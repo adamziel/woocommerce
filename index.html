@@ -1,123 +1,296 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>WooCommerce Performance Research: Variations, Search, Orders</title>
+	<style>
+		:root {
+			color-scheme: light;
+			--ink: #1d2327;
+			--muted: #59636e;
+			--line: #dcdcde;
+			--panel: #f6f7f7;
+			--accent: #674399;
+			--good: #0a7f45;
+			--warn: #996800;
+		}
+		body {
+			margin: 0;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+			color: var(--ink);
+			background: #fff;
+			line-height: 1.5;
+		}
+		main {
+			max-width: 1180px;
+			margin: 0 auto;
+			padding: 32px 24px 64px;
+		}
+		h1, h2, h3 {
+			line-height: 1.2;
+			margin: 0 0 12px;
+		}
+		h1 {
+			font-size: 32px;
+			letter-spacing: 0;
+		}
+		h2 {
+			margin-top: 36px;
+			font-size: 23px;
+			border-top: 1px solid var(--line);
+			padding-top: 24px;
+		}
+		h3 {
+			margin-top: 24px;
+			font-size: 18px;
+		}
+		p {
+			margin: 0 0 12px;
+		}
+		a {
+			color: var(--accent);
+		}
+		.meta {
+			color: var(--muted);
+			font-size: 14px;
+			margin-bottom: 24px;
+		}
+		.summary {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+			gap: 12px;
+			margin: 24px 0;
+		}
+		.summary div, .callout {
+			background: var(--panel);
+			border: 1px solid var(--line);
+			border-radius: 6px;
+			padding: 14px 16px;
+		}
+		.summary strong {
+			display: block;
+			font-size: 20px;
+			margin-bottom: 4px;
+		}
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			margin: 16px 0 24px;
+			font-size: 14px;
+		}
+		th, td {
+			border: 1px solid var(--line);
+			padding: 8px 10px;
+			text-align: left;
+			vertical-align: top;
+		}
+		th {
+			background: var(--panel);
+			font-weight: 600;
+		}
+		code {
+			background: #f0f0f1;
+			border-radius: 4px;
+			padding: 1px 4px;
+			font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+			font-size: 0.95em;
+		}
+		ol, ul {
+			margin-top: 8px;
+			padding-left: 24px;
+		}
+		li {
+			margin-bottom: 6px;
+		}
+		.badge {
+			display: inline-block;
+			border-radius: 999px;
+			padding: 2px 8px;
+			font-size: 12px;
+			font-weight: 600;
+			background: #efe8f7;
+			color: var(--accent);
+		}
+		.warn {
+			color: var(--warn);
+			font-weight: 600;
+		}
+	</style>
+</head>
+<body>
+<main>
+	<h1>WooCommerce Performance Research</h1>
+	<p class="meta">Preliminary working report, generated June 26, 2026. Fork: <code>adamziel/woocommerce</code>. Local checkout: <code>/home/claude/woo-perf/woocommerce</code>. Upstream push URL is disabled.</p>
 
-    <title>@storybook/cli - Storybook</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+	<div class="summary">
+		<div><strong>#1 candidate</strong>Variable products, variation payload generation, variation matching, and attribute lookup/filtering.</div>
+		<div><strong>Measured slope</strong>Full variation arrays grew from 12.7 ms at 8 variations to 6.0 s at 1,000 variations.</div>
+		<div><strong>First PR evidence</strong>Four variation lanes now have scoped commits, focused tests, and local benchmarks.</div>
+		<div><strong>Boundary</strong>WooCommerce Bookings is not in core; benchmark it through core extension points unless the premium plugin is available.</div>
+	</div>
 
-    
-    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-    
-    <link
-      rel="prefetch"
-      href="./sb-common-assets/nunito-sans-regular.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link
-      rel="prefetch"
-      href="./sb-common-assets/nunito-sans-bold.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link rel="stylesheet" href="./sb-common-assets/fonts.css" />
+	<h2>Executive Findings</h2>
+	<ol>
+		<li><strong>Product variations and attributes are the strongest first issue.</strong> WooCommerce core itself warns that <code>WC_Product_Variable::get_available_variations( 'array' )</code> is expensive for many variations. Local measurements show steep CPU and payload growth: roughly 6 seconds and 1 MB of JSON-like payload for a single 1,000-variation product in the CLI profile.</li>
+		<li><strong>Product/admin search is the second issue to keep close.</strong> Search uses leading-wildcard <code>LIKE</code> paths and can hand a large ID list into admin list queries. This is likely to degrade badly with large product and variation counts.</li>
+		<li><strong>Orders are improved by HPOS but not solved for every shape.</strong> HPOS gives dedicated order tables and indexes, but order search fallbacks and generic meta queries still have expensive shapes at 100k+ orders.</li>
+		<li><strong>Bookings performance is mostly outside this repo.</strong> Core can approximate Bookings pressure with product type/data-store hooks, cart hooks, Store API hooks, and booking-like order meta. The real availability calendar and slot search logic lives in WooCommerce Bookings, not in core.</li>
+	</ol>
 
-    <link href="./sb-manager/runtime.js" rel="modulepreload" />
+	<h2>Local Benchmark Environment</h2>
+	<table>
+		<tr><th>Item</th><th>Value</th></tr>
+		<tr><td>WooCommerce</td><td><code>11.0.0-dev</code>, branch <code>trunk</code>, commit <code>e9a9675048</code></td></tr>
+		<tr><td>WordPress environment</td><td><code>wp-env</code>, PHP 8.1 container, MySQL containers, test site on <code>http://localhost:18096</code></td></tr>
+		<tr><td>Harness</td><td><code>plugins/woocommerce/tests/bin/tmp/woo-perf-benchmark.php</code> (ignored local file)</td></tr>
+		<tr><td>Raw results</td><td><code>/home/claude/woo-perf/research/results/*.json</code></td></tr>
+		<tr><td>Fixture strategy so far</td><td>WooCommerce CRUD APIs for correctness-sized fixtures, plus a bulk variation seeder for larger variable-product scale points. Bulk fixtures keep the post/meta shape used by read and matching paths but are not a replacement for CRUD correctness tests.</td></tr>
+	</table>
 
-    
-    <link href="./sb-addons/controls-0/manager-bundle.js" rel="modulepreload" />
-    
-    <link href="./sb-addons/viewport-1/manager-bundle.js" rel="modulepreload" />
-    
-    <link href="./sb-addons/a11y-2/manager-bundle.js" rel="modulepreload" />
-    
-    <link href="./sb-addons/actions-3/manager-bundle.js" rel="modulepreload" />
-    
-    <link href="./sb-addons/links-4/manager-bundle.js" rel="modulepreload" />
-    
-    <link href="./sb-addons/storybook-5/manager-bundle.js" rel="modulepreload" />
-       
+	<h2>Measured Results</h2>
+	<h3>Variation Operations</h3>
+	<table>
+		<tr>
+			<th>Fixture</th>
+			<th>Operation</th>
+			<th>Median</th>
+			<th>p95</th>
+			<th>Queries</th>
+			<th>Result / Payload</th>
+		</tr>
+		<tr><td>8 variations/parent</td><td><code>get_available_variations( 'objects' )</code></td><td>7.6 ms</td><td>8.3 ms</td><td>10</td><td>8 objects</td></tr>
+		<tr><td>8 variations/parent</td><td><code>get_available_variations( 'array' )</code></td><td>12.7 ms</td><td>20.7 ms</td><td>10</td><td>8.3 KB JSON</td></tr>
+		<tr><td>60 variations/parent</td><td><code>get_available_variations( 'objects' )</code></td><td>30.5 ms</td><td>40.6 ms</td><td>10</td><td>60 objects</td></tr>
+		<tr><td>60 variations/parent</td><td><code>get_available_variations( 'array' )</code></td><td>60.0 ms</td><td>103.8 ms</td><td>10</td><td>62.4 KB JSON</td></tr>
+		<tr><td>180 variations/parent</td><td><code>get_available_variations( 'objects' )</code></td><td>70.6 ms</td><td>78.8 ms</td><td>10</td><td>180 objects</td></tr>
+		<tr><td>180 variations/parent</td><td><code>get_available_variations( 'array' )</code></td><td>280.3 ms</td><td>283.1 ms</td><td>10</td><td>187.6 KB JSON</td></tr>
+		<tr><td>180 variations/parent</td><td><code>find_matching_product_variation()</code></td><td>4.7 ms</td><td>11.2 ms</td><td>1</td><td>1 matching ID</td></tr>
+		<tr><td>1,000 variations/parent, bulk seed</td><td><code>get_available_variations( 'objects' )</code></td><td>380.3 ms</td><td>4,866.5 ms</td><td>10</td><td>1,000 objects</td></tr>
+		<tr><td>1,000 variations/parent, bulk seed</td><td><code>get_available_variations( 'array' )</code></td><td>5,961.6 ms</td><td>6,734.9 ms</td><td>10</td><td>1.05 MB JSON</td></tr>
+		<tr><td>1,000 variations/parent, bulk seed</td><td><code>find_matching_product_variation()</code></td><td>25.6 ms</td><td>31.1 ms</td><td>1</td><td>1 matching ID</td></tr>
+	</table>
 
-    <style>
-      #storybook-root[hidden] {
-        display: none !important;
-      }
-    </style>
+	<div class="callout">
+		<p><strong>Interpretation:</strong> query count is mostly flat because WooCommerce primes/caches variation objects, but CPU and payload size scale with child count. The array path performs formatting, price display work, image checks, dimensions, stock HTML, and filters for every variation. At 1,000 variations this is a multi-second single-product operation before browser/network cost.</p>
+	</div>
 
-    
-  </head>
-  <body>
-    <div id="root"></div>
+	<h3>First-Issue Optimization Lane Results</h3>
+	<table>
+		<tr>
+			<th>Branch</th>
+			<th>Approach</th>
+			<th>Focused tests</th>
+			<th>Measured result</th>
+		</tr>
+		<tr>
+			<td><a href="https://github.com/adamziel/woocommerce/pull/1"><code>perf/variation-payload-lane</code></a></td>
+			<td>Reuse parent-level payload context inside <code>get_available_variations( 'array' )</code> so repeated image/gallery and price-range checks are not recomputed per variation.</td>
+			<td><code>WC_Product_Variable_Test</code>: 11 tests, 32 assertions.</td>
+			<td><code>get_available_variations( 'array' )</code> median improved from 5,961.6 ms to 669.7 ms on a 1,000-variation fixture.</td>
+		</tr>
+		<tr>
+			<td><a href="https://github.com/adamziel/woocommerce/pull/2"><code>perf/lazy-variation-resolution-lane-clean</code></a></td>
+			<td>Inline compact variation maps for classic variable forms and fetch the full selected variation payload only after a concrete selection.</td>
+			<td>PHP: 5 tests, 23 assertions. JS: 2 Jest tests.</td>
+			<td>Classic form render median improved from 5,592.6 ms / 1.75 MB HTML to 395.5 ms / 435 KB HTML on a 1,000-variation fixture with raised AJAX threshold.</td>
+		</tr>
+		<tr>
+			<td><a href="https://github.com/adamziel/woocommerce/pull/3"><code>perf/attribute-lookup-maintenance-lane</code></a></td>
+			<td>Batch non-optimized Product Attributes Lookup Table inserts instead of issuing one insert per lookup row.</td>
+			<td><code>batched_non_optimized_creation</code>: 2 tests, 6 assertions.</td>
+			<td>Lookup regeneration for one 1,000-variation product improved from 15,157.4 ms to 1,536.4 ms for the same 3,406 lookup rows.</td>
+		</tr>
+		<tr>
+			<td><a href="https://github.com/adamziel/woocommerce/pull/4"><code>perf/variation-match-index-lane</code></a></td>
+			<td>Replace PHP-side scanning of all child variation attribute meta with a bounded SQL anti-conflict query while preserving empty-value “any” semantics.</td>
+			<td><code>find_matching_product_variation</code>: 6 tests, 21 assertions.</td>
+			<td><code>find_matching_product_variation()</code> median improved from 25.6 ms to 8.3 ms on a 1,000-variation fixture.</td>
+		</tr>
+		<tr>
+			<td><a href="https://github.com/adamziel/woocommerce/pull/5"><code>perf/variable-child-query-lane</code></a></td>
+			<td>Use one default-path posts query that returns variation IDs and statuses, deriving <code>all</code> and <code>visible</code> children from the same result. Filtered child args still use the existing fallback.</td>
+			<td><code>WC_Product_Variable_Data_Store_CPT_Test</code>: 25 tests, 93 assertions.</td>
+			<td>Cold child lookup changed from 2 queries / 28.6 ms median to 1 query / 24.4 ms median on a 1,000-variation fixture.</td>
+		</tr>
+	</table>
 
-    
-    <script>
-      
-        
-          window['FEATURES'] = {
-  "warnOnLegacyHierarchySeparator": true,
-  "buildStoriesJson": false,
-  "storyStoreV7": true,
-  "argTypeTargetsV7": true,
-  "legacyDecoratorFileOrder": false,
-  "disallowImplicitActionsInRenderV8": false
-};
-        
-      
-        
-          window['REFS'] = {
-  "woocommerce-blocks": {
-    "expanded": false,
-    "title": "Blocks",
-    "url": "/woocommerce/assets/woocommerce-blocks",
-    "id": "woocommerce-blocks",
-    "type": "unknown"
-  }
-};
-        
-      
-        
-          window['LOGLEVEL'] = "info";
-        
-      
-        
-          window['DOCS_OPTIONS'] = {
-  "defaultName": "Docs",
-  "autodocs": true
-};
-        
-      
-        
-          window['CONFIG_TYPE'] = "PRODUCTION";
-        
-      
-        
-      
-        
-      
-    </script>
-    
+	<h3>Product And Order Query Operations</h3>
+	<table>
+		<tr><th>Fixture</th><th>Operation</th><th>Median</th><th>p95</th><th>Queries</th><th>Result</th></tr>
+		<tr><td>480 variations, 300 orders</td><td>Product search, common partial term</td><td>4.3 ms</td><td>4.8 ms</td><td>1</td><td>101 IDs</td></tr>
+		<tr><td>480 variations, 300 orders</td><td>Product search, exact variation SKU</td><td>3.9 ms</td><td>8.0 ms</td><td>1</td><td>2 IDs</td></tr>
+		<tr><td>480 variations, 300 orders</td><td>Product meta query segment</td><td>3.1 ms</td><td>3.3 ms</td><td>4</td><td>20 IDs</td></tr>
+		<tr><td>480 variations, 300 orders</td><td>Recent orders page</td><td>1.3 ms</td><td>1.7 ms</td><td>2</td><td>20 IDs</td></tr>
+		<tr><td>480 variations, 300 orders</td><td>Order search by customer email</td><td>3.2 ms</td><td>8.5 ms</td><td>4</td><td>1 ID</td></tr>
+		<tr><td>480 variations, 300 orders</td><td>Order meta query bucket</td><td>1.3 ms</td><td>1.6 ms</td><td>2</td><td>20 IDs</td></tr>
+	</table>
 
-    <script type="module">
-      import './sb-manager/runtime.js';
+	<p>The current order/product query numbers are not yet large enough to prove their ceiling. They mainly validate the harness. Static code review and published database guidance still indicate they are important candidates at large cardinality.</p>
 
-      
-      import './sb-addons/controls-0/manager-bundle.js';
-      
-      import './sb-addons/viewport-1/manager-bundle.js';
-      
-      import './sb-addons/a11y-2/manager-bundle.js';
-      
-      import './sb-addons/actions-3/manager-bundle.js';
-      
-      import './sb-addons/links-4/manager-bundle.js';
-      
-      import './sb-addons/storybook-5/manager-bundle.js';
-      
-    </script>
+	<h2>Code Paths</h2>
+	<h3>Variations And Attributes</h3>
+	<ul>
+		<li><code>includes/class-wc-product-variable.php</code>: <code>get_available_variations()</code>, <code>get_available_variation()</code>, <code>sync()</code>.</li>
+		<li><code>includes/data-stores/class-wc-product-data-store-cpt.php</code>: <code>find_matching_product_variation()</code> loads all child attribute meta and scans in PHP.</li>
+		<li><code>includes/data-stores/class-wc-product-variable-data-store-cpt.php</code>: child reads, variation attributes, price/stock sync, and large child <code>IN (...)</code> query shapes.</li>
+		<li><code>src/Internal/ProductAttributesLookup/*</code>: attribute lookup maintenance, filtering, and regeneration.</li>
+		<li><code>src/Internal/ProductFilters/FilterData.php</code>: product filter counts can materialize all matching product IDs with <code>posts_per_page = -1</code>.</li>
+	</ul>
 
-    <link href="./sb-preview/runtime.js" rel="prefetch" as="script" />
-  </body>
+	<h3>Orders</h3>
+	<ul>
+		<li><code>src/Internal/DataStores/Orders/OrdersTableQuery.php</code>: HPOS order query builder.</li>
+		<li><code>src/Internal/DataStores/Orders/OrdersTableSearchQuery.php</code>: HPOS order search, including fallback search paths.</li>
+		<li><code>includes/data-stores/class-wc-order-data-store-cpt.php</code>: legacy post/meta order queries and legacy order search.</li>
+		<li><code>src/Caches/OrderCountCache*.php</code>: order count caching and priming.</li>
+	</ul>
+
+	<h3>Bookings Boundary</h3>
+	<p>Core does not include <code>WC_Product_Booking</code> or booking availability logic. The relevant core extension points are product type registration, product data stores, cart item data, Store API payment requirements, checkout line items, and HPOS/order meta storage. Real slot lookup, resources, availability rules, in-cart holds, and booking calendar performance require the WooCommerce Bookings plugin.</p>
+
+	<h2>Ranked Issues</h2>
+	<table>
+		<tr><th>Rank</th><th>Issue</th><th>Evidence</th><th>Next optimization lanes</th></tr>
+		<tr>
+			<td>1</td>
+			<td>Variable product variation payloads and attribute matching</td>
+			<td>Measured 280 ms for 180 full variation arrays; code warns this path is expensive; matching scans all child attribute meta.</td>
+			<td>Indexed variation combination lookup; minimal variation payload maps; lazy full payload resolution; child-query chunk/temp-table strategy; optimized attribute lookup maintenance.</td>
+		</tr>
+		<tr>
+			<td>2</td>
+			<td>Product/admin search and filter count materialization</td>
+			<td>Leading-wildcard search paths, large <code>post__in</code> handoff risk, filter counts materialize all product IDs.</td>
+			<td>Exact/prefix SKU fast path; split broad search fallback; lookup indexes for global ID/sort fields; push filter aggregation into SQL; external-search/offload hooks.</td>
+		</tr>
+		<tr>
+			<td>3</td>
+			<td>Order search/meta-query at 100k+ orders</td>
+			<td>HPOS tables help, but fallback <code>%LIKE%</code>, generic meta joins, and legacy postmeta search remain expensive shapes.</td>
+			<td>Adaptive status UNION threshold; FTS/prefix search handling; selective meta-query rewrites; common-extension lookup/index strategy; cache/count priming improvements.</td>
+		</tr>
+	</table>
+
+	<h2>Limitations</h2>
+	<ul>
+		<li>The largest local fixture so far is 1,000 variations on one parent and 300 orders. That is enough to confirm variation payload slope, not enough to prove 100k-order behavior.</li>
+		<li>CRUD seeding is faithful but too slow for repeated large sweeps. The new bulk variation seed path is useful for read/matching profiles, but write-path and hook behavior must still be verified with CRUD fixtures.</li>
+		<li>The current measurements run in WP-CLI inside Docker. HTTP/k6 and browser-facing paths still need to be measured after the query candidates are narrowed.</li>
+		<li>No premium WooCommerce Bookings source is present. Bookings conclusions are therefore about core extension points and documented product behavior, not the private implementation.</li>
+	</ul>
+
+	<h2>Sources</h2>
+	<ul>
+		<li><a href="https://developer.woocommerce.com/2019/04/01/performance-improvements-in-3-6/">WooCommerce 3.6 performance improvements</a>: product meta lookup table context.</li>
+		<li><a href="https://developer.woocommerce.com/2022/02/02/new-product-filtering-by-attributes-rolling-out-in-woocommerce-6-3/">Product filtering by attributes rollout</a>: attribute lookup table background.</li>
+		<li><a href="https://developer.woocommerce.com/2022/03/08/woocommerce-6-3-released/">WooCommerce 6.3 release notes</a>: attribute lookup indexing changes.</li>
+		<li><a href="https://woocommerce.com/document/high-performance-order-storage/">High-Performance Order Storage</a>: dedicated order tables and indexes.</li>
+		<li><a href="https://docs.wpvip.com/databases/optimize-queries/querying-on-meta_value/">WordPress VIP: querying on meta_value</a>: why broad meta-value searches are expensive.</li>
+		<li><a href="https://docs.wpvip.com/databases/optimize-queries/posts_per_page/">WordPress VIP: posts_per_page guidance</a>: unbounded result sets and scale risk.</li>
+		<li><a href="https://developer.woocommerce.com/2017/02/06/wc-2-7-extension-compatibility-examples-3-bookings/">WooCommerce Bookings extension compatibility example</a>: Bookings product type/data-store boundary.</li>
+		<li><a href="https://woocommerce.github.io/woocommerce-bookings-api-docs/">WooCommerce Bookings API docs</a>: slot/product/resource query shape.</li>
+	</ul>
+</main>
+</body>
 </html>
