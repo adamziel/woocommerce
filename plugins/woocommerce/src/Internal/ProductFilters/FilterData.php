@@ -94,6 +94,15 @@ class FilterData {
 			*/
 			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			$results = (array) $wpdb->get_row( $price_filter_sql );
+
+			if (
+				array_key_exists( 'min_price', $results ) &&
+				array_key_exists( 'max_price', $results ) &&
+				null === $results['min_price'] &&
+				null === $results['max_price']
+			) {
+				$results = array();
+			}
 		}
 
 		/**
@@ -163,8 +172,13 @@ class FilterData {
 				";
 			}
 
-			$results = array_fill_keys( $statuses, 0 );
-			foreach ( $wpdb->get_results( $sql ) as $row ) { // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$rows = $wpdb->get_results( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+			if ( ! empty( $rows ) ) {
+				$results = array_fill_keys( $statuses, 0 );
+			}
+
+			foreach ( $rows as $row ) {
 				if ( isset( $results[ $row->stock_status ] ) ) {
 					$results[ $row->stock_status ] = (int) $row->status_count;
 				}
@@ -379,7 +393,7 @@ class FilterData {
 	/**
 	 * Get hierarchical taxonomy counts using optimized hierarchy data.
 	 *
-	 * @param string $product_ids   Comma-separated list of product IDs.
+	 * @param string $product_ids   Product IDs SQL source for use inside an IN clause.
 	 * @param string $taxonomy_name Original taxonomy name for hierarchy methods.
 	 * @return array Array of term_id => count pairs.
 	 */
@@ -630,17 +644,21 @@ class FilterData {
 	/**
 	 * Get cached product IDs from query vars.
 	 *
-	 * Executes a WP_Query with the given query vars and returns a comma-separated string of product IDs.
-	 * Results are cached to avoid repeated database queries.
+	 * Builds a WP_Query with the given query vars and returns its prepared product ID SQL request.
+	 * The SQL source is cached to avoid rebuilding the same request and to let count queries consume
+	 * the filtered product set without materializing every matching ID in PHP.
+	 *
+	 * Older object-cache entries may contain a comma-separated ID list. Both forms are valid inside
+	 * the IN clauses used by this class.
 	 *
 	 * @param array $query_vars The WP_Query arguments.
-	 * @return string Comma-separated list of product IDs.
+	 * @return string Product IDs SQL source for use inside an IN clause.
 	 */
 	private function get_cached_product_ids( array $query_vars ) {
 		$cache_key = WC_Cache_Helper::get_cache_prefix( CacheController::CACHE_GROUP ) . md5( wp_json_encode( $this->normalize_query_vars( $query_vars ) ) );
 		$cache     = wp_cache_get( $cache_key );
 
-		if ( $cache ) {
+		if ( false !== $cache ) {
 			return $cache;
 		}
 
@@ -657,19 +675,10 @@ class FilterData {
 		remove_filter( 'posts_clauses', array( $this->query_clauses, 'add_query_clauses' ), 10 );
 		remove_filter( 'posts_pre_query', '__return_empty_array' );
 
-		global $wpdb;
+		$product_ids_sql = $query->request;
 
-		// The query is already prepared by WP_Query.
-		$results = $wpdb->get_results( $query->request, ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		wp_cache_set( $cache_key, $product_ids_sql );
 
-		if ( ! $results ) {
-			$results = array();
-		}
-
-		$results = implode( ',', array_column( $results, 'ID' ) );
-
-		wp_cache_set( $cache_key, $results );
-
-		return $results;
+		return $product_ids_sql;
 	}
 }
