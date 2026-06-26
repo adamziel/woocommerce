@@ -1460,8 +1460,15 @@ class OrdersTableQuery {
 			return;
 		}
 
-		$offset    = (int) ( $this->limits[0] ?? 0 );
-		$row_count = (int) ( $this->limits[1] ?? 0 );
+		$offset      = (int) ( $this->limits[0] ?? 0 );
+		$row_count   = (int) ( $this->limits[1] ?? 0 );
+		$order_count = count( $this->orders );
+
+		if ( $row_count > 0 && 0 === $offset && $order_count < $row_count ) {
+			$this->found_orders  = $order_count;
+			$this->max_num_pages = (int) ceil( $this->found_orders / $row_count );
+			return;
+		}
 
 		if ( $row_count > 0 || $offset > 0 ) {
 			$this->found_orders  = absint( $wpdb->get_var( $this->count_sql ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
@@ -1469,7 +1476,7 @@ class OrdersTableQuery {
 				? (int) ceil( $this->found_orders / $row_count )
 				: 0;
 		} else {
-			$this->found_orders = count( $this->orders );
+			$this->found_orders = $order_count;
 		}
 	}
 
