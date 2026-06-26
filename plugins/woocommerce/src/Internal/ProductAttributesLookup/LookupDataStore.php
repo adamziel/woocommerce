@@ -28,6 +28,13 @@ class LookupDataStore {
 	public const ACTION_DELETE       = 3;
 
 	/**
+	 * Number of lookup table rows to insert in each non-optimized batch.
+	 *
+	 * @var int
+	 */
+	private const INSERT_LOOKUP_TABLE_DATA_BATCH_SIZE = 100;
+
+	/**
 	 * The lookup table name.
 	 *
 	 * @var string
@@ -385,12 +392,15 @@ class LookupDataStore {
 		$product_attributes_data = $this->get_attribute_taxonomies( $product );
 		$has_stock               = $product->is_in_stock();
 		$product_id              = $product->get_id();
+		$insert_data             = array();
 		foreach ( $product_attributes_data as $taxonomy => $data ) {
 			$term_ids = $data['term_ids'];
 			foreach ( $term_ids as $term_id ) {
-				$this->insert_lookup_table_data( $product_id, $product_id, $taxonomy, $term_id, false, $has_stock );
+				$insert_data[] = $this->get_lookup_table_data_for_insert( $product_id, $product_id, $taxonomy, $term_id, false, $has_stock );
 			}
 		}
+
+		$this->insert_lookup_table_data( $insert_data );
 	}
 
 	/**
@@ -416,11 +426,12 @@ class LookupDataStore {
 
 		$main_product_has_stock = $product->is_in_stock();
 		$main_product_id        = $product->get_id();
+		$insert_data            = array();
 
 		foreach ( $non_variation_attributes_data as $taxonomy => $data ) {
 			$term_ids = $data['term_ids'];
 			foreach ( $term_ids as $term_id ) {
-				$this->insert_lookup_table_data( $main_product_id, $main_product_id, $taxonomy, $term_id, false, $main_product_has_stock );
+				$insert_data[] = $this->get_lookup_table_data_for_insert( $main_product_id, $main_product_id, $taxonomy, $term_id, false, $main_product_has_stock );
 			}
 		}
 
@@ -429,9 +440,13 @@ class LookupDataStore {
 
 		foreach ( $variation_attributes_data as $taxonomy => $data ) {
 			foreach ( $variations as $variation ) {
-				$this->insert_lookup_table_data_for_variation( $variation, $taxonomy, $main_product_id, $data['term_ids'], $term_ids_by_slug_cache );
+				foreach ( $this->get_lookup_table_data_for_variation( $variation, $taxonomy, $main_product_id, $data['term_ids'], $term_ids_by_slug_cache ) as $row ) {
+					$insert_data[] = $row;
+				}
 			}
 		}
+
+		$this->insert_lookup_table_data( $insert_data );
 	}
 
 	/**
@@ -456,33 +471,42 @@ class LookupDataStore {
 		);
 
 		$term_ids_by_slug_cache = $this->get_term_ids_by_slug_cache( array_keys( $variation_attributes_data ) );
+		$insert_data            = array();
 
 		foreach ( $variation_attributes_data as $taxonomy => $data ) {
-			$this->insert_lookup_table_data_for_variation( $variation, $taxonomy, $main_product->get_id(), $data['term_ids'], $term_ids_by_slug_cache );
+			foreach ( $this->get_lookup_table_data_for_variation( $variation, $taxonomy, $main_product->get_id(), $data['term_ids'], $term_ids_by_slug_cache ) as $row ) {
+				$insert_data[] = $row;
+			}
 		}
+
+		$this->insert_lookup_table_data( $insert_data );
 	}
 
 	/**
-	 * Create lookup table entries for a given variation, corresponding to a given taxonomy and a set of term ids.
+	 * Get lookup table entries for a given variation, corresponding to a given taxonomy and a set of term ids.
 	 *
 	 * @param \WC_Product_Variation $variation The variation to create entries for.
 	 * @param string                $taxonomy The taxonomy to create the entries for.
 	 * @param int                   $main_product_id The parent product id.
 	 * @param array                 $term_ids The term ids to create entries for.
 	 * @param array                 $term_ids_by_slug_cache A dictionary of term ids by term slug, as returned by 'get_term_ids_by_slug_cache'.
+	 * @return array Lookup table rows to insert.
 	 */
-	private function insert_lookup_table_data_for_variation( \WC_Product_Variation $variation, string $taxonomy, int $main_product_id, array $term_ids, array $term_ids_by_slug_cache ) {
+	private function get_lookup_table_data_for_variation( \WC_Product_Variation $variation, string $taxonomy, int $main_product_id, array $term_ids, array $term_ids_by_slug_cache ) {
 		$variation_id                 = $variation->get_id();
 		$variation_has_stock          = $variation->is_in_stock();
 		$variation_definition_term_id = $this->get_variation_definition_term_id( $variation, $taxonomy, $term_ids_by_slug_cache );
+		$insert_data                  = array();
 		if ( $variation_definition_term_id ) {
-			$this->insert_lookup_table_data( $variation_id, $main_product_id, $taxonomy, $variation_definition_term_id, true, $variation_has_stock );
+			$insert_data[] = $this->get_lookup_table_data_for_insert( $variation_id, $main_product_id, $taxonomy, $variation_definition_term_id, true, $variation_has_stock );
 		} else {
 			$term_ids_for_taxonomy = $term_ids;
 			foreach ( $term_ids_for_taxonomy as $term_id ) {
-				$this->insert_lookup_table_data( $variation_id, $main_product_id, $taxonomy, $term_id, true, $variation_has_stock );
+				$insert_data[] = $this->get_lookup_table_data_for_insert( $variation_id, $main_product_id, $taxonomy, $term_id, true, $variation_has_stock );
 			}
 		}
+
+		return $insert_data;
 	}
 
 	/**
@@ -604,7 +628,7 @@ class LookupDataStore {
 	}
 
 	/**
-	 * Insert one entry in the lookup table.
+	 * Build one lookup table row for insertion.
 	 *
 	 * @param int    $product_id             The product id.
 	 * @param int    $product_or_parent_id   The product id for non-variable products, the main/parent product id for variations.
@@ -612,8 +636,74 @@ class LookupDataStore {
 	 * @param int    $term_id                Term id.
 	 * @param bool   $is_variation_attribute True if the taxonomy corresponds to an attribute used to define variations.
 	 * @param bool   $has_stock              True if the product is in stock.
+	 * @return array Lookup table row values.
 	 */
-	private function insert_lookup_table_data( int $product_id, int $product_or_parent_id, string $taxonomy, int $term_id, bool $is_variation_attribute, bool $has_stock ) {
+	private function get_lookup_table_data_for_insert( int $product_id, int $product_or_parent_id, string $taxonomy, int $term_id, bool $is_variation_attribute, bool $has_stock ): array {
+		return array(
+			$product_id,
+			$product_or_parent_id,
+			$taxonomy,
+			$term_id,
+			$is_variation_attribute ? 1 : 0,
+			$has_stock ? 1 : 0,
+		);
+	}
+
+	/**
+	 * Insert lookup table entries in batches.
+	 *
+	 * @param array $insert_data Lookup table rows, as returned by get_lookup_table_data_for_insert.
+	 */
+	private function insert_lookup_table_data( array $insert_data ) {
+		global $wpdb;
+
+		if ( empty( $insert_data ) ) {
+			return;
+		}
+
+		$insert_data_chunks = array_chunk( $insert_data, self::INSERT_LOOKUP_TABLE_DATA_BATCH_SIZE );
+		foreach ( $insert_data_chunks as $insert_data_chunk ) {
+			$placeholders = array_fill( 0, count( $insert_data_chunk ), '( %d, %d, %s, %d, %d, %d )' );
+			$values       = array( $this->lookup_table_name );
+			foreach ( $insert_data_chunk as $row ) {
+				foreach ( $row as $value ) {
+					$values[] = $value;
+				}
+			}
+
+			$sql = $wpdb->prepare(
+				'INSERT INTO %i (
+					  product_id,
+					  product_or_parent_id,
+					  taxonomy,
+					  term_id,
+					  is_variation_attribute,
+					  in_stock)
+					VALUES ' . implode( ',', $placeholders ),
+				$values
+			);
+
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$result = $wpdb->query( $sql );
+			if ( false === $result ) {
+				foreach ( $insert_data_chunk as $row ) {
+					$this->insert_lookup_table_data_row( ...$row );
+				}
+			}
+		}
+	}
+
+	/**
+	 * Insert one entry in the lookup table.
+	 *
+	 * @param int    $product_id             The product id.
+	 * @param int    $product_or_parent_id   The product id for non-variable products, the main/parent product id for variations.
+	 * @param string $taxonomy               Taxonomy name.
+	 * @param int    $term_id                Term id.
+	 * @param int    $is_variation_attribute 1 if the taxonomy corresponds to an attribute used to define variations.
+	 * @param int    $has_stock              1 if the product is in stock.
+	 */
+	private function insert_lookup_table_data_row( int $product_id, int $product_or_parent_id, string $taxonomy, int $term_id, int $is_variation_attribute, int $has_stock ) {
 		global $wpdb;
 
 		$wpdb->query(
@@ -632,8 +722,8 @@ class LookupDataStore {
 				$product_or_parent_id,
 				$taxonomy,
 				$term_id,
-				$is_variation_attribute ? 1 : 0,
-				$has_stock ? 1 : 0
+				$is_variation_attribute,
+				$has_stock
 			)
 		);
 	}

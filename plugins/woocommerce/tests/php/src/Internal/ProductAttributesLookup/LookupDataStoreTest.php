@@ -1146,6 +1146,119 @@ class LookupDataStoreTest extends \WC_Unit_Test_Case {
 	}
 
 	/**
+	 * @testdox Batched non-optimized creation produces the same rows as optimized creation for simple products.
+	 */
+	public function test_batched_non_optimized_creation_matches_optimized_creation_for_simple_product() {
+		$attribute         = self::$attributes[0];
+		$another_attribute = self::$attributes[1];
+
+		$product = new \WC_Product_Simple();
+		$product->set_stock_status( ProductStockStatus::OUT_OF_STOCK );
+		$this->set_product_attributes(
+			$product,
+			array(
+				$attribute['name']         => array(
+					'id'      => $attribute['id'],
+					'options' => array( $attribute['term_ids'][0], $attribute['term_ids'][1] ),
+				),
+				$another_attribute['name'] => array(
+					'id'      => $another_attribute['id'],
+					'options' => array( $another_attribute['term_ids'][1], $another_attribute['term_ids'][2] ),
+				),
+				'pa_custom_attribute'      => array(
+					'id'      => 0,
+					'options' => array( 'foo', 'bar' ),
+				),
+			)
+		);
+		$this->save( $product );
+
+		$this->assert_non_optimized_lookup_data_matches_optimized_lookup_data( $product );
+	}
+
+	/**
+	 * @testdox Batched non-optimized creation produces the same rows as optimized creation for variable products with any attributes.
+	 */
+	public function test_batched_non_optimized_creation_matches_optimized_creation_for_variable_product_with_any_attributes() {
+		$non_variation_attribute = self::$attributes[0];
+		$variation_attribute_1   = self::$attributes[1];
+		$variation_attribute_2   = self::$attributes[2];
+
+		$product = new \WC_Product_Variable();
+		$product->set_stock_status( ProductStockStatus::IN_STOCK );
+		$this->set_product_attributes(
+			$product,
+			array(
+				$non_variation_attribute['name'] => array(
+					'id'      => $non_variation_attribute['id'],
+					'options' => $non_variation_attribute['term_ids'],
+				),
+				$variation_attribute_1['name']   => array(
+					'id'        => $variation_attribute_1['id'],
+					'options'   => $variation_attribute_1['term_ids'],
+					'variation' => true,
+				),
+				$variation_attribute_2['name']   => array(
+					'id'        => $variation_attribute_2['id'],
+					'options'   => $variation_attribute_2['term_ids'],
+					'variation' => true,
+				),
+				'pa_custom_attribute'            => array(
+					'id'      => 0,
+					'options' => array( 'foo', 'bar' ),
+				),
+			)
+		);
+		$product->save();
+		$product_id = $product->get_id();
+
+		$variation_ids = array();
+		for ( $i = 0; $i < 30; $i++ ) {
+			$variation_attributes = array();
+			if ( 0 === $i % 3 ) {
+				$variation_attributes[ $variation_attribute_1['name'] ] = 'term_2_' . ( ( $i % 3 ) + 1 );
+				$variation_attributes[ $variation_attribute_2['name'] ] = 'term_3_' . ( ( $i % 3 ) + 1 );
+			} elseif ( 1 === $i % 3 ) {
+				$variation_attributes[ $variation_attribute_1['name'] ] = 'term_2_' . ( ( $i % 3 ) + 1 );
+			}
+
+			$variation = new \WC_Product_Variation();
+			$variation->set_attributes( $variation_attributes );
+			$variation->set_stock_status( 0 === $i % 2 ? ProductStockStatus::IN_STOCK : ProductStockStatus::OUT_OF_STOCK );
+			$variation->set_parent_id( $product_id );
+			$variation->save();
+			$variation_ids[] = $variation->get_id();
+		}
+
+		$product->set_children( $variation_ids );
+		\WC_Product_Variable::sync( $product );
+
+		$this->assert_non_optimized_lookup_data_matches_optimized_lookup_data( $product, 100 );
+	}
+
+	/**
+	 * Assert that the non-optimized lookup data writer produces the same rows as the optimized writer.
+	 *
+	 * @param \WC_Product $product The product to regenerate lookup table rows for.
+	 * @param int         $minimum_rows Minimum expected rows in the generated dataset.
+	 */
+	private function assert_non_optimized_lookup_data_matches_optimized_lookup_data( \WC_Product $product, int $minimum_rows = 0 ) {
+		$this->get_instance_of( DataRegenerator::class )->truncate_lookup_table();
+		$this->sut->create_data_for_product( $product, false );
+		$non_optimized_rows = $this->get_lookup_table_data();
+
+		$this->assertGreaterThanOrEqual( $minimum_rows, count( $non_optimized_rows ) );
+
+		$this->get_instance_of( DataRegenerator::class )->truncate_lookup_table();
+		$this->sut->create_data_for_product( $product, true );
+		$optimized_rows = $this->get_lookup_table_data();
+
+		sort( $non_optimized_rows );
+		sort( $optimized_rows );
+		$this->assertEquals( $optimized_rows, $non_optimized_rows );
+	}
+
+	/**
 	 * Set the product attributes from an array with this format:
 	 *
 	 * [
