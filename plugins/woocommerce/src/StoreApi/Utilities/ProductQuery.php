@@ -196,15 +196,9 @@ class ProductQuery implements QueryClausesGenerator {
 			);
 		}
 
-		// Filter by on sale products.
+		// Filter by on sale products during query clause generation to avoid materializing large ID lists.
 		if ( is_bool( $request['on_sale'] ) ) {
-			$on_sale_key = $request['on_sale'] ? 'post__in' : 'post__not_in';
-			$on_sale_ids = wc_get_product_ids_on_sale();
-
-			// Use 0 when there's no on sale products to avoid return all products.
-			$on_sale_ids = empty( $on_sale_ids ) ? array( 0 ) : $on_sale_ids;
-
-			$args[ $on_sale_key ] += $on_sale_ids;
+			$args['store_api_on_sale'] = $request['on_sale'];
 		}
 
 		$catalog_visibility = $request->get_param( 'catalog_visibility' );
@@ -447,6 +441,40 @@ class ProductQuery implements QueryClausesGenerator {
 			$args['join']   = $this->append_product_sorting_table_join( $args['join'] );
 			$post_name__in  = implode( '","', array_map( 'esc_sql', $slugs ) );
 			$args['where'] .= " AND $wpdb->posts.post_name IN (\"$post_name__in\")";
+		}
+
+		$on_sale = $wp_query->get( 'store_api_on_sale' );
+		if ( is_bool( $on_sale ) ) {
+			$args['join'] = $this->append_product_sorting_table_join( $args['join'] );
+
+			$on_sale_variation_stock_status_query = 'yes' === get_option( 'woocommerce_hide_out_of_stock_items' )
+				? ' AND on_sale_variation_lookup.stock_status != "outofstock"'
+				: '';
+			$on_sale_variation_parent_query       = "
+				SELECT on_sale_variations.post_parent
+				FROM {$wpdb->posts} on_sale_variations
+				INNER JOIN {$wpdb->wc_product_meta_lookup} on_sale_variation_lookup
+					ON on_sale_variations.ID = on_sale_variation_lookup.product_id
+				WHERE on_sale_variations.post_type = 'product_variation'
+				AND on_sale_variations.post_status = 'publish'
+				AND on_sale_variations.post_parent > 0
+				AND on_sale_variation_lookup.onsale = 1
+				$on_sale_variation_stock_status_query
+			";
+
+			if ( true === $on_sale ) {
+				$args['where'] .= "
+					AND (
+						wc_product_meta_lookup.onsale = 1
+						OR {$wpdb->posts}.ID IN ( $on_sale_variation_parent_query )
+					)
+				";
+			} else {
+				$args['where'] .= "
+					AND ( wc_product_meta_lookup.onsale IS NULL OR wc_product_meta_lookup.onsale = 0 )
+					AND {$wpdb->posts}.ID NOT IN ( $on_sale_variation_parent_query )
+				";
+			}
 		}
 
 		if ( $wp_query->get( 'stock_status' ) ) {
