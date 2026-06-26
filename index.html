@@ -128,13 +128,14 @@
 		<div><strong>Measured slope</strong>Full variation arrays grew from 12.7 ms at 8 variations to 6.0 s at 1,000 variations.</div>
 		<div><strong>First issue</strong>Five variation/attribute PRs are open with scoped commits, focused tests, and local benchmarks.</div>
 		<div><strong>Second issue</strong>Five search/filter PRs are open for exact identifier search, admin search caps, Store API on-sale SQL, filter-count subqueries, and Product Collection ID merging.</div>
+		<div><strong>Third issue</strong>Five HPOS order-search PRs are open for selective counts, email routing, transaction IDs, <code>created_via</code> filters, and customer meta search.</div>
 	</div>
 
 	<h2>Executive Findings</h2>
 	<ol>
 		<li><strong>Product variations and attributes are the strongest first issue.</strong> WooCommerce core itself warns that <code>WC_Product_Variable::get_available_variations( 'array' )</code> is expensive for many variations. Local measurements show steep CPU and payload growth: roughly 6 seconds and 1 MB of JSON-like payload for a single 1,000-variation product in the CLI profile.</li>
 		<li><strong>Product/admin search and filter ID materialization are the second issue.</strong> On a 5,000-product fixture, admin search built a 5,002-ID <code>post__in</code> array before pagination, Store API <code>on_sale=true</code> prepared 2,500 IDs, and Product Collection large ID intersections spent measurable PHP time before the query ran.</li>
-		<li><strong>Orders are improved by HPOS but not solved for every shape.</strong> HPOS gives dedicated order tables and indexes, but order search fallbacks and generic meta queries still have expensive shapes at 100k+ orders.</li>
+		<li><strong>Orders are improved by HPOS but not solved for every shape.</strong> HPOS gives dedicated order tables and indexes, but the default <code>All</code> admin search can still fan out into expensive scans. On a 20,000-order fixture, a complete email search through <code>All</code> took 185 ms while the indexed email path took less than 1 ms.</li>
 		<li><strong>Bookings performance is mostly outside this repo.</strong> Core can approximate Bookings pressure with product type/data-store hooks, cart hooks, Store API hooks, and booking-like order meta. The real availability calendar and slot search logic lives in WooCommerce Bookings, not in core.</li>
 	</ol>
 
@@ -143,7 +144,7 @@
 		<tr><th>Item</th><th>Value</th></tr>
 		<tr><td>WooCommerce</td><td><code>11.0.0-dev</code>, branch <code>trunk</code>, commit <code>e9a9675048</code></td></tr>
 		<tr><td>WordPress environment</td><td><code>wp-env</code>, PHP 8.1 container, MySQL containers, test site on <code>http://localhost:18096</code></td></tr>
-		<tr><td>Harnesses</td><td><code>plugins/woocommerce/tests/bin/tmp/woo-perf-benchmark.php</code> and <code>product-search-filter-benchmark.php</code> (ignored local files)</td></tr>
+		<tr><td>Harnesses</td><td><code>plugins/woocommerce/tests/bin/tmp/woo-perf-benchmark.php</code>, <code>product-search-filter-benchmark.php</code>, and <code>order-hpos-benchmark.php</code> (ignored local files)</td></tr>
 		<tr><td>Raw results</td><td><code>/home/claude/woo-perf/research/results/*.json</code></td></tr>
 		<tr><td>Fixture strategy so far</td><td>WooCommerce CRUD APIs for correctness-sized fixtures, plus a bulk variation seeder for larger variable-product scale points. Bulk fixtures keep the post/meta shape used by read and matching paths but are not a replacement for CRUD correctness tests.</td></tr>
 	</table>
@@ -268,6 +269,64 @@
 		</tr>
 	</table>
 
+	<h3>Third-Issue HPOS Order Search Baseline</h3>
+	<table>
+		<tr><th>Fixture</th><th>Operation</th><th>Median</th><th>p95</th><th>Queries</th><th>Result</th></tr>
+		<tr><td>20,000 HPOS orders</td><td>Plain paginated order query</td><td>5.3 ms</td><td>13.0 ms</td><td>2</td><td>20 IDs / 20,000 total</td></tr>
+		<tr><td>20,000 HPOS orders</td><td>Plain query with <code>no_found_rows</code></td><td>0.50 ms</td><td>0.58 ms</td><td>1</td><td>20 IDs</td></tr>
+		<tr><td>20,000 HPOS orders</td><td><code>All</code> search for a complete email</td><td>185.0 ms</td><td>216.6 ms</td><td>2</td><td>1 order</td></tr>
+		<tr><td>20,000 HPOS orders</td><td>Indexed customer email search</td><td>0.88 ms</td><td>1.23 ms</td><td>2</td><td>1 order</td></tr>
+		<tr><td>20,000 HPOS orders</td><td>Explicit transaction ID search</td><td>50.6 ms</td><td>55.2 ms</td><td>2</td><td>1 order</td></tr>
+		<tr><td>20,000 HPOS orders</td><td>Customer/address fallback search, FTS off</td><td>146.1 ms</td><td>151.3 ms</td><td>2</td><td>6,666 orders</td></tr>
+		<tr><td>20,000 HPOS orders</td><td>Product-name fallback search, FTS off</td><td>61.1 ms</td><td>69.9 ms</td><td>2</td><td>20,000 orders</td></tr>
+		<tr><td>20,000 HPOS orders</td><td><code>created_via=checkout</code></td><td>34.2 ms</td><td>38.6 ms</td><td>2</td><td>5,000 orders</td></tr>
+		<tr><td>20,000 HPOS orders</td><td>Custom HPOS meta query</td><td>14.6 ms</td><td>15.9 ms</td><td>2</td><td>2,000 orders</td></tr>
+	</table>
+
+	<div class="callout">
+		<p><strong>Interpretation:</strong> WooCommerce 9.9-era admin work already improved the unfiltered orders list with cached counts and status-union rewrites. The remaining order issue is searched/filtered HPOS queries: selective searches still run unnecessary counts, default <code>All</code> can hide indexed paths behind broad scans, and some supported filters lack matching indexes.</p>
+	</div>
+
+	<h3>Third-Issue HPOS Order Search Lanes</h3>
+	<table>
+		<tr>
+			<th>Branch</th>
+			<th>Approach</th>
+			<th>Focused tests</th>
+			<th>Measured result on 20,000 orders</th>
+		</tr>
+		<tr>
+			<td><a href="https://github.com/adamziel/woocommerce/pull/11"><code>perf/order-query-count-short-circuit</code></a></td>
+			<td>Skip the HPOS count query when the first page returns fewer IDs than the requested limit. The fetched page already proves the total and max pages.</td>
+			<td><code>OrdersTableQueryTests</code>: 2 tests, 7 assertions.</td>
+			<td>Selective search query count fell from 2 to 1. Email prefix search improved from 0.88 ms to 0.54 ms; order ID search improved from 0.76 ms to 0.69 ms.</td>
+		</tr>
+		<tr>
+			<td><a href="https://github.com/adamziel/woocommerce/pull/14"><code>perf/hpos-email-search-routing</code></a></td>
+			<td>Route default or <code>all</code> searches for a complete email address to the indexed <code>customer_email</code> filter instead of fanning out through transaction, meta, and product scans.</td>
+			<td><code>OrdersTableQueryTests</code>: 29 tests, 154 assertions.</td>
+			<td><code>search_email_all_filter</code> improved from 185.0 ms to 1.20 ms; p95 improved from 216.6 ms to 4.89 ms.</td>
+		</tr>
+		<tr>
+			<td><a href="https://github.com/adamziel/woocommerce/pull/15"><code>perf/hpos-transaction-search-sargable</code></a></td>
+			<td>Use an indexed prefix predicate for explicit, identifier-looking <code>transaction_id</code> searches while preserving legacy substring behavior for broad terms and <code>all</code>.</td>
+			<td><code>OrdersTableQueryTests</code>: 3 tests, 8 assertions.</td>
+			<td>Explicit transaction search improved from 50.6 ms to 1.18 ms. EXPLAIN changed from full table scan to <code>type=range</code> on <code>transaction_id</code>.</td>
+		</tr>
+		<tr>
+			<td><a href="https://github.com/adamziel/woocommerce/pull/13"><code>perf/hpos-created-via-index</code></a></td>
+			<td>Add <code>KEY created_via_order_id (created_via, order_id)</code> to the HPOS operational data schema.</td>
+			<td><code>OrdersTableDataStoreTests</code>: 1 test, 2 assertions.</td>
+			<td><code>created_via=checkout</code> improved from 34.2 ms to 17.8 ms; EXPLAIN uses <code>created_via_order_id</code>.</td>
+		</tr>
+		<tr>
+			<td><a href="https://github.com/adamziel/woocommerce/pull/12"><code>perf/hpos-customer-meta-search</code></a></td>
+			<td>Remove redundant <code>GROUP BY order_id</code> from the fallback customer/address meta subquery; <code>IN (...)</code> already ignores duplicate IDs.</td>
+			<td><code>OrdersTableQueryTests</code>: 2 tests, 5 assertions.</td>
+			<td>Customer fallback search improved from 197.4 ms to 142.3 ms in the worker rerun. <code>All</code> common-customer search improved from 199.8 ms to 160.8 ms.</td>
+		</tr>
+	</table>
+
 	<h2>Code Paths</h2>
 	<h3>Variations And Attributes</h3>
 	<ul>
@@ -307,14 +366,14 @@
 		<tr>
 			<td>3</td>
 			<td>Order search/meta-query at 100k+ orders</td>
-			<td>HPOS tables help, but fallback <code>%LIKE%</code>, generic meta joins, and legacy postmeta search remain expensive shapes.</td>
-			<td>Adaptive status UNION threshold; FTS/prefix search handling; selective meta-query rewrites; common-extension lookup/index strategy; cache/count priming improvements.</td>
+			<td>Measured 185 ms for a default <code>All</code> email search that could use a sub-millisecond indexed email path; transaction search and <code>created_via</code> filters also scanned without targeted query/index help.</td>
+			<td>Selective count short-circuit; email-shaped search routing; transaction ID prefix search; <code>created_via</code> operational-data index; fallback customer meta search simplification.</td>
 		</tr>
 	</table>
 
 	<h2>Limitations</h2>
 	<ul>
-		<li>The largest local fixtures so far are 1,000 variations on one parent, 5,000 products for search/filter lanes, and 300 orders. That is enough to confirm the first two issue classes, not enough to prove 100k-order behavior.</li>
+		<li>The largest local fixtures so far are 1,000 variations on one parent, 5,000 products for search/filter lanes, and 20,000 HPOS orders. That gives strong query-shape evidence, but it is still smaller than the 100k+ and million-order stores discussed in large-store reports.</li>
 		<li>CRUD seeding is faithful but too slow for repeated large sweeps. The new bulk variation seed path is useful for read/matching profiles, but write-path and hook behavior must still be verified with CRUD fixtures.</li>
 		<li>The current measurements run in WP-CLI inside Docker. HTTP/k6 and browser-facing paths still need to be measured after the query candidates are narrowed.</li>
 		<li>No premium WooCommerce Bookings source is present. Bookings conclusions are therefore about core extension points and documented product behavior, not the private implementation.</li>
@@ -327,6 +386,10 @@
 		<li><a href="https://developer.woocommerce.com/2022/03/08/woocommerce-6-3-released/">WooCommerce 6.3 release notes</a>: attribute lookup indexing changes.</li>
 		<li><a href="https://developer.woocommerce.com/2026/05/21/reimagining-catalog-management/">Reimagining catalog management</a>: WooCommerce acknowledges that stores with many products and variations need further scale work beyond current proof-of-concept catalog management.</li>
 		<li><a href="https://woocommerce.com/document/high-performance-order-storage/">High-Performance Order Storage</a>: dedicated order tables and indexes.</li>
+		<li><a href="https://developer.woocommerce.com/docs/features/high-performance-order-storage/">WooCommerce HPOS developer docs</a>: HPOS replaces post/postmeta order storage with dedicated order, address, operational, and meta tables.</li>
+		<li><a href="https://developer.woocommerce.com/docs/features/high-performance-order-storage/guide-large-store/">Large-store HPOS migration guide</a>: high-volume stores should migrate and test HPOS carefully, then progressively disable sync-on-read/write.</li>
+		<li><a href="https://developer.woocommerce.com/2025/05/13/woocommerce-9-9-will-deliver-massive-admin-performance-gains/">WooCommerce 9.9 admin performance gains</a>: large-store order admin improvements from cached counts, async loading, and leaner queries.</li>
+		<li><a href="https://github.com/woocommerce/woocommerce/issues/45721">WooCommerce issue #45721</a>: HPOS default <code>All</code> order search reported slow on stores around 150k orders.</li>
 		<li><a href="https://wpvip.com/blog/scaling-a-high-volume-woocommerce-shop-with-enterprise-search/">WordPress VIP: scaling a high-volume WooCommerce shop with Enterprise Search</a>: search/navigation pressure at million-product scale.</li>
 		<li><a href="https://docs.wpvip.com/databases/optimize-queries/querying-on-meta_value/">WordPress VIP: querying on meta_value</a>: why broad meta-value searches are expensive.</li>
 		<li><a href="https://docs.wpvip.com/databases/optimize-queries/posts_per_page/">WordPress VIP: posts_per_page guidance</a>: unbounded result sets and scale risk.</li>
