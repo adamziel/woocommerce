@@ -1998,6 +1998,8 @@ class WC_Product_Data_Store_CPT extends WC_Data_Store_WP implements WC_Object_Da
 		$type_where   = '';
 		$status_where = '';
 		$limit_query  = '';
+		$include_where = '';
+		$exclude_where = '';
 
 		// When searching variations we should include the parent's meta table for use in searches.
 		if ( $include_variations ) {
@@ -2015,6 +2017,66 @@ class WC_Product_Data_Store_CPT extends WC_Data_Store_WP implements WC_Object_Da
 			'woocommerce_search_products_post_statuses',
 			current_user_can( 'edit_private_products' ) ? array( 'private', 'publish' ) : array( 'publish' )
 		);
+
+		if ( ! empty( $include ) && is_array( $include ) ) {
+			$include_where = ' AND posts.ID IN(' . implode( ',', array_map( 'absint', $include ) ) . ') ';
+		}
+
+		if ( ! empty( $exclude ) && is_array( $exclude ) ) {
+			$exclude_where = ' AND posts.ID NOT IN(' . implode( ',', array_map( 'absint', $exclude ) ) . ') ';
+		}
+
+		if ( 'virtual' === $type ) {
+			$type_where = ' AND ( wc_product_meta_lookup.virtual = 1 ) ';
+		} elseif ( 'downloadable' === $type ) {
+			$type_where = ' AND ( wc_product_meta_lookup.downloadable = 1 ) ';
+		}
+
+		if ( ! $all_statuses ) {
+			$status_where = " AND posts.post_status IN ('" . implode( "','", $post_statuses ) . "') ";
+		}
+
+		if ( $limit ) {
+			$limit_query = $wpdb->prepare( ' LIMIT %d ', $limit );
+		}
+
+		$exact_search_term = trim( (string) $term );
+
+		if ( '' !== $exact_search_term && preg_match( '/^[^\s",+]+$/', $exact_search_term ) && preg_match( '/[\d_-]/', $exact_search_term ) ) {
+			$exact_search_where = $wpdb->prepare(
+				'( wc_product_meta_lookup.sku = %s ) OR ( wc_product_meta_lookup.global_unique_id = %s )',
+				$exact_search_term,
+				$exact_search_term
+			);
+
+			if ( $include_variations ) {
+				$exact_search_where .= $wpdb->prepare( " OR ( wc_product_meta_lookup.sku = '' AND parent_wc_product_meta_lookup.sku = %s )", $exact_search_term );
+				$exact_search_where .= $wpdb->prepare( " OR ( wc_product_meta_lookup.global_unique_id = '' AND parent_wc_product_meta_lookup.global_unique_id = %s )", $exact_search_term );
+			}
+
+			// phpcs:ignore WordPress.VIP.DirectDatabaseQuery.DirectQuery
+			$exact_search_results = $wpdb->get_results(
+				// phpcs:disable
+				"SELECT DISTINCT posts.ID as product_id, posts.post_parent as parent_id FROM {$wpdb->posts} posts
+				 LEFT JOIN {$wpdb->wc_product_meta_lookup} wc_product_meta_lookup ON posts.ID = wc_product_meta_lookup.product_id
+				 $join_query
+				WHERE posts.post_type IN ('" . implode( "','", $post_types ) . "')
+				AND ( $exact_search_where )
+				$include_where
+				$exclude_where
+				$status_where
+				$type_where
+				ORDER BY posts.post_parent ASC, posts.post_title ASC
+				$limit_query
+				"
+				// phpcs:enable
+			);
+
+			if ( $exact_search_results ) {
+				$product_ids = $this->get_product_ids_from_search_results( $exact_search_results );
+				return $this->maybe_add_numeric_search_product_ids( $product_ids, $term, $include_variations );
+			}
+		}
 
 		// See if search term contains OR keywords.
 		if ( stristr( $term, ' or ' ) ) {
@@ -2069,27 +2131,7 @@ class WC_Product_Data_Store_CPT extends WC_Data_Store_WP implements WC_Object_Da
 			$search_where = ' AND (' . implode( ') OR (', $search_queries ) . ') ';
 		}
 
-		if ( ! empty( $include ) && is_array( $include ) ) {
-			$search_where .= ' AND posts.ID IN(' . implode( ',', array_map( 'absint', $include ) ) . ') ';
-		}
-
-		if ( ! empty( $exclude ) && is_array( $exclude ) ) {
-			$search_where .= ' AND posts.ID NOT IN(' . implode( ',', array_map( 'absint', $exclude ) ) . ') ';
-		}
-
-		if ( 'virtual' === $type ) {
-			$type_where = ' AND ( wc_product_meta_lookup.virtual = 1 ) ';
-		} elseif ( 'downloadable' === $type ) {
-			$type_where = ' AND ( wc_product_meta_lookup.downloadable = 1 ) ';
-		}
-
-		if ( ! $all_statuses ) {
-			$status_where = " AND posts.post_status IN ('" . implode( "','", $post_statuses ) . "') ";
-		}
-
-		if ( $limit ) {
-			$limit_query = $wpdb->prepare( ' LIMIT %d ', $limit );
-		}
+		$search_where .= $include_where . $exclude_where;
 
 		// phpcs:ignore WordPress.VIP.DirectDatabaseQuery.DirectQuery
 		$search_results = $wpdb->get_results(
@@ -2107,8 +2149,30 @@ class WC_Product_Data_Store_CPT extends WC_Data_Store_WP implements WC_Object_Da
 			// phpcs:enable
 		);
 
-		$product_ids = wp_parse_id_list( array_merge( wp_list_pluck( $search_results, 'product_id' ), wp_list_pluck( $search_results, 'parent_id' ) ) );
+		$product_ids = $this->get_product_ids_from_search_results( $search_results );
 
+		return $this->maybe_add_numeric_search_product_ids( $product_ids, $term, $include_variations );
+	}
+
+	/**
+	 * Get product and parent IDs from product search result rows.
+	 *
+	 * @param array $search_results Search result rows.
+	 * @return array
+	 */
+	private function get_product_ids_from_search_results( $search_results ) {
+		return wp_parse_id_list( array_merge( wp_list_pluck( $search_results, 'product_id' ), wp_list_pluck( $search_results, 'parent_id' ) ) );
+	}
+
+	/**
+	 * Add exact numeric product ID matches to product search results.
+	 *
+	 * @param array  $product_ids Product IDs.
+	 * @param string $term Search term.
+	 * @param bool   $include_variations Include variations in search or not.
+	 * @return array
+	 */
+	private function maybe_add_numeric_search_product_ids( $product_ids, $term, $include_variations ) {
 		if ( is_numeric( $term ) ) {
 			$post_id   = absint( $term );
 			$post_type = get_post_type( $post_id );
