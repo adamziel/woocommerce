@@ -417,6 +417,24 @@ class OrdersTableQueryTests extends \WC_Unit_Test_Case {
 	 */
 	public function test_first_page_partial_results_skip_count_query(): void {
 		$order_ids = $this->create_order_ids_for_pagination_count_tests( 2 );
+		$query     = new OrdersTableQuery(
+			array(
+				'id'     => $order_ids,
+				'limit'  => 3,
+				'return' => 'ids',
+			)
+		);
+
+		$this->assertEqualsCanonicalizing( $order_ids, $query->orders );
+		$this->assertSame( 2, $query->found_orders );
+		$this->assertSame( 1, $query->max_num_pages );
+	}
+
+	/**
+	 * @testdox First-page limited queries still count when count SQL is filtered.
+	 */
+	public function test_first_page_partial_results_still_count_with_filtered_count_sql(): void {
+		$order_ids = $this->create_order_ids_for_pagination_count_tests( 2 );
 		$callback  = static function () {
 			return 'SELECT 999';
 		};
@@ -436,8 +454,8 @@ class OrdersTableQueryTests extends \WC_Unit_Test_Case {
 		}
 
 		$this->assertEqualsCanonicalizing( $order_ids, $query->orders );
-		$this->assertSame( 2, $query->found_orders );
-		$this->assertSame( 1, $query->max_num_pages );
+		$this->assertSame( 999, $query->found_orders );
+		$this->assertSame( 333, $query->max_num_pages );
 	}
 
 	/**
@@ -456,6 +474,26 @@ class OrdersTableQueryTests extends \WC_Unit_Test_Case {
 		$this->assertCount( 2, $query->orders );
 		$this->assertEmpty( array_diff( $query->orders, $order_ids ) );
 		$this->assertSame( 3, $query->found_orders );
+		$this->assertSame( 2, $query->max_num_pages );
+	}
+
+	/**
+	 * @testdox Offset limited queries still count when they return fewer orders than requested.
+	 */
+	public function test_offset_partial_results_still_count_query(): void {
+		$order_ids = $this->create_order_ids_for_pagination_count_tests( 4 );
+		$query     = new OrdersTableQuery(
+			array(
+				'id'     => $order_ids,
+				'limit'  => 3,
+				'offset' => 3,
+				'return' => 'ids',
+			)
+		);
+
+		$this->assertCount( 1, $query->orders );
+		$this->assertEmpty( array_diff( $query->orders, $order_ids ) );
+		$this->assertSame( 4, $query->found_orders );
 		$this->assertSame( 2, $query->max_num_pages );
 	}
 

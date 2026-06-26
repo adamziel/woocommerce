@@ -1464,7 +1464,7 @@ class OrdersTableQuery {
 		$row_count   = (int) ( $this->limits[1] ?? 0 );
 		$order_count = count( $this->orders );
 
-		if ( $row_count > 0 && 0 === $offset && $order_count < $row_count ) {
+		if ( $row_count > 0 && 0 === $offset && $order_count < $row_count && $this->can_infer_found_orders_from_result_count() ) {
 			$this->found_orders  = $order_count;
 			$this->max_num_pages = (int) ceil( $this->found_orders / $row_count );
 			return;
@@ -1478,6 +1478,23 @@ class OrdersTableQuery {
 		} else {
 			$this->found_orders = $order_count;
 		}
+	}
+
+	/**
+	 * Whether found order counts can be inferred from a partial first-page result.
+	 *
+	 * @return bool
+	 */
+	private function can_infer_found_orders_from_result_count(): bool {
+		if ( $this->suppress_filters ) {
+			return true;
+		}
+
+		return ! (
+			has_filter( 'woocommerce_orders_table_query_clauses' )
+			|| has_filter( 'woocommerce_orders_table_query_sql' )
+			|| has_filter( 'woocommerce_orders_table_query_count_sql' )
+		);
 	}
 
 	/**
