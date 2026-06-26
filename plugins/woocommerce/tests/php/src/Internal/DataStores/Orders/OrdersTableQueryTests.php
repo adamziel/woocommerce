@@ -494,6 +494,101 @@ class OrdersTableQueryTests extends \WC_Unit_Test_Case {
 	}
 
 	/**
+	 * Set up orders that match the same email-like search term through different search filters.
+	 *
+	 * @return array
+	 */
+	private function setup_dummy_orders_for_email_search_filter() {
+		$email = 'customer@woo.test';
+
+		$email_order = new WC_Order();
+		$email_order->set_billing_email( $email );
+		$email_order->set_status( OrderStatus::COMPLETED );
+		$email_order->save();
+
+		$test_product = WC_Helper_Product::create_simple_product( true, array( 'name' => $email ) );
+		$test_product->save();
+		$product_order = new WC_Order();
+		$product_order->add_product( $test_product );
+		$product_order->set_status( OrderStatus::COMPLETED );
+		$product_order->save();
+
+		$transaction_order = new WC_Order();
+		$transaction_order->set_transaction_id( 'txn-' . $email );
+		$transaction_order->set_status( OrderStatus::COMPLETED );
+		$transaction_order->save();
+
+		return array(
+			'email'             => $email,
+			'email_order'       => $email_order->get_id(),
+			'product_order'     => $product_order->get_id(),
+			'transaction_order' => $transaction_order->get_id(),
+		);
+	}
+
+	/**
+	 * @testDox Default and 'all' search filters only search billing email for email terms.
+	 */
+	public function test_query_s_all_filter_with_email_term_uses_customer_email_only() {
+		$orders = $this->setup_dummy_orders_for_email_search_filter();
+
+		foreach ( array( null, '', 'all' ) as $search_filter ) {
+			$captured_clauses = array();
+			$filter_callback  = function ( $clauses ) use ( &$captured_clauses ) {
+				$captured_clauses = $clauses;
+				return $clauses;
+			};
+
+			add_filter( 'woocommerce_orders_table_query_clauses', $filter_callback );
+
+			$query_args = array(
+				's'      => $orders['email'],
+				'return' => 'ids',
+			);
+
+			if ( null !== $search_filter ) {
+				$query_args['search_filter'] = $search_filter;
+			}
+
+			$query = new OrdersTableQuery( $query_args );
+			remove_filter( 'woocommerce_orders_table_query_clauses', $filter_callback );
+
+			$this->assertEqualsCanonicalizing( array( $orders['email_order'] ), $query->orders );
+			$this->assertStringContainsString( 'billing_email LIKE', $captured_clauses['where'] );
+			$this->assertStringNotContainsString( 'transaction_id LIKE', $captured_clauses['where'] );
+			$this->assertStringNotContainsString( 'search_query_items', $captured_clauses['where'] );
+			$this->assertStringNotContainsString( 'search_query_meta', $captured_clauses['where'] );
+			$this->assertStringNotContainsString( 'fts_items', $captured_clauses['join'] . $captured_clauses['where'] );
+			$this->assertStringNotContainsString( 'fts_addresses', $captured_clauses['join'] . $captured_clauses['where'] );
+		}
+	}
+
+	/**
+	 * @testDox Explicit email-like product and transaction ID searches keep their selected scope.
+	 */
+	public function test_query_s_explicit_email_like_filters_keep_selected_scope() {
+		$orders = $this->setup_dummy_orders_for_email_search_filter();
+
+		$query = new OrdersTableQuery(
+			array(
+				's'             => $orders['email'],
+				'return'        => 'ids',
+				'search_filter' => 'products',
+			)
+		);
+		$this->assertEqualsCanonicalizing( array( $orders['product_order'] ), $query->orders );
+
+		$query = new OrdersTableQuery(
+			array(
+				's'             => $orders['email'],
+				'return'        => 'ids',
+				'search_filter' => 'transaction_id',
+			)
+		);
+		$this->assertEqualsCanonicalizing( array( $orders['transaction_order'] ), $query->orders );
+	}
+
+	/**
 	 * @testDox The 'search_filter' argument works with a 'customer' param passed in.
 	 */
 	public function test_query_s_filters_customers() {
