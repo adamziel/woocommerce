@@ -596,7 +596,7 @@ class WC_Admin_List_Table_Products extends WC_Admin_List_Table {
 			$ids          = $data_store->search_products( $search, '', true, true, $search_limit ? $search_limit : null );
 			$ids          = array_values( array_filter( $ids ) );
 
-			if ( $search_limit && count( $ids ) > $search_limit ) {
+			if ( $search_limit && count( $ids ) >= $search_limit ) {
 				// Enforce the cap even when custom product search filters return more IDs than requested.
 				$exact_ids = $this->get_exact_product_search_ids( $search );
 				$ids       = $exact_ids ? array_values( array_unique( array_merge( $exact_ids, $ids ) ) ) : $ids;

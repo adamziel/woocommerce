@@ -13,7 +13,7 @@ require_once WC_ABSPATH . '/includes/admin/list-tables/class-wc-admin-list-table
 class WC_Admin_List_Table_Products_Test extends WC_Unit_Test_Case {
 
 	/**
-	 * Test that product list table searches pass the default cap to the product data store.
+	 * @testdox Product list table searches pass the default cap to the product data store.
 	 */
 	public function test_product_search_uses_default_result_limit() {
 		$captured_limit = null;
@@ -41,7 +41,7 @@ class WC_Admin_List_Table_Products_Test extends WC_Unit_Test_Case {
 	}
 
 	/**
-	 * Test that product list table search result materialization can be capped with a filter.
+	 * @testdox Product list table search result materialization can be capped with a filter.
 	 */
 	public function test_product_search_result_limit_is_filterable() {
 		$search_term = 'adminsearchcap' . wp_rand();
@@ -76,7 +76,7 @@ class WC_Admin_List_Table_Products_Test extends WC_Unit_Test_Case {
 	}
 
 	/**
-	 * Test that returning 0 from the admin product search result limit filter disables the cap.
+	 * @testdox Returning 0 from the admin product search result limit filter disables the cap.
 	 */
 	public function test_product_search_result_limit_can_be_disabled() {
 		$captured_limit = 'not called';
@@ -103,7 +103,7 @@ class WC_Admin_List_Table_Products_Test extends WC_Unit_Test_Case {
 	}
 
 	/**
-	 * Test that exact product ID searches are preserved when broad numeric results exceed the cap.
+	 * @testdox Exact product ID searches are preserved when broad numeric results exceed the cap.
 	 */
 	public function test_product_search_result_limit_preserves_exact_product_id_searches() {
 		$product    = WC_Helper_Product::create_simple_product();
@@ -112,6 +112,38 @@ class WC_Admin_List_Table_Products_Test extends WC_Unit_Test_Case {
 		};
 		$pre_search = function () {
 			return array( 111111, 222222, 333333 );
+		};
+
+		add_filter( 'woocommerce_admin_product_search_results_limit', $set_limit );
+		add_filter( 'woocommerce_product_pre_search_products', $pre_search, 10, 0 );
+
+		try {
+			$query_vars = $this->filter_product_query_vars(
+				array(
+					's' => (string) $product->get_id(),
+				)
+			);
+		} finally {
+			remove_filter( 'woocommerce_admin_product_search_results_limit', $set_limit );
+			remove_filter( 'woocommerce_product_pre_search_products', $pre_search, 10 );
+			WC_Helper_Product::delete_product( $product->get_id() );
+		}
+
+		$this->assertCount( 3, $query_vars['post__in'] );
+		$this->assertContains( $product->get_id(), $query_vars['post__in'] );
+		$this->assertSame( 0, end( $query_vars['post__in'] ) );
+	}
+
+	/**
+	 * @testdox Exact product ID searches are preserved when broad numeric results exactly meet the cap.
+	 */
+	public function test_product_search_result_limit_preserves_exact_product_id_searches_at_limit() {
+		$product    = WC_Helper_Product::create_simple_product();
+		$set_limit  = function ( $limit ) {
+			return 2;
+		};
+		$pre_search = function () {
+			return array( 111111, 222222 );
 		};
 
 		add_filter( 'woocommerce_admin_product_search_results_limit', $set_limit );
