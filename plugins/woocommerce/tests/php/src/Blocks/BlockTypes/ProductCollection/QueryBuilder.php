@@ -614,7 +614,7 @@ class QueryBuilder extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * Test merging exclusive id filters keeps the original order after intersection.
+	 * @testdox Merging exclusive id filters keeps the original order after intersection.
 	 */
 	public function test_merges_post__in_preserves_first_filter_order() {
 		$existing_id_filter     = array( 9, 2, 4, 2, 7, 4, 5 );
@@ -645,7 +645,7 @@ class QueryBuilder extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * Test merging large exclusive id filters keeps first-filter order.
+	 * @testdox Merging large exclusive id filters keeps first-filter order.
 	 */
 	public function test_merges_large_post__in_preserves_first_filter_order() {
 		$existing_id_filter     = array_merge( range( 1, 2499 ), range( 2600, 2500 ), range( 2601, 5000 ) );
@@ -661,7 +661,7 @@ class QueryBuilder extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * Test merging exclusive id filters ignores empty arrays and keeps numeric uniqueness.
+	 * @testdox Merging exclusive id filters ignores empty arrays and keeps numeric uniqueness.
 	 */
 	public function test_merges_post__in_ignores_empty_arrays() {
 		$existing_id_filter = array( 4, 2, 4, 3 );
@@ -676,7 +676,7 @@ class QueryBuilder extends \WP_UnitTestCase {
 	}
 
 	/**
-	 * Test merging without valid id filters keeps the query unrestricted.
+	 * @testdox Merging without valid id filters keeps the query unrestricted.
 	 */
 	public function test_merges_post__in_without_valid_arrays() {
 		$merged_query = Utils::initialize_merged_query( $this->block_instance );
