@@ -1165,6 +1165,72 @@ class WC_Product_Functions_Tests extends \WC_Unit_Test_Case {
 	}
 
 	/**
+	 * @testdox Variable add-to-cart emits compact lazy variation data when the AJAX threshold is raised above the lazy data threshold.
+	 */
+	public function test_woocommerce_variable_add_to_cart_emits_lazy_variation_data() {
+		$product = $this->create_many_variation_product( 31 );
+		$filter  = function () {
+			return 50;
+		};
+
+		add_filter( 'woocommerce_ajax_variation_threshold', $filter );
+
+		try {
+			$html       = $this->capture_variable_add_to_cart_html( $product );
+			$variations = $this->extract_product_variations_from_html( $html );
+		} finally {
+			remove_filter( 'woocommerce_ajax_variation_threshold', $filter );
+			WC_Helper_Product::delete_product( $product->get_id() );
+		}
+
+		$this->assertStringContainsString( 'data-product_variations_lazy="true"', $html );
+		$this->assertCount( 31, $variations );
+		$this->assertArrayHasKey( 'attributes', $variations[0] );
+		$this->assertArrayHasKey( 'variation_id', $variations[0] );
+		$this->assertArrayHasKey( 'variation_is_active', $variations[0] );
+		$this->assertArrayHasKey( 'variation_is_visible', $variations[0] );
+		$this->assertFalse( $variations[0]['variation_data_loaded'] );
+		$this->assertArrayNotHasKey( 'price_html', $variations[0] );
+		$this->assertArrayNotHasKey( 'image', $variations[0] );
+	}
+
+	/**
+	 * @testdox Variable add-to-cart keeps the existing AJAX mode above the AJAX threshold.
+	 */
+	public function test_woocommerce_variable_add_to_cart_keeps_ajax_mode_above_ajax_threshold() {
+		$product = $this->create_many_variation_product( 31 );
+
+		try {
+			$html       = $this->capture_variable_add_to_cart_html( $product );
+			$variations = $this->extract_product_variations_from_html( $html );
+		} finally {
+			WC_Helper_Product::delete_product( $product->get_id() );
+		}
+
+		$this->assertStringNotContainsString( 'data-product_variations_lazy="true"', $html );
+		$this->assertFalse( $variations );
+	}
+
+	/**
+	 * @testdox Variable add-to-cart keeps full inline variation data below the lazy data threshold.
+	 */
+	public function test_woocommerce_variable_add_to_cart_keeps_full_variation_data_below_lazy_threshold() {
+		$product = WC_Helper_Product::create_variation_product();
+
+		try {
+			$html       = $this->capture_variable_add_to_cart_html( $product );
+			$variations = $this->extract_product_variations_from_html( $html );
+		} finally {
+			WC_Helper_Product::delete_product( $product->get_id() );
+		}
+
+		$this->assertStringNotContainsString( 'data-product_variations_lazy="true"', $html );
+		$this->assertNotFalse( $variations );
+		$this->assertArrayHasKey( 'price_html', $variations[0] );
+		$this->assertArrayHasKey( 'image', $variations[0] );
+	}
+
+	/**
 	 * Render the variable add-to-cart template and return the inline JS
 	 * attached to the variation script.
 	 */
@@ -1191,5 +1257,78 @@ class WC_Product_Functions_Tests extends \WC_Unit_Test_Case {
 		WC_Helper_Product::delete_product( $product->get_id() );
 
 		return implode( "\n", (array) $before_data );
+	}
+
+	/**
+	 * Render the variable add-to-cart template and return its HTML.
+	 *
+	 * @param WC_Product_Variable $product Product to render.
+	 * @return string
+	 */
+	private function capture_variable_add_to_cart_html( WC_Product_Variable $product ): string {
+		$previous_product   = $GLOBALS['product'] ?? null;
+		$GLOBALS['product'] = $product; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+
+		ob_start();
+		woocommerce_variable_add_to_cart();
+		$html = ob_get_clean();
+
+		$GLOBALS['product'] = $previous_product; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+
+		return $html;
+	}
+
+	/**
+	 * Extract the JSON variation data embedded in the classic add-to-cart form.
+	 *
+	 * @param string $html Template HTML.
+	 * @return array|false
+	 */
+	private function extract_product_variations_from_html( string $html ) {
+		preg_match( '/data-product_variations="([^"]*)"/', $html, $matches );
+
+		$this->assertNotEmpty( $matches, 'Variable add-to-cart form should include product variation data.' );
+
+		return json_decode( html_entity_decode( $matches[1], ENT_QUOTES, 'UTF-8' ), true );
+	}
+
+	/**
+	 * Create a variable product with many one-attribute variations.
+	 *
+	 * @param int $variation_count Number of variations to create.
+	 * @return WC_Product_Variable
+	 */
+	private function create_many_variation_product( int $variation_count ): WC_Product_Variable {
+		$suffix  = (string) wp_rand( 1000, 9999 );
+		$options = array();
+
+		for ( $i = 1; $i <= $variation_count; $i++ ) {
+			$options[] = 'lazy-option-' . $i . '-' . $suffix;
+		}
+
+		$product = new WC_Product_Variable();
+		$product->set_props(
+			array(
+				'name' => 'Lazy Variable Product',
+				'sku'  => 'LAZY VARIABLE SKU ' . $suffix,
+			)
+		);
+
+		$attribute = WC_Helper_Product::create_product_attribute_object( 'lazy_size_' . $suffix, $options );
+		$product->set_attributes( array( $attribute ) );
+		$product->save();
+
+		foreach ( $options as $index => $option ) {
+			WC_Helper_Product::create_product_variation_object(
+				$product->get_id(),
+				'LAZY VARIATION SKU ' . $suffix . ' ' . $index,
+				10 + $index,
+				array(
+					$attribute->get_name() => $option,
+				)
+			);
+		}
+
+		return wc_get_product( $product->get_id() );
 	}
 }
