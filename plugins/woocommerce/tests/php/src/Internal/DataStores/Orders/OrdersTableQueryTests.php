@@ -494,6 +494,33 @@ class OrdersTableQueryTests extends \WC_Unit_Test_Case {
 	}
 
 	/**
+	 * Create an order with a transaction ID.
+	 *
+	 * @param string $transaction_id Transaction ID.
+	 * @return int Order ID.
+	 */
+	private function create_order_with_transaction_id( string $transaction_id ): int {
+		$order = new WC_Order();
+		$order->set_transaction_id( $transaction_id );
+		$order->set_status( OrderStatus::COMPLETED );
+		$order->save();
+
+		return $order->get_id();
+	}
+
+	/**
+	 * Remove placeholder escapes from generated SQL.
+	 *
+	 * @param string $sql SQL string.
+	 * @return string SQL string.
+	 */
+	private function remove_placeholder_escape_from_sql( string $sql ): string {
+		global $wpdb;
+
+		return $wpdb->remove_placeholder_escape( $sql );
+	}
+
+	/**
 	 * @testDox The 'search_filter' argument works with a 'customer' param passed in.
 	 */
 	public function test_query_s_filters_customers() {
@@ -599,6 +626,72 @@ class OrdersTableQueryTests extends \WC_Unit_Test_Case {
 
 		$query = new OrdersTableQuery( $query_args );
 		$this->assertEqualsCanonicalizing( array( $orders[0] ), $query->orders );
+	}
+
+	/**
+	 * @testDox The 'search_filter' argument uses an indexed transaction ID prefix search for identifier-like terms.
+	 */
+	public function test_query_s_filters_transaction_id_uses_indexed_prefix_for_identifier_like_terms() {
+		$prefix_order    = $this->create_order_with_transaction_id( 'txn_woo_12345_alpha' );
+		$substring_order = $this->create_order_with_transaction_id( 'legacy_txn_woo_12345_alpha' );
+
+		$query = new OrdersTableQuery(
+			array(
+				's'             => 'txn_woo_12345',
+				'search_filter' => 'transaction_id',
+				'return'        => 'ids',
+				'no_found_rows' => true,
+			)
+		);
+
+		$sql = $this->remove_placeholder_escape_from_sql( $query->request );
+
+		$this->assertEqualsCanonicalizing( array( $prefix_order ), $query->orders );
+		$this->assertNotContains( $substring_order, $query->orders );
+		$this->assertMatchesRegularExpression( "#transaction_id LIKE 'txn[\\\\]+_woo[\\\\]+_12345%'#", $sql );
+		$this->assertStringNotContainsString( "transaction_id LIKE '%txn", $sql );
+	}
+
+	/**
+	 * @testDox The 'search_filter' argument keeps substring transaction ID search for broad terms.
+	 */
+	public function test_query_s_filters_transaction_id_keeps_substring_search_for_broad_terms() {
+		$order_id = $this->create_order_with_transaction_id( 'txn_woo_12345_tail' );
+
+		$query = new OrdersTableQuery(
+			array(
+				's'             => 'tail',
+				'search_filter' => 'transaction_id',
+				'return'        => 'ids',
+				'no_found_rows' => true,
+			)
+		);
+
+		$sql = $this->remove_placeholder_escape_from_sql( $query->request );
+
+		$this->assertEqualsCanonicalizing( array( $order_id ), $query->orders );
+		$this->assertStringContainsString( "transaction_id LIKE '%tail%'", $sql );
+	}
+
+	/**
+	 * @testDox The 'all' search filter keeps substring transaction ID search.
+	 */
+	public function test_query_s_filters_all_keeps_transaction_id_substring_search() {
+		$order_id = $this->create_order_with_transaction_id( 'legacy_txn_woo_12345_tail' );
+
+		$query = new OrdersTableQuery(
+			array(
+				's'             => 'txn_woo_12345',
+				'search_filter' => 'all',
+				'return'        => 'ids',
+				'no_found_rows' => true,
+			)
+		);
+
+		$sql = $this->remove_placeholder_escape_from_sql( $query->request );
+
+		$this->assertEqualsCanonicalizing( array( $order_id ), $query->orders );
+		$this->assertMatchesRegularExpression( "#transaction_id LIKE '%txn[\\\\]+_woo[\\\\]+_12345%'#", $sql );
 	}
 
 	/**

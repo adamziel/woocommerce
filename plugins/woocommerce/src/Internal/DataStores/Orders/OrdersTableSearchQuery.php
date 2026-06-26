@@ -43,6 +43,16 @@ class OrdersTableSearchQuery {
 	private const CUSTOMERS_JOIN_ALIAS = 'fts_addresses';
 
 	/**
+	 * Minimum length for using the transaction_id index in search queries.
+	 */
+	private const MINIMUM_INDEXED_TRANSACTION_ID_SEARCH_LENGTH = 6;
+
+	/**
+	 * Minimum length for indexed transaction_id searches that do not include a separator.
+	 */
+	private const MINIMUM_INDEXED_TRANSACTION_ID_SEARCH_LENGTH_WITHOUT_SEPARATOR = 10;
+
+	/**
 	 * Creates the JOIN and WHERE clauses needed to execute a search of orders.
 	 *
 	 * @internal
@@ -296,10 +306,7 @@ class OrdersTableSearchQuery {
 		}
 
 		if ( 'transaction_id' === $search_filter ) {
-			return $wpdb->prepare(
-				"`$order_table`.transaction_id LIKE %s",
-				'%' . $wpdb->esc_like( $this->search_term ) . '%'
-			);
+			return $this->generate_where_for_transaction_id( $order_table );
 		}
 		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
@@ -333,6 +340,67 @@ class OrdersTableSearchQuery {
 			$search_filter,
 			$this->query
 		);
+	}
+
+	/**
+	 * Generates a WHERE clause for transaction ID searches.
+	 *
+	 * Identifier-like terms in the explicit transaction_id filter are treated as exact/prefix searches so the
+	 * transaction_id index can be used. Broad searches keep the legacy substring behavior.
+	 *
+	 * @param string $order_table Orders table name.
+	 *
+	 * @return string WHERE clause.
+	 */
+	private function generate_where_for_transaction_id( string $order_table ): string {
+		global $wpdb;
+
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $order_table is hardcoded.
+		if ( $this->should_use_indexed_transaction_id_prefix_search() ) {
+			return $wpdb->prepare(
+				"`$order_table`.transaction_id LIKE %s",
+				$wpdb->esc_like( (string) $this->search_term ) . '%'
+			);
+		}
+
+		return $wpdb->prepare(
+			"`$order_table`.transaction_id LIKE %s",
+			'%' . $wpdb->esc_like( (string) $this->search_term ) . '%'
+		);
+		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	}
+
+	/**
+	 * Whether the current search can use the transaction_id index as a prefix lookup.
+	 *
+	 * @return bool
+	 */
+	private function should_use_indexed_transaction_id_prefix_search(): bool {
+		return array( 'transaction_id' ) === $this->search_filters && $this->is_indexable_transaction_id_search_term();
+	}
+
+	/**
+	 * Determines whether a term looks specific enough to be an exact/prefix transaction ID search.
+	 *
+	 * @return bool
+	 */
+	private function is_indexable_transaction_id_search_term(): bool {
+		$search_term = (string) $this->search_term;
+
+		if ( strlen( $search_term ) < self::MINIMUM_INDEXED_TRANSACTION_ID_SEARCH_LENGTH ) {
+			return false;
+		}
+
+		if ( 1 !== preg_match( '/\A[A-Za-z0-9._:-]+\z/', $search_term ) ) {
+			return false;
+		}
+
+		if ( 1 !== preg_match( '/\d/', $search_term ) ) {
+			return false;
+		}
+
+		return strlen( $search_term ) >= self::MINIMUM_INDEXED_TRANSACTION_ID_SEARCH_LENGTH_WITHOUT_SEPARATOR
+			|| 1 === preg_match( '/[._:-]/', $search_term );
 	}
 
 	/**
