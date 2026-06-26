@@ -5,6 +5,7 @@ namespace Automattic\WooCommerce\Tests\Internal\DataStores\Orders;
 
 use Automattic\WooCommerce\Caches\OrderCountCache;
 use Automattic\WooCommerce\Enums\OrderStatus;
+use Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableController;
 use Automattic\WooCommerce\Internal\DataStores\Orders\OrdersTableQuery;
 use Automattic\WooCommerce\RestApi\UnitTests\Helpers\OrderHelper;
 use Automattic\WooCommerce\RestApi\UnitTests\HPOSToggleTrait;
@@ -513,6 +514,53 @@ class OrdersTableQueryTests extends \WC_Unit_Test_Case {
 		$query_args['s'] = 'Product';
 		$query           = new OrdersTableQuery( $query_args );
 		$this->assertCount( 0, $query->orders );
+	}
+
+	/**
+	 * @testDox The fallback customer search returns distinct orders without grouping the meta subquery.
+	 */
+	public function test_query_s_filters_customers_does_not_group_meta_fallback() {
+		$order = new \WC_Order();
+		$order->set_billing_first_name( 'Duplicate' );
+		$order->set_billing_last_name( 'Search' );
+		$order->set_shipping_first_name( 'Duplicate' );
+		$order->set_shipping_last_name( 'Search' );
+		$order->set_status( OrderStatus::COMPLETED );
+		$order->save();
+
+		$fts_options = array(
+			CustomOrdersTableController::HPOS_FTS_INDEX_OPTION,
+			CustomOrdersTableController::HPOS_FTS_ADDRESS_INDEX_CREATED_OPTION,
+			CustomOrdersTableController::HPOS_FTS_ORDER_ITEM_INDEX_CREATED_OPTION,
+		);
+		$original    = array();
+
+		foreach ( $fts_options as $option ) {
+			$original[ $option ] = get_option( $option, false );
+			update_option( $option, 'no' );
+		}
+
+		try {
+			list( $ids, $sql ) = $this->get_orders_and_capture_sql(
+				array(
+					's'             => 'Duplicate',
+					'search_filter' => 'customers',
+					'limit'         => -1,
+				)
+			);
+		} finally {
+			foreach ( $original as $option => $value ) {
+				if ( false === $value ) {
+					delete_option( $option );
+				} else {
+					update_option( $option, $value );
+				}
+			}
+		}
+
+		$this->assertEqualsCanonicalizing( array( $order->get_id() ), $ids );
+		$this->assertStringContainsString( 'wc_orders_meta', $sql );
+		$this->assertStringNotContainsString( 'GROUP BY search_query_meta.order_id', $sql );
 	}
 
 	/**
