@@ -199,6 +199,9 @@ class WC_Product_Variable_Data_Store_CPT extends WC_Product_Data_Store_CPT imple
 				);
 			}
 
+			$default_all_args          = $all_args;
+			$default_visible_only_args = $visible_only_args;
+
 			/**
 			 * Filters the query arguments used to retrieve variation children of a variable product.
 			 *
@@ -208,10 +211,18 @@ class WC_Product_Variable_Data_Store_CPT extends WC_Product_Data_Store_CPT imple
 			 * @param WC_Product $product         The variable product object.
 			 * @param bool       $visible_only    True when retrieving only visible variations, false for all variations.
 			 */
-			$children['all'] = get_posts( apply_filters( 'woocommerce_variable_children_args', $all_args, $product, false ) );
+			$all_args = apply_filters( 'woocommerce_variable_children_args', $all_args, $product, false );
 
 			// phpcs:disable WooCommerce.Commenting.CommentHooks
-			$children['visible'] = get_posts( apply_filters( 'woocommerce_variable_children_args', $visible_only_args, $product, true ) );
+			$visible_only_args = apply_filters( 'woocommerce_variable_children_args', $visible_only_args, $product, true );
+
+			$children_from_query = $this->read_children_from_default_query( $product, $all_args, $visible_only_args, $default_all_args, $default_visible_only_args );
+			if ( is_array( $children_from_query ) ) {
+				$children = $children_from_query;
+			} else {
+				$children['all']     = get_posts( $all_args );
+				$children['visible'] = get_posts( $visible_only_args );
+			}
 
 			// Validate the children data before storing it in the transient.
 			if ( $this->validate_children_data( $children, $transient_version ) ) {
@@ -223,6 +234,74 @@ class WC_Product_Variable_Data_Store_CPT extends WC_Product_Data_Store_CPT imple
 		$children['visible'] = wp_parse_id_list( (array) $children['visible'] );
 
 		return $children;
+	}
+
+	/**
+	 * Read default variation child IDs using one query that includes each child's status.
+	 *
+	 * @param WC_Product $product                   Product object.
+	 * @param array      $all_args                  Filtered query arguments for all children.
+	 * @param array      $visible_only_args         Filtered query arguments for visible children.
+	 * @param array      $default_all_args          Default query arguments for all children.
+	 * @param array      $default_visible_only_args Default query arguments for visible children.
+	 *
+	 * @return array|null Children data, or null when the existing get_posts() path should be used.
+	 */
+	protected function read_children_from_default_query( $product, $all_args, $visible_only_args, $default_all_args, $default_visible_only_args ) {
+		if ( ! $this->can_read_children_from_default_query( $all_args, $visible_only_args, $default_all_args, $default_visible_only_args ) ) {
+			return null;
+		}
+
+		global $wpdb;
+
+		$post_statuses      = array( ProductStatus::PUBLISH, ProductStatus::PRIVATE );
+		$status_placeholder = implode( ', ', array_fill( 0, count( $post_statuses ), '%s' ) );
+		$query_args         = array_merge( array( $product->get_id(), 'product_variation' ), $post_statuses );
+		$children           = array(
+			'all'     => array(),
+			'visible' => array(),
+		);
+
+		$child_rows = $wpdb->get_results(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"SELECT ID, post_status FROM {$wpdb->posts}
+				WHERE post_parent = %d
+				AND post_type = %s
+				AND post_status IN ( {$status_placeholder} )
+				ORDER BY menu_order ASC, ID ASC",
+				$query_args
+			)
+		);
+
+		foreach ( $child_rows as $child_row ) {
+			$child_id           = (int) $child_row->ID;
+			$children['all'][] = $child_id;
+
+			if ( ProductStatus::PUBLISH === $child_row->post_status ) {
+				$children['visible'][] = $child_id;
+			}
+		}
+
+		return $children;
+	}
+
+	/**
+	 * Determine whether the optimized default children query can be used.
+	 *
+	 * @param array $all_args                  Filtered query arguments for all children.
+	 * @param array $visible_only_args         Filtered query arguments for visible children.
+	 * @param array $default_all_args          Default query arguments for all children.
+	 * @param array $default_visible_only_args Default query arguments for visible children.
+	 *
+	 * @return bool True when a single default query can return equivalent children data.
+	 */
+	protected function can_read_children_from_default_query( $all_args, $visible_only_args, $default_all_args, $default_visible_only_args ) {
+		if ( ! empty( $visible_only_args['tax_query'] ) ) {
+			return false;
+		}
+
+		return $all_args === $default_all_args && $visible_only_args === $default_visible_only_args;
 	}
 
 	/**

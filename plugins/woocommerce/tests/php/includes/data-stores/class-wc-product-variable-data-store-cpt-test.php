@@ -418,6 +418,104 @@ class WC_Product_Variable_Data_Store_CPT_Test extends WC_Unit_Test_Case {
 	}
 
 	/**
+	 * @testdox read_children uses one default child lookup query while preserving private child visibility.
+	 */
+	public function test_read_children_uses_single_default_child_lookup_query() {
+		$data_store    = new WC_Product_Variable_Data_Store_CPT();
+		$product       = WC_Helper_Product::create_variation_product();
+		$product_id    = $product->get_id();
+		$variation_ids = get_posts(
+			array(
+				'post_parent' => $product_id,
+				'post_type'   => 'product_variation',
+				'orderby'     => array(
+					'menu_order' => 'ASC',
+					'ID'         => 'ASC',
+				),
+				'fields'      => 'ids',
+				'post_status' => 'publish',
+				'numberposts' => -1, // phpcs:ignore WordPress.VIP.PostsPerPage.posts_per_page_numberposts
+			)
+		);
+		$private_id    = $variation_ids[1];
+
+		wp_update_post(
+			array(
+				'ID'          => $private_id,
+				'post_status' => 'private',
+			)
+		);
+		delete_transient( 'wc_product_children_' . $product_id );
+
+		$children = array();
+		$queries  = $this->capture_variation_child_post_queries(
+			$product_id,
+			function () use ( $data_store, $product, &$children ) {
+				$children = $data_store->read_children( $product, false );
+			}
+		);
+
+		$this->assertCount( 1, $queries, 'Default child lookup should only query the posts table once.' );
+		$this->assertContains( $private_id, $children['all'], 'Private variations should remain in all children.' );
+		$this->assertNotContains( $private_id, $children['visible'], 'Private variations should not be visible children.' );
+		$this->assertCount( count( $variation_ids ), $children['all'] );
+		$this->assertCount( count( $variation_ids ) - 1, $children['visible'] );
+
+		$product->delete();
+	}
+
+	/**
+	 * @testdox read_children keeps the get_posts fallback when child lookup args are filtered.
+	 */
+	public function test_read_children_uses_get_posts_fallback_for_filtered_child_lookup_args() {
+		$data_store    = new WC_Product_Variable_Data_Store_CPT();
+		$product       = WC_Helper_Product::create_variation_product();
+		$product_id    = $product->get_id();
+		$variation_ids = get_posts(
+			array(
+				'post_parent' => $product_id,
+				'post_type'   => 'product_variation',
+				'orderby'     => array(
+					'menu_order' => 'ASC',
+					'ID'         => 'ASC',
+				),
+				'fields'      => 'ids',
+				'post_status' => 'publish',
+				'numberposts' => -1, // phpcs:ignore WordPress.VIP.PostsPerPage.posts_per_page_numberposts
+			)
+		);
+		$excluded_id   = end( $variation_ids );
+		$args_filter   = function ( $args, $filtered_product, $visible_only ) use ( $product_id, $excluded_id ) {
+			if ( $visible_only && $filtered_product->get_id() === $product_id ) {
+				$args['post__not_in'] = array( $excluded_id );
+			}
+
+			return $args;
+		};
+
+		add_filter( 'woocommerce_variable_children_args', $args_filter, 10, 3 );
+		delete_transient( 'wc_product_children_' . $product_id );
+
+		try {
+			$children = array();
+			$queries  = $this->capture_variation_child_post_queries(
+				$product_id,
+				function () use ( $data_store, $product, &$children ) {
+					$children = $data_store->read_children( $product, false );
+				}
+			);
+		} finally {
+			remove_filter( 'woocommerce_variable_children_args', $args_filter, 10 );
+		}
+
+		$this->assertCount( 2, $queries, 'Filtered child lookup should keep separate all and visible get_posts queries.' );
+		$this->assertContains( $excluded_id, $children['all'], 'Filtered visible args should not affect all children.' );
+		$this->assertNotContains( $excluded_id, $children['visible'], 'Filtered visible args should be honored.' );
+
+		$product->delete();
+	}
+
+	/**
 	 * @testdox Test read_price_data method handles various pricing scenarios including invalid transient data
 	 */
 	public function test_read_price_data() {
@@ -701,6 +799,40 @@ class WC_Product_Variable_Data_Store_CPT_Test extends WC_Unit_Test_Case {
 	 */
 	private function get_keys_for_json_encoded_transient( string $transient_name ): array {
 		return array_keys( array_filter( (array) json_decode( strval( get_transient( $transient_name ) ), true ) ) );
+	}
+
+	/**
+	 * Capture post table queries for variation children of a product.
+	 *
+	 * @param int      $product_id Product ID.
+	 * @param callable $callback   Callback to run while capturing queries.
+	 * @return array Captured SQL queries.
+	 */
+	private function capture_variation_child_post_queries( int $product_id, callable $callback ): array {
+		global $wpdb;
+
+		$queries      = array();
+		$query_filter = function ( $query ) use ( &$queries, $product_id, $wpdb ) {
+			if (
+				false !== strpos( $query, $wpdb->posts ) &&
+				false !== strpos( $query, 'product_variation' ) &&
+				1 === preg_match( '/post_parent\s*=\s*' . preg_quote( (string) $product_id, '/' ) . '\b/', $query )
+			) {
+				$queries[] = $query;
+			}
+
+			return $query;
+		};
+
+		add_filter( 'query', $query_filter );
+
+		try {
+			$callback();
+		} finally {
+			remove_filter( 'query', $query_filter );
+		}
+
+		return $queries;
 	}
 
 	/**
