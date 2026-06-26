@@ -329,6 +329,7 @@ class WC_Product_Variable extends WC_Product {
 		$variation_ids           = $this->get_children();
 		$hide_out_of_stock_items = ( 'yes' === get_option( 'woocommerce_hide_out_of_stock_items' ) );
 		$available_variations    = array();
+		$variation_context       = null;
 
 		if ( ! empty( $variation_ids ) ) {
 			// Prime caches to reduce future queries.
@@ -358,7 +359,10 @@ class WC_Product_Variable extends WC_Product {
 			}
 
 			if ( 'array' === $return ) {
-				$available_variations[] = $this->get_available_variation( $variation );
+				if ( null === $variation_context ) {
+					$variation_context = $this->get_available_variation_payload_context();
+				}
+				$available_variations[] = $this->get_available_variation_payload( $variation, $variation_context );
 			} else {
 				$available_variations[] = $variation;
 			}
@@ -418,15 +422,61 @@ class WC_Product_Variable extends WC_Product {
 			return false;
 		}
 
+		return $this->get_available_variation_payload( $variation );
+	}
+
+	/**
+	 * Get reusable parent-level context for available variation payload generation.
+	 *
+	 * @return array<string,mixed>
+	 */
+	private function get_available_variation_payload_context() {
+		$parent_featured_id = (int) $this->get_image_id();
+
+		return array(
+			'parent_featured_id'       => $parent_featured_id,
+			'parent_featured_valid'    => $parent_featured_id && wp_attachment_is_image( $parent_featured_id ),
+			'variation_gallery_enabled' => VariationGalleryPackage::is_enabled(),
+			'has_variable_prices'      => (
+				$this->get_variation_sale_price( 'min' ) !== $this->get_variation_sale_price( 'max' ) ||
+				$this->get_variation_regular_price( 'min' ) !== $this->get_variation_regular_price( 'max' )
+			),
+		);
+	}
+
+	/**
+	 * Build the available variation payload used by the add to cart form.
+	 *
+	 * @param  WC_Product_Variation $variation Variation product object.
+	 * @param  array<string,mixed>  $context Optional reusable parent-level context.
+	 * @return array
+	 */
+	private function get_available_variation_payload( WC_Product_Variation $variation, $context = array() ) {
 		$variation_featured_id    = (int) $variation->get_image_id();
 		$variation_featured_valid = $variation_featured_id && wp_attachment_is_image( $variation_featured_id );
-		$parent_featured_id       = (int) $this->get_image_id();
-		$parent_featured_valid    = $parent_featured_id && wp_attachment_is_image( $parent_featured_id );
+
+		if ( array_key_exists( 'parent_featured_id', $context ) ) {
+			$parent_featured_id = (int) $context['parent_featured_id'];
+		} else {
+			$parent_featured_id = (int) $this->get_image_id();
+		}
+
+		if ( array_key_exists( 'parent_featured_valid', $context ) ) {
+			$parent_featured_valid = (bool) $context['parent_featured_valid'];
+		} else {
+			$parent_featured_valid = $parent_featured_id && wp_attachment_is_image( $parent_featured_id );
+		}
 
 		$variation_gallery_image_ids = array();
 		$variation_gallery_html      = '';
 
-		if ( VariationGalleryPackage::is_enabled() ) {
+		if ( array_key_exists( 'variation_gallery_enabled', $context ) ) {
+			$variation_gallery_enabled = (bool) $context['variation_gallery_enabled'];
+		} else {
+			$variation_gallery_enabled = VariationGalleryPackage::is_enabled();
+		}
+
+		if ( $variation_gallery_enabled ) {
 			$variation_gallery_image_ids = array_values(
 				array_filter(
 					array_map( 'intval', $variation->get_gallery_image_ids() ),
@@ -457,7 +507,20 @@ class WC_Product_Variable extends WC_Product {
 		}
 
 		// See if prices should be shown for each variation after selection.
-		$show_variation_price = apply_filters( 'woocommerce_show_variation_price', $variation->get_price() === '' || $this->get_variation_sale_price( 'min' ) !== $this->get_variation_sale_price( 'max' ) || $this->get_variation_regular_price( 'min' ) !== $this->get_variation_regular_price( 'max' ), $this, $variation );
+		if ( array_key_exists( 'has_variable_prices', $context ) ) {
+			$has_variable_prices = (bool) $context['has_variable_prices'];
+		} else {
+			$has_variable_prices = (
+				$this->get_variation_sale_price( 'min' ) !== $this->get_variation_sale_price( 'max' ) ||
+				$this->get_variation_regular_price( 'min' ) !== $this->get_variation_regular_price( 'max' )
+			);
+		}
+		$show_variation_price = apply_filters(
+			'woocommerce_show_variation_price',
+			$variation->get_price() === '' || $has_variable_prices,
+			$this,
+			$variation
+		);
 
 		return apply_filters(
 			'woocommerce_available_variation',
