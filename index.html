@@ -126,14 +126,14 @@
 	<div class="summary">
 		<div><strong>#1 candidate</strong>Variable products, variation payload generation, variation matching, and attribute lookup/filtering.</div>
 		<div><strong>Measured slope</strong>Full variation arrays grew from 12.7 ms at 8 variations to 6.0 s at 1,000 variations.</div>
-		<div><strong>First PR evidence</strong>Four variation lanes now have scoped commits, focused tests, and local benchmarks.</div>
-		<div><strong>Boundary</strong>WooCommerce Bookings is not in core; benchmark it through core extension points unless the premium plugin is available.</div>
+		<div><strong>First issue</strong>Five variation/attribute PRs are open with scoped commits, focused tests, and local benchmarks.</div>
+		<div><strong>Second issue</strong>Five search/filter PRs are open for exact identifier search, admin search caps, Store API on-sale SQL, filter-count subqueries, and Product Collection ID merging.</div>
 	</div>
 
 	<h2>Executive Findings</h2>
 	<ol>
 		<li><strong>Product variations and attributes are the strongest first issue.</strong> WooCommerce core itself warns that <code>WC_Product_Variable::get_available_variations( 'array' )</code> is expensive for many variations. Local measurements show steep CPU and payload growth: roughly 6 seconds and 1 MB of JSON-like payload for a single 1,000-variation product in the CLI profile.</li>
-		<li><strong>Product/admin search is the second issue to keep close.</strong> Search uses leading-wildcard <code>LIKE</code> paths and can hand a large ID list into admin list queries. This is likely to degrade badly with large product and variation counts.</li>
+		<li><strong>Product/admin search and filter ID materialization are the second issue.</strong> On a 5,000-product fixture, admin search built a 5,002-ID <code>post__in</code> array before pagination, Store API <code>on_sale=true</code> prepared 2,500 IDs, and Product Collection large ID intersections spent measurable PHP time before the query ran.</li>
 		<li><strong>Orders are improved by HPOS but not solved for every shape.</strong> HPOS gives dedicated order tables and indexes, but order search fallbacks and generic meta queries still have expensive shapes at 100k+ orders.</li>
 		<li><strong>Bookings performance is mostly outside this repo.</strong> Core can approximate Bookings pressure with product type/data-store hooks, cart hooks, Store API hooks, and booking-like order meta. The real availability calendar and slot search logic lives in WooCommerce Bookings, not in core.</li>
 	</ol>
@@ -143,7 +143,7 @@
 		<tr><th>Item</th><th>Value</th></tr>
 		<tr><td>WooCommerce</td><td><code>11.0.0-dev</code>, branch <code>trunk</code>, commit <code>e9a9675048</code></td></tr>
 		<tr><td>WordPress environment</td><td><code>wp-env</code>, PHP 8.1 container, MySQL containers, test site on <code>http://localhost:18096</code></td></tr>
-		<tr><td>Harness</td><td><code>plugins/woocommerce/tests/bin/tmp/woo-perf-benchmark.php</code> (ignored local file)</td></tr>
+		<tr><td>Harnesses</td><td><code>plugins/woocommerce/tests/bin/tmp/woo-perf-benchmark.php</code> and <code>product-search-filter-benchmark.php</code> (ignored local files)</td></tr>
 		<tr><td>Raw results</td><td><code>/home/claude/woo-perf/research/results/*.json</code></td></tr>
 		<tr><td>Fixture strategy so far</td><td>WooCommerce CRUD APIs for correctness-sized fixtures, plus a bulk variation seeder for larger variable-product scale points. Bulk fixtures keep the post/meta shape used by read and matching paths but are not a replacement for CRUD correctness tests.</td></tr>
 	</table>
@@ -228,6 +228,46 @@
 
 	<p>The current order/product query numbers are not yet large enough to prove their ceiling. They mainly validate the harness. Static code review and published database guidance still indicate they are important candidates at large cardinality.</p>
 
+	<h3>Second-Issue Search And Filter Lanes</h3>
+	<table>
+		<tr>
+			<th>Branch</th>
+			<th>Approach</th>
+			<th>Focused tests</th>
+			<th>Measured result on 5,000 products</th>
+		</tr>
+		<tr>
+			<td><a href="https://github.com/adamziel/woocommerce/pull/7"><code>perf/product-search-core-lane</code></a></td>
+			<td>Fast-path exact SKU and <code>global_unique_id</code> searches through <code>wc_product_meta_lookup</code> before broad title/content <code>%LIKE%</code> search. The fast path is limited to identifier-looking tokens to avoid penalizing ordinary word searches.</td>
+			<td><code>WC_Product_Data_Store_CPT_Test</code>: 3 focused tests, 12 assertions.</td>
+			<td>Exact SKU median improved from 22.4 ms to 11.8 ms. Exact global ID improved from 21.5 ms to 12.0 ms. Broad common-term search stayed near baseline.</td>
+		</tr>
+		<tr>
+			<td><a href="https://github.com/adamziel/woocommerce/pull/8"><code>perf/admin-product-search-lane</code></a></td>
+			<td>Adds a filterable default cap of 1,000 admin product search results before populating <code>post__in</code>. Returning <code>0</code> from <code>woocommerce_admin_product_search_results_limit</code> restores unbounded behavior.</td>
+			<td><code>WC_Admin_List_Table_Products_Test</code>: 4 tests, 11 assertions.</td>
+			<td>Admin broad search median improved from 44.4 ms to 23.1 ms. <code>post__in</code> fell from 5,002 IDs to 1,001 IDs.</td>
+		</tr>
+		<tr>
+			<td><a href="https://github.com/adamziel/woocommerce/pull/6"><code>perf/store-api-product-search-lane</code></a></td>
+			<td>Moves Store API <code>on_sale</code> filtering out of <code>wc_get_product_ids_on_sale()</code> ID-list materialization and into SQL clauses over <code>wc_product_meta_lookup.onsale</code>, including variable parent handling.</td>
+			<td><code>ProductQueryTest</code>: 13 tests, 31 assertions.</td>
+			<td>Preparing <code>on_sale=true</code> improved from 21.4 ms / 2,500 IDs to 0.26 ms / 0 IDs. End-to-end ID query improved from 27.5 ms / 11 queries to 8.7 ms / 4 queries.</td>
+		</tr>
+		<tr>
+			<td><a href="https://github.com/adamziel/woocommerce/pull/9"><code>perf/product-filter-counts-lane</code></a></td>
+			<td>Feeds Product Filter count queries with the prepared product-ID <code>WP_Query</code> SQL as a subquery instead of first materializing every matching ID in PHP.</td>
+			<td><code>FilterDataTest</code>: 18 tests, 30 assertions, 1 existing skipped test.</td>
+			<td>Warmed 5,000-product timings were modest: stock count 8.4 ms to 7.5 ms and attribute count 8.2 ms to 7.2 ms. The structural win is removing unbounded PHP ID-list allocation.</td>
+		</tr>
+		<tr>
+			<td><a href="https://github.com/adamziel/woocommerce/pull/10"><code>perf/product-collection-post-in-lane</code></a></td>
+			<td>Replaces <code>array_intersect(...$post__in)</code> with sorted hash-set narrowing, then projects the result back through the first filter to preserve order.</td>
+			<td><code>ProductCollection\QueryBuilder</code>: 37 tests, 102 assertions.</td>
+			<td>Large <code>post__in</code> merge improved from 5.8 ms to 0.62 ms in the synthetic Product Collection merge metric.</td>
+		</tr>
+	</table>
+
 	<h2>Code Paths</h2>
 	<h3>Variations And Attributes</h3>
 	<ul>
@@ -261,8 +301,8 @@
 		<tr>
 			<td>2</td>
 			<td>Product/admin search and filter count materialization</td>
-			<td>Leading-wildcard search paths, large <code>post__in</code> handoff risk, filter counts materialize all product IDs.</td>
-			<td>Exact/prefix SKU fast path; split broad search fallback; lookup indexes for global ID/sort fields; push filter aggregation into SQL; external-search/offload hooks.</td>
+			<td>Measured 5,002 admin search IDs and 2,500 Store API on-sale IDs on a 5,000-product fixture; filter counts and Product Collection also had ID-list or large-array hot paths.</td>
+			<td>Exact identifier fast path; admin materialization cap; Store API on-sale SQL clauses; filter-count subqueries; hash-based Product Collection ID intersections.</td>
 		</tr>
 		<tr>
 			<td>3</td>
@@ -274,7 +314,7 @@
 
 	<h2>Limitations</h2>
 	<ul>
-		<li>The largest local fixture so far is 1,000 variations on one parent and 300 orders. That is enough to confirm variation payload slope, not enough to prove 100k-order behavior.</li>
+		<li>The largest local fixtures so far are 1,000 variations on one parent, 5,000 products for search/filter lanes, and 300 orders. That is enough to confirm the first two issue classes, not enough to prove 100k-order behavior.</li>
 		<li>CRUD seeding is faithful but too slow for repeated large sweeps. The new bulk variation seed path is useful for read/matching profiles, but write-path and hook behavior must still be verified with CRUD fixtures.</li>
 		<li>The current measurements run in WP-CLI inside Docker. HTTP/k6 and browser-facing paths still need to be measured after the query candidates are narrowed.</li>
 		<li>No premium WooCommerce Bookings source is present. Bookings conclusions are therefore about core extension points and documented product behavior, not the private implementation.</li>
@@ -285,11 +325,14 @@
 		<li><a href="https://developer.woocommerce.com/2019/04/01/performance-improvements-in-3-6/">WooCommerce 3.6 performance improvements</a>: product meta lookup table context.</li>
 		<li><a href="https://developer.woocommerce.com/2022/02/02/new-product-filtering-by-attributes-rolling-out-in-woocommerce-6-3/">Product filtering by attributes rollout</a>: attribute lookup table background.</li>
 		<li><a href="https://developer.woocommerce.com/2022/03/08/woocommerce-6-3-released/">WooCommerce 6.3 release notes</a>: attribute lookup indexing changes.</li>
+		<li><a href="https://developer.woocommerce.com/2026/05/21/reimagining-catalog-management/">Reimagining catalog management</a>: WooCommerce acknowledges that stores with many products and variations need further scale work beyond current proof-of-concept catalog management.</li>
 		<li><a href="https://woocommerce.com/document/high-performance-order-storage/">High-Performance Order Storage</a>: dedicated order tables and indexes.</li>
+		<li><a href="https://wpvip.com/blog/scaling-a-high-volume-woocommerce-shop-with-enterprise-search/">WordPress VIP: scaling a high-volume WooCommerce shop with Enterprise Search</a>: search/navigation pressure at million-product scale.</li>
 		<li><a href="https://docs.wpvip.com/databases/optimize-queries/querying-on-meta_value/">WordPress VIP: querying on meta_value</a>: why broad meta-value searches are expensive.</li>
 		<li><a href="https://docs.wpvip.com/databases/optimize-queries/posts_per_page/">WordPress VIP: posts_per_page guidance</a>: unbounded result sets and scale risk.</li>
 		<li><a href="https://developer.woocommerce.com/2017/02/06/wc-2-7-extension-compatibility-examples-3-bookings/">WooCommerce Bookings extension compatibility example</a>: Bookings product type/data-store boundary.</li>
 		<li><a href="https://woocommerce.github.io/woocommerce-bookings-api-docs/">WooCommerce Bookings API docs</a>: slot/product/resource query shape.</li>
+		<li><a href="https://github.com/woocommerce/woocommerce-bookings-generator/issues/1">WooCommerce Bookings generator issue</a>: example of availability range expansion causing slow calendar queries.</li>
 	</ul>
 </main>
 </body>
