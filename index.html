@@ -369,10 +369,106 @@
 			<td>Measured 185 ms for a default <code>All</code> email search that could use a sub-millisecond indexed email path; transaction search and <code>created_via</code> filters also scanned without targeted query/index help.</td>
 			<td>Selective count short-circuit; email-shaped search routing; transaction ID prefix search; <code>created_via</code> operational-data index; fallback customer meta search simplification.</td>
 		</tr>
-	</table>
+		</table>
 
-	<h2>Limitations</h2>
-	<ul>
+		<h2>Alternative Iterations And Conclusions</h2>
+		<p>This matrix records the main alternatives considered while narrowing each lane. The kept artifact is the PR linked in the lane tables above; rejected alternatives are retained here so follow-up work can avoid repeating low-signal paths.</p>
+		<table>
+			<tr><th>Issue</th><th>Lane</th><th>Alternatives considered</th><th>Conclusion kept</th></tr>
+			<tr>
+				<td>Variations</td>
+				<td><code>variation-payload-lane</code></td>
+				<td>Cache parent-level context; skip expensive per-variation fields; defer full payload to selection-time fetch.</td>
+				<td>Parent-context reuse gave a large server-side win without changing the classic variation response contract.</td>
+			</tr>
+			<tr>
+				<td>Variations</td>
+				<td><code>lazy-variation-resolution-lane-clean</code></td>
+				<td>Raise the AJAX threshold; inline only compact selectable maps; expose a selected-variation payload endpoint.</td>
+				<td>Compact maps plus selection-time resolution attacked HTML size and render cost while keeping compatibility paths explicit.</td>
+			</tr>
+			<tr>
+				<td>Variations</td>
+				<td><code>attribute-lookup-maintenance-lane</code></td>
+				<td>Single-row inserts; multi-row insert batches; full table regeneration changes.</td>
+				<td>Batching the existing non-optimized insert path was the smallest high-impact write-path change.</td>
+			</tr>
+			<tr>
+				<td>Variations</td>
+				<td><code>variation-match-index-lane</code></td>
+				<td>Scan child meta in PHP; query matching attributes with SQL anti-conflict semantics; introduce a dedicated combination lookup.</td>
+				<td>The SQL anti-conflict query reduced matching time while preserving empty-attribute "any" semantics without a new table.</td>
+			</tr>
+			<tr>
+				<td>Variations</td>
+				<td><code>variable-child-query-lane</code></td>
+				<td>Keep separate child ID/status queries; merge default child lookups into one posts query; use temporary-table chunking for very large child sets.</td>
+				<td>A single default-path posts query removed one query with low behavioral risk; temp-table work remains a larger-store follow-up.</td>
+			</tr>
+			<tr>
+				<td>Search/filter</td>
+				<td><code>product-search-core-lane</code></td>
+				<td>Keep broad <code>%LIKE%</code>; add exact SKU/global-ID lookup before broad search; add a broader search index.</td>
+				<td>The exact identifier fast path helps common admin searches without forcing a new index or changing ordinary word search.</td>
+			</tr>
+			<tr>
+				<td>Search/filter</td>
+				<td><code>admin-product-search-lane</code></td>
+				<td>Rewrite admin search as SQL clauses; cap materialized IDs; leave behavior unbounded and rely on pagination.</td>
+				<td>The filterable cap bounds memory and query args now, with an opt-out for stores that require exhaustive admin search.</td>
+			</tr>
+			<tr>
+				<td>Search/filter</td>
+				<td><code>store-api-product-search-lane</code></td>
+				<td>Use cached <code>wc_get_product_ids_on_sale()</code>; push simple products only to lookup SQL; include variable-parent sale state in SQL.</td>
+				<td>SQL clauses removed large ID-list preparation and preserved variable-parent behavior in one query shape.</td>
+			</tr>
+			<tr>
+				<td>Search/filter</td>
+				<td><code>product-filter-counts-lane</code></td>
+				<td>Cache comma-separated ID lists; cache the prepared product-ID SQL subquery; cache computed count results.</td>
+				<td>Subquery caching removes unbounded PHP ID-list allocation while leaving count-result caching as a separate invalidation problem.</td>
+			</tr>
+			<tr>
+				<td>Search/filter</td>
+				<td><code>product-collection-post-in-lane</code></td>
+				<td>Use <code>array_intersect()</code>; start intersection from the smallest set; preserve first-filter order after hash-set narrowing.</td>
+				<td>Hash-set narrowing gave the PHP hot-path win while preserving the externally visible ordering rule.</td>
+			</tr>
+			<tr>
+				<td>Orders</td>
+				<td><code>order-query-count-short-circuit</code></td>
+				<td>Always run count SQL; infer totals on partial first pages; infer even when query filters are active.</td>
+				<td>Partial-page inference is kept only when filters cannot alter SQL/count semantics, avoiding a correctness regression.</td>
+			</tr>
+			<tr>
+				<td>Orders</td>
+				<td><code>hpos-email-search-routing</code></td>
+				<td>Keep default <code>all</code> fanout; route complete emails to indexed customer email; rewrite all order search into ranked clauses.</td>
+				<td>Complete-email routing captures the biggest measured win while leaving explicit product/transaction filters available.</td>
+			</tr>
+			<tr>
+				<td>Orders</td>
+				<td><code>hpos-transaction-search-sargable</code></td>
+				<td>Keep substring search; use prefix search for identifier-like explicit transaction terms; add a separate normalized transaction lookup.</td>
+				<td>Prefix search makes the existing <code>transaction_id</code> index usable for exact-looking explicit searches.</td>
+			</tr>
+			<tr>
+				<td>Orders</td>
+				<td><code>hpos-created-via-index</code></td>
+				<td>Rely on operational table scans; add a schema index only; add a versioned migration for existing HPOS tables.</td>
+				<td>The final patch includes both schema and migration coverage so disabled-HPOS stores also receive the index.</td>
+			</tr>
+			<tr>
+				<td>Orders</td>
+				<td><code>hpos-customer-meta-search</code></td>
+				<td>Try <code>FORCE INDEX</code>, per-key <code>UNION</code>, <code>EXISTS</code>, and derived joins; remove redundant grouping.</td>
+				<td>Dropping <code>GROUP BY</code> was the smallest defensible fallback-meta improvement because <code>IN (...)</code> already ignores duplicate IDs.</td>
+			</tr>
+		</table>
+
+		<h2>Limitations</h2>
+		<ul>
 		<li>The largest local fixtures so far are 1,000 variations on one parent, 5,000 products for search/filter lanes, and 20,000 HPOS orders. That gives strong query-shape evidence, but it is still smaller than the 100k+ and million-order stores discussed in large-store reports.</li>
 		<li>CRUD seeding is faithful but too slow for repeated large sweeps. The new bulk variation seed path is useful for read/matching profiles, but write-path and hook behavior must still be verified with CRUD fixtures.</li>
 		<li>The current measurements run in WP-CLI inside Docker. HTTP/k6 and browser-facing paths still need to be measured after the query candidates are narrowed.</li>
