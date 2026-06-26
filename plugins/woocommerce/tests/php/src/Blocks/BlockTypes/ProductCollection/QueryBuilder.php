@@ -614,6 +614,77 @@ class QueryBuilder extends \WP_UnitTestCase {
 	}
 
 	/**
+	 * Test merging exclusive id filters keeps the original order after intersection.
+	 */
+	public function test_merges_post__in_preserves_first_filter_order() {
+		$existing_id_filter     = array( 9, 2, 4, 2, 7, 4, 5 );
+		$handpicked_product_ids = array( 4, 2, 8, 7 );
+		$collection_product_ids = array( 7, 4, 2 );
+
+		$this->block_instance->register_collection_handlers(
+			'test-post-in-intersection',
+			function () use ( $collection_product_ids ) {
+				return array(
+					'post__in' => $collection_product_ids,
+				);
+			}
+		);
+
+		$parsed_block                        = Utils::get_base_parsed_block();
+		$parsed_block['attrs']['collection'] = 'test-post-in-intersection';
+		$parsed_block['attrs']['query']['post__in'] = $existing_id_filter;
+		$parsed_block['attrs']['query']['woocommerceHandPickedProducts'] = $handpicked_product_ids;
+
+		try {
+			$merged_query = Utils::initialize_merged_query( $this->block_instance, $parsed_block );
+		} finally {
+			$this->block_instance->unregister_collection_handlers( 'test-post-in-intersection' );
+		}
+
+		$this->assertSame( array( 2, 4, 7 ), $merged_query['post__in'] );
+	}
+
+	/**
+	 * Test merging large exclusive id filters keeps first-filter order.
+	 */
+	public function test_merges_large_post__in_preserves_first_filter_order() {
+		$existing_id_filter     = array_merge( range( 1, 2499 ), range( 2600, 2500 ), range( 2601, 5000 ) );
+		$handpicked_product_ids = range( 2500, 2600 );
+
+		$parsed_block                               = Utils::get_base_parsed_block();
+		$parsed_block['attrs']['query']['post__in'] = $existing_id_filter;
+		$parsed_block['attrs']['query']['woocommerceHandPickedProducts'] = $handpicked_product_ids;
+
+		$merged_query = Utils::initialize_merged_query( $this->block_instance, $parsed_block );
+
+		$this->assertSame( range( 2600, 2500 ), $merged_query['post__in'] );
+	}
+
+	/**
+	 * Test merging exclusive id filters ignores empty arrays and keeps numeric uniqueness.
+	 */
+	public function test_merges_post__in_ignores_empty_arrays() {
+		$existing_id_filter = array( 4, 2, 4, 3 );
+
+		$parsed_block                               = Utils::get_base_parsed_block();
+		$parsed_block['attrs']['query']['post__in'] = $existing_id_filter;
+		$parsed_block['attrs']['query']['woocommerceHandPickedProducts'] = array();
+
+		$merged_query = Utils::initialize_merged_query( $this->block_instance, $parsed_block );
+
+		$this->assertSame( array( 4, 2, 3 ), $merged_query['post__in'] );
+	}
+
+	/**
+	 * Test merging without valid id filters keeps the query unrestricted.
+	 */
+	public function test_merges_post__in_without_valid_arrays() {
+		$merged_query = Utils::initialize_merged_query( $this->block_instance );
+
+		$this->assertSame( array(), $merged_query['post__in'] );
+	}
+
+	/**
 	 * Test merging exclusive id filters with no intersection.
 	 */
 	public function test_merges_post__in_empty_result_without_intersection() {
