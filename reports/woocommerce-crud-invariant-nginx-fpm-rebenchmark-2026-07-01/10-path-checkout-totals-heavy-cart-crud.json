@@ -1,0 +1,794 @@
+{
+  "scenario": {
+    "id": "10-path-checkout-totals-heavy-cart-crud",
+    "rank": 10,
+    "title": "Store API Checkout: CRUD 20-Line Cart",
+    "codePath": "/wp-json/wc/store/v1/checkout via nginx/php-fpm",
+    "trigger": "Simultaneous Store API checkouts, each with a 20-line CRUD-created cart prepared before the measured batch.",
+    "concurrency": 12,
+    "reportRequest": {
+      "method": "POST",
+      "path": "/wp-json/wc/store/v1/checkout",
+      "headers": [
+        "Content-Type: application/json"
+      ]
+    }
+  },
+  "request": {
+    "method": "POST",
+    "path": "/wp-json/wc/store/v1/checkout",
+    "headers": [
+      "Content-Type: application/json"
+    ]
+  },
+  "summary": {
+    "requests": 12,
+    "http_codes": [
+      200
+    ],
+    "total_ms": {
+      "min": 4263.291,
+      "median": 8288.571,
+      "p95": 11868.991,
+      "max": 11868.991
+    },
+    "server_ms": {
+      "min": 3557.77,
+      "median": 4016.74,
+      "p95": 4273.16,
+      "max": 4273.16
+    },
+    "query_count": {
+      "median": 2603,
+      "p95": 2685,
+      "max": 2685
+    },
+    "query_time_ms": {
+      "median": 3681.7,
+      "p95": 3955.75,
+      "max": 3955.75
+    },
+    "memory_peak_mb": {
+      "median": 20,
+      "p95": 20,
+      "max": 20
+    }
+  },
+  "samples": [
+    {
+      "run_id": "10-path-checkout-totals-heavy-cart-crud-1782936918202-1",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 4270.263,
+      "ttfb_ms": 4270.156,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "10-path-checkout-totals-heavy-cart-crud-1782936918202-1",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 4260.6,
+        "query_count": 2685,
+        "query_time_ms": 3930.7,
+        "memory_peak_mb": 20,
+        "slow_queries": [
+          {
+            "seconds": 0.08961915969848633,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('16821', '_debug_log_source', 'place-order-debug-7c762827')"
+          },
+          {
+            "seconds": 0.05644083023071289,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16821, 14, 2, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 14 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 14 AND stock_table.`order_id` != 16821 FOR UPDATE ) >= 2 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.04435992240905762,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('28294', '_line_tax_data', 'a:2:{s:5:\\\"total\\\";a:0:{}s:8:\\\"subtotal\\\";a:0:{}}')"
+          },
+          {
+            "seconds": 0.03268718719482422,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('28347', 'total_tax', '0')"
+          },
+          {
+            "seconds": 0.0326838493347168,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16821, 18, 3, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 18 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 18 AND stock_table.`order_id` != 16821 FOR UPDATE ) >= 3 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.031590938568115234,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16821, 16, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 16 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 16 AND stock_table.`order_id` != 16821 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.029591083526611328,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 56064 AND `order_id` = 16821"
+          },
+          {
+            "seconds": 0.028622865676879883,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('16821', '_debug_log_source', 'place-order-debug-7c762827')"
+          },
+          {
+            "seconds": 0.02828693389892578,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('28294', '_line_tax', '0')"
+          },
+          {
+            "seconds": 0.02738499641418457,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 31 AND meta_key='_stock'"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T20:15:22+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "10-path-checkout-totals-heavy-cart-crud-1782936918202-2",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 4286.383,
+      "ttfb_ms": 4286.28,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "10-path-checkout-totals-heavy-cart-crud-1782936918202-2",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 4273.16,
+        "query_count": 2555,
+        "query_time_ms": 3955.75,
+        "memory_peak_mb": 20,
+        "slow_queries": [
+          {
+            "seconds": 0.08892488479614258,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 56063 AND `order_id` = 16822"
+          },
+          {
+            "seconds": 0.043662071228027344,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 31 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.04328608512878418,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('16822', '_debug_log_source', 'place-order-debug-256887e3')"
+          },
+          {
+            "seconds": 0.03506803512573242,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16822, 20, 2, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 20 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 20 AND stock_table.`order_id` != 16822 FOR UPDATE ) >= 2 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.03393888473510742,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `payment_method_title`, `type` ) VALUES ( '2026-07-01 20:15:20', 16822, 'Cash on delivery', 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `payment_method_title` = VALUES( `payment_method_title` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.030375957489013672,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16822, 21, 3, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 21 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 21 AND stock_table.`order_id` != 16822 FOR UPDATE ) >= 3 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.029565095901489258,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 3.000000 WHERE post_id = 24 AND meta_key='total_sales'"
+          },
+          {
+            "seconds": 0.02953195571899414,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 56056 AND `order_id` = 16822"
+          },
+          {
+            "seconds": 0.028715133666992188,
+            "sql": "REPLACE INTO `wp_wc_product_meta_lookup` (`product_id`, `sku`, `virtual`, `downloadable`, `min_price`, `max_price`, `onsale`, `stock_quantity`, `stock_status`, `rating_count`, `average_rating`, `total_sales`, `tax_status`, `tax_class`, `global_unique_id`) VALUES ('31', 'CRUD-SKU-000019', '0', '0', '29', '29', '0', '473', 'instock', '0', '0', '47', 'taxable', '', '')"
+          },
+          {
+            "seconds": 0.028352975845336914,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('28296', '_product_id', '22')"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T20:15:22+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "10-path-checkout-totals-heavy-cart-crud-1782936918202-3",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 4455.813,
+      "ttfb_ms": 4455.675,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "10-path-checkout-totals-heavy-cart-crud-1782936918202-3",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 4187.53,
+        "query_count": 2603,
+        "query_time_ms": 3844.71,
+        "memory_peak_mb": 20,
+        "slow_queries": [
+          {
+            "seconds": 0.11618804931640625,
+            "sql": "INSERT INTO `wp_woocommerce_order_items` (`order_item_name`, `order_item_type`, `order_id`) VALUES ('CRUD Product 000019 CatalogNeedle019', 'line_item', '16824')"
+          },
+          {
+            "seconds": 0.0467679500579834,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('28353', '_variation_id', '0')"
+          },
+          {
+            "seconds": 0.04200387001037598,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('28349', '_qty', '3')"
+          },
+          {
+            "seconds": 0.03467512130737305,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('28349', '_line_total', '84')"
+          },
+          {
+            "seconds": 0.030740022659301758,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16824, 18, 3, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 18 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 18 AND stock_table.`order_id` != 16824 FOR UPDATE ) >= 3 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.030125141143798828,
+            "sql": "INSERT INTO `wp_woocommerce_order_items` (`order_item_name`, `order_item_type`, `order_id`) VALUES ('CRUD Product 000006 CatalogNeedle006', 'line_item', '16824')"
+          },
+          {
+            "seconds": 0.028802871704101562,
+            "sql": "INSERT INTO `wp_comments` (`comment_post_ID`, `comment_author_IP`, `comment_author`, `comment_author_email`, `comment_author_url`, `comment_date`, `comment_date_gmt`, `comment_content`, `comment_karma`, `comment_approved`, `comment_agent`, `comment_type`, `comment_parent`, `user_id`) VALUES (16824, '', 'WooCommerce', '', '', '2026-07-01 20:15:21', '2026-07-01 20:15:21', 'Stock hold of 60 minutes applied to: <br>- CRUD Product 000001 CatalogNeedle001 (CRUD-SKU-000001) &times; 1<br>- CRUD Product 000002 CatalogNeedle002 (CRUD-SKU-000002) &times; 2<br>- CRUD Product 000003 CatalogNeedle003 (CRUD-SKU-000003) &times; 3<br>- CRUD Product 000004 CatalogNeedle004 (CRUD-SKU-000004) &times; 1<br>- CRUD Product 000005 CatalogNeedle005 (CRUD-SKU-000005) &times; 2<br>- ... and 15 more items.', 0, '1', 'WooCommerce', 'order_note', 0, 0)"
+          },
+          {
+            "seconds": 0.028388023376464844,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('28295', '_tax_class', '')"
+          },
+          {
+            "seconds": 0.02752995491027832,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('28349', '_line_subtotal_tax', '0')"
+          },
+          {
+            "seconds": 0.027408123016357422,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('28349', '_line_tax', '0')"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T20:15:22+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "10-path-checkout-totals-heavy-cart-crud-1782936918202-4",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 4263.291,
+      "ttfb_ms": 4263.184,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "10-path-checkout-totals-heavy-cart-crud-1782936918202-4",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 4245.74,
+        "query_count": 2639,
+        "query_time_ms": 3925.85,
+        "memory_peak_mb": 20,
+        "slow_queries": [
+          {
+            "seconds": 0.11613106727600098,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('16823', '_debug_log_source', 'place-order-debug-ea44b05e')"
+          },
+          {
+            "seconds": 0.06349897384643555,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16823, 17, 2, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 17 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 17 AND stock_table.`order_id` != 16823 FOR UPDATE ) >= 2 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.03632497787475586,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('16823', '_debug_log_source', 'place-order-debug-ea44b05e')"
+          },
+          {
+            "seconds": 0.0319368839263916,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('16823', '_debug_log_source', 'place-order-debug-ea44b05e')"
+          },
+          {
+            "seconds": 0.03119683265686035,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16823, 19, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 19 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 19 AND stock_table.`order_id` != 16823 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.030743122100830078,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16823, 21, 3, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 21 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 21 AND stock_table.`order_id` != 16823 FOR UPDATE ) >= 3 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.03009200096130371,
+            "sql": "INSERT INTO `wp_woocommerce_order_items` (`order_item_name`, `order_item_type`, `order_id`) VALUES ('CRUD Product 000010 CatalogNeedle010', 'line_item', '16823')"
+          },
+          {
+            "seconds": 0.029533863067626953,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 3.000000 WHERE post_id = 18 AND meta_key='total_sales'"
+          },
+          {
+            "seconds": 0.028727054595947266,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 56059 AND `order_id` = 16823"
+          },
+          {
+            "seconds": 0.026280879974365234,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('16823', '_debug_log_source', 'place-order-debug-ea44b05e')"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T20:15:22+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "10-path-checkout-totals-heavy-cart-crud-1782936918202-5",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 8293.661,
+      "ttfb_ms": 8293.545999999998,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "10-path-checkout-totals-heavy-cart-crud-1782936918202-5",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 4016.74,
+        "query_count": 2635,
+        "query_time_ms": 3681.7,
+        "memory_peak_mb": 20,
+        "slow_queries": [
+          {
+            "seconds": 0.0540308952331543,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16826, 31, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 31 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 31 AND stock_table.`order_id` != 16826 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.041578054428100586,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16826, 28, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 28 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 28 AND stock_table.`order_id` != 16826 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.03174901008605957,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16826, 30, 3, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 30 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 30 AND stock_table.`order_id` != 16826 FOR UPDATE ) >= 3 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.03114604949951172,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 20:15:25', 16826, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.030650854110717773,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `status`, `type` ) VALUES ( '2026-07-01 20:15:24', 16826, 'wc-pending', 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `status` = VALUES( `status` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.02734994888305664,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16826, 29, 2, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 29 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 29 AND stock_table.`order_id` != 16826 FOR UPDATE ) >= 2 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.025399208068847656,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16826, 32, 2, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 32 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 32 AND stock_table.`order_id` != 16826 FOR UPDATE ) >= 2 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.02501082420349121,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `status`, `type` ) VALUES ( '2026-07-01 20:15:25', 16826, 'wc-processing', 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `status` = VALUES( `status` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.02471303939819336,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16826, 23, 2, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 23 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 23 AND stock_table.`order_id` != 16826 FOR UPDATE ) >= 2 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.020402908325195312,
+            "sql": "REPLACE INTO `wp_wc_product_meta_lookup` (`product_id`, `sku`, `virtual`, `downloadable`, `min_price`, `max_price`, `onsale`, `stock_quantity`, `stock_status`, `rating_count`, `average_rating`, `total_sales`, `tax_status`, `tax_class`, `global_unique_id`) VALUES ('31', 'CRUD-SKU-000019', '0', '0', '29', '29', '0', '469', 'instock', '0', '0', '52', 'taxable', '', '')"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T20:15:26+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "10-path-checkout-totals-heavy-cart-crud-1782936918202-6",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 5471.947,
+      "ttfb_ms": 5471.832,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "10-path-checkout-totals-heavy-cart-crud-1782936918202-6",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 4211.65,
+        "query_count": 2579,
+        "query_time_ms": 3885.12,
+        "memory_peak_mb": 20,
+        "slow_queries": [
+          {
+            "seconds": 0.11553716659545898,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('28350', '_variation_id', '0')"
+          },
+          {
+            "seconds": 0.04667806625366211,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('28352', '_tax_class', '')"
+          },
+          {
+            "seconds": 0.041561126708984375,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('28348', '_line_tax', '0')"
+          },
+          {
+            "seconds": 0.0359189510345459,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('28348', '_tax_class', '')"
+          },
+          {
+            "seconds": 0.029309988021850586,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('28360', '_product_id', '26')"
+          },
+          {
+            "seconds": 0.027451038360595703,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('28354', '_product_id', '21')"
+          },
+          {
+            "seconds": 0.026240110397338867,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('28348', '_line_subtotal', '48')"
+          },
+          {
+            "seconds": 0.026113033294677734,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('28348', '_line_total', '48')"
+          },
+          {
+            "seconds": 0.025777101516723633,
+            "sql": "UPDATE `wp_options` SET `option_value` = '1782936922' WHERE `option_name` = '_transient_orders-transient-version'"
+          },
+          {
+            "seconds": 0.025751829147338867,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('28348', '_line_subtotal_tax', '0')"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T20:15:23+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "10-path-checkout-totals-heavy-cart-crud-1782936918202-7",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 8364.3,
+      "ttfb_ms": 8364.164999999999,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "10-path-checkout-totals-heavy-cart-crud-1782936918202-7",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 4087.88,
+        "query_count": 2645,
+        "query_time_ms": 3750.99,
+        "memory_peak_mb": 20,
+        "slow_queries": [
+          {
+            "seconds": 0.05688810348510742,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16827, 27, 3, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 27 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 27 AND stock_table.`order_id` != 16827 FOR UPDATE ) >= 3 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.05600881576538086,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16827, 26, 2, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 26 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 26 AND stock_table.`order_id` != 16827 FOR UPDATE ) >= 2 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.049484968185424805,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16827, 28, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 28 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 28 AND stock_table.`order_id` != 16827 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.04651784896850586,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `status`, `type` ) VALUES ( '2026-07-01 20:15:25', 16827, 'wc-pending', 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `status` = VALUES( `status` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.04094409942626953,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16827, 23, 2, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 23 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 23 AND stock_table.`order_id` != 16827 FOR UPDATE ) >= 2 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.03767085075378418,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16827, 25, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 25 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 25 AND stock_table.`order_id` != 16827 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.029773950576782227,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16827, 29, 2, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 29 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 29 AND stock_table.`order_id` != 16827 FOR UPDATE ) >= 2 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.026628971099853516,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16827, 24, 3, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 24 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 24 AND stock_table.`order_id` != 16827 FOR UPDATE ) >= 3 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.025756120681762695,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 56152 AND `order_id` = 16827"
+          },
+          {
+            "seconds": 0.023746967315673828,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16827, 31, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 31 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 31 AND stock_table.`order_id` != 16827 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T20:15:26+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "10-path-checkout-totals-heavy-cart-crud-1782936918202-8",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 8288.571,
+      "ttfb_ms": 8288.458,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "10-path-checkout-totals-heavy-cart-crud-1782936918202-8",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 3994.12,
+        "query_count": 2561,
+        "query_time_ms": 3660.49,
+        "memory_peak_mb": 20,
+        "slow_queries": [
+          {
+            "seconds": 0.04834413528442383,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 2.000000 WHERE post_id = 20 AND meta_key='total_sales'"
+          },
+          {
+            "seconds": 0.04089093208312988,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `status`, `type` ) VALUES ( '2026-07-01 20:15:24', 16828, 'wc-processing', 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `status` = VALUES( `status` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.027226924896240234,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 20:15:24', 16828, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.027041912078857422,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 20:15:24', 16828, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.02321004867553711,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 20:15:24', 16828, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.022832155227661133,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 1.000000 WHERE post_id = 19 AND meta_key='total_sales'"
+          },
+          {
+            "seconds": 0.022188186645507812,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `status`, `type` ) VALUES ( '2026-07-01 20:15:24', 16828, 'wc-pending', 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `status` = VALUES( `status` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.02211308479309082,
+            "sql": "REPLACE INTO `wp_wc_product_meta_lookup` (`product_id`, `sku`, `virtual`, `downloadable`, `min_price`, `max_price`, `onsale`, `stock_quantity`, `stock_status`, `rating_count`, `average_rating`, `total_sales`, `tax_status`, `tax_class`, `global_unique_id`) VALUES ('17', 'CRUD-SKU-000005', '0', '0', '15', '15', '0', '427', 'instock', '0', '0', '80', 'taxable', '', '')"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T20:15:26+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "10-path-checkout-totals-heavy-cart-crud-1782936918202-9",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 8446.130000000001,
+      "ttfb_ms": 8446.033,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "10-path-checkout-totals-heavy-cart-crud-1782936918202-9",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 3985,
+        "query_count": 2665,
+        "query_time_ms": 3658.76,
+        "memory_peak_mb": 20,
+        "slow_queries": [
+          {
+            "seconds": 0.06767606735229492,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16829, 28, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 28 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 28 AND stock_table.`order_id` != 16829 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.057454824447631836,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16829, 18, 3, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 18 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 18 AND stock_table.`order_id` != 16829 FOR UPDATE ) >= 3 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.05647015571594238,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16829, 19, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 19 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 19 AND stock_table.`order_id` != 16829 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.049961090087890625,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16829, 17, 2, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 17 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 17 AND stock_table.`order_id` != 16829 FOR UPDATE ) >= 2 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.04318809509277344,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16829, 20, 2, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 20 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 20 AND stock_table.`order_id` != 16829 FOR UPDATE ) >= 2 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.035588979721069336,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16829, 25, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 25 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 25 AND stock_table.`order_id` != 16829 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.03163409233093262,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16829, 15, 3, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 15 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 15 AND stock_table.`order_id` != 16829 FOR UPDATE ) >= 3 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.026495933532714844,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16829, 27, 3, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 27 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 27 AND stock_table.`order_id` != 16829 FOR UPDATE ) >= 3 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.024489879608154297,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16829, 16, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 16 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 16 AND stock_table.`order_id` != 16829 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.02373504638671875,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16829, 21, 3, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 21 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 21 AND stock_table.`order_id` != 16829 FOR UPDATE ) >= 3 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T20:15:26+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "10-path-checkout-totals-heavy-cart-crud-1782936918202-10",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 11868.991,
+      "ttfb_ms": 11868.911,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "10-path-checkout-totals-heavy-cart-crud-1782936918202-10",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 3564.42,
+        "query_count": 2609,
+        "query_time_ms": 3257.71,
+        "memory_peak_mb": 20,
+        "slow_queries": [
+          {
+            "seconds": 0.051386117935180664,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('28480', '_reduced_stock', '1')"
+          },
+          {
+            "seconds": 0.02464008331298828,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -2.000000 WHERE post_id = 17 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.0228118896484375,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('28510', '_line_total', '29')"
+          },
+          {
+            "seconds": 0.02024698257446289,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16832, 24, 3, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 24 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 24 AND stock_table.`order_id` != 16832 FOR UPDATE ) >= 3 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.020207881927490234,
+            "sql": "UPDATE `wp_options` SET `option_value` = '1782936929' WHERE `option_name` = '_transient_filter_data-transient-version'"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T20:15:30+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "10-path-checkout-totals-heavy-cart-crud-1782936918202-11",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 9356.74,
+      "ttfb_ms": 9356.63,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "10-path-checkout-totals-heavy-cart-crud-1782936918202-11",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 3886.44,
+        "query_count": 2593,
+        "query_time_ms": 3563.96,
+        "memory_peak_mb": 20,
+        "slow_queries": [
+          {
+            "seconds": 0.04812908172607422,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('28465', '_line_subtotal', '48')"
+          },
+          {
+            "seconds": 0.02269291877746582,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('28465', '_qty', '2')"
+          },
+          {
+            "seconds": 0.022404909133911133,
+            "sql": "INSERT INTO `wp_woocommerce_order_items` (`order_item_name`, `order_item_type`, `order_id`) VALUES ('CRUD Product 000014 CatalogNeedle014', 'line_item', '16830')"
+          },
+          {
+            "seconds": 0.020468950271606445,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16830, 25, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 25 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 25 AND stock_table.`order_id` != 16830 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T20:15:27+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "10-path-checkout-totals-heavy-cart-crud-1782936918202-12",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 11863.178,
+      "ttfb_ms": 11863.088,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "10-path-checkout-totals-heavy-cart-crud-1782936918202-12",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 3557.77,
+        "query_count": 2551,
+        "query_time_ms": 3251.35,
+        "memory_peak_mb": 20,
+        "slow_queries": [
+          {
+            "seconds": 0.0429379940032959,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('28479', '_reduced_stock', '1')"
+          },
+          {
+            "seconds": 0.023440122604370117,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -2.000000 WHERE post_id = 17 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.020129919052124023,
+            "sql": "UPDATE `wp_options` SET `option_value` = '1782936929' WHERE `option_name` = '_transient_filter_data-transient-version'"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T20:15:30+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    }
+  ],
+  "fixture": {
+    "fixture_mode": "woocommerce-crud",
+    "orders": 10000,
+    "products": 5000,
+    "variations": 800,
+    "heavy_order_id": 15869,
+    "heavy_order_items": 500,
+    "first_product_id": 13,
+    "last_product_id": 8267,
+    "variable_parent_id": 1385,
+    "created_gmt": "2026-07-01T15:39:02+00:00"
+  },
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "site_url": "http://localhost:8100",
+    "server": "nginx -> php-fpm"
+  },
+  "measured_at_gmt": "2026-07-01T20:15:30.091Z",
+  "batch_ms": 11889
+}

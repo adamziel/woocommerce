@@ -9,35 +9,43 @@ body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;color:#1
 main{max-width:880px;margin:0 auto;padding:36px 22px}
 h1{font-size:30px;line-height:1.15;margin:0 0 10px}
 p{color:#5c6875;margin:0 0 24px}
-.list{display:grid;gap:12px}
-a.card{display:block;background:#fff;border:1px solid #d8dee4;border-radius:8px;padding:16px 18px;color:#17202a;text-decoration:none}
-a.card:hover{border-color:#8aa4c4}
-strong{display:block;font-size:18px;margin-bottom:4px}
-span{color:#5c6875}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #d8dee4}
+th,td{border-bottom:1px solid #d8dee4;padding:12px 14px;text-align:left;vertical-align:top}
+th{background:#eef2f6;color:#5c6875;font-size:13px}
+tr:last-child td{border-bottom:0}
+a{color:#674399}
+span{color:#5c6875;font-size:14px}
 </style>
 </head>
 <body>
 <main>
 <h1>WooCommerce Reports</h1>
 <p>Published reports on WooCommerce performance and related research.</p>
-<div class="list">
-<a class="card" href="../">
-<strong>WooCommerce Performance Research: Variations, Search, Orders</strong>
-<span>Existing root report.</span>
-</a>
-<a class="card" href="woocommerce-core-performance-bottlenecks-2026-07-01/">
-<strong>WooCommerce Core Performance Bottlenecks</strong>
-<span>Local benchmark report generated July 1, 2026. Includes HPOS orders, checkout, cart, catalog, variations, edit-order, and Woo Admin scenarios.</span>
-</a>
-<a class="card" href="woocommerce-pathological-performance-2026-07-01/">
-<strong>WooCommerce Pathological Performance</strong>
-<span>Stress report generated July 1, 2026 against 1M HPOS orders, 200k products, a 1,000-line-item order, 1M analytics rows, and concurrent buyer writes.</span>
-</a>
-<a class="card" href="woocommerce-crud-invariant-nginx-fpm-performance-2026-07-01/index.html">
-<strong>WooCommerce CRUD-Invariant nginx/php-fpm Performance</strong>
-<span>Corrected benchmark generated July 1, 2026 with WooCommerce CRUD-created fixtures, drained lookup/import work, nginx/php-fpm HTTP concurrency, 10k HPOS orders, 5k products, 800 variations, and a 500-line-item order.</span>
-</a>
-</div>
+<table>
+<thead><tr><th>Report</th><th>Scope</th></tr></thead>
+<tbody>
+<tr>
+<td><a href="woocommerce-crud-invariant-nginx-fpm-rebenchmark-2026-07-01/index.html">WooCommerce CRUD-Invariant nginx/php-fpm Rebenchmark</a></td>
+<td><span>Fresh concurrent HTTP rerun generated July 1, 2026. Fixtures were created through WooCommerce CRUD/application APIs, measured through nginx/php-fpm, with 10k HPOS orders, 5k products, 800 variations, and a 500-line-item order.</span></td>
+</tr>
+<tr>
+<td><a href="woocommerce-crud-invariant-nginx-fpm-performance-2026-07-01/index.html">WooCommerce CRUD-Invariant nginx/php-fpm Performance</a></td>
+<td><span>Corrected benchmark generated July 1, 2026 with WooCommerce CRUD-created fixtures, drained lookup/import work, nginx/php-fpm HTTP concurrency, 10k HPOS orders, 5k products, 800 variations, and a 500-line-item order.</span></td>
+</tr>
+<tr>
+<td><a href="woocommerce-pathological-performance-2026-07-01/">WooCommerce Pathological Performance</a></td>
+<td><span>Stress report generated July 1, 2026 against 1M HPOS orders, 200k products, a 1,000-line-item order, 1M analytics rows, and concurrent buyer writes.</span></td>
+</tr>
+<tr>
+<td><a href="woocommerce-core-performance-bottlenecks-2026-07-01/">WooCommerce Core Performance Bottlenecks</a></td>
+<td><span>Local benchmark report generated July 1, 2026. Includes HPOS orders, checkout, cart, catalog, variations, edit-order, and Woo Admin scenarios.</span></td>
+</tr>
+<tr>
+<td><a href="../">WooCommerce Performance Research: Variations, Search, Orders</a></td>
+<td><span>Existing root report.</span></td>
+</tr>
+</tbody>
+</table>
 </main>
 </body>
 </html>

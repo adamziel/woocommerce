@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Store API Checkout: CRUD 20-Line Cart</title>
+<style>
+:root{--ink:#15202b;--muted:#5d6976;--line:#d7dde3;--bg:#f6f8fa;--panel:#fff;--accent:#1f7a6d;--warn:#a84800;--bad:#a12a2a;--blue:#2764b5}
+*{box-sizing:border-box} body{margin:0;font:14px/1.45 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:var(--bg)}
+header{background:#fff;border-bottom:1px solid var(--line);padding:22px 28px 16px} main{max-width:1180px;margin:0 auto;padding:22px 24px 40px}
+h1{font-size:26px;line-height:1.15;margin:0 0 8px} h2{font-size:17px;margin:26px 0 10px} h3{font-size:14px;margin:18px 0 8px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.sub{color:var(--muted);max-width:900px}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px}
+.metric{font-size:26px;font-weight:720}.label{color:var(--muted);font-size:12px}.two{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+table{width:100%;border-collapse:collapse} th,td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left} th{font-size:12px;color:var(--muted);background:#f1f4f7} tr:last-child td{border-bottom:0}
+.barrow{display:grid;grid-template-columns:140px 1fr 70px;gap:10px;align-items:center;margin:8px 0}.bartrack{height:12px;background:#e5eaef;border-radius:4px;overflow:hidden}.bar{height:100%;background:var(--accent)}.barlabel,.barvalue{font-size:12px;color:var(--muted)}svg{width:100%;height:95px;color:var(--blue)}
+.pill{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;padding:2px 8px;background:#fff;color:var(--muted);font-size:12px}.risk{color:var(--warn);font-weight:650}.bad{color:var(--bad);font-weight:650} code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;background:#eef2f5;padding:1px 4px;border-radius:4px}
+pre{white-space:pre-wrap;word-break:break-word;background:#101820;color:#eef7ff;padding:12px;border-radius:8px;max-height:320px;overflow:auto;font-size:12px}
+.scenario-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.scenario-list a{display:block;background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px;text-decoration:none;color:var(--ink)}
+.scenario-list strong{display:block}.scenario-list span{color:var(--muted);font-size:12px}
+@media(max-width:800px){main{padding:16px}.grid,.two,.scenario-list{grid-template-columns:1fr}.barrow{grid-template-columns:100px 1fr 62px}header{padding:18px 16px}}
+</style>
+</head>
+<body>
+<header><h1>Store API Checkout: CRUD 20-Line Cart</h1><div class="sub">Fresh concurrent HTTP rerun on July 1, 2026. Fixtures were created through WooCommerce CRUD/application APIs; measured requests went through nginx -&gt; php-fpm with concurrent curl workers.</div></header>
+<main>
+<section class="grid">
+  <div class="card"><div class="label">HTTP median</div><div class="metric">8289ms</div></div>
+  <div class="card"><div class="label">HTTP p95</div><div class="metric">11869ms</div></div>
+  <div class="card"><div class="label">Queries p95</div><div class="metric">2685</div></div>
+  <div class="card"><div class="label">DB time p95</div><div class="metric">3956ms</div></div>
+</section>
+<h2>What Was Triggered</h2>
+<div class="card">
+  <p><strong>Rank 10:</strong> Store API Checkout: CRUD 20-Line Cart</p>
+  <p>Simultaneous Store API checkouts, each with a 20-line CRUD-created cart prepared before the measured batch.</p>
+  <p><span class="pill">/wp-json/wc/store/v1/checkout via nginx/php-fpm</span> <span class="pill">HTTP 200</span> <span class="pill">12 samples</span></p>
+</div>
+<h2>Latency Shape</h2>
+<div class="two">
+  <div class="card">
+    <div class="barrow"><div class="barlabel">HTTP median</div><div class="bartrack"><div class="bar" style="width:70%"></div></div><div class="barvalue">8289ms</div></div>
+    <div class="barrow"><div class="barlabel">HTTP p95</div><div class="bartrack"><div class="bar" style="width:100%"></div></div><div class="barvalue">11869ms</div></div>
+    <div class="barrow"><div class="barlabel">PHP p95</div><div class="bartrack"><div class="bar" style="width:36%"></div></div><div class="barvalue">4273ms</div></div>
+    <div class="barrow"><div class="barlabel">DB p95</div><div class="bartrack"><div class="bar" style="width:33%"></div></div><div class="barvalue">3956ms</div></div>
+  </div>
+  <div class="card"><svg viewBox="0 0 100 52" role="img" aria-label="Latency samples"><polyline points="0.0,32.9 9.1,32.8 18.2,32.2 27.3,32.9 36.4,18.7 45.5,28.6 54.5,18.4 63.6,18.7 72.7,18.1 81.8,6.0 90.9,14.9 100.0,6.0" fill="none" stroke="currentColor" stroke-width="2.5"/><line x1="0" x2="100" y1="48" y2="48" stroke="currentColor" opacity=".25"/></svg><div class="label">Each point is one measured request in run order.</div></div>
+</div>
+<h2>Fixture Context</h2>
+<table class="table"><tbody>
+  <tr><th>Orders</th><td>10000</td><th>Products</th><td>5000</td></tr>
+  <tr><th>Variations</th><td>800</td><th>Variable product</th><td>1385</td></tr>
+  <tr><th>WordPress</th><td>7.0</td><th>WooCommerce</th><td>10.9.1</td></tr>
+  <tr><th>PHP</th><td>8.3.31</td><th>MySQL</th><td>8.0.46</td></tr>
+</tbody></table>
+<h2>Samples</h2>
+<table class="table"><thead><tr><th>#</th><th>HTTP ms</th><th>PHP ms</th><th>Queries</th><th>DB ms</th><th>Peak MB</th><th>Status</th></tr></thead><tbody>
+<tr><td>1</td><td>4270ms</td><td>4261ms</td><td>2685</td><td>3931ms</td><td>20.0MB</td><td>200</td></tr><tr><td>2</td><td>4286ms</td><td>4273ms</td><td>2555</td><td>3956ms</td><td>20.0MB</td><td>200</td></tr><tr><td>3</td><td>4456ms</td><td>4188ms</td><td>2603</td><td>3845ms</td><td>20.0MB</td><td>200</td></tr><tr><td>4</td><td>4263ms</td><td>4246ms</td><td>2639</td><td>3926ms</td><td>20.0MB</td><td>200</td></tr><tr><td>5</td><td>8294ms</td><td>4017ms</td><td>2635</td><td>3682ms</td><td>20.0MB</td><td>200</td></tr><tr><td>6</td><td>5472ms</td><td>4212ms</td><td>2579</td><td>3885ms</td><td>20.0MB</td><td>200</td></tr><tr><td>7</td><td>8364ms</td><td>4088ms</td><td>2645</td><td>3751ms</td><td>20.0MB</td><td>200</td></tr><tr><td>8</td><td>8289ms</td><td>3994ms</td><td>2561</td><td>3660ms</td><td>20.0MB</td><td>200</td></tr><tr><td>9</td><td>8446ms</td><td>3985ms</td><td>2665</td><td>3659ms</td><td>20.0MB</td><td>200</td></tr><tr><td>10</td><td>11869ms</td><td>3564ms</td><td>2609</td><td>3258ms</td><td>20.0MB</td><td>200</td></tr><tr><td>11</td><td>9357ms</td><td>3886ms</td><td>2593</td><td>3564ms</td><td>20.0MB</td><td>200</td></tr><tr><td>12</td><td>11863ms</td><td>3558ms</td><td>2551</td><td>3251ms</td><td>20.0MB</td><td>200</td></tr>
+</tbody></table>
+<h2>Slow SQL Signatures</h2>
+<table class="table"><thead><tr><th>Seconds</th><th>SQL excerpt</th></tr></thead><tbody><tr><td>116ms</td><td><code>INSERT INTO `wp_woocommerce_order_items` (`order_item_name`, `order_item_type`, `order_id`) VALUES ('CRUD Product 000019 CatalogNeedle019', 'line_item', '16824')</code></td></tr><tr><td>116ms</td><td><code>INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('16823', '_debug_log_source', 'place-order-debug-ea44b05e')</code></td></tr><tr><td>116ms</td><td><code>INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('28350', '_variation_id', '0')</code></td></tr><tr><td>89.6ms</td><td><code>INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('16821', '_debug_log_source', 'place-order-debug-7c762827')</code></td></tr><tr><td>88.9ms</td><td><code>DELETE FROM `wp_wc_orders_meta` WHERE `id` = 56063 AND `order_id` = 16822</code></td></tr><tr><td>67.7ms</td><td><code> INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16829, 28, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 28 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` &gt; NOW() AND stock_table.`product_id` = 28 AND stock_table.`order_id` != 16829 FOR UPDATE ) &gt;= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) </code></td></tr><tr><td>63.5ms</td><td><code> INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16823, 17, 2, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 17 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` &gt; NOW() AND stock_table.`product_id` = 17 AND stock_table.`order_id` != 16823 FOR UPDATE ) &gt;= 2 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) </code></td></tr><tr><td>57.5ms</td><td><code> INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 16829, 18, 3, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 18 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` &gt; NOW() AND stock_table.`product_id` = 18 AND stock_table.`order_id` != 16829 FOR UPDATE ) &gt;= 3 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) </code></td></tr></tbody></table>
+</main>
+</body>
+</html>
