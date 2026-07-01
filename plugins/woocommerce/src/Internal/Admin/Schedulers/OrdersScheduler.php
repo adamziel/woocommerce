@@ -128,7 +128,7 @@ class OrdersScheduler extends ImportScheduler {
 			add_action( 'action_scheduler_ensure_recurring_actions', array( __CLASS__, 'schedule_recurring_batch_processor' ) );
 		} else {
 			// Schedule import immediately on order create/update/delete.
-			add_action( 'woocommerce_update_order', array( __CLASS__, 'possibly_schedule_import' ) );
+			add_action( 'woocommerce_update_order', array( __CLASS__, 'possibly_schedule_import' ), 10, 2 );
 			add_filter( 'woocommerce_create_order', array( __CLASS__, 'possibly_schedule_import' ) );
 			add_action( 'woocommerce_refund_created', array( __CLASS__, 'possibly_schedule_import' ) );
 			add_action( 'woocommerce_schedule_import', array( __CLASS__, 'possibly_schedule_import' ) );
@@ -339,17 +339,20 @@ AND status NOT IN ( 'wc-auto-draft', 'trash', 'auto-draft' )
 	 * Note: This method is only called when scheduled import is disabled
 	 * (immediate mode). Otherwise, orders are processed in batches periodically.
 	 *
-	 * @param int $order_id Post ID.
+	 * @param int            $order_id Post ID.
+	 * @param \WC_Order|null $order    Order object.
 	 *
 	 * @internal
 	 * @returns int The order id
 	 */
-	public static function possibly_schedule_import( $order_id ) {
+	public static function possibly_schedule_import( $order_id, $order = null ) {
 		if ( self::is_scheduled_import_enabled() ) {
 			return $order_id;
 		}
 
-		if ( ! OrderUtil::is_order( $order_id, array( 'shop_order' ) ) && 'woocommerce_refund_created' !== current_filter() && 'woocommerce_schedule_import' !== current_filter() ) {
+		$is_order = $order instanceof \WC_Order ? 'shop_order' === $order->get_type() : OrderUtil::is_order( $order_id, array( 'shop_order' ) );
+
+		if ( ! $is_order && 'woocommerce_refund_created' !== current_filter() && 'woocommerce_schedule_import' !== current_filter() ) {
 			return $order_id;
 		}
 

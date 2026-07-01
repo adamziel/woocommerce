@@ -1,0 +1,4 @@
+Significance: patch
+Type: performance
+
+Avoid redundant order type lookups when scheduling analytics imports.
