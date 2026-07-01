@@ -22,6 +22,41 @@ class WC_Order_Functions_Test extends \WC_Unit_Test_Case {
 	}
 
 	/**
+	 * Assert a hook callback's accepted arguments count.
+	 *
+	 * @param string $hook          Hook name.
+	 * @param string $callback      Callback name.
+	 * @param int    $accepted_args Expected number of accepted arguments.
+	 */
+	private function assert_hook_accepted_args( string $hook, string $callback, int $accepted_args ): void {
+		global $wp_filter;
+
+		$priority = has_action( $hook, $callback );
+
+		$this->assertNotFalse( $priority, "{$callback} should be hooked to {$hook}." );
+		$this->assertSame( $accepted_args, $wp_filter[ $hook ]->callbacks[ $priority ][ $callback ]['accepted_args'] );
+	}
+
+	/**
+	 * Test order status callbacks receive the order object passed by WC_Order::status_transition().
+	 */
+	public function test_order_status_callbacks_accept_order_object_argument(): void {
+		foreach ( array( 'completed', 'processing' ) as $status ) {
+			$this->assert_hook_accepted_args( "woocommerce_order_status_{$status}", 'wc_downloadable_product_permissions', 2 );
+		}
+
+		foreach ( array( 'completed', 'processing', 'on-hold' ) as $status ) {
+			$this->assert_hook_accepted_args( "woocommerce_order_status_{$status}", 'wc_update_total_sales_counts', 2 );
+		}
+
+		foreach ( array( 'completed_to_cancelled', 'processing_to_cancelled', 'on-hold_to_cancelled' ) as $transition ) {
+			$this->assert_hook_accepted_args( "woocommerce_order_status_{$transition}", 'wc_update_total_sales_counts', 2 );
+		}
+
+		$this->assert_hook_accepted_args( 'woocommerce_order_status_processing', 'wc_update_coupon_usage_counts', 1 );
+	}
+
+	/**
 	 * Test that wc_restock_refunded_items() preserves order item stock metadata.
 	 */
 	public function test_wc_restock_refunded_items_stock_metadata() {

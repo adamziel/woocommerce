@@ -62238,7 +62238,7 @@ parameters:
 		-
 			message: '#^Cannot call method save\(\) on WC_Order\|WC_Order_Refund\|false\.$#'
 			identifier: method.nonObject
-			count: 6
+			count: 4
 			path: src/Internal/DataStores/Orders/OrdersTableDataStore.php
 
 		-
