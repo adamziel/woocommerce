@@ -1493,6 +1493,120 @@ class WC_Product_Data_Store_CPT extends WC_Data_Store_WP implements WC_Object_Da
 			$meta_attribute_names[] = 'attribute_' . sanitize_title( $attribute->get_name() );
 		}
 
+		if ( empty( $meta_attribute_names ) ) {
+			return 0;
+		}
+
+		$meta_attribute_names = array_values( array_unique( $meta_attribute_names ) );
+		$selected_attributes  = array_intersect_key( $match_attributes, array_flip( $meta_attribute_names ) );
+
+		foreach ( $selected_attributes as $attribute_value ) {
+			if ( ! is_string( $attribute_value ) ) {
+				$matching_variation_id = $this->find_matching_product_variation_by_attribute_scan( $product, $match_attributes, $meta_attribute_names );
+
+				if ( $matching_variation_id ) {
+					return $matching_variation_id;
+				}
+
+				if ( version_compare( get_post_meta( $product->get_id(), '_product_version', true ), '2.4.0', '<' ) ) {
+					/**
+					 * Pre 2.4 handling where 'slugs' were saved instead of the full text attribute.
+					 * Fallback is here because there are cases where data will be 'synced' but the product version will remain the same.
+					 */
+					return ( array_map( 'sanitize_title', $match_attributes ) === $match_attributes ) ? 0 : $this->find_matching_product_variation( $product, array_map( 'sanitize_title', $match_attributes ) );
+				}
+
+				return 0;
+			}
+		}
+
+		/**
+		 * Find the first variation whose saved attribute meta does not conflict with the selected attributes.
+		 * Empty attribute meta values mean "any", and missing attribute meta rows are ignored for compatibility
+		 * with the PHP scan this replaces.
+		 */
+		$meta_attribute_placeholders = implode( ', ', array_fill( 0, count( $meta_attribute_names ), '%s' ) );
+		$query_args                  = array_merge(
+			array( $product->get_id() ),
+			$meta_attribute_names,
+			$meta_attribute_names
+		);
+
+		if ( $selected_attributes ) {
+			$selected_attribute_placeholders = implode( ', ', array_fill( 0, count( $selected_attributes ), '%s' ) );
+			$conflicting_attribute_checks    = array(
+				"conflicting_meta.meta_key NOT IN ( {$selected_attribute_placeholders} )",
+			);
+			$query_args                      = array_merge( $query_args, array_keys( $selected_attributes ) );
+
+			foreach ( $selected_attributes as $attribute_key => $attribute_value ) {
+				$conflicting_attribute_checks[] = '( conflicting_meta.meta_key = %s AND conflicting_meta.meta_value != %s )';
+				$query_args[]                   = $attribute_key;
+				$query_args[]                   = $attribute_value;
+			}
+
+			$conflicting_attribute_condition = implode( ' OR ', $conflicting_attribute_checks );
+		} else {
+			$conflicting_attribute_condition = '1=1';
+		}
+
+		$query = $wpdb->prepare(
+			"
+			SELECT posts.ID
+			FROM {$wpdb->posts} as posts
+			WHERE posts.post_parent = %d
+			AND posts.post_status = 'publish'
+			AND posts.post_type = 'product_variation'
+			AND EXISTS (
+				SELECT 1
+				FROM {$wpdb->postmeta} as variation_meta
+				WHERE variation_meta.post_id = posts.ID
+				AND variation_meta.meta_key IN ( {$meta_attribute_placeholders} )
+			)
+			AND NOT EXISTS (
+				SELECT 1
+				FROM {$wpdb->postmeta} as conflicting_meta
+				WHERE conflicting_meta.post_id = posts.ID
+				AND conflicting_meta.meta_key IN ( {$meta_attribute_placeholders} )
+				AND conflicting_meta.meta_value != ''
+				AND ( {$conflicting_attribute_condition} )
+			)
+			ORDER BY posts.menu_order ASC, posts.ID ASC
+			LIMIT 1
+			",
+			$query_args
+		);
+
+		$matching_variation_id = absint( $wpdb->get_var( $query ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+		if ( $matching_variation_id ) {
+			return $matching_variation_id;
+		}
+
+		if ( version_compare( get_post_meta( $product->get_id(), '_product_version', true ), '2.4.0', '<' ) ) {
+			/**
+			 * Pre 2.4 handling where 'slugs' were saved instead of the full text attribute.
+			 * Fallback is here because there are cases where data will be 'synced' but the product version will remain the same.
+			 */
+			return ( array_map( 'sanitize_title', $match_attributes ) === $match_attributes ) ? 0 : $this->find_matching_product_variation( $product, array_map( 'sanitize_title', $match_attributes ) );
+		}
+
+		return 0;
+	}
+
+	/**
+	 * Find a matching variation by scanning variation attribute meta in PHP.
+	 *
+	 * This keeps strict comparison semantics for unusual non-string attribute values while the main path uses SQL.
+	 *
+	 * @param WC_Product $product Variable product.
+	 * @param array      $match_attributes Array of attributes we want to try to match.
+	 * @param array      $meta_attribute_names Attribute meta keys used by variations.
+	 * @return int Matching variation ID or 0.
+	 */
+	private function find_matching_product_variation_by_attribute_scan( $product, $match_attributes, $meta_attribute_names ) {
+		global $wpdb;
+
 		// Get the attributes of the variations.
 		$query = $wpdb->prepare(
 			"
@@ -1550,14 +1664,6 @@ class WC_Product_Data_Store_CPT extends WC_Data_Store_WP implements WC_Object_Da
 			if ( true === $match ) {
 				return $variation_id;
 			}
-		}
-
-		if ( version_compare( get_post_meta( $product->get_id(), '_product_version', true ), '2.4.0', '<' ) ) {
-			/**
-			 * Pre 2.4 handling where 'slugs' were saved instead of the full text attribute.
-			 * Fallback is here because there are cases where data will be 'synced' but the product version will remain the same.
-			 */
-			return ( array_map( 'sanitize_title', $match_attributes ) === $match_attributes ) ? 0 : $this->find_matching_product_variation( $product, array_map( 'sanitize_title', $match_attributes ) );
 		}
 
 		return 0;

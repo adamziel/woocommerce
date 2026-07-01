@@ -76,6 +76,172 @@ class WC_Product_Data_Store_CPT_Test extends WC_Unit_Test_Case {
 	}
 
 	/**
+	 * @testdox find_matching_product_variation returns a variation with exact attribute matches.
+	 */
+	public function test_find_matching_product_variation_returns_exact_match() {
+		list( $product, $variations ) = $this->create_matching_variable_product(
+			array(
+				array(
+					'attributes' => array(
+						'pa_match_size'  => 'small',
+						'pa_match_color' => 'red',
+					),
+				),
+				array(
+					'attributes' => array(
+						'pa_match_size'  => 'large',
+						'pa_match_color' => 'blue',
+					),
+				),
+			)
+		);
+		$data_store                 = WC_Data_Store::load( 'product' );
+
+		$match = $data_store->find_matching_product_variation(
+			$product,
+			array(
+				'attribute_pa_match_size'  => 'large',
+				'attribute_pa_match_color' => 'blue',
+			)
+		);
+
+		$this->assertSame( $variations[1], $match );
+	}
+
+	/**
+	 * @testdox find_matching_product_variation treats empty variation attribute meta as "any".
+	 */
+	public function test_find_matching_product_variation_matches_any_attribute_value() {
+		list( $product, $variations ) = $this->create_matching_variable_product(
+			array(
+				array(
+					'attributes' => array(
+						'pa_match_size'  => 'medium',
+						'pa_match_color' => '',
+					),
+				),
+			)
+		);
+		$data_store                 = WC_Data_Store::load( 'product' );
+
+		$match = $data_store->find_matching_product_variation(
+			$product,
+			array(
+				'attribute_pa_match_size'  => 'medium',
+				'attribute_pa_match_color' => 'blue',
+			)
+		);
+
+		$this->assertSame( $variations[0], $match );
+	}
+
+	/**
+	 * @testdox find_matching_product_variation returns zero when no variation matches the selected attributes.
+	 */
+	public function test_find_matching_product_variation_returns_zero_for_no_match() {
+		list( $product ) = $this->create_matching_variable_product(
+			array(
+				array(
+					'attributes' => array(
+						'pa_match_size'  => 'small',
+						'pa_match_color' => 'red',
+					),
+				),
+			)
+		);
+		$data_store     = WC_Data_Store::load( 'product' );
+
+		$match = $data_store->find_matching_product_variation(
+			$product,
+			array(
+				'attribute_pa_match_size'  => 'large',
+				'attribute_pa_match_color' => 'red',
+			)
+		);
+
+		$this->assertSame( 0, $match );
+	}
+
+	/**
+	 * @testdox find_matching_product_variation returns the first matching variation by menu order.
+	 */
+	public function test_find_matching_product_variation_prefers_lowest_menu_order() {
+		list( $product, $variations ) = $this->create_matching_variable_product(
+			array(
+				array(
+					'attributes' => array(
+						'pa_match_size'  => 'small',
+						'pa_match_color' => 'red',
+					),
+					'menu_order' => 10,
+				),
+				array(
+					'attributes' => array(
+						'pa_match_size'  => 'small',
+						'pa_match_color' => 'red',
+					),
+					'menu_order' => 2,
+				),
+			)
+		);
+		$data_store                 = WC_Data_Store::load( 'product' );
+
+		$match = $data_store->find_matching_product_variation(
+			$product,
+			array(
+				'attribute_pa_match_size'  => 'small',
+				'attribute_pa_match_color' => 'red',
+			)
+		);
+
+		$this->assertSame( $variations[1], $match );
+	}
+
+	/**
+	 * @testdox find_matching_product_variation ignores draft and private variations.
+	 */
+	public function test_find_matching_product_variation_ignores_unpublished_variations() {
+		list( $product, $variations ) = $this->create_matching_variable_product(
+			array(
+				array(
+					'attributes' => array(
+						'pa_match_size'  => 'small',
+						'pa_match_color' => 'red',
+					),
+					'menu_order' => 0,
+					'status'     => 'draft',
+				),
+				array(
+					'attributes' => array(
+						'pa_match_size'  => 'small',
+						'pa_match_color' => 'red',
+					),
+					'menu_order' => 1,
+					'status'     => 'private',
+				),
+				array(
+					'attributes' => array(
+						'pa_match_size'  => 'small',
+						'pa_match_color' => 'red',
+					),
+					'menu_order' => 2,
+				),
+			)
+		);
+		$data_store                 = WC_Data_Store::load( 'product' );
+
+		$match = $data_store->find_matching_product_variation(
+			$product,
+			array(
+				'attribute_pa_match_size'  => 'small',
+				'attribute_pa_match_color' => 'red',
+			)
+		);
+
+		$this->assertSame( $variations[2], $match );
+	}
+
+	/**
 	 * Ensure product rating counts are calculated correctly.
 	 *
 	 * @return void
@@ -432,5 +598,48 @@ class WC_Product_Data_Store_CPT_Test extends WC_Unit_Test_Case {
 		$this->assertSame( '20.000000', get_post_meta( $product_id, 'total_sales', true ) );
 		$store->update_product_sales( $product_id, 30.5, 'set' );
 		$this->assertSame( '30.500000', get_post_meta( $product_id, 'total_sales', true ) );
+	}
+
+	/**
+	 * Create a variable product with controlled variation attributes.
+	 *
+	 * @param array $variation_data Variation data to create.
+	 * @return array{0: WC_Product_Variable, 1: array<int, int>}
+	 */
+	private function create_matching_variable_product( array $variation_data ) {
+		$product = new WC_Product_Variable();
+		$product->set_name( 'Matching Variable Product' );
+		$product->set_attributes(
+			array(
+				WC_Helper_Product::create_product_attribute_object( 'match_size', array( 'small', 'medium', 'large' ) ),
+				WC_Helper_Product::create_product_attribute_object( 'match_color', array( 'red', 'blue' ) ),
+			)
+		);
+		$product->save();
+
+		$variation_ids = array();
+
+		foreach ( $variation_data as $index => $variation_props ) {
+			$variation = WC_Helper_Product::create_product_variation_object(
+				$product->get_id(),
+				uniqid( 'MATCH-VAR-' ),
+				10 + $index,
+				$variation_props['attributes'],
+				false
+			);
+			$variation->set_menu_order( isset( $variation_props['menu_order'] ) ? $variation_props['menu_order'] : 0 );
+
+			if ( isset( $variation_props['status'] ) ) {
+				$variation->set_status( $variation_props['status'] );
+			}
+
+			$variation->save();
+			$variation_ids[] = $variation->get_id();
+		}
+
+		WC_Product_Variable::sync( $product->get_id(), false );
+		wc_delete_product_transients( $product->get_id() );
+
+		return array( wc_get_product( $product->get_id() ), $variation_ids );
 	}
 }
