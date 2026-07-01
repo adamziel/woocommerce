@@ -389,9 +389,8 @@ $orders_table.id in (
 	/**
 	 * Generates where clause for meta table.
 	 *
-	 * Note we generate the where clause as a subquery to be used by calling function inside the IN clause. This is against the general wisdom for performance, but in this particular case, a subquery is able to use the order_id-meta_key-meta_value index, which is not possible with a join.
-	 *
-	 * Since it can use the index, which otherwise would not be possible, it is much faster than both LEFT JOIN or SQL_CALC approach that could have been used.
+	 * Note we generate the where clause as a subquery to be used by calling function inside the IN clause.
+	 * Duplicate order IDs do not change IN() results, so avoid grouping in the subquery.
 	 *
 	 * @return string The where clause for meta table.
 	 */
@@ -411,7 +410,6 @@ SELECT search_query_meta.order_id
 FROM $meta_table as search_query_meta
 WHERE search_query_meta.meta_key IN ( $meta_fields )
 AND search_query_meta.meta_value LIKE %s
-GROUP BY search_query_meta.order_id
 ",
 			'%' . $wpdb->esc_like( $this->search_term ) . '%'
 		);
