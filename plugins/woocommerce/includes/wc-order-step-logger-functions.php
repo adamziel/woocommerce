@@ -63,8 +63,11 @@ function wc_log_order_step( string $message, ?array $context = null, bool $final
 			$order   = $context['order_object'];
 			$context = array_merge( extract_order_safe_data( $order ), $context );
 			unset( $context['order_object'] ); // This is super-important to avoid logging sensitive data.
-			$order->add_meta_data( '_debug_log_source', $context['source'], true );
-			$order->save();
+
+			if ( $order->get_meta( '_debug_log_source', true ) !== $context['source'] ) {
+				$order->update_meta_data( '_debug_log_source', $context['source'] );
+				$order->save();
+			}
 		}
 
 		// Use the global logger instance which respects site's logging configuration.

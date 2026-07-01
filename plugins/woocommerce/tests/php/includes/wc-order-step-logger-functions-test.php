@@ -88,6 +88,25 @@ class WC_Order_Step_Logger_Functions_Test extends \WC_Unit_Test_Case {
 	}
 
 	/**
+	 * Get the ID for a meta entry by key.
+	 *
+	 * @param WC_Order $order Order object.
+	 * @param string   $key Meta key.
+	 * @return int Meta ID.
+	 */
+	private function get_order_meta_id( WC_Order $order, string $key ): int {
+		$order->read_meta_data( true );
+
+		foreach ( $order->get_meta_data() as $meta ) {
+			if ( $meta->key === $key ) {
+				return (int) $meta->id;
+			}
+		}
+
+		return 0;
+	}
+
+	/**
 	 * @testdox Order step logging should respect the site's logging level configuration when set to CRITICAL.
 	 */
 	public function test_wc_log_order_step_respects_critical_level_threshold(): void {
@@ -177,6 +196,45 @@ class WC_Order_Step_Logger_Functions_Test extends \WC_Unit_Test_Case {
 		$this->assertStringContainsString( 'Final step - should be logged', $log_content );
 
 		// Clean up the order.
+		$order->delete( true );
+	}
+
+	/**
+	 * @testdox Order step logging should keep the same debug log source meta row across multiple steps.
+	 */
+	public function test_wc_log_order_step_keeps_existing_debug_log_source_meta(): void {
+		Constants::set_constant( 'WC_LOG_THRESHOLD', WC_Log_Levels::DEBUG );
+
+		$order = WC_Helper_Order::create_order();
+
+		wc_log_order_step(
+			'Step 1',
+			array( 'order_object' => $order ),
+			false,
+			true
+		);
+
+		$first_meta_id = $this->get_order_meta_id( $order, '_debug_log_source' );
+
+		wc_log_order_step(
+			'Step 2',
+			array( 'order_object' => $order ),
+			false,
+			false
+		);
+
+		$second_meta_id = $this->get_order_meta_id( $order, '_debug_log_source' );
+
+		$this->assertGreaterThan( 0, $first_meta_id, 'Expected the debug log source meta to be created.' );
+		$this->assertSame( $first_meta_id, $second_meta_id, 'Expected later steps to reuse the existing debug log source meta row.' );
+
+		wc_log_order_step(
+			'Step 3 - Final',
+			array( 'order_object' => $order ),
+			true,
+			false
+		);
+
 		$order->delete( true );
 	}
 
