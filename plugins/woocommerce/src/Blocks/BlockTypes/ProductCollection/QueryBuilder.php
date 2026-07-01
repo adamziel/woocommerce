@@ -1258,34 +1258,69 @@ class QueryBuilder {
 			return array();
 		}
 
-		// Since we're using array_intersect, any array that is empty will result
-		// in an empty output array. To avoid this we need to make sure every
-		// argument is a non-empty array.
-		$post__in = array_filter(
-			$post__in,
-			function ( $val ) {
-				return is_array( $val ) && ! empty( $val );
-			}
+		// Empty arrays should not remove all products by themselves. Some query
+		// sources use an empty post__in array to mean "no restriction".
+		$post__in = array_values(
+			array_filter(
+				$post__in,
+				function ( $val ) {
+					return is_array( $val ) && ! empty( $val );
+				}
+			)
 		);
 		if ( empty( $post__in ) ) {
 			return array();
 		}
 
+		if ( 1 === count( $post__in ) ) {
+			return array_values( array_unique( $post__in[0], SORT_NUMERIC ) );
+		}
+
+		$ordered_post__in = $post__in[0];
+
+		usort(
+			$post__in,
+			function ( $a, $b ) {
+				return count( $a ) <=> count( $b );
+			}
+		);
+
+		$intersection = array();
+		foreach ( $post__in[0] as $product_id ) {
+			$intersection[ 'post_id:' . (string) $product_id ] = true;
+		}
+
 		// Since the 'post__in' filter is exclusionary we need to use an intersection of
 		// all of the arrays. This ensures one query doesn't add options that another
 		// has otherwise excluded from the results.
-		if ( count( $post__in ) > 1 ) {
-			$post__in = array_intersect( ...$post__in );
-			// An empty array means that there was no overlap between the filters and so
-			// the query should return no results.
-			if ( empty( $post__in ) ) {
+		for ( $i = 1, $count = count( $post__in ); $i < $count; $i++ ) {
+			$next_intersection = array();
+
+			foreach ( $post__in[ $i ] as $product_id ) {
+				$key = 'post_id:' . (string) $product_id;
+				if ( isset( $intersection[ $key ] ) ) {
+					$next_intersection[ $key ] = true;
+				}
+			}
+
+			$intersection = $next_intersection;
+			if ( empty( $intersection ) ) {
 				return array( -1 );
 			}
-		} else {
-			$post__in = reset( $post__in );
 		}
 
-		return array_values( array_unique( $post__in, SORT_NUMERIC ) );
+		$merged_post__in = array();
+		foreach ( $ordered_post__in as $product_id ) {
+			if ( isset( $intersection[ 'post_id:' . (string) $product_id ] ) ) {
+				$merged_post__in[] = $product_id;
+			}
+		}
+
+		if ( empty( $merged_post__in ) ) {
+			return array( -1 );
+		}
+
+		return array_values( array_unique( $merged_post__in, SORT_NUMERIC ) );
 	}
 
 	/**
