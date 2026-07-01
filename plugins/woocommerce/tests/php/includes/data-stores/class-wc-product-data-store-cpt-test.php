@@ -414,6 +414,104 @@ class WC_Product_Data_Store_CPT_Test extends WC_Unit_Test_Case {
 	}
 
 	/**
+	 * Test update_product_stock updates lookup table stock quantity for managed stock products.
+	 */
+	public function test_update_product_stock_lookup_table_managed_stock_update(): void {
+		global $wpdb;
+
+		/** @var WC_Product_Data_Store_CPT $store */
+		$store = WC_Data_Store::load( 'product' );
+
+		$product = WC_Helper_Product::create_simple_product(
+			true,
+			array(
+				'manage_stock'   => true,
+				'stock_quantity' => 10,
+			)
+		);
+
+		$store->update_product_stock( $product->get_id(), 3, 'decrease' );
+
+		$this->assertSame( '7', get_post_meta( $product->get_id(), '_stock', true ) );
+		$this->assertEquals(
+			7,
+			$wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT stock_quantity FROM {$wpdb->wc_product_meta_lookup} WHERE product_id = %d",
+					$product->get_id()
+				)
+			)
+		);
+	}
+
+	/**
+	 * Test update_product_stock keeps lookup table stock quantity null for unmanaged stock products.
+	 */
+	public function test_update_product_stock_lookup_table_unmanaged_stock_update(): void {
+		global $wpdb;
+
+		/** @var WC_Product_Data_Store_CPT $store */
+		$store = WC_Data_Store::load( 'product' );
+
+		$product = WC_Helper_Product::create_simple_product(
+			true,
+			array(
+				'manage_stock'   => false,
+				'stock_quantity' => 10,
+			)
+		);
+
+		$store->update_product_stock( $product->get_id(), 5, 'set' );
+
+		$this->assertSame( '5.000000', get_post_meta( $product->get_id(), '_stock', true ) );
+		$this->assertNull(
+			$wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT stock_quantity FROM {$wpdb->wc_product_meta_lookup} WHERE product_id = %d",
+					$product->get_id()
+				)
+			)
+		);
+	}
+
+	/**
+	 * Test update_product_stock recreates a missing lookup table row.
+	 */
+	public function test_update_product_stock_lookup_table_missing_row_fallback(): void {
+		global $wpdb;
+
+		/** @var WC_Product_Data_Store_CPT $store */
+		$store = WC_Data_Store::load( 'product' );
+
+		$product = WC_Helper_Product::create_simple_product(
+			true,
+			array(
+				'manage_stock'   => true,
+				'stock_quantity' => 10,
+			)
+		);
+
+		$wpdb->delete(
+			$wpdb->wc_product_meta_lookup,
+			array(
+				'product_id' => $product->get_id(),
+			)
+		);
+
+		$store->update_product_stock( $product->get_id(), 8, 'set' );
+
+		$this->assertEquals(
+			8,
+			$wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT stock_quantity FROM {$wpdb->wc_product_meta_lookup} WHERE product_id = %d",
+					$product->get_id()
+				)
+			)
+		);
+	}
+
+	/**
 	 * Test update_product_sales updates on the meta-entry.
 	 */
 	public function test_update_product_sales_meta_update(): void {
