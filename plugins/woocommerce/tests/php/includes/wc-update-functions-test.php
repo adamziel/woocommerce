@@ -7,11 +7,55 @@
 
 use Automattic\WooCommerce\Blocks\Options as BlockOptions;
 use Automattic\WooCommerce\Blocks\Utils\BlockTemplateUtils;
+use Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableController;
+use Automattic\WooCommerce\Internal\DataStores\Orders\DataSynchronizer;
+use Automattic\WooCommerce\Internal\DataStores\Orders\OrdersTableDataStore;
+use Automattic\WooCommerce\RestApi\UnitTests\Helpers\OrderHelper;
 
 /**
  * Class WC_Core_Functions_Test
  */
 class WC_Update_Functions_Test extends \WC_Unit_Test_Case {
+
+	/**
+	 * Get the columns in the created_via_order_id operational data index.
+	 *
+	 * @return array
+	 */
+	private function get_created_via_order_id_index_columns(): array {
+		global $wpdb;
+
+		$operational_data_table = OrdersTableDataStore::get_operational_data_table_name();
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is returned by OrdersTableDataStore.
+		$index_rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SHOW INDEX FROM {$operational_data_table} WHERE Key_name = %s",
+				'created_via_order_id'
+			)
+		);
+		$index_rows = is_array( $index_rows ) ? $index_rows : array();
+		usort(
+			$index_rows,
+			fn( $a, $b ) => (int) $a->Seq_in_index <=> (int) $b->Seq_in_index
+		);
+
+		return wp_list_pluck( $index_rows, 'Column_name' );
+	}
+
+	/**
+	 * Drop the created_via_order_id operational data index when it exists.
+	 */
+	private function drop_created_via_order_id_index(): void {
+		global $wpdb;
+
+		if ( array() === $this->get_created_via_order_id_index_columns() ) {
+			return;
+		}
+
+		$operational_data_table = OrdersTableDataStore::get_operational_data_table_name();
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is returned by OrdersTableDataStore.
+		$wpdb->query( "ALTER TABLE {$operational_data_table} DROP INDEX created_via_order_id" );
+	}
 
 	/**
 	 * Test wc_update_343_cleanup_foreign_keys() function.
@@ -337,5 +381,53 @@ class WC_Update_Functions_Test extends \WC_Unit_Test_Case {
 		delete_option( 'woocommerce_feature_point_of_sale_enabled' );
 		wc_update_1100_enable_point_of_sale_feature();
 		$this->assertSame( 'yes', get_option( 'woocommerce_feature_point_of_sale_enabled' ) );
+	}
+
+	/**
+	 * @testdox Migration adds created_via_order_id to existing HPOS operational data tables while HPOS is disabled.
+	 */
+	public function test_wc_update_11001_add_hpos_created_via_order_id_index(): void {
+		include_once WC_ABSPATH . 'includes/wc-update-functions.php';
+
+		$previous_hpos_option = get_option( CustomOrdersTableController::CUSTOM_ORDERS_TABLE_USAGE_ENABLED_OPTION, null );
+		$previous_sync_option = get_option( DataSynchronizer::ORDERS_DATA_SYNC_ENABLED_OPTION, null );
+
+		remove_filter( 'query', array( $this, '_create_temporary_tables' ) );
+		remove_filter( 'query', array( $this, '_drop_temporary_tables' ) );
+
+		try {
+			OrderHelper::delete_order_custom_tables();
+			OrderHelper::create_order_custom_table_if_not_exist();
+			update_option( CustomOrdersTableController::CUSTOM_ORDERS_TABLE_USAGE_ENABLED_OPTION, 'no' );
+			update_option( DataSynchronizer::ORDERS_DATA_SYNC_ENABLED_OPTION, 'no' );
+
+			$this->drop_created_via_order_id_index();
+			$this->assertSame( array(), $this->get_created_via_order_id_index_columns() );
+
+			wc_update_11001_add_hpos_created_via_order_id_index();
+
+			$this->assertSame(
+				array( 'created_via', 'order_id' ),
+				$this->get_created_via_order_id_index_columns()
+			);
+		} finally {
+			OrderHelper::delete_order_custom_tables();
+			OrderHelper::create_order_custom_table_if_not_exist();
+
+			if ( null === $previous_hpos_option ) {
+				delete_option( CustomOrdersTableController::CUSTOM_ORDERS_TABLE_USAGE_ENABLED_OPTION );
+			} else {
+				update_option( CustomOrdersTableController::CUSTOM_ORDERS_TABLE_USAGE_ENABLED_OPTION, $previous_hpos_option );
+			}
+
+			if ( null === $previous_sync_option ) {
+				delete_option( DataSynchronizer::ORDERS_DATA_SYNC_ENABLED_OPTION );
+			} else {
+				update_option( DataSynchronizer::ORDERS_DATA_SYNC_ENABLED_OPTION, $previous_sync_option );
+			}
+
+			add_filter( 'query', array( $this, '_create_temporary_tables' ) );
+			add_filter( 'query', array( $this, '_drop_temporary_tables' ) );
+		}
 	}
 }

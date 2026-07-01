@@ -342,6 +342,9 @@ class WC_Install {
 		'11.0.0'   => array(
 			'wc_update_1100_enable_point_of_sale_feature',
 		),
+		'11.0.0-1' => array(
+			'wc_update_11001_add_hpos_created_via_order_id_index',
+		),
 	);
 
 	/**

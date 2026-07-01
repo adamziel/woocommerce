@@ -115,6 +115,36 @@ class OrdersTableDataStoreTests extends \HposTestCase {
 	}
 
 	/**
+	 * @testDox HPOS operational data schema indexes created_via filters by order ID.
+	 */
+	public function test_operational_data_schema_indexes_created_via_by_order_id(): void {
+		global $wpdb;
+
+		$this->assertStringContainsString(
+			'KEY created_via_order_id (created_via, order_id)',
+			$this->sut->get_database_schema()
+		);
+
+		$operational_data_table = OrdersTableDataStore::get_operational_data_table_name();
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name is returned by OrdersTableDataStore.
+		$index_rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SHOW INDEX FROM {$operational_data_table} WHERE Key_name = %s",
+				'created_via_order_id'
+			)
+		);
+		usort(
+			$index_rows,
+			fn( $a, $b ) => (int) $a->Seq_in_index <=> (int) $b->Seq_in_index
+		);
+
+		$this->assertSame(
+			array( 'created_via', 'order_id' ),
+			wp_list_pluck( $index_rows, 'Column_name' )
+		);
+	}
+
+	/**
 	 * @testDox Test reading from migrated post order.
 	 */
 	public function test_read_from_migrated_order() {

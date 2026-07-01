@@ -3581,3 +3581,56 @@ function wc_update_10902_remove_deprecated_push_notifications_option(): void {
 function wc_update_1100_enable_point_of_sale_feature() {
 	update_option( 'woocommerce_feature_point_of_sale_enabled', 'yes' );
 }
+
+/**
+ * Add the created_via_order_id index to the HPOS operational data table.
+ *
+ * The regular dbDelta schema update only includes HPOS tables on stores where HPOS
+ * or HPOS sync is enabled during the WooCommerce update. This migration updates
+ * existing HPOS tables even when HPOS is disabled during the update.
+ *
+ * @since 11.0.0
+ *
+ * @return void
+ */
+function wc_update_11001_add_hpos_created_via_order_id_index(): void {
+	global $wpdb;
+
+	$table_name = $wpdb->prefix . 'wc_order_operational_data';
+	$index_name = 'created_via_order_id';
+
+	if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table_name ) ) !== $table_name ) { // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		return;
+	}
+
+	// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
+	$columns = $wpdb->get_results(
+		$wpdb->prepare(
+			'SHOW INDEX FROM ' . $table_name . ' WHERE Key_name = %s',
+			$index_name
+		)
+	);
+	// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared
+	$columns = is_array( $columns ) ? $columns : array();
+	usort(
+		$columns,
+		fn( $a, $b ) => (int) $a->Seq_in_index <=> (int) $b->Seq_in_index
+	);
+
+	$already_correct =
+		2 === count( $columns ) &&
+		'created_via' === $columns[0]->Column_name && empty( $columns[0]->Sub_part ) &&
+		'order_id' === $columns[1]->Column_name && empty( $columns[1]->Sub_part );
+
+	if ( $already_correct ) {
+		return;
+	}
+
+	if ( empty( $columns ) ) {
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$wpdb->query( "ALTER TABLE {$table_name} ADD INDEX {$index_name} (created_via, order_id)" );
+	} else {
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$wpdb->query( "ALTER TABLE {$table_name} DROP INDEX {$index_name}, ADD INDEX {$index_name} (created_via, order_id)" );
+	}
+}
