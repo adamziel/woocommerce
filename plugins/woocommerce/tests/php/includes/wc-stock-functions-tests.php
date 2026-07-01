@@ -46,6 +46,41 @@ class WC_Stock_Functions_Tests extends \WC_Unit_Test_Case {
 	}
 
 	/**
+	 * Assert a hook callback's accepted arguments count.
+	 *
+	 * @param string $hook          Hook name.
+	 * @param string $callback      Callback name.
+	 * @param int    $accepted_args Expected number of accepted arguments.
+	 */
+	private function assert_hook_accepted_args( string $hook, string $callback, int $accepted_args ): void {
+		global $wp_filter;
+
+		$priority = has_action( $hook, $callback );
+
+		$this->assertNotFalse( $priority, "{$callback} should be hooked to {$hook}." );
+		$this->assertSame( $accepted_args, $wp_filter[ $hook ]->callbacks[ $priority ][ $callback ]['accepted_args'] );
+	}
+
+	/**
+	 * Test stock status callbacks receive the order object passed by WC_Order::status_transition().
+	 */
+	public function test_stock_status_callbacks_accept_order_object_argument(): void {
+		foreach ( $this->order_stock_reduce_statuses as $status ) {
+			$status = str_replace( 'wc-', '', $status );
+			$this->assert_hook_accepted_args( "woocommerce_order_status_{$status}", 'wc_maybe_reduce_stock_levels', 2 );
+			$this->assert_hook_accepted_args( "woocommerce_order_status_{$status}", 'wc_release_stock_for_order', 2 );
+		}
+
+		foreach ( $this->order_stock_restore_statuses as $status ) {
+			$status = str_replace( 'wc-', '', $status );
+			$this->assert_hook_accepted_args( "woocommerce_order_status_{$status}", 'wc_maybe_increase_stock_levels', 2 );
+		}
+
+		$this->assert_hook_accepted_args( 'woocommerce_payment_complete', 'wc_maybe_reduce_stock_levels', 1 );
+		$this->assert_hook_accepted_args( 'woocommerce_payment_complete', 'wc_release_stock_for_order', 1 );
+	}
+
+	/**
 	 * Helper function to simulate creating order from cart.
 	 *
 	 * @param string $status Status for the newly created order.
