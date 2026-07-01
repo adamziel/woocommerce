@@ -76,6 +76,85 @@ class WC_Product_Data_Store_CPT_Test extends WC_Unit_Test_Case {
 	}
 
 	/**
+	 * @testdox Exact SKU searches should return exact identifier matches without broad text matches.
+	 */
+	public function test_exact_sku_search_returns_exact_identifier_match() {
+		$product = new WC_Product();
+		$product->set_name( 'Core exact SKU product' );
+		$product->set_sku( 'core-exact-sku-1' );
+		$product->save();
+
+		$title_match = new WC_Product();
+		$title_match->set_name( 'core-exact-sku-1 title match' );
+		$title_match->save();
+
+		$data_store = WC_Data_Store::load( 'product' );
+
+		$results = $data_store->search_products( 'core-exact-sku-1', '', false, true );
+		$this->assertContains( $product->get_id(), $results );
+		$this->assertNotContains( $title_match->get_id(), $results );
+
+		$partial_results = $data_store->search_products( 'core-exact-sku', '', false, true );
+		$this->assertContains( $product->get_id(), $partial_results );
+		$this->assertContains( $title_match->get_id(), $partial_results );
+	}
+
+	/**
+	 * @testdox Exact global unique ID searches should return exact identifier matches without broad text matches.
+	 */
+	public function test_exact_global_unique_id_search_returns_exact_identifier_match() {
+		$product = new WC_Product();
+		$product->set_name( 'Core exact GTIN product' );
+		$product->set_global_unique_id( '1234567890123' );
+		$product->save();
+
+		$title_match = new WC_Product();
+		$title_match->set_name( '1234567890123 title match' );
+		$title_match->save();
+
+		$data_store = WC_Data_Store::load( 'product' );
+
+		$results = $data_store->search_products( '1234567890123', '', false, true );
+		$this->assertContains( $product->get_id(), $results );
+		$this->assertNotContains( $title_match->get_id(), $results );
+	}
+
+	/**
+	 * @testdox Variations should appear when searching for parent product's global unique ID.
+	 */
+	public function test_variation_searches_parent_global_unique_id() {
+		$parent = new WC_Product_Variable();
+		$parent->set_name( 'Barcode widget' );
+		$parent->set_global_unique_id( '2234567890123' );
+		$parent->save();
+
+		$variation = new WC_Product_Variation();
+		$variation->set_parent_id( $parent->get_id() );
+		$variation->set_global_unique_id( '' );
+		$variation->save();
+
+		$data_store = WC_Data_Store::load( 'product' );
+
+		// No variations should be found searching for just the parent.
+		$results = $data_store->search_products( '2234567890123', '', false, true );
+		$this->assertContains( $parent->get_id(), $results );
+		$this->assertNotContains( $variation->get_id(), $results );
+
+		// Variation should be found when searching for it.
+		$results = $data_store->search_products( '2234567890123', '', true, true );
+		$this->assertContains( $parent->get_id(), $results );
+		$this->assertContains( $variation->get_id(), $results );
+
+		$variation->set_global_unique_id( '3234567890123' );
+		$variation->save();
+
+		// Variations should be found when searching for their specific global unique ID.
+		$results = $data_store->search_products( '3234567890123', '', true, true );
+		$this->assertContains( $parent->get_id(), $results );
+		$this->assertContains( $variation->get_id(), $results );
+	}
+
+	/**
 	 * Ensure product rating counts are calculated correctly.
 	 *
 	 * @return void
