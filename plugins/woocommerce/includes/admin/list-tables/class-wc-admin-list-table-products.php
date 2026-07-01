@@ -612,14 +612,63 @@ class WC_Admin_List_Table_Products extends WC_Admin_List_Table {
 
 		// Search using CRUD.
 		if ( ! empty( $query_vars['s'] ) ) {
-			$data_store                   = WC_Data_Store::load( 'product' );
-			$ids                          = $data_store->search_products( wc_clean( wp_unslash( $query_vars['s'] ) ), '', true, true );
+			$data_store = WC_Data_Store::load( 'product' );
+			$search     = wc_clean( wp_unslash( $query_vars['s'] ) );
+
+			/**
+			 * Filters the maximum number of matching rows requested for an admin Products list table search.
+			 *
+			 * The limit is passed to the product data store before the matching product IDs are placed into `post__in`.
+			 * Return 0 to restore the previous unbounded search behavior.
+			 *
+			 * @since 11.0.0
+			 * @param int    $limit      Maximum number of matching rows to request. Default 1000.
+			 * @param string $search     Search term.
+			 * @param array  $query_vars Query vars.
+			 */
+			$search_limit = absint( apply_filters( 'woocommerce_admin_product_search_results_limit', 1000, $search, $query_vars ) );
+			$ids          = $data_store->search_products( $search, '', true, true, $search_limit ? $search_limit : null );
+			$ids          = array_values( array_filter( $ids ) );
+
+			if ( $search_limit && count( $ids ) >= $search_limit ) {
+				// Enforce the cap even when custom product search filters return more IDs than requested.
+				$exact_ids = $this->get_exact_product_search_ids( $search );
+				$ids       = $exact_ids ? array_values( array_unique( array_merge( $exact_ids, $ids ) ) ) : $ids;
+				$ids       = array_slice( $ids, 0, $search_limit );
+			}
+
 			$query_vars['post__in']       = array_merge( $ids, array( 0 ) );
 			$query_vars['product_search'] = true;
 			unset( $query_vars['s'] );
 		}
 
 		return $query_vars;
+	}
+
+	/**
+	 * Get exact product IDs for numeric product searches.
+	 *
+	 * @param string $search Search term.
+	 * @return array
+	 */
+	private function get_exact_product_search_ids( $search ) {
+		if ( ! is_numeric( $search ) ) {
+			return array();
+		}
+
+		$post_id   = absint( $search );
+		$post_type = get_post_type( $post_id );
+
+		if ( 'product' === $post_type ) {
+			return array( $post_id );
+		}
+
+		if ( 'product_variation' === $post_type ) {
+			$parent_id = wp_get_post_parent_id( $post_id );
+			return $parent_id ? array( $parent_id ) : array();
+		}
+
+		return array();
 	}
 
 	/**
