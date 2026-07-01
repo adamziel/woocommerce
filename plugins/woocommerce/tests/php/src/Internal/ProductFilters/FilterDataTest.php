@@ -80,6 +80,73 @@ class FilterDataTest extends AbstractProductFiltersTest {
 	}
 
 	/**
+	 * @testdox Count queries use a product ID subquery instead of materializing the matching ID list.
+	 */
+	public function test_count_queries_use_product_id_subquery_without_materializing_ids() {
+		global $wpdb;
+
+		$query_vars = array(
+			'post_type'           => 'product',
+			'counts-cache-bypass' => uniqid( 'subquery-', true ),
+		);
+
+		$queries       = array();
+		$capture_query = function ( $sql ) use ( &$queries ) {
+			$queries[] = $sql;
+			return $sql;
+		};
+
+		add_filter( 'query', $capture_query );
+
+		try {
+			$this->sut->get_filtered_price( $query_vars );
+		} finally {
+			remove_filter( 'query', $capture_query );
+		}
+
+		$price_query = null;
+
+		foreach ( $queries as $query ) {
+			if (
+				false !== strpos( $query, "FROM {$wpdb->wc_product_meta_lookup}" ) &&
+				false !== strpos( $query, 'min_price' ) &&
+				false !== strpos( $query, 'product_id IN' )
+			) {
+				$price_query = preg_replace( '/\s+/', ' ', trim( $query ) );
+				break;
+			}
+		}
+
+		$this->assertNotNull( $price_query );
+		$this->assertStringContainsString( 'product_id IN ( SELECT', $price_query );
+		$this->assertStringContainsString( "{$wpdb->posts}.ID", $price_query );
+
+		$standalone_product_id_query_pattern = '/^SELECT\s+'
+			. preg_quote( $wpdb->posts, '/' )
+			. '\.ID\s+FROM\s+'
+			. preg_quote( $wpdb->posts, '/' )
+			. '\b/i';
+
+		foreach ( $queries as $query ) {
+			$normalized_query = preg_replace( '/\s+/', ' ', trim( $query ) );
+			$this->assertDoesNotMatchRegularExpression( $standalone_product_id_query_pattern, $normalized_query );
+		}
+	}
+
+	/**
+	 * @testdox Price counts return the existing empty result shape when no products match.
+	 */
+	public function test_get_filtered_price_with_no_matching_products_returns_empty_array() {
+		$query_vars = array(
+			'post_type'           => 'product',
+			'post__in'            => array( 0 ),
+			'counts-cache-bypass' => uniqid( 'no-products-', true ),
+		);
+
+		$this->assertSame( array(), (array) $this->sut->get_filtered_price( $query_vars ) );
+	}
+
+	/**
 	 * @testdox Test stock counts without filter: via wc_product_meta_lookup table.
 	 */
 	public function test_get_stock_status_counts_with_default_query_using_lookup_table() {
