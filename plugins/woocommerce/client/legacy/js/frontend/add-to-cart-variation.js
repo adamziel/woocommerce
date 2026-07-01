@@ -15,6 +15,10 @@
 		self.$product = $form.closest( '.product' );
 		self.variationData = $form.data( 'product_variations' );
 		self.useAjax = false === self.variationData;
+		self.useLazyVariationData =
+			! self.useAjax &&
+			( true === $form.data( 'product_variations_lazy' ) ||
+				'true' === $form.data( 'product_variations_lazy' ) );
 		self.xhr = false;
 		self.loading = true;
 
@@ -125,6 +129,10 @@
 		var form = event.data.variationForm;
 		form.variationData = form.$form.data( 'product_variations' );
 		form.useAjax = false === form.variationData;
+		form.useLazyVariationData =
+			! form.useAjax &&
+			( true === form.$form.data( 'product_variations_lazy' ) ||
+				'true' === form.$form.data( 'product_variations_lazy' ) );
 		form.$form.trigger( 'check_variations' );
 	};
 
@@ -253,6 +261,83 @@
 	};
 
 	/**
+	 * Fetch full variation data for a selected attribute set.
+	 */
+	VariationForm.prototype.requestVariationData = function (
+		currentAttributes,
+		attributes
+	) {
+		var form = this,
+			requestData = $.extend( {}, currentAttributes );
+
+		if ( form.xhr ) {
+			form.xhr.abort();
+		}
+
+		form.$form.block( {
+			message: null,
+			overlayCSS: { background: '#fff', opacity: 0.6 },
+		} );
+
+		requestData.product_id = parseInt(
+			form.$form.data( 'product_id' ),
+			10
+		);
+		requestData.custom_data = form.$form.data( 'custom_data' );
+
+		form.xhr = $.ajax( {
+			url: wc_add_to_cart_variation_params.wc_ajax_url
+				.toString()
+				.replace( '%%endpoint%%', 'get_variation' ),
+			type: 'POST',
+			data: requestData,
+			success: function ( variation ) {
+				if ( variation ) {
+					form.cacheVariationData( variation );
+					form.$form.trigger( 'found_variation', [ variation ] );
+				} else {
+					form.$form.trigger( 'reset_data' );
+					attributes.chosenCount = 0;
+
+					if ( ! form.loading ) {
+						form.showNoMatchingVariationsMsg();
+					}
+				}
+			},
+			complete: function () {
+				form.xhr = false;
+				form.$form.unblock();
+			},
+		} );
+	};
+
+	/**
+	 * Cache a lazily loaded full variation payload in the inline variation map.
+	 */
+	VariationForm.prototype.cacheVariationData = function ( variation ) {
+		if (
+			! this.useLazyVariationData ||
+			! variation ||
+			! variation.variation_id ||
+			! $.isArray( this.variationData )
+		) {
+			return;
+		}
+
+		variation.variation_data_loaded = true;
+
+		for ( var i = 0; i < this.variationData.length; i++ ) {
+			if (
+				parseInt( this.variationData[ i ].variation_id, 10 ) ===
+				parseInt( variation.variation_id, 10 )
+			) {
+				this.variationData[ i ] = variation;
+				return;
+			}
+		}
+	};
+
+	/**
 	 * Looks for matching variations for current selected attributes.
 	 */
 	VariationForm.prototype.onFindVariation = function (
@@ -268,43 +353,7 @@
 
 		if ( attributes.count && attributes.count === attributes.chosenCount ) {
 			if ( form.useAjax ) {
-				if ( form.xhr ) {
-					form.xhr.abort();
-				}
-				form.$form.block( {
-					message: null,
-					overlayCSS: { background: '#fff', opacity: 0.6 },
-				} );
-				currentAttributes.product_id = parseInt(
-					form.$form.data( 'product_id' ),
-					10
-				);
-				currentAttributes.custom_data =
-					form.$form.data( 'custom_data' );
-				form.xhr = $.ajax( {
-					url: wc_add_to_cart_variation_params.wc_ajax_url
-						.toString()
-						.replace( '%%endpoint%%', 'get_variation' ),
-					type: 'POST',
-					data: currentAttributes,
-					success: function ( variation ) {
-						if ( variation ) {
-							form.$form.trigger( 'found_variation', [
-								variation,
-							] );
-						} else {
-							form.$form.trigger( 'reset_data' );
-							attributes.chosenCount = 0;
-
-							if ( ! form.loading ) {
-								form.showNoMatchingVariationsMsg();
-							}
-						}
-					},
-					complete: function () {
-						form.$form.unblock();
-					},
-				} );
+				form.requestVariationData( currentAttributes, attributes );
 			} else {
 				form.$form.trigger( 'update_variation_values' );
 
@@ -315,7 +364,17 @@
 					variation = matching_variations.shift();
 
 				if ( variation ) {
-					form.$form.trigger( 'found_variation', [ variation ] );
+					if (
+						form.useLazyVariationData &&
+						! variation.variation_data_loaded
+					) {
+						form.requestVariationData(
+							currentAttributes,
+							attributes
+						);
+					} else {
+						form.$form.trigger( 'found_variation', [ variation ] );
+					}
 				} else {
 					form.$form.trigger( 'reset_data' );
 					attributes.chosenCount = 0;
