@@ -1460,8 +1460,15 @@ class OrdersTableQuery {
 			return;
 		}
 
-		$offset    = (int) ( $this->limits[0] ?? 0 );
-		$row_count = (int) ( $this->limits[1] ?? 0 );
+		$offset      = (int) ( $this->limits[0] ?? 0 );
+		$row_count   = (int) ( $this->limits[1] ?? 0 );
+		$order_count = count( $this->orders );
+
+		if ( $row_count > 0 && 0 === $offset && $order_count < $row_count && $this->can_infer_found_orders_from_result_count() ) {
+			$this->found_orders  = $order_count;
+			$this->max_num_pages = (int) ceil( $this->found_orders / $row_count );
+			return;
+		}
 
 		if ( $row_count > 0 || $offset > 0 ) {
 			$this->found_orders  = absint( $wpdb->get_var( $this->count_sql ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
@@ -1469,8 +1476,25 @@ class OrdersTableQuery {
 				? (int) ceil( $this->found_orders / $row_count )
 				: 0;
 		} else {
-			$this->found_orders = count( $this->orders );
+			$this->found_orders = $order_count;
 		}
+	}
+
+	/**
+	 * Whether found order counts can be inferred from a partial first-page result.
+	 *
+	 * @return bool
+	 */
+	private function can_infer_found_orders_from_result_count(): bool {
+		if ( $this->suppress_filters ) {
+			return true;
+		}
+
+		return ! (
+			has_filter( 'woocommerce_orders_table_query_clauses' )
+			|| has_filter( 'woocommerce_orders_table_query_sql' )
+			|| has_filter( 'woocommerce_orders_table_query_count_sql' )
+		);
 	}
 
 	/**

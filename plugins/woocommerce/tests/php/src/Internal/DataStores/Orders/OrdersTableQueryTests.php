@@ -413,6 +413,111 @@ class OrdersTableQueryTests extends \WC_Unit_Test_Case {
 	}
 
 	/**
+	 * @testdox First-page limited queries skip counting when they return fewer orders than requested.
+	 */
+	public function test_first_page_partial_results_skip_count_query(): void {
+		$order_ids = $this->create_order_ids_for_pagination_count_tests( 2 );
+		$query     = new OrdersTableQuery(
+			array(
+				'id'     => $order_ids,
+				'limit'  => 3,
+				'return' => 'ids',
+			)
+		);
+
+		$this->assertEqualsCanonicalizing( $order_ids, $query->orders );
+		$this->assertSame( 2, $query->found_orders );
+		$this->assertSame( 1, $query->max_num_pages );
+	}
+
+	/**
+	 * @testdox First-page limited queries still count when count SQL is filtered.
+	 */
+	public function test_first_page_partial_results_still_count_with_filtered_count_sql(): void {
+		$order_ids = $this->create_order_ids_for_pagination_count_tests( 2 );
+		$callback  = static function () {
+			return 'SELECT 999';
+		};
+
+		add_filter( 'woocommerce_orders_table_query_count_sql', $callback );
+
+		try {
+			$query = new OrdersTableQuery(
+				array(
+					'id'     => $order_ids,
+					'limit'  => 3,
+					'return' => 'ids',
+				)
+			);
+		} finally {
+			remove_filter( 'woocommerce_orders_table_query_count_sql', $callback );
+		}
+
+		$this->assertEqualsCanonicalizing( $order_ids, $query->orders );
+		$this->assertSame( 999, $query->found_orders );
+		$this->assertSame( 333, $query->max_num_pages );
+	}
+
+	/**
+	 * @testdox First-page limited queries still count when they return a full page of orders.
+	 */
+	public function test_first_page_full_results_still_count_query(): void {
+		$order_ids = $this->create_order_ids_for_pagination_count_tests( 3 );
+		$query     = new OrdersTableQuery(
+			array(
+				'id'     => $order_ids,
+				'limit'  => 2,
+				'return' => 'ids',
+			)
+		);
+
+		$this->assertCount( 2, $query->orders );
+		$this->assertEmpty( array_diff( $query->orders, $order_ids ) );
+		$this->assertSame( 3, $query->found_orders );
+		$this->assertSame( 2, $query->max_num_pages );
+	}
+
+	/**
+	 * @testdox Offset limited queries still count when they return fewer orders than requested.
+	 */
+	public function test_offset_partial_results_still_count_query(): void {
+		$order_ids = $this->create_order_ids_for_pagination_count_tests( 4 );
+		$query     = new OrdersTableQuery(
+			array(
+				'id'     => $order_ids,
+				'limit'  => 3,
+				'offset' => 3,
+				'return' => 'ids',
+			)
+		);
+
+		$this->assertCount( 1, $query->orders );
+		$this->assertEmpty( array_diff( $query->orders, $order_ids ) );
+		$this->assertSame( 4, $query->found_orders );
+		$this->assertSame( 2, $query->max_num_pages );
+	}
+
+	/**
+	 * Helper function to create orders for pagination count tests.
+	 *
+	 * @param int $count Number of orders to create.
+	 * @return int[] Order IDs.
+	 */
+	private function create_order_ids_for_pagination_count_tests( int $count ): array {
+		$order_ids = array();
+
+		for ( $i = 0; $i < $count; $i++ ) {
+			$order = new \WC_Order();
+			$order->set_status( OrderStatus::COMPLETED );
+			$order->save();
+
+			$order_ids[] = $order->get_id();
+		}
+
+		return $order_ids;
+	}
+
+	/**
 	 * @testdox Orders will be correctly returned by inexact queries using the 's' search argument.
 	 */
 	public function test_query_s_argument() {
