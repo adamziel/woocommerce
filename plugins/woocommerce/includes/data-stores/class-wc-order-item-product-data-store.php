@@ -68,11 +68,53 @@ class WC_Order_Item_Product_Data_Store extends Abstract_WC_Order_Item_Type_Data_
 			'_line_tax'          => 'total_tax',
 			'_line_tax_data'     => 'taxes',
 		);
-		$props_to_update   = $this->get_props_to_update( $item, $meta_key_to_props, 'order_item' );
+		$props_to_update   = $this->is_creating_order_item() ? $meta_key_to_props : $this->get_props_to_update( $item, $meta_key_to_props, 'order_item' );
+
+		if ( $this->is_creating_order_item() ) {
+			$this->insert_item_data_meta( $id, $props_to_update, $item );
+			return;
+		}
 
 		foreach ( $props_to_update as $meta_key => $prop ) {
 			update_metadata( 'order_item', $id, $meta_key, $item->{"get_$prop"}( 'edit' ) );
 		}
+	}
+
+	/**
+	 * Inserts product order item data meta in one query for newly created items.
+	 *
+	 * @param int                   $item_id Order item ID.
+	 * @param array<string,string>  $props_to_update Meta key to prop mapping.
+	 * @param WC_Order_Item_Product $item Product order item object.
+	 */
+	private function insert_item_data_meta( int $item_id, array $props_to_update, WC_Order_Item_Product $item ): void {
+		global $wpdb;
+
+		if ( empty( $props_to_update ) ) {
+			return;
+		}
+
+		$placeholders = array();
+		$values       = array();
+
+		foreach ( $props_to_update as $meta_key => $prop ) {
+			$placeholders[] = '( %d, %s, %s )';
+			$values[]       = $item_id;
+			$values[]       = $meta_key;
+			$values[]       = maybe_serialize( $item->{"get_$prop"}( 'edit' ) );
+		}
+
+		$query = "INSERT INTO {$wpdb->prefix}woocommerce_order_itemmeta ( order_item_id, meta_key, meta_value ) VALUES " . implode( ', ', $placeholders );
+
+		$wpdb->query(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Placeholder groups are generated above and values are passed separately.
+				$query,
+				$values
+			)
+		);
+
+		wp_cache_delete( $item_id, 'order_item_meta' );
 	}
 
 	/**

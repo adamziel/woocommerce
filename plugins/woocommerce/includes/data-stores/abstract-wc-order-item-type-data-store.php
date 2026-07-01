@@ -46,6 +46,13 @@ abstract class Abstract_WC_Order_Item_Type_Data_Store extends WC_Data_Store_WP i
 	private bool $cogs_is_enabled;
 
 	/**
+	 * Whether the current save operation is creating a new order item.
+	 *
+	 * @var bool
+	 */
+	protected bool $creating_order_item = false;
+
+	/**
 	 * The instance of WC_Order_Item_Data_Store to use for COGS related operations.
 	 *
 	 * @var WC_Order_Item_Data_Store
@@ -80,7 +87,12 @@ abstract class Abstract_WC_Order_Item_Type_Data_Store extends WC_Data_Store_WP i
 			)
 		);
 		$item->set_id( $wpdb->insert_id );
-		$this->save_item_data( $item );
+		$this->creating_order_item = true;
+		try {
+			$this->save_item_data( $item );
+		} finally {
+			$this->creating_order_item = false;
+		}
 		$item->save_meta_data();
 
 		if ( $this->cogs_is_enabled && $item->has_cogs() ) {
@@ -91,6 +103,15 @@ abstract class Abstract_WC_Order_Item_Type_Data_Store extends WC_Data_Store_WP i
 		$this->clear_cache( $item );
 
 		do_action( 'woocommerce_new_order_item', $item->get_id(), $item, $item->get_order_id() );
+	}
+
+	/**
+	 * Whether the current item persistence operation is a create.
+	 *
+	 * @return bool
+	 */
+	protected function is_creating_order_item(): bool {
+		return $this->creating_order_item;
 	}
 
 	/**

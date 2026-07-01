@@ -622,4 +622,93 @@ class WC_Order_Item_Product_Test extends WC_Unit_Test_Case {
 		// Clean up order.
 		$order->delete( true );
 	}
+
+	/**
+	 * @testdox Product order item create persists internal meta without per-key existence reads.
+	 */
+	public function test_create_persists_internal_meta_without_existence_reads() {
+		$item = new WC_Order_Item_Product();
+		$item->set_product( $this->product );
+		$item->set_quantity( 3 );
+		$item->set_subtotal( 30 );
+		$item->set_total( 27 );
+		$item->set_taxes(
+			array(
+				'total'    => array(
+					1 => '2.70',
+				),
+				'subtotal' => array(
+					1 => '3.00',
+				),
+			)
+		);
+		$item->set_order_id( $this->order->get_id() );
+		$item->add_meta_data( 'custom_checkout_meta', 'custom value', true );
+
+		$queries = array();
+		$capture = static function ( $query ) use ( &$queries ) {
+			$queries[] = $query;
+			return $query;
+		};
+
+		add_filter( 'query', $capture );
+		try {
+			$item->save();
+		} finally {
+			remove_filter( 'query', $capture );
+		}
+
+		$item_id = $item->get_id();
+		$this->assertGreaterThan( 0, $item_id );
+
+		$reloaded_item = new WC_Order_Item_Product( $item_id );
+		$this->assertSame( $this->product->get_id(), $reloaded_item->get_product_id() );
+		$this->assertSame( 3, $reloaded_item->get_quantity() );
+		$this->assertEquals( 30, $reloaded_item->get_subtotal() );
+		$this->assertEquals( 27, $reloaded_item->get_total() );
+		$this->assertSame( 'custom value', $reloaded_item->get_meta( 'custom_checkout_meta', true ) );
+		$this->assertEquals(
+			array(
+				'total'    => array(
+					1 => '2.70',
+				),
+				'subtotal' => array(
+					1 => '3.00',
+				),
+			),
+			$reloaded_item->get_taxes()
+		);
+
+		$order_item_meta_selects = array_filter(
+			$queries,
+			static function ( $query ) {
+				$normalized_query = preg_replace( '/\s+/', ' ', trim( $query ) );
+				return 0 === stripos( $normalized_query, 'SELECT' )
+					&& false !== strpos( $normalized_query, 'woocommerce_order_itemmeta' );
+			}
+		);
+
+		$this->assertEmpty( $order_item_meta_selects );
+	}
+
+	/**
+	 * @testdox Product order item update keeps using the existing meta update path.
+	 */
+	public function test_update_persists_internal_meta_after_bulk_create() {
+		$item = new WC_Order_Item_Product();
+		$item->set_product( $this->product );
+		$item->set_quantity( 1 );
+		$item->set_subtotal( 10 );
+		$item->set_total( 10 );
+		$item->set_order_id( $this->order->get_id() );
+		$item->save();
+
+		$item->set_quantity( 4 );
+		$item->set_total( 35 );
+		$item->save();
+
+		$reloaded_item = new WC_Order_Item_Product( $item->get_id() );
+		$this->assertSame( 4, $reloaded_item->get_quantity() );
+		$this->assertEquals( 35, $reloaded_item->get_total() );
+	}
 }

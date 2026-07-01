@@ -1,0 +1,4 @@
+Significance: patch
+Type: performance
+
+Bulk insert product order item data meta when creating line items.
