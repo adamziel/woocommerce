@@ -1,0 +1,1111 @@
+{
+  "scenario": {
+    "id": "09-path-analytics-products-stats-crud",
+    "rank": 9,
+    "title": "Woo Analytics Product Stats: CRUD Cache Miss",
+    "codePath": "/wp-json/wc-analytics/reports/products/stats via nginx/php-fpm",
+    "trigger": "Concurrent forced-cache-refresh product stats over CRUD-created order product lookup rows.",
+    "concurrency": 8
+  },
+  "request": {
+    "path": "/wp-json/wc-analytics/reports/products/stats?after=2024-01-01T00:00:00&before=2026-07-01T23:59:59&interval=month&force_cache_refresh=1"
+  },
+  "summary": {
+    "requests": 8,
+    "http_codes": [
+      200
+    ],
+    "total_ms": {
+      "min": 137.16500000000002,
+      "median": 140.309,
+      "p95": 149.58599999999998,
+      "max": 149.58599999999998
+    },
+    "server_ms": {
+      "min": 134.65,
+      "median": 136.51,
+      "p95": 146.65,
+      "max": 146.65
+    },
+    "query_count": {
+      "median": 46,
+      "p95": 46,
+      "max": 46
+    },
+    "query_time_ms": {
+      "median": 99.15,
+      "p95": 109.8,
+      "max": 109.8
+    },
+    "memory_peak_mb": {
+      "median": 30,
+      "p95": 32,
+      "max": 32
+    }
+  },
+  "samples": [
+    {
+      "run_id": "09-path-analytics-products-stats-crud-1782941434132-1",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 149.58599999999998,
+      "ttfb_ms": 149.521,
+      "size_download": 2983,
+      "body_bytes": 2983,
+      "profiler": {
+        "run_id": "09-path-analytics-products-stats-crud-1782941434132-1",
+        "method": "GET",
+        "uri": "/wp-json/wc-analytics/reports/products/stats?after=2024-01-01T00:00:00&before=2026-07-01T23:59:59&interval=month&force_cache_refresh=1",
+        "status": 200,
+        "server_ms": 146.65,
+        "query_count": 46,
+        "query_time_ms": 109.8,
+        "memory_peak_mb": 32,
+        "slow_queries": [
+          {
+            "seconds": 0.05704307556152344,
+            "sql": "SELECT SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00'"
+          },
+          {
+            "seconds": 0.045001983642578125,
+            "sql": "SELECT DATE_FORMAT(wp_wc_order_product_lookup.`date_created`, '%Y-%m') AS time_interval FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00' GROUP BY time_interval"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 26,
+            "seconds": 0.0034847259521484375,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 6,
+            "seconds": 0.0007610321044921875,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_jetpack_connection_active_plugins_refresh','_transient_timeout_jetpack_connection_active_plugins_refresh')",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\Jetpack\\Connection\\Plugin_Storage::configure, Automattic\\Jetpack\\Connection\\Plugin_Storage::maybe_update_active_connected_plugins, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.05704307556152344,
+            "sql": "SELECT SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_stats_data"
+          },
+          {
+            "count": 1,
+            "seconds": 0.045001983642578125,
+            "sql": "SELECT DATE_FORMAT(wp_wc_order_product_lookup.`date_created`, '%Y-%m') AS time_interval FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00' GROUP ",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_stats_data"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0008039474487304688,
+            "sql": "SELECT DATE_FORMAT(wp_wc_order_product_lookup.`date_created`, '%Y-%m') AS time_interval , MAX(wp_wc_order_product_lookup.date_created) AS datetime_anchor , SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_stats_data"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0007870197296142578,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE autoload IN ( 'yes', 'on', 'auto-on', 'auto' )",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), wp_not_installed, is_blog_installed, wp_load_alloptions"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0005857944488525391,
+            "sql": "SHOW FULL COLUMNS FROM `wp_options`",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->set_cached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Cache::set, set_transient, update_option"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0002269744873046875,
+            "sql": "SELECT t.term_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('wp_theme') AND t.name IN ('twentytwentyfive') LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\BlockPatterns->register_block_patterns, Automattic\\WooCommerce\\Blocks\\BlockPatterns->load_pattern_content, include('/plugins/woocommerce/patterns/coming-soon-entire-site.php'), Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonTemplate::get_font_families, wp_get_global_settings, WP_Theme_JSON_Resolver::get_merged_data, WP_Theme_JSON_Resolver::get_user_data, WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles, WP_Query->query, WP_Query->get_posts, WP_Tax_Query->get_sql, WP_Tax_Query->get_sql_clauses, WP_Tax_Query->get_sql_for_query, WP_Tax_Query->get_sql_for_clause, WP_Tax_Query->clean_query, WP_Tax_Query->transform_query, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00018906593322753906,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('woocommerce_new_order_settings','woocommerce_cancelled_order_settings','woocommerce_customer_cancelled_order_settings','woocommerce_failed_order_settings','woocommerce_customer_failed_order_settings','woocommerce_customer_on_hold_order_settings','woocommerce_customer_processing_order_settings','woocommerce_customer_completed_order_settings','woocommerce_customer_refunded_order_settings','woocommerce_customer_invoice_settings",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce->register_wp_admin_settings, WC_Emails::instance, WC_Emails->__construct, WC_Emails->init, wp_prime_option_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00017499923706054688,
+            "sql": "SELECT * FROM wp_users WHERE ID = '1' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, wp_set_current_user, WP_User->__construct, WP_User::get_data_by"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00014591217041015625,
+            "sql": "SELECT * FROM wp_wc_tax_rate_classes ORDER BY name;",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Admin\\API\\Init->rest_api_init, Automattic\\WooCommerce\\Utilities\\RestApiUtil->lazy_load_namespace, Automattic\\WooCommerce\\Utilities\\RestApiUtil->attach_lazy_loaded_namespace, call_user_func, Automattic\\WooCommerce\\Admin\\API\\Init->rest_api_init_wc_analytics, WC_REST_Taxes_V1_Controller->register_routes, Automattic\\WooCommerce\\Admin\\API\\Taxes->get_collection_params, WC_REST_Taxes_V1_Controller->get_collection_params, WP_REST_Controller->get_context_param, WC_REST_Taxes_Controller->get_item_schema, WC_REST_Taxes_V1_Controller->get_item_schema, WC_Tax::get_tax_class_slugs, WC_Tax::get_tax_rate_classes"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00014090538024902344,
+            "sql": "SELECT user_id, meta_key, meta_value FROM wp_usermeta WHERE user_id IN (1) ORDER BY umeta_id ASC",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, wp_set_current_user, WP_User->__construct, WP_User->init, WP_User->for_site, WP_User->get_caps_data, get_user_meta, get_metadata, get_metadata_raw, update_meta_cache"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001308917999267578,
+            "sql": "UPDATE `wp_options` SET `option_value` = '1783546234' WHERE `option_name` = '_transient_timeout_wc_report_products_stats_1c5ba5868f69ea0f718afec6dc9df8e2'",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->set_cached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Cache::set, set_transient, update_option"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00011897087097167969,
+            "sql": "SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND ( 0 = 1 ) AND wp_posts.post_type = 'wp_global_styles' AND ((wp_posts.post_status = 'publish')) GROUP BY wp_posts.ID ORDER BY wp_posts.post_date DESC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\BlockPatterns->register_block_patterns, Automattic\\WooCommerce\\Blocks\\BlockPatterns->load_pattern_content, include('/plugins/woocommerce/patterns/coming-soon-entire-site.php'), Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonTemplate::get_font_families, wp_get_global_settings, WP_Theme_JSON_Resolver::get_merged_data, WP_Theme_JSON_Resolver::get_user_data, WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles, WP_Query->query, WP_Query->get_posts"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00011587142944335938,
+            "sql": "SELECT autoload FROM wp_options WHERE option_name = '_transient_timeout_wc_report_products_stats_1c5ba5868f69ea0f718afec6dc9df8e2' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->set_cached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Cache::set, set_transient, update_option"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00008988380432128906,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 4 LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T21:30:34+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "09-path-analytics-products-stats-crud-1782941434132-2",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 141.974,
+      "ttfb_ms": 141.92499999999998,
+      "size_download": 2983,
+      "body_bytes": 2983,
+      "profiler": {
+        "run_id": "09-path-analytics-products-stats-crud-1782941434132-2",
+        "method": "GET",
+        "uri": "/wp-json/wc-analytics/reports/products/stats?after=2024-01-01T00:00:00&before=2026-07-01T23:59:59&interval=month&force_cache_refresh=1",
+        "status": 200,
+        "server_ms": 137.88,
+        "query_count": 46,
+        "query_time_ms": 97.83,
+        "memory_peak_mb": 30,
+        "slow_queries": [
+          {
+            "seconds": 0.06778216361999512,
+            "sql": "SELECT SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00'"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 26,
+            "seconds": 0.0032608509063720703,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 6,
+            "seconds": 0.0008547306060791016,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_jetpack_connection_active_plugins_refresh','_transient_timeout_jetpack_connection_active_plugins_refresh')",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\Jetpack\\Connection\\Plugin_Storage::configure, Automattic\\Jetpack\\Connection\\Plugin_Storage::maybe_update_active_connected_plugins, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.06778216361999512,
+            "sql": "SELECT SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_stats_data"
+          },
+          {
+            "count": 1,
+            "seconds": 0.017221927642822266,
+            "sql": "SELECT DATE_FORMAT(wp_wc_order_product_lookup.`date_created`, '%Y-%m') AS time_interval FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00' GROUP ",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_stats_data"
+          },
+          {
+            "count": 1,
+            "seconds": 0.005352020263671875,
+            "sql": "UPDATE `wp_options` SET `option_value` = '1783546234' WHERE `option_name` = '_transient_timeout_wc_report_products_stats_1c5ba5868f69ea0f718afec6dc9df8e2'",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->set_cached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Cache::set, set_transient, update_option"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0011718273162841797,
+            "sql": "SELECT DATE_FORMAT(wp_wc_order_product_lookup.`date_created`, '%Y-%m') AS time_interval , MAX(wp_wc_order_product_lookup.date_created) AS datetime_anchor , SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_stats_data"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0005738735198974609,
+            "sql": "SHOW FULL COLUMNS FROM `wp_options`",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->set_cached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Cache::set, set_transient, update_option"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0005030632019042969,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE autoload IN ( 'yes', 'on', 'auto-on', 'auto' )",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), wp_not_installed, is_blog_installed, wp_load_alloptions"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0002079010009765625,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('woocommerce_new_order_settings','woocommerce_cancelled_order_settings','woocommerce_customer_cancelled_order_settings','woocommerce_failed_order_settings','woocommerce_customer_failed_order_settings','woocommerce_customer_on_hold_order_settings','woocommerce_customer_processing_order_settings','woocommerce_customer_completed_order_settings','woocommerce_customer_refunded_order_settings','woocommerce_customer_invoice_settings",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce->register_wp_admin_settings, WC_Emails::instance, WC_Emails->__construct, WC_Emails->init, wp_prime_option_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00017309188842773438,
+            "sql": "SELECT * FROM wp_wc_tax_rate_classes ORDER BY name;",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Admin\\API\\Init->rest_api_init, Automattic\\WooCommerce\\Utilities\\RestApiUtil->lazy_load_namespace, Automattic\\WooCommerce\\Utilities\\RestApiUtil->attach_lazy_loaded_namespace, call_user_func, Automattic\\WooCommerce\\Admin\\API\\Init->rest_api_init_wc_analytics, WC_REST_Taxes_V1_Controller->register_routes, Automattic\\WooCommerce\\Admin\\API\\Taxes->get_collection_params, WC_REST_Taxes_V1_Controller->get_collection_params, WP_REST_Controller->get_context_param, WC_REST_Taxes_Controller->get_item_schema, WC_REST_Taxes_V1_Controller->get_item_schema, WC_Tax::get_tax_class_slugs, WC_Tax::get_tax_rate_classes"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00016689300537109375,
+            "sql": "SELECT t.term_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('wp_theme') AND t.name IN ('twentytwentyfive') LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\BlockPatterns->register_block_patterns, Automattic\\WooCommerce\\Blocks\\BlockPatterns->load_pattern_content, include('/plugins/woocommerce/patterns/coming-soon-entire-site.php'), Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonTemplate::get_font_families, wp_get_global_settings, WP_Theme_JSON_Resolver::get_merged_data, WP_Theme_JSON_Resolver::get_user_data, WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles, WP_Query->query, WP_Query->get_posts, WP_Tax_Query->get_sql, WP_Tax_Query->get_sql_clauses, WP_Tax_Query->get_sql_for_query, WP_Tax_Query->get_sql_for_clause, WP_Tax_Query->clean_query, WP_Tax_Query->transform_query, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001380443572998047,
+            "sql": "SELECT autoload FROM wp_options WHERE option_name = '_transient_timeout_wc_report_products_stats_1c5ba5868f69ea0f718afec6dc9df8e2' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->set_cached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Cache::set, set_transient, update_option"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001308917999267578,
+            "sql": "SELECT * FROM wp_users WHERE ID = '1' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, wp_set_current_user, WP_User->__construct, WP_User::get_data_by"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001270771026611328,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 4 LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00009989738464355469,
+            "sql": "SELECT user_id, meta_key, meta_value FROM wp_usermeta WHERE user_id IN (1) ORDER BY umeta_id ASC",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, wp_set_current_user, WP_User->__construct, WP_User->init, WP_User->for_site, WP_User->get_caps_data, get_user_meta, get_metadata, get_metadata_raw, update_meta_cache"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00007009506225585938,
+            "sql": "SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND ( 0 = 1 ) AND wp_posts.post_type = 'wp_global_styles' AND ((wp_posts.post_status = 'publish')) GROUP BY wp_posts.ID ORDER BY wp_posts.post_date DESC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\BlockPatterns->register_block_patterns, Automattic\\WooCommerce\\Blocks\\BlockPatterns->load_pattern_content, include('/plugins/woocommerce/patterns/coming-soon-entire-site.php'), Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonTemplate::get_font_families, wp_get_global_settings, WP_Theme_JSON_Resolver::get_merged_data, WP_Theme_JSON_Resolver::get_user_data, WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles, WP_Query->query, WP_Query->get_posts"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T21:30:34+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "09-path-analytics-products-stats-crud-1782941434132-3",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 140.686,
+      "ttfb_ms": 140.53099999999998,
+      "size_download": 2983,
+      "body_bytes": 2983,
+      "profiler": {
+        "run_id": "09-path-analytics-products-stats-crud-1782941434132-3",
+        "method": "GET",
+        "uri": "/wp-json/wc-analytics/reports/products/stats?after=2024-01-01T00:00:00&before=2026-07-01T23:59:59&interval=month&force_cache_refresh=1",
+        "status": 200,
+        "server_ms": 137.4,
+        "query_count": 46,
+        "query_time_ms": 97.59,
+        "memory_peak_mb": 26,
+        "slow_queries": [
+          {
+            "seconds": 0.06778216361999512,
+            "sql": "SELECT SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00'"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 26,
+            "seconds": 0.0025482177734375,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 6,
+            "seconds": 0.0008499622344970703,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_jetpack_connection_active_plugins_refresh','_transient_timeout_jetpack_connection_active_plugins_refresh')",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\Jetpack\\Connection\\Plugin_Storage::configure, Automattic\\Jetpack\\Connection\\Plugin_Storage::maybe_update_active_connected_plugins, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.06778216361999512,
+            "sql": "SELECT SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_stats_data"
+          },
+          {
+            "count": 1,
+            "seconds": 0.017279863357543945,
+            "sql": "SELECT DATE_FORMAT(wp_wc_order_product_lookup.`date_created`, '%Y-%m') AS time_interval FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00' GROUP ",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_stats_data"
+          },
+          {
+            "count": 1,
+            "seconds": 0.005348920822143555,
+            "sql": "UPDATE `wp_options` SET `option_value` = '1783546234' WHERE `option_name` = '_transient_timeout_wc_report_products_stats_1c5ba5868f69ea0f718afec6dc9df8e2'",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->set_cached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Cache::set, set_transient, update_option"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0011630058288574219,
+            "sql": "SELECT DATE_FORMAT(wp_wc_order_product_lookup.`date_created`, '%Y-%m') AS time_interval , MAX(wp_wc_order_product_lookup.date_created) AS datetime_anchor , SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_stats_data"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0006060600280761719,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE autoload IN ( 'yes', 'on', 'auto-on', 'auto' )",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), wp_not_installed, is_blog_installed, wp_load_alloptions"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0006048679351806641,
+            "sql": "SHOW FULL COLUMNS FROM `wp_options`",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->set_cached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Cache::set, set_transient, update_option"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00023412704467773438,
+            "sql": "SELECT t.term_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('wp_theme') AND t.name IN ('twentytwentyfive') LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\BlockPatterns->register_block_patterns, Automattic\\WooCommerce\\Blocks\\BlockPatterns->load_pattern_content, include('/plugins/woocommerce/patterns/coming-soon-entire-site.php'), Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonTemplate::get_font_families, wp_get_global_settings, WP_Theme_JSON_Resolver::get_merged_data, WP_Theme_JSON_Resolver::get_user_data, WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles, WP_Query->query, WP_Query->get_posts, WP_Tax_Query->get_sql, WP_Tax_Query->get_sql_clauses, WP_Tax_Query->get_sql_for_query, WP_Tax_Query->get_sql_for_clause, WP_Tax_Query->clean_query, WP_Tax_Query->transform_query, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00021696090698242188,
+            "sql": "SELECT user_id, meta_key, meta_value FROM wp_usermeta WHERE user_id IN (1) ORDER BY umeta_id ASC",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, wp_set_current_user, WP_User->__construct, WP_User->init, WP_User->for_site, WP_User->get_caps_data, get_user_meta, get_metadata, get_metadata_raw, update_meta_cache"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001850128173828125,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('woocommerce_new_order_settings','woocommerce_cancelled_order_settings','woocommerce_customer_cancelled_order_settings','woocommerce_failed_order_settings','woocommerce_customer_failed_order_settings','woocommerce_customer_on_hold_order_settings','woocommerce_customer_processing_order_settings','woocommerce_customer_completed_order_settings','woocommerce_customer_refunded_order_settings','woocommerce_customer_invoice_settings",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce->register_wp_admin_settings, WC_Emails::instance, WC_Emails->__construct, WC_Emails->init, wp_prime_option_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001819133758544922,
+            "sql": "SELECT * FROM wp_users WHERE ID = '1' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, wp_set_current_user, WP_User->__construct, WP_User::get_data_by"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00017714500427246094,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 4 LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00015807151794433594,
+            "sql": "SELECT * FROM wp_wc_tax_rate_classes ORDER BY name;",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Admin\\API\\Init->rest_api_init, Automattic\\WooCommerce\\Utilities\\RestApiUtil->lazy_load_namespace, Automattic\\WooCommerce\\Utilities\\RestApiUtil->attach_lazy_loaded_namespace, call_user_func, Automattic\\WooCommerce\\Admin\\API\\Init->rest_api_init_wc_analytics, WC_REST_Taxes_V1_Controller->register_routes, Automattic\\WooCommerce\\Admin\\API\\Taxes->get_collection_params, WC_REST_Taxes_V1_Controller->get_collection_params, WP_REST_Controller->get_context_param, WC_REST_Taxes_Controller->get_item_schema, WC_REST_Taxes_V1_Controller->get_item_schema, WC_Tax::get_tax_class_slugs, WC_Tax::get_tax_rate_classes"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001380443572998047,
+            "sql": "SELECT autoload FROM wp_options WHERE option_name = '_transient_timeout_wc_report_products_stats_1c5ba5868f69ea0f718afec6dc9df8e2' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->set_cached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Cache::set, set_transient, update_option"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00011897087097167969,
+            "sql": "SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND ( 0 = 1 ) AND wp_posts.post_type = 'wp_global_styles' AND ((wp_posts.post_status = 'publish')) GROUP BY wp_posts.ID ORDER BY wp_posts.post_date DESC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\BlockPatterns->register_block_patterns, Automattic\\WooCommerce\\Blocks\\BlockPatterns->load_pattern_content, include('/plugins/woocommerce/patterns/coming-soon-entire-site.php'), Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonTemplate::get_font_families, wp_get_global_settings, WP_Theme_JSON_Resolver::get_merged_data, WP_Theme_JSON_Resolver::get_user_data, WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles, WP_Query->query, WP_Query->get_posts"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T21:30:34+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "09-path-analytics-products-stats-crud-1782941434132-4",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 140.33499999999998,
+      "ttfb_ms": 140.215,
+      "size_download": 2983,
+      "body_bytes": 2983,
+      "profiler": {
+        "run_id": "09-path-analytics-products-stats-crud-1782941434132-4",
+        "method": "GET",
+        "uri": "/wp-json/wc-analytics/reports/products/stats?after=2024-01-01T00:00:00&before=2026-07-01T23:59:59&interval=month&force_cache_refresh=1",
+        "status": 200,
+        "server_ms": 137.4,
+        "query_count": 46,
+        "query_time_ms": 101.27,
+        "memory_peak_mb": 30,
+        "slow_queries": [
+          {
+            "seconds": 0.07005620002746582,
+            "sql": "SELECT SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00'"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 26,
+            "seconds": 0.004785299301147461,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 6,
+            "seconds": 0.0008342266082763672,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_jetpack_connection_active_plugins_refresh','_transient_timeout_jetpack_connection_active_plugins_refresh')",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\Jetpack\\Connection\\Plugin_Storage::configure, Automattic\\Jetpack\\Connection\\Plugin_Storage::maybe_update_active_connected_plugins, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.07005620002746582,
+            "sql": "SELECT SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_stats_data"
+          },
+          {
+            "count": 1,
+            "seconds": 0.01728081703186035,
+            "sql": "SELECT DATE_FORMAT(wp_wc_order_product_lookup.`date_created`, '%Y-%m') AS time_interval FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00' GROUP ",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_stats_data"
+          },
+          {
+            "count": 1,
+            "seconds": 0.005300998687744141,
+            "sql": "UPDATE `wp_options` SET `option_value` = '1783546234' WHERE `option_name` = '_transient_timeout_wc_report_products_stats_1c5ba5868f69ea0f718afec6dc9df8e2'",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->set_cached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Cache::set, set_transient, update_option"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0008189678192138672,
+            "sql": "SELECT DATE_FORMAT(wp_wc_order_product_lookup.`date_created`, '%Y-%m') AS time_interval , MAX(wp_wc_order_product_lookup.date_created) AS datetime_anchor , SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_stats_data"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0007791519165039062,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE autoload IN ( 'yes', 'on', 'auto-on', 'auto' )",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), wp_not_installed, is_blog_installed, wp_load_alloptions"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0004630088806152344,
+            "sql": "SHOW FULL COLUMNS FROM `wp_options`",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->set_cached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Cache::set, set_transient, update_option"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00016999244689941406,
+            "sql": "SELECT t.term_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('wp_theme') AND t.name IN ('twentytwentyfive') LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\BlockPatterns->register_block_patterns, Automattic\\WooCommerce\\Blocks\\BlockPatterns->load_pattern_content, include('/plugins/woocommerce/patterns/coming-soon-entire-site.php'), Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonTemplate::get_font_families, wp_get_global_settings, WP_Theme_JSON_Resolver::get_merged_data, WP_Theme_JSON_Resolver::get_user_data, WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles, WP_Query->query, WP_Query->get_posts, WP_Tax_Query->get_sql, WP_Tax_Query->get_sql_clauses, WP_Tax_Query->get_sql_for_query, WP_Tax_Query->get_sql_for_clause, WP_Tax_Query->clean_query, WP_Tax_Query->transform_query, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00016999244689941406,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('woocommerce_new_order_settings','woocommerce_cancelled_order_settings','woocommerce_customer_cancelled_order_settings','woocommerce_failed_order_settings','woocommerce_customer_failed_order_settings','woocommerce_customer_on_hold_order_settings','woocommerce_customer_processing_order_settings','woocommerce_customer_completed_order_settings','woocommerce_customer_refunded_order_settings','woocommerce_customer_invoice_settings",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce->register_wp_admin_settings, WC_Emails::instance, WC_Emails->__construct, WC_Emails->init, wp_prime_option_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001277923583984375,
+            "sql": "SELECT * FROM wp_users WHERE ID = '1' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, wp_set_current_user, WP_User->__construct, WP_User::get_data_by"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001251697540283203,
+            "sql": "SELECT * FROM wp_wc_tax_rate_classes ORDER BY name;",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Admin\\API\\Init->rest_api_init, Automattic\\WooCommerce\\Utilities\\RestApiUtil->lazy_load_namespace, Automattic\\WooCommerce\\Utilities\\RestApiUtil->attach_lazy_loaded_namespace, call_user_func, Automattic\\WooCommerce\\Admin\\API\\Init->rest_api_init_wc_analytics, WC_REST_Taxes_V1_Controller->register_routes, Automattic\\WooCommerce\\Admin\\API\\Taxes->get_collection_params, WC_REST_Taxes_V1_Controller->get_collection_params, WP_REST_Controller->get_context_param, WC_REST_Taxes_Controller->get_item_schema, WC_REST_Taxes_V1_Controller->get_item_schema, WC_Tax::get_tax_class_slugs, WC_Tax::get_tax_rate_classes"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00010704994201660156,
+            "sql": "SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND ( 0 = 1 ) AND wp_posts.post_type = 'wp_global_styles' AND ((wp_posts.post_status = 'publish')) GROUP BY wp_posts.ID ORDER BY wp_posts.post_date DESC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\BlockPatterns->register_block_patterns, Automattic\\WooCommerce\\Blocks\\BlockPatterns->load_pattern_content, include('/plugins/woocommerce/patterns/coming-soon-entire-site.php'), Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonTemplate::get_font_families, wp_get_global_settings, WP_Theme_JSON_Resolver::get_merged_data, WP_Theme_JSON_Resolver::get_user_data, WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles, WP_Query->query, WP_Query->get_posts"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00009989738464355469,
+            "sql": "SELECT user_id, meta_key, meta_value FROM wp_usermeta WHERE user_id IN (1) ORDER BY umeta_id ASC",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, wp_set_current_user, WP_User->__construct, WP_User->init, WP_User->for_site, WP_User->get_caps_data, get_user_meta, get_metadata, get_metadata_raw, update_meta_cache"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00008893013000488281,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 4 LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00006508827209472656,
+            "sql": "SELECT autoload FROM wp_options WHERE option_name = '_transient_timeout_wc_report_products_stats_1c5ba5868f69ea0f718afec6dc9df8e2' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->set_cached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Cache::set, set_transient, update_option"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T21:30:34+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "09-path-analytics-products-stats-crud-1782941434132-5",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 140.309,
+      "ttfb_ms": 140.25799999999998,
+      "size_download": 2983,
+      "body_bytes": 2983,
+      "profiler": {
+        "run_id": "09-path-analytics-products-stats-crud-1782941434132-5",
+        "method": "GET",
+        "uri": "/wp-json/wc-analytics/reports/products/stats?after=2024-01-01T00:00:00&before=2026-07-01T23:59:59&interval=month&force_cache_refresh=1",
+        "status": 200,
+        "server_ms": 136.05,
+        "query_count": 46,
+        "query_time_ms": 99.15,
+        "memory_peak_mb": 32,
+        "slow_queries": [
+          {
+            "seconds": 0.07017803192138672,
+            "sql": "SELECT SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00'"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 26,
+            "seconds": 0.002673625946044922,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 6,
+            "seconds": 0.0007860660552978516,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_jetpack_connection_active_plugins_refresh','_transient_timeout_jetpack_connection_active_plugins_refresh')",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\Jetpack\\Connection\\Plugin_Storage::configure, Automattic\\Jetpack\\Connection\\Plugin_Storage::maybe_update_active_connected_plugins, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.07017803192138672,
+            "sql": "SELECT SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_stats_data"
+          },
+          {
+            "count": 1,
+            "seconds": 0.017271995544433594,
+            "sql": "SELECT DATE_FORMAT(wp_wc_order_product_lookup.`date_created`, '%Y-%m') AS time_interval FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00' GROUP ",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_stats_data"
+          },
+          {
+            "count": 1,
+            "seconds": 0.005339860916137695,
+            "sql": "UPDATE `wp_options` SET `option_value` = '1783546234' WHERE `option_name` = '_transient_timeout_wc_report_products_stats_1c5ba5868f69ea0f718afec6dc9df8e2'",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->set_cached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Cache::set, set_transient, update_option"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0008051395416259766,
+            "sql": "SELECT DATE_FORMAT(wp_wc_order_product_lookup.`date_created`, '%Y-%m') AS time_interval , MAX(wp_wc_order_product_lookup.date_created) AS datetime_anchor , SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_stats_data"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0004241466522216797,
+            "sql": "SHOW FULL COLUMNS FROM `wp_options`",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->set_cached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Cache::set, set_transient, update_option"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0003650188446044922,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE autoload IN ( 'yes', 'on', 'auto-on', 'auto' )",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), wp_not_installed, is_blog_installed, wp_load_alloptions"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00023293495178222656,
+            "sql": "SELECT t.term_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('wp_theme') AND t.name IN ('twentytwentyfive') LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\BlockPatterns->register_block_patterns, Automattic\\WooCommerce\\Blocks\\BlockPatterns->load_pattern_content, include('/plugins/woocommerce/patterns/coming-soon-entire-site.php'), Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonTemplate::get_font_families, wp_get_global_settings, WP_Theme_JSON_Resolver::get_merged_data, WP_Theme_JSON_Resolver::get_user_data, WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles, WP_Query->query, WP_Query->get_posts, WP_Tax_Query->get_sql, WP_Tax_Query->get_sql_clauses, WP_Tax_Query->get_sql_for_query, WP_Tax_Query->get_sql_for_clause, WP_Tax_Query->clean_query, WP_Tax_Query->transform_query, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00021791458129882812,
+            "sql": "SELECT user_id, meta_key, meta_value FROM wp_usermeta WHERE user_id IN (1) ORDER BY umeta_id ASC",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, wp_set_current_user, WP_User->__construct, WP_User->init, WP_User->for_site, WP_User->get_caps_data, get_user_meta, get_metadata, get_metadata_raw, update_meta_cache"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00018596649169921875,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('woocommerce_new_order_settings','woocommerce_cancelled_order_settings','woocommerce_customer_cancelled_order_settings','woocommerce_failed_order_settings','woocommerce_customer_failed_order_settings','woocommerce_customer_on_hold_order_settings','woocommerce_customer_processing_order_settings','woocommerce_customer_completed_order_settings','woocommerce_customer_refunded_order_settings','woocommerce_customer_invoice_settings",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce->register_wp_admin_settings, WC_Emails::instance, WC_Emails->__construct, WC_Emails->init, wp_prime_option_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00017714500427246094,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 4 LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00015807151794433594,
+            "sql": "SELECT * FROM wp_wc_tax_rate_classes ORDER BY name;",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Admin\\API\\Init->rest_api_init, Automattic\\WooCommerce\\Utilities\\RestApiUtil->lazy_load_namespace, Automattic\\WooCommerce\\Utilities\\RestApiUtil->attach_lazy_loaded_namespace, call_user_func, Automattic\\WooCommerce\\Admin\\API\\Init->rest_api_init_wc_analytics, WC_REST_Taxes_V1_Controller->register_routes, Automattic\\WooCommerce\\Admin\\API\\Taxes->get_collection_params, WC_REST_Taxes_V1_Controller->get_collection_params, WP_REST_Controller->get_context_param, WC_REST_Taxes_Controller->get_item_schema, WC_REST_Taxes_V1_Controller->get_item_schema, WC_Tax::get_tax_class_slugs, WC_Tax::get_tax_rate_classes"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00015401840209960938,
+            "sql": "SELECT * FROM wp_users WHERE ID = '1' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, wp_set_current_user, WP_User->__construct, WP_User::get_data_by"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00011706352233886719,
+            "sql": "SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND ( 0 = 1 ) AND wp_posts.post_type = 'wp_global_styles' AND ((wp_posts.post_status = 'publish')) GROUP BY wp_posts.ID ORDER BY wp_posts.post_date DESC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\BlockPatterns->register_block_patterns, Automattic\\WooCommerce\\Blocks\\BlockPatterns->load_pattern_content, include('/plugins/woocommerce/patterns/coming-soon-entire-site.php'), Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonTemplate::get_font_families, wp_get_global_settings, WP_Theme_JSON_Resolver::get_merged_data, WP_Theme_JSON_Resolver::get_user_data, WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles, WP_Query->query, WP_Query->get_posts"
+          },
+          {
+            "count": 1,
+            "seconds": 0.000064849853515625,
+            "sql": "SELECT autoload FROM wp_options WHERE option_name = '_transient_timeout_wc_report_products_stats_1c5ba5868f69ea0f718afec6dc9df8e2' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->set_cached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Cache::set, set_transient, update_option"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T21:30:34+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "09-path-analytics-products-stats-crud-1782941434132-6",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 140.012,
+      "ttfb_ms": 139.963,
+      "size_download": 2983,
+      "body_bytes": 2983,
+      "profiler": {
+        "run_id": "09-path-analytics-products-stats-crud-1782941434132-6",
+        "method": "GET",
+        "uri": "/wp-json/wc-analytics/reports/products/stats?after=2024-01-01T00:00:00&before=2026-07-01T23:59:59&interval=month&force_cache_refresh=1",
+        "status": 200,
+        "server_ms": 136.51,
+        "query_count": 46,
+        "query_time_ms": 99.45,
+        "memory_peak_mb": 24,
+        "slow_queries": [
+          {
+            "seconds": 0.0713191032409668,
+            "sql": "SELECT SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00'"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 26,
+            "seconds": 0.002655029296875,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 6,
+            "seconds": 0.0008928775787353516,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_jetpack_connection_active_plugins_refresh','_transient_timeout_jetpack_connection_active_plugins_refresh')",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\Jetpack\\Connection\\Plugin_Storage::configure, Automattic\\Jetpack\\Connection\\Plugin_Storage::maybe_update_active_connected_plugins, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0713191032409668,
+            "sql": "SELECT SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_stats_data"
+          },
+          {
+            "count": 1,
+            "seconds": 0.017302989959716797,
+            "sql": "SELECT DATE_FORMAT(wp_wc_order_product_lookup.`date_created`, '%Y-%m') AS time_interval FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00' GROUP ",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_stats_data"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0043261051177978516,
+            "sql": "UPDATE `wp_options` SET `option_value` = '1783546234' WHERE `option_name` = '_transient_timeout_wc_report_products_stats_1c5ba5868f69ea0f718afec6dc9df8e2'",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->set_cached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Cache::set, set_transient, update_option"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0006859302520751953,
+            "sql": "SELECT DATE_FORMAT(wp_wc_order_product_lookup.`date_created`, '%Y-%m') AS time_interval , MAX(wp_wc_order_product_lookup.date_created) AS datetime_anchor , SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_stats_data"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0005819797515869141,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE autoload IN ( 'yes', 'on', 'auto-on', 'auto' )",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), wp_not_installed, is_blog_installed, wp_load_alloptions"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00042700767517089844,
+            "sql": "SHOW FULL COLUMNS FROM `wp_options`",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->set_cached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Cache::set, set_transient, update_option"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00023508071899414062,
+            "sql": "SELECT t.term_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('wp_theme') AND t.name IN ('twentytwentyfive') LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\BlockPatterns->register_block_patterns, Automattic\\WooCommerce\\Blocks\\BlockPatterns->load_pattern_content, include('/plugins/woocommerce/patterns/coming-soon-entire-site.php'), Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonTemplate::get_font_families, wp_get_global_settings, WP_Theme_JSON_Resolver::get_merged_data, WP_Theme_JSON_Resolver::get_user_data, WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles, WP_Query->query, WP_Query->get_posts, WP_Tax_Query->get_sql, WP_Tax_Query->get_sql_clauses, WP_Tax_Query->get_sql_for_query, WP_Tax_Query->get_sql_for_clause, WP_Tax_Query->clean_query, WP_Tax_Query->transform_query, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00018477439880371094,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('woocommerce_new_order_settings','woocommerce_cancelled_order_settings','woocommerce_customer_cancelled_order_settings','woocommerce_failed_order_settings','woocommerce_customer_failed_order_settings','woocommerce_customer_on_hold_order_settings','woocommerce_customer_processing_order_settings','woocommerce_customer_completed_order_settings','woocommerce_customer_refunded_order_settings','woocommerce_customer_invoice_settings",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce->register_wp_admin_settings, WC_Emails::instance, WC_Emails->__construct, WC_Emails->init, wp_prime_option_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00017714500427246094,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 4 LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001659393310546875,
+            "sql": "SELECT user_id, meta_key, meta_value FROM wp_usermeta WHERE user_id IN (1) ORDER BY umeta_id ASC",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, wp_set_current_user, WP_User->__construct, WP_User->init, WP_User->for_site, WP_User->get_caps_data, get_user_meta, get_metadata, get_metadata_raw, update_meta_cache"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001590251922607422,
+            "sql": "SELECT * FROM wp_users WHERE ID = '1' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, wp_set_current_user, WP_User->__construct, WP_User::get_data_by"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00015807151794433594,
+            "sql": "SELECT * FROM wp_wc_tax_rate_classes ORDER BY name;",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Admin\\API\\Init->rest_api_init, Automattic\\WooCommerce\\Utilities\\RestApiUtil->lazy_load_namespace, Automattic\\WooCommerce\\Utilities\\RestApiUtil->attach_lazy_loaded_namespace, call_user_func, Automattic\\WooCommerce\\Admin\\API\\Init->rest_api_init_wc_analytics, WC_REST_Taxes_V1_Controller->register_routes, Automattic\\WooCommerce\\Admin\\API\\Taxes->get_collection_params, WC_REST_Taxes_V1_Controller->get_collection_params, WP_REST_Controller->get_context_param, WC_REST_Taxes_Controller->get_item_schema, WC_REST_Taxes_V1_Controller->get_item_schema, WC_Tax::get_tax_class_slugs, WC_Tax::get_tax_rate_classes"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00011086463928222656,
+            "sql": "SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND ( 0 = 1 ) AND wp_posts.post_type = 'wp_global_styles' AND ((wp_posts.post_status = 'publish')) GROUP BY wp_posts.ID ORDER BY wp_posts.post_date DESC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\BlockPatterns->register_block_patterns, Automattic\\WooCommerce\\Blocks\\BlockPatterns->load_pattern_content, include('/plugins/woocommerce/patterns/coming-soon-entire-site.php'), Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonTemplate::get_font_families, wp_get_global_settings, WP_Theme_JSON_Resolver::get_merged_data, WP_Theme_JSON_Resolver::get_user_data, WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles, WP_Query->query, WP_Query->get_posts"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00006604194641113281,
+            "sql": "SELECT autoload FROM wp_options WHERE option_name = '_transient_timeout_wc_report_products_stats_1c5ba5868f69ea0f718afec6dc9df8e2' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->set_cached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Cache::set, set_transient, update_option"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T21:30:34+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "09-path-analytics-products-stats-crud-1782941434132-7",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 138.87099999999998,
+      "ttfb_ms": 138.823,
+      "size_download": 2983,
+      "body_bytes": 2983,
+      "profiler": {
+        "run_id": "09-path-analytics-products-stats-crud-1782941434132-7",
+        "method": "GET",
+        "uri": "/wp-json/wc-analytics/reports/products/stats?after=2024-01-01T00:00:00&before=2026-07-01T23:59:59&interval=month&force_cache_refresh=1",
+        "status": 200,
+        "server_ms": 134.99,
+        "query_count": 46,
+        "query_time_ms": 99.22,
+        "memory_peak_mb": 32,
+        "slow_queries": [
+          {
+            "seconds": 0.07181501388549805,
+            "sql": "SELECT SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00'"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 26,
+            "seconds": 0.0026557445526123047,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 6,
+            "seconds": 0.0008943080902099609,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_jetpack_connection_active_plugins_refresh','_transient_timeout_jetpack_connection_active_plugins_refresh')",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\Jetpack\\Connection\\Plugin_Storage::configure, Automattic\\Jetpack\\Connection\\Plugin_Storage::maybe_update_active_connected_plugins, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.07181501388549805,
+            "sql": "SELECT SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_stats_data"
+          },
+          {
+            "count": 1,
+            "seconds": 0.01728081703186035,
+            "sql": "SELECT DATE_FORMAT(wp_wc_order_product_lookup.`date_created`, '%Y-%m') AS time_interval FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00' GROUP ",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_stats_data"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0037500858306884766,
+            "sql": "UPDATE `wp_options` SET `option_value` = '1783546234' WHERE `option_name` = '_transient_timeout_wc_report_products_stats_1c5ba5868f69ea0f718afec6dc9df8e2'",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->set_cached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Cache::set, set_transient, update_option"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0007021427154541016,
+            "sql": "SELECT DATE_FORMAT(wp_wc_order_product_lookup.`date_created`, '%Y-%m') AS time_interval , MAX(wp_wc_order_product_lookup.date_created) AS datetime_anchor , SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_stats_data"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0004019737243652344,
+            "sql": "SHOW FULL COLUMNS FROM `wp_options`",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->set_cached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Cache::set, set_transient, update_option"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0003390312194824219,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE autoload IN ( 'yes', 'on', 'auto-on', 'auto' )",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), wp_not_installed, is_blog_installed, wp_load_alloptions"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00023317337036132812,
+            "sql": "SELECT t.term_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('wp_theme') AND t.name IN ('twentytwentyfive') LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\BlockPatterns->register_block_patterns, Automattic\\WooCommerce\\Blocks\\BlockPatterns->load_pattern_content, include('/plugins/woocommerce/patterns/coming-soon-entire-site.php'), Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonTemplate::get_font_families, wp_get_global_settings, WP_Theme_JSON_Resolver::get_merged_data, WP_Theme_JSON_Resolver::get_user_data, WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles, WP_Query->query, WP_Query->get_posts, WP_Tax_Query->get_sql, WP_Tax_Query->get_sql_clauses, WP_Tax_Query->get_sql_for_query, WP_Tax_Query->get_sql_for_clause, WP_Tax_Query->clean_query, WP_Tax_Query->transform_query, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 1,
+            "seconds": 0.000225067138671875,
+            "sql": "SELECT user_id, meta_key, meta_value FROM wp_usermeta WHERE user_id IN (1) ORDER BY umeta_id ASC",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, wp_set_current_user, WP_User->__construct, WP_User->init, WP_User->for_site, WP_User->get_caps_data, get_user_meta, get_metadata, get_metadata_raw, update_meta_cache"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00018906593322753906,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('woocommerce_new_order_settings','woocommerce_cancelled_order_settings','woocommerce_customer_cancelled_order_settings','woocommerce_failed_order_settings','woocommerce_customer_failed_order_settings','woocommerce_customer_on_hold_order_settings','woocommerce_customer_processing_order_settings','woocommerce_customer_completed_order_settings','woocommerce_customer_refunded_order_settings','woocommerce_customer_invoice_settings",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce->register_wp_admin_settings, WC_Emails::instance, WC_Emails->__construct, WC_Emails->init, wp_prime_option_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00017714500427246094,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 4 LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001628398895263672,
+            "sql": "SELECT * FROM wp_users WHERE ID = '1' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, wp_set_current_user, WP_User->__construct, WP_User::get_data_by"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00015687942504882812,
+            "sql": "SELECT * FROM wp_wc_tax_rate_classes ORDER BY name;",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Admin\\API\\Init->rest_api_init, Automattic\\WooCommerce\\Utilities\\RestApiUtil->lazy_load_namespace, Automattic\\WooCommerce\\Utilities\\RestApiUtil->attach_lazy_loaded_namespace, call_user_func, Automattic\\WooCommerce\\Admin\\API\\Init->rest_api_init_wc_analytics, WC_REST_Taxes_V1_Controller->register_routes, Automattic\\WooCommerce\\Admin\\API\\Taxes->get_collection_params, WC_REST_Taxes_V1_Controller->get_collection_params, WP_REST_Controller->get_context_param, WC_REST_Taxes_Controller->get_item_schema, WC_REST_Taxes_V1_Controller->get_item_schema, WC_Tax::get_tax_class_slugs, WC_Tax::get_tax_rate_classes"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00011897087097167969,
+            "sql": "SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND ( 0 = 1 ) AND wp_posts.post_type = 'wp_global_styles' AND ((wp_posts.post_status = 'publish')) GROUP BY wp_posts.ID ORDER BY wp_posts.post_date DESC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\BlockPatterns->register_block_patterns, Automattic\\WooCommerce\\Blocks\\BlockPatterns->load_pattern_content, include('/plugins/woocommerce/patterns/coming-soon-entire-site.php'), Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonTemplate::get_font_families, wp_get_global_settings, WP_Theme_JSON_Resolver::get_merged_data, WP_Theme_JSON_Resolver::get_user_data, WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles, WP_Query->query, WP_Query->get_posts"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00011682510375976562,
+            "sql": "SELECT autoload FROM wp_options WHERE option_name = '_transient_timeout_wc_report_products_stats_1c5ba5868f69ea0f718afec6dc9df8e2' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->set_cached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Cache::set, set_transient, update_option"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T21:30:34+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "09-path-analytics-products-stats-crud-1782941434132-8",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 137.16500000000002,
+      "ttfb_ms": 137.03099999999998,
+      "size_download": 2983,
+      "body_bytes": 2983,
+      "profiler": {
+        "run_id": "09-path-analytics-products-stats-crud-1782941434132-8",
+        "method": "GET",
+        "uri": "/wp-json/wc-analytics/reports/products/stats?after=2024-01-01T00:00:00&before=2026-07-01T23:59:59&interval=month&force_cache_refresh=1",
+        "status": 200,
+        "server_ms": 134.65,
+        "query_count": 46,
+        "query_time_ms": 99.05,
+        "memory_peak_mb": 28,
+        "slow_queries": [
+          {
+            "seconds": 0.07011818885803223,
+            "sql": "SELECT SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00'"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 26,
+            "seconds": 0.0026924610137939453,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 6,
+            "seconds": 0.0008447170257568359,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_jetpack_connection_active_plugins_refresh','_transient_timeout_jetpack_connection_active_plugins_refresh')",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\Jetpack\\Connection\\Plugin_Storage::configure, Automattic\\Jetpack\\Connection\\Plugin_Storage::maybe_update_active_connected_plugins, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.07011818885803223,
+            "sql": "SELECT SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_stats_data"
+          },
+          {
+            "count": 1,
+            "seconds": 0.017248868942260742,
+            "sql": "SELECT DATE_FORMAT(wp_wc_order_product_lookup.`date_created`, '%Y-%m') AS time_interval FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00' GROUP ",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_stats_data"
+          },
+          {
+            "count": 1,
+            "seconds": 0.005259037017822266,
+            "sql": "UPDATE `wp_options` SET `option_value` = '1783546234' WHERE `option_name` = '_transient_timeout_wc_report_products_stats_1c5ba5868f69ea0f718afec6dc9df8e2'",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->set_cached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Cache::set, set_transient, update_option"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0008401870727539062,
+            "sql": "SELECT DATE_FORMAT(wp_wc_order_product_lookup.`date_created`, '%Y-%m') AS time_interval , MAX(wp_wc_order_product_lookup.date_created) AS datetime_anchor , SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_noncached_stats_data"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0004220008850097656,
+            "sql": "SHOW FULL COLUMNS FROM `wp_options`",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->set_cached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Cache::set, set_transient, update_option"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00033593177795410156,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE autoload IN ( 'yes', 'on', 'auto-on', 'auto' )",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), wp_not_installed, is_blog_installed, wp_load_alloptions"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0002129077911376953,
+            "sql": "SELECT t.term_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('wp_theme') AND t.name IN ('twentytwentyfive') LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\BlockPatterns->register_block_patterns, Automattic\\WooCommerce\\Blocks\\BlockPatterns->load_pattern_content, include('/plugins/woocommerce/patterns/coming-soon-entire-site.php'), Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonTemplate::get_font_families, wp_get_global_settings, WP_Theme_JSON_Resolver::get_merged_data, WP_Theme_JSON_Resolver::get_user_data, WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles, WP_Query->query, WP_Query->get_posts, WP_Tax_Query->get_sql, WP_Tax_Query->get_sql_clauses, WP_Tax_Query->get_sql_for_query, WP_Tax_Query->get_sql_for_clause, WP_Tax_Query->clean_query, WP_Tax_Query->transform_query, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 1,
+            "seconds": 0.000209808349609375,
+            "sql": "SELECT user_id, meta_key, meta_value FROM wp_usermeta WHERE user_id IN (1) ORDER BY umeta_id ASC",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, wp_set_current_user, WP_User->__construct, WP_User->init, WP_User->for_site, WP_User->get_caps_data, get_user_meta, get_metadata, get_metadata_raw, update_meta_cache"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00018477439880371094,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('woocommerce_new_order_settings','woocommerce_cancelled_order_settings','woocommerce_customer_cancelled_order_settings','woocommerce_failed_order_settings','woocommerce_customer_failed_order_settings','woocommerce_customer_on_hold_order_settings','woocommerce_customer_processing_order_settings','woocommerce_customer_completed_order_settings','woocommerce_customer_refunded_order_settings','woocommerce_customer_invoice_settings",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce->register_wp_admin_settings, WC_Emails::instance, WC_Emails->__construct, WC_Emails->init, wp_prime_option_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00017714500427246094,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 4 LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001678466796875,
+            "sql": "SELECT * FROM wp_users WHERE ID = '1' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, wp_set_current_user, WP_User->__construct, WP_User::get_data_by"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00015497207641601562,
+            "sql": "SELECT * FROM wp_wc_tax_rate_classes ORDER BY name;",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Admin\\API\\Init->rest_api_init, Automattic\\WooCommerce\\Utilities\\RestApiUtil->lazy_load_namespace, Automattic\\WooCommerce\\Utilities\\RestApiUtil->attach_lazy_loaded_namespace, call_user_func, Automattic\\WooCommerce\\Admin\\API\\Init->rest_api_init_wc_analytics, WC_REST_Taxes_V1_Controller->register_routes, Automattic\\WooCommerce\\Admin\\API\\Taxes->get_collection_params, WC_REST_Taxes_V1_Controller->get_collection_params, WP_REST_Controller->get_context_param, WC_REST_Taxes_Controller->get_item_schema, WC_REST_Taxes_V1_Controller->get_item_schema, WC_Tax::get_tax_class_slugs, WC_Tax::get_tax_rate_classes"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001201629638671875,
+            "sql": "SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND ( 0 = 1 ) AND wp_posts.post_type = 'wp_global_styles' AND ((wp_posts.post_status = 'publish')) GROUP BY wp_posts.ID ORDER BY wp_posts.post_date DESC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\BlockPatterns->register_block_patterns, Automattic\\WooCommerce\\Blocks\\BlockPatterns->load_pattern_content, include('/plugins/woocommerce/patterns/coming-soon-entire-site.php'), Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonTemplate::get_font_families, wp_get_global_settings, WP_Theme_JSON_Resolver::get_merged_data, WP_Theme_JSON_Resolver::get_user_data, WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles, WP_Query->query, WP_Query->get_posts"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00006318092346191406,
+            "sql": "SELECT autoload FROM wp_options WHERE option_name = '_transient_timeout_wc_report_products_stats_1c5ba5868f69ea0f718afec6dc9df8e2' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController->get_items, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\Controller->get_datastore_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericQuery->get_data, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\API\\Reports\\Products\\Stats\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->get_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\DataStore->set_cached_data, Automattic\\WooCommerce\\Admin\\API\\Reports\\Cache::set, set_transient, update_option"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T21:30:34+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    }
+  ],
+  "fixture": {
+    "fixture_mode": "woocommerce-crud",
+    "orders": 10000,
+    "products": 5000,
+    "variations": 800,
+    "heavy_order_id": 15869,
+    "heavy_order_items": 500,
+    "first_product_id": 13,
+    "last_product_id": 8267,
+    "variable_parent_id": 1385,
+    "created_gmt": "2026-07-01T15:39:02+00:00"
+  },
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "site_url": "http://localhost:8100",
+    "server": "nginx -> php-fpm",
+    "php_fpm": {
+      "pm": "dynamic",
+      "max_children": 48
+    }
+  },
+  "measured_at_gmt": "2026-07-01T21:30:34.288Z",
+  "batch_ms": 156,
+  "concurrency_evidence": {
+    "launched_requests": 8,
+    "configured_concurrency": 8,
+    "batch_wall_ms": 156,
+    "summed_request_ms": 1128.9379999999999,
+    "effective_parallelism": 7.23678205128205,
+    "php_fpm_max_children": 48
+  }
+}
