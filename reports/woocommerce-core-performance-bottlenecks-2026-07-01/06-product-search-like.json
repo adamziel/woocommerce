@@ -1,0 +1,229 @@
+{
+  "scenario": {
+    "id": "06-product-search-like",
+    "rank": 6,
+    "title": "Product Search LIKE Query",
+    "codePath": "?s=CatalogNeedle&post_type=product",
+    "trigger": "Buyer product search term distributed across title/content/excerpt, exercising LIKE search and result counting.",
+    "iterations": 7
+  },
+  "request": {
+    "path": "/?s=CatalogNeedle199&post_type=product",
+    "headers": []
+  },
+  "summary": {
+    "requests": 7,
+    "http_codes": [
+      200
+    ],
+    "total_ms": {
+      "min": 120.988,
+      "median": 124.111,
+      "p95": 135.94400000000002,
+      "max": 135.94400000000002
+    },
+    "server_ms": {
+      "min": 119.35,
+      "median": 122.17,
+      "p95": 133.78,
+      "max": 133.78
+    },
+    "query_count": {
+      "median": 90,
+      "p95": 90,
+      "max": 90
+    },
+    "query_time_ms": {
+      "median": 27.2,
+      "p95": 28.75,
+      "max": 28.75
+    },
+    "memory_peak_mb": {
+      "median": 14,
+      "p95": 14,
+      "max": 14
+    }
+  },
+  "samples": [
+    {
+      "run_id": "06-product-search-like-1782905788212-1",
+      "http_code": 200,
+      "total_ms": 133.208,
+      "ttfb_ms": 125.60199999999999,
+      "size_download": 197883,
+      "body_bytes": 197883,
+      "profiler": {
+        "run_id": "06-product-search-like-1782905788212-1",
+        "method": "GET",
+        "uri": "/?s=CatalogNeedle199&post_type=product",
+        "status": 200,
+        "server_ms": 131.09,
+        "query_count": 90,
+        "query_time_ms": 28.75,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:28+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "06-product-search-like-1782905788352-2",
+      "http_code": 200,
+      "total_ms": 122.97800000000001,
+      "ttfb_ms": 115.27600000000001,
+      "size_download": 197883,
+      "body_bytes": 197883,
+      "profiler": {
+        "run_id": "06-product-search-like-1782905788352-2",
+        "method": "GET",
+        "uri": "/?s=CatalogNeedle199&post_type=product",
+        "status": 200,
+        "server_ms": 120.89,
+        "query_count": 90,
+        "query_time_ms": 26.63,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:28+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "06-product-search-like-1782905788484-3",
+      "http_code": 200,
+      "total_ms": 135.94400000000002,
+      "ttfb_ms": 128.251,
+      "size_download": 197883,
+      "body_bytes": 197883,
+      "profiler": {
+        "run_id": "06-product-search-like-1782905788484-3",
+        "method": "GET",
+        "uri": "/?s=CatalogNeedle199&post_type=product",
+        "status": 200,
+        "server_ms": 133.78,
+        "query_count": 90,
+        "query_time_ms": 28.09,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:28+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "06-product-search-like-1782905788627-4",
+      "http_code": 200,
+      "total_ms": 124.111,
+      "ttfb_ms": 116.797,
+      "size_download": 197883,
+      "body_bytes": 197883,
+      "profiler": {
+        "run_id": "06-product-search-like-1782905788627-4",
+        "method": "GET",
+        "uri": "/?s=CatalogNeedle199&post_type=product",
+        "status": 200,
+        "server_ms": 122.17,
+        "query_count": 90,
+        "query_time_ms": 25.84,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:28+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "06-product-search-like-1782905788760-5",
+      "http_code": 200,
+      "total_ms": 120.988,
+      "ttfb_ms": 114.32199999999999,
+      "size_download": 197883,
+      "body_bytes": 197883,
+      "profiler": {
+        "run_id": "06-product-search-like-1782905788760-5",
+        "method": "GET",
+        "uri": "/?s=CatalogNeedle199&post_type=product",
+        "status": 200,
+        "server_ms": 119.35,
+        "query_count": 90,
+        "query_time_ms": 26.2,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:28+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "06-product-search-like-1782905788888-6",
+      "http_code": 200,
+      "total_ms": 123.234,
+      "ttfb_ms": 116.032,
+      "size_download": 197883,
+      "body_bytes": 197883,
+      "profiler": {
+        "run_id": "06-product-search-like-1782905788888-6",
+        "method": "GET",
+        "uri": "/?s=CatalogNeedle199&post_type=product",
+        "status": 200,
+        "server_ms": 121.36,
+        "query_count": 90,
+        "query_time_ms": 27.2,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:29+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "06-product-search-like-1782905789018-7",
+      "http_code": 200,
+      "total_ms": 124.457,
+      "ttfb_ms": 117.31099999999999,
+      "size_download": 197883,
+      "body_bytes": 197883,
+      "profiler": {
+        "run_id": "06-product-search-like-1782905789018-7",
+        "method": "GET",
+        "uri": "/?s=CatalogNeedle199&post_type=product",
+        "status": 200,
+        "server_ms": 122.72,
+        "query_count": 90,
+        "query_time_ms": 28.03,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:29+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    }
+  ],
+  "fixture": {
+    "orders": 60000,
+    "products": 6000,
+    "variations": 800,
+    "variable_parent_id": 6014,
+    "first_product_id": 14,
+    "first_order_id": 9000001,
+    "last_order_id": 9060000,
+    "created_gmt": "2026-07-01T11:27:24+00:00"
+  },
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "site_url": "http://localhost:8099"
+  },
+  "measured_at_gmt": "2026-07-01T11:36:33.331Z"
+}

@@ -1,0 +1,302 @@
+{
+  "scenario": {
+    "id": "04-add-to-cart-session",
+    "rank": 4,
+    "title": "Add to Cart and Session Writes",
+    "codePath": "wc-ajax=add_to_cart",
+    "trigger": "Repeated AJAX cart mutation against stocked products, forcing cart totals and session persistence.",
+    "iterations": 10
+  },
+  "request": {
+    "method": "POST",
+    "path": "/?wc-ajax=add_to_cart",
+    "headers": [
+      "Content-Type: application/x-www-form-urlencoded"
+    ],
+    "body": "product_id=14&quantity=1"
+  },
+  "summary": {
+    "requests": 10,
+    "http_codes": [
+      200
+    ],
+    "total_ms": {
+      "min": 43.822,
+      "median": 45.847,
+      "p95": 72.615,
+      "max": 72.615
+    },
+    "server_ms": {
+      "min": 36.85,
+      "median": 38.32,
+      "p95": 47.59,
+      "max": 47.59
+    },
+    "query_count": {
+      "median": 66,
+      "p95": 66,
+      "max": 66
+    },
+    "query_time_ms": {
+      "median": 9.21,
+      "p95": 11.18,
+      "max": 11.18
+    },
+    "memory_peak_mb": {
+      "median": 12,
+      "p95": 14,
+      "max": 14
+    }
+  },
+  "samples": [
+    {
+      "run_id": "04-add-to-cart-session-1782905778295-1",
+      "http_code": 200,
+      "total_ms": 72.615,
+      "ttfb_ms": 72.533,
+      "size_download": 2495,
+      "body_bytes": 2495,
+      "profiler": {
+        "run_id": "04-add-to-cart-session-1782905778295-1",
+        "method": "POST",
+        "uri": "/?wc-ajax=add_to_cart",
+        "status": 200,
+        "server_ms": 46.26,
+        "query_count": 66,
+        "query_time_ms": 9.35,
+        "memory_peak_mb": 12,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:18+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "04-add-to-cart-session-1782905778376-2",
+      "http_code": 200,
+      "total_ms": 44.307,
+      "ttfb_ms": 44.23,
+      "size_download": 2495,
+      "body_bytes": 2495,
+      "profiler": {
+        "run_id": "04-add-to-cart-session-1782905778376-2",
+        "method": "POST",
+        "uri": "/?wc-ajax=add_to_cart",
+        "status": 200,
+        "server_ms": 38.61,
+        "query_count": 66,
+        "query_time_ms": 8.67,
+        "memory_peak_mb": 12,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:18+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "04-add-to-cart-session-1782905778428-3",
+      "http_code": 200,
+      "total_ms": 49.297,
+      "ttfb_ms": 49.219,
+      "size_download": 2495,
+      "body_bytes": 2495,
+      "profiler": {
+        "run_id": "04-add-to-cart-session-1782905778428-3",
+        "method": "POST",
+        "uri": "/?wc-ajax=add_to_cart",
+        "status": 200,
+        "server_ms": 40.5,
+        "query_count": 66,
+        "query_time_ms": 9.21,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:18+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "04-add-to-cart-session-1782905778483-4",
+      "http_code": 200,
+      "total_ms": 66.967,
+      "ttfb_ms": 66.88199999999999,
+      "size_download": 2495,
+      "body_bytes": 2495,
+      "profiler": {
+        "run_id": "04-add-to-cart-session-1782905778483-4",
+        "method": "POST",
+        "uri": "/?wc-ajax=add_to_cart",
+        "status": 200,
+        "server_ms": 47.59,
+        "query_count": 66,
+        "query_time_ms": 11.18,
+        "memory_peak_mb": 12,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:18+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "04-add-to-cart-session-1782905778557-5",
+      "http_code": 200,
+      "total_ms": 49.719,
+      "ttfb_ms": 49.595,
+      "size_download": 2495,
+      "body_bytes": 2495,
+      "profiler": {
+        "run_id": "04-add-to-cart-session-1782905778557-5",
+        "method": "POST",
+        "uri": "/?wc-ajax=add_to_cart",
+        "status": 200,
+        "server_ms": 39.16,
+        "query_count": 66,
+        "query_time_ms": 9.5,
+        "memory_peak_mb": 12,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:18+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "04-add-to-cart-session-1782905778614-6",
+      "http_code": 200,
+      "total_ms": 46.226000000000006,
+      "ttfb_ms": 46.161,
+      "size_download": 2495,
+      "body_bytes": 2495,
+      "profiler": {
+        "run_id": "04-add-to-cart-session-1782905778614-6",
+        "method": "POST",
+        "uri": "/?wc-ajax=add_to_cart",
+        "status": 200,
+        "server_ms": 38.29,
+        "query_count": 66,
+        "query_time_ms": 9.88,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:18+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "04-add-to-cart-session-1782905778667-7",
+      "http_code": 200,
+      "total_ms": 45.847,
+      "ttfb_ms": 45.729,
+      "size_download": 2495,
+      "body_bytes": 2495,
+      "profiler": {
+        "run_id": "04-add-to-cart-session-1782905778667-7",
+        "method": "POST",
+        "uri": "/?wc-ajax=add_to_cart",
+        "status": 200,
+        "server_ms": 38.32,
+        "query_count": 66,
+        "query_time_ms": 8.93,
+        "memory_peak_mb": 12,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:18+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "04-add-to-cart-session-1782905778720-8",
+      "http_code": 200,
+      "total_ms": 45.535,
+      "ttfb_ms": 45.330000000000005,
+      "size_download": 2495,
+      "body_bytes": 2495,
+      "profiler": {
+        "run_id": "04-add-to-cart-session-1782905778720-8",
+        "method": "POST",
+        "uri": "/?wc-ajax=add_to_cart",
+        "status": 200,
+        "server_ms": 37.16,
+        "query_count": 66,
+        "query_time_ms": 8.77,
+        "memory_peak_mb": 12,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:18+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "04-add-to-cart-session-1782905778773-9",
+      "http_code": 200,
+      "total_ms": 43.822,
+      "ttfb_ms": 43.753,
+      "size_download": 2495,
+      "body_bytes": 2495,
+      "profiler": {
+        "run_id": "04-add-to-cart-session-1782905778773-9",
+        "method": "POST",
+        "uri": "/?wc-ajax=add_to_cart",
+        "status": 200,
+        "server_ms": 36.85,
+        "query_count": 66,
+        "query_time_ms": 9.12,
+        "memory_peak_mb": 12,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:18+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "04-add-to-cart-session-1782905778824-10",
+      "http_code": 200,
+      "total_ms": 44.838,
+      "ttfb_ms": 44.748000000000005,
+      "size_download": 2495,
+      "body_bytes": 2495,
+      "profiler": {
+        "run_id": "04-add-to-cart-session-1782905778824-10",
+        "method": "POST",
+        "uri": "/?wc-ajax=add_to_cart",
+        "status": 200,
+        "server_ms": 37.3,
+        "query_count": 66,
+        "query_time_ms": 9.89,
+        "memory_peak_mb": 12,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:18+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    }
+  ],
+  "fixture": {
+    "orders": 60000,
+    "products": 6000,
+    "variations": 800,
+    "variable_parent_id": 6014,
+    "first_product_id": 14,
+    "first_order_id": 9000001,
+    "last_order_id": 9060000,
+    "created_gmt": "2026-07-01T11:27:24+00:00"
+  },
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "site_url": "http://localhost:8099"
+  },
+  "measured_at_gmt": "2026-07-01T11:36:22.971Z"
+}

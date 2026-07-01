@@ -1,0 +1,232 @@
+{
+  "scenario": {
+    "id": "03-checkout-submit",
+    "rank": 3,
+    "title": "Store API Checkout Submit Order Creation",
+    "codePath": "/wp-json/wc/store/v1/checkout",
+    "trigger": "Store API checkout POST with a fresh tokenized cart; exercises order creation, stock reservation/reduction, customer/order saves, and session cleanup.",
+    "prepareEach": true,
+    "iterations": 5
+  },
+  "request": {
+    "method": "POST",
+    "path": "/wp-json/wc/store/v1/checkout",
+    "headers": [
+      "Content-Type: application/json",
+      "Nonce: 1d403f2eff"
+    ],
+    "body": "{\"billing_address\":{\"first_name\":\"Benchmark\",\"last_name\":\"Buyer\",\"company\":\"\",\"address_1\":\"1 Perf Way\",\"address_2\":\"\",\"city\":\"Perf City\",\"state\":\"CA\",\"postcode\":\"94105\",\"country\":\"US\",\"email\":\"buyer@example.test\",\"phone\":\"5551234567\"},\"shipping_address\":{\"first_name\":\"Benchmark\",\"last_name\":\"Buyer\",\"company\":\"\",\"address_1\":\"1 Perf Way\",\"address_2\":\"\",\"city\":\"Perf City\",\"state\":\"CA\",\"postcode\":\"94105\",\"country\":\"US\",\"phone\":\"5551234567\"},\"payment_method\":\"cod\",\"create_account\":false,\"customer_note\":\"\"}"
+  },
+  "summary": {
+    "requests": 5,
+    "http_codes": [
+      200
+    ],
+    "total_ms": {
+      "min": 505.37299999999993,
+      "median": 541.89,
+      "p95": 916.846,
+      "max": 916.846
+    },
+    "server_ms": {
+      "min": 498.56,
+      "median": 532.83,
+      "p95": 909.37,
+      "max": 909.37
+    },
+    "query_count": {
+      "median": 475,
+      "p95": 477,
+      "max": 477
+    },
+    "query_time_ms": {
+      "median": 436.38,
+      "p95": 807.21,
+      "max": 807.21
+    },
+    "memory_peak_mb": {
+      "median": 14,
+      "p95": 14,
+      "max": 14
+    }
+  },
+  "samples": [
+    {
+      "run_id": "03-checkout-submit-1782905752718-1",
+      "http_code": 200,
+      "total_ms": 916.846,
+      "ttfb_ms": 916.7389999999999,
+      "size_download": 978,
+      "body_bytes": 978,
+      "profiler": {
+        "run_id": "03-checkout-submit-1782905752718-1",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 909.37,
+        "query_count": 477,
+        "query_time_ms": 807.21,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.11141395568847656,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 300106 AND `order_id` = 6822"
+          },
+          {
+            "seconds": 0.07055997848510742,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('6822', '_debug_log_source', 'place-order-debug-89102082')"
+          },
+          {
+            "seconds": 0.03278994560241699,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 300108 AND `order_id` = 6822"
+          },
+          {
+            "seconds": 0.03113102912902832,
+            "sql": "UPDATE `wp_options` SET `option_value` = '1782905753' WHERE `option_name` = '_transient_orders-transient-version'"
+          },
+          {
+            "seconds": 0.03089284896850586,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 300107 AND `order_id` = 6822"
+          },
+          {
+            "seconds": 0.02633500099182129,
+            "sql": "INSERT INTO `wp_comments` (`comment_post_ID`, `comment_author_IP`, `comment_author`, `comment_author_email`, `comment_author_url`, `comment_date`, `comment_date_gmt`, `comment_content`, `comment_karma`, `comment_approved`, `comment_agent`, `comment_type`, `comment_parent`, `user_id`) VALUES (6822, '', 'WooCommerce', '', '', '2026-07-01 11:35:53', '2026-07-01 11:35:53', 'Stock hold of 60 minutes applied to: <br>- Benchmark Product 00001 Alpha SearchToken001 (BENCH-SKU-00001) &times; 1', 0, '1', 'WooCommerce', 'order_note', 0, 0)"
+          },
+          {
+            "seconds": 0.024127960205078125,
+            "sql": "INSERT INTO `wp_comments` (`comment_post_ID`, `comment_author_IP`, `comment_author`, `comment_author_email`, `comment_author_url`, `comment_date`, `comment_date_gmt`, `comment_content`, `comment_karma`, `comment_approved`, `comment_agent`, `comment_type`, `comment_parent`, `user_id`) VALUES (6822, '', 'WooCommerce', '', '', '2026-07-01 11:35:53', '2026-07-01 11:35:53', 'Email \\\"New order\\\" failed to send: Could not instantiate mail function..', 0, '1', 'WooCommerce', 'order_note', 0, 0)"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T11:35:53+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "03-checkout-submit-1782905753803-2",
+      "http_code": 200,
+      "total_ms": 573.419,
+      "ttfb_ms": 573.322,
+      "size_download": 978,
+      "body_bytes": 978,
+      "profiler": {
+        "run_id": "03-checkout-submit-1782905753803-2",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 565.98,
+        "query_count": 475,
+        "query_time_ms": 473.1,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.02665400505065918,
+            "sql": "INSERT INTO `wp_posts` (`post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_content_filtered`, `post_title`, `post_excerpt`, `post_status`, `post_type`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_parent`, `menu_order`, `post_mime_type`, `guid`) VALUES (0, '2026-07-01 11:35:53', '2026-07-01 11:35:53', '', '', '', '', 'draft', 'shop_order_placehold', 'closed', 'closed', '', '', '', '', '2026-07-01 11:35:53', '2026-07-01 11:35:53', 0, 0, '', '')"
+          },
+          {
+            "seconds": 0.022906064987182617,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('6823', '_billing_address_index', 'Benchmark Buyer 1 Perf Way Perf City CA 94105 US buyer@example.test 5551234567')"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T11:35:54+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "03-checkout-submit-1782905754471-3",
+      "http_code": 200,
+      "total_ms": 539.852,
+      "ttfb_ms": 539.759,
+      "size_download": 978,
+      "body_bytes": 978,
+      "profiler": {
+        "run_id": "03-checkout-submit-1782905754471-3",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 532.83,
+        "query_count": 471,
+        "query_time_ms": 434.36,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:35:55+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "03-checkout-submit-1782905755108-4",
+      "http_code": 200,
+      "total_ms": 505.37299999999993,
+      "ttfb_ms": 505.274,
+      "size_download": 978,
+      "body_bytes": 978,
+      "profiler": {
+        "run_id": "03-checkout-submit-1782905755108-4",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 498.56,
+        "query_count": 473,
+        "query_time_ms": 406.99,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:35:55+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "03-checkout-submit-1782905755711-5",
+      "http_code": 200,
+      "total_ms": 541.89,
+      "ttfb_ms": 541.785,
+      "size_download": 978,
+      "body_bytes": 978,
+      "profiler": {
+        "run_id": "03-checkout-submit-1782905755711-5",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 530.58,
+        "query_count": 475,
+        "query_time_ms": 436.38,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.026183128356933594,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 300169 AND `order_id` = 6826"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T11:35:56+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    }
+  ],
+  "fixture": {
+    "orders": 60000,
+    "products": 6000,
+    "variations": 800,
+    "variable_parent_id": 6014,
+    "first_product_id": 14,
+    "first_order_id": 9000001,
+    "last_order_id": 9060000,
+    "created_gmt": "2026-07-01T11:27:24+00:00"
+  },
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "site_url": "http://localhost:8099"
+  },
+  "measured_at_gmt": "2026-07-01T11:36:00.419Z"
+}

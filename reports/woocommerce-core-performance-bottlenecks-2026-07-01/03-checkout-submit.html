@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Store API Checkout Submit Order Creation</title>
+<style>
+:root{--ink:#15202b;--muted:#5d6976;--line:#d7dde3;--bg:#f6f8fa;--panel:#fff;--accent:#1f7a6d;--warn:#a84800;--bad:#a12a2a;--blue:#2764b5}
+*{box-sizing:border-box} body{margin:0;font:14px/1.45 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:var(--bg)}
+header{background:#fff;border-bottom:1px solid var(--line);padding:22px 28px 16px} main{max-width:1180px;margin:0 auto;padding:22px 24px 40px}
+h1{font-size:26px;line-height:1.15;margin:0 0 8px} h2{font-size:17px;margin:26px 0 10px} h3{font-size:14px;margin:18px 0 8px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.sub{color:var(--muted);max-width:900px}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px}
+.metric{font-size:26px;font-weight:720}.label{color:var(--muted);font-size:12px}.two{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+table{width:100%;border-collapse:collapse} th,td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left} th{font-size:12px;color:var(--muted);background:#f1f4f7} tr:last-child td{border-bottom:0}
+.barrow{display:grid;grid-template-columns:140px 1fr 70px;gap:10px;align-items:center;margin:8px 0}.bartrack{height:12px;background:#e5eaef;border-radius:4px;overflow:hidden}.bar{height:100%;background:var(--accent)}.barlabel,.barvalue{font-size:12px;color:var(--muted)}svg{width:100%;height:95px;color:var(--blue)}
+.pill{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;padding:2px 8px;background:#fff;color:var(--muted);font-size:12px}.risk{color:var(--warn);font-weight:650}.bad{color:var(--bad);font-weight:650} code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;background:#eef2f5;padding:1px 4px;border-radius:4px}
+pre{white-space:pre-wrap;word-break:break-word;background:#101820;color:#eef7ff;padding:12px;border-radius:8px;max-height:320px;overflow:auto;font-size:12px}
+.scenario-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.scenario-list a{display:block;background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px;text-decoration:none;color:var(--ink)}
+.scenario-list strong{display:block}.scenario-list span{color:var(--muted);font-size:12px}
+@media(max-width:800px){main{padding:16px}.grid,.two,.scenario-list{grid-template-columns:1fr}.barrow{grid-template-columns:100px 1fr 62px}header{padding:18px 16px}}
+</style>
+</head>
+<body>
+<header><h1>Store API Checkout Submit Order Creation</h1><div class="sub">Local WooCommerce core performance benchmarks. Each page contains only the trigger, measured latency, query volume, and the slow SQL signatures needed to reason about the bottleneck.</div></header>
+<main>
+<section class="grid">
+  <div class="card"><div class="label">HTTP median</div><div class="metric">542ms</div></div>
+  <div class="card"><div class="label">HTTP p95</div><div class="metric">917ms</div></div>
+  <div class="card"><div class="label">Queries p95</div><div class="metric">477</div></div>
+  <div class="card"><div class="label">DB time p95</div><div class="metric">807ms</div></div>
+</section>
+<h2>What Was Triggered</h2>
+<div class="card">
+  <p><strong>Rank 3:</strong> Store API Checkout Submit Order Creation</p>
+  <p>Store API checkout POST with a fresh tokenized cart; exercises order creation, stock reservation/reduction, customer/order saves, and session cleanup.</p>
+  <p><span class="pill">/wp-json/wc/store/v1/checkout</span> <span class="pill">HTTP 200</span> <span class="pill">5 samples</span></p>
+</div>
+<h2>Latency Shape</h2>
+<div class="two">
+  <div class="card">
+    <div class="barrow"><div class="barlabel">HTTP median</div><div class="bartrack"><div class="bar" style="width:59%"></div></div><div class="barvalue">542ms</div></div>
+    <div class="barrow"><div class="barlabel">HTTP p95</div><div class="bartrack"><div class="bar" style="width:100%"></div></div><div class="barvalue">917ms</div></div>
+    <div class="barrow"><div class="barlabel">PHP p95</div><div class="bartrack"><div class="bar" style="width:99%"></div></div><div class="barvalue">909ms</div></div>
+    <div class="barrow"><div class="barlabel">DB p95</div><div class="bartrack"><div class="bar" style="width:88%"></div></div><div class="barvalue">807ms</div></div>
+  </div>
+  <div class="card"><svg viewBox="0 0 100 52" role="img" aria-label="Latency samples"><polyline points="0.0,6.0 25.0,21.7 50.0,23.3 75.0,24.8 100.0,23.2" fill="none" stroke="currentColor" stroke-width="2.5"/><line x1="0" x2="100" y1="48" y2="48" stroke="currentColor" opacity=".25"/></svg><div class="label">Each point is one measured request in run order.</div></div>
+</div>
+<h2>Fixture Context</h2>
+<table class="table"><tbody>
+  <tr><th>Orders</th><td>60000</td><th>Products</th><td>6000</td></tr>
+  <tr><th>Variations</th><td>800</td><th>Variable product</th><td>6014</td></tr>
+  <tr><th>WordPress</th><td>7.0</td><th>WooCommerce</th><td>10.9.1</td></tr>
+  <tr><th>PHP</th><td>8.3.31</td><th>MySQL</th><td>8.0.46</td></tr>
+</tbody></table>
+<h2>Samples</h2>
+<table class="table"><thead><tr><th>#</th><th>HTTP ms</th><th>PHP ms</th><th>Queries</th><th>DB ms</th><th>Peak MB</th><th>Status</th></tr></thead><tbody>
+<tr><td>1</td><td>917ms</td><td>909ms</td><td>477</td><td>807ms</td><td>14.0MB</td><td>200</td></tr><tr><td>2</td><td>573ms</td><td>566ms</td><td>475</td><td>473ms</td><td>14.0MB</td><td>200</td></tr><tr><td>3</td><td>540ms</td><td>533ms</td><td>471</td><td>434ms</td><td>14.0MB</td><td>200</td></tr><tr><td>4</td><td>505ms</td><td>499ms</td><td>473</td><td>407ms</td><td>14.0MB</td><td>200</td></tr><tr><td>5</td><td>542ms</td><td>531ms</td><td>475</td><td>436ms</td><td>14.0MB</td><td>200</td></tr>
+</tbody></table>
+<h2>Slow SQL Signatures</h2>
+<table class="table"><thead><tr><th>Seconds</th><th>SQL excerpt</th></tr></thead><tbody><tr><td>111ms</td><td><code>DELETE FROM `wp_wc_orders_meta` WHERE `id` = 300106 AND `order_id` = 6822</code></td></tr><tr><td>70.6ms</td><td><code>INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('6822', '_debug_log_source', 'place-order-debug-89102082')</code></td></tr><tr><td>32.8ms</td><td><code>DELETE FROM `wp_wc_orders_meta` WHERE `id` = 300108 AND `order_id` = 6822</code></td></tr><tr><td>31.1ms</td><td><code>UPDATE `wp_options` SET `option_value` = '1782905753' WHERE `option_name` = '_transient_orders-transient-version'</code></td></tr><tr><td>30.9ms</td><td><code>DELETE FROM `wp_wc_orders_meta` WHERE `id` = 300107 AND `order_id` = 6822</code></td></tr><tr><td>26.7ms</td><td><code>INSERT INTO `wp_posts` (`post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_content_filtered`, `post_title`, `post_excerpt`, `post_status`, `post_type`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_parent`, `menu_order`, `post_mime_type`, `guid`) VALUES (0, '2026-07-01 11:35:53', '2026-07-01 11:35:53', '', '', '', '', 'draft', 'shop_order_placehold', 'closed', 'closed', '', '', '', '', '2026-07-01 11:35:53', '2026-07-01 11:35:53', 0, 0, '', '')</code></td></tr><tr><td>26.3ms</td><td><code>INSERT INTO `wp_comments` (`comment_post_ID`, `comment_author_IP`, `comment_author`, `comment_author_email`, `comment_author_url`, `comment_date`, `comment_date_gmt`, `comment_content`, `comment_karma`, `comment_approved`, `comment_agent`, `comment_type`, `comment_parent`, `user_id`) VALUES (6822, '', 'WooCommerce', '', '', '2026-07-01 11:35:53', '2026-07-01 11:35:53', 'Stock hold of 60 minutes applied to: &lt;br&gt;- Benchmark Product 00001 Alpha SearchToken001 (BENCH-SKU-00001) &amp;times; 1', 0, '1', 'WooCommerce', 'order_note', 0, 0)</code></td></tr><tr><td>26.2ms</td><td><code>DELETE FROM `wp_wc_orders_meta` WHERE `id` = 300169 AND `order_id` = 6826</code></td></tr></tbody></table>
+</main>
+</body>
+</html>

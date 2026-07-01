@@ -1,0 +1,204 @@
+{
+  "scenario": {
+    "id": "08-variable-product-variations",
+    "rank": 8,
+    "title": "Variable Product Variation Loading",
+    "codePath": "Variable product page",
+    "trigger": "Single variable product with hundreds of variations, forcing available variation data and variation meta reads.",
+    "iterations": 5
+  },
+  "request": {
+    "path": "/product/benchmark-variable-product-many-variations/",
+    "headers": []
+  },
+  "summary": {
+    "requests": 5,
+    "http_codes": [
+      200
+    ],
+    "total_ms": {
+      "min": 1485.684,
+      "median": 1494.128,
+      "p95": 6431.3589999999995,
+      "max": 6431.3589999999995
+    },
+    "server_ms": {
+      "min": 1484.11,
+      "median": 1491.8,
+      "p95": 6429.23,
+      "max": 6429.23
+    },
+    "query_count": {
+      "median": 209,
+      "p95": 1831,
+      "max": 1831
+    },
+    "query_time_ms": {
+      "median": 62.27,
+      "p95": 4646.93,
+      "max": 4646.93
+    },
+    "memory_peak_mb": {
+      "median": 30,
+      "p95": 36,
+      "max": 36
+    }
+  },
+  "samples": [
+    {
+      "run_id": "08-variable-product-variations-1782905860919-1",
+      "http_code": 200,
+      "total_ms": 6431.3589999999995,
+      "ttfb_ms": 6419.286999999999,
+      "size_download": 1428767,
+      "body_bytes": 1428767,
+      "profiler": {
+        "run_id": "08-variable-product-variations-1782905860919-1",
+        "method": "GET",
+        "uri": "/product/benchmark-variable-product-many-variations/",
+        "status": 200,
+        "server_ms": 6429.23,
+        "query_count": 1831,
+        "query_time_ms": 4646.93,
+        "memory_peak_mb": 36,
+        "slow_queries": [
+          {
+            "seconds": 0.03203582763671875,
+            "sql": "UPDATE `wp_posts` SET `post_title` = 'Benchmark Variable Product With Many Variations - Size 12' WHERE `ID` = 6626"
+          },
+          {
+            "seconds": 0.026495933532714844,
+            "sql": "UPDATE `wp_posts` SET `post_title` = 'Benchmark Variable Product With Many Variations - Size 13' WHERE `ID` = 6267"
+          },
+          {
+            "seconds": 0.0261991024017334,
+            "sql": "UPDATE `wp_posts` SET `post_title` = 'Benchmark Variable Product With Many Variations - Size 21' WHERE `ID` = 6155"
+          },
+          {
+            "seconds": 0.024592161178588867,
+            "sql": "UPDATE `wp_posts` SET `post_title` = 'Benchmark Variable Product With Many Variations - Size 3' WHERE `ID` = 6497"
+          },
+          {
+            "seconds": 0.02112293243408203,
+            "sql": "UPDATE `wp_posts` SET `post_title` = 'Benchmark Variable Product With Many Variations - Size 111' WHERE `ID` = 6365"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T11:37:47+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "08-variable-product-variations-1782905867358-2",
+      "http_code": 200,
+      "total_ms": 1485.684,
+      "ttfb_ms": 1475.6670000000001,
+      "size_download": 1428767,
+      "body_bytes": 1428767,
+      "profiler": {
+        "run_id": "08-variable-product-variations-1782905867358-2",
+        "method": "GET",
+        "uri": "/product/benchmark-variable-product-many-variations/",
+        "status": 200,
+        "server_ms": 1484.11,
+        "query_count": 209,
+        "query_time_ms": 62.27,
+        "memory_peak_mb": 30,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:37:48+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "08-variable-product-variations-1782905868851-3",
+      "http_code": 200,
+      "total_ms": 1548.0149999999999,
+      "ttfb_ms": 1537.028,
+      "size_download": 1428767,
+      "body_bytes": 1428767,
+      "profiler": {
+        "run_id": "08-variable-product-variations-1782905868851-3",
+        "method": "GET",
+        "uri": "/product/benchmark-variable-product-many-variations/",
+        "status": 200,
+        "server_ms": 1546.37,
+        "query_count": 209,
+        "query_time_ms": 64.67,
+        "memory_peak_mb": 30,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:37:50+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "08-variable-product-variations-1782905870406-4",
+      "http_code": 200,
+      "total_ms": 1493.371,
+      "ttfb_ms": 1483.418,
+      "size_download": 1428767,
+      "body_bytes": 1428767,
+      "profiler": {
+        "run_id": "08-variable-product-variations-1782905870406-4",
+        "method": "GET",
+        "uri": "/product/benchmark-variable-product-many-variations/",
+        "status": 200,
+        "server_ms": 1491.8,
+        "query_count": 209,
+        "query_time_ms": 61.74,
+        "memory_peak_mb": 30,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:37:51+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "08-variable-product-variations-1782905871907-5",
+      "http_code": 200,
+      "total_ms": 1494.128,
+      "ttfb_ms": 1477.721,
+      "size_download": 1428767,
+      "body_bytes": 1428767,
+      "profiler": {
+        "run_id": "08-variable-product-variations-1782905871907-5",
+        "method": "GET",
+        "uri": "/product/benchmark-variable-product-many-variations/",
+        "status": 200,
+        "server_ms": 1485.98,
+        "query_count": 209,
+        "query_time_ms": 54.31,
+        "memory_peak_mb": 30,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:37:53+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    }
+  ],
+  "fixture": {
+    "orders": 60000,
+    "products": 6000,
+    "variations": 800,
+    "variable_parent_id": 6014,
+    "first_product_id": 14,
+    "first_order_id": 9000001,
+    "last_order_id": 9060000,
+    "created_gmt": "2026-07-01T11:27:24+00:00"
+  },
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "site_url": "http://localhost:8099"
+  },
+  "measured_at_gmt": "2026-07-01T11:37:57.542Z"
+}

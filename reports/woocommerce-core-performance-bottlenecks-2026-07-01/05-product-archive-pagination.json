@@ -1,0 +1,229 @@
+{
+  "scenario": {
+    "id": "05-product-archive-pagination",
+    "rank": 5,
+    "title": "Product Archive Pagination and Counts",
+    "codePath": "Shop archive paged query",
+    "trigger": "Deep shop archive page over a large product catalog; exercises found rows/counts and catalog visibility filtering.",
+    "iterations": 7
+  },
+  "request": {
+    "path": "/shop/page/80/?orderby=date",
+    "headers": []
+  },
+  "summary": {
+    "requests": 7,
+    "http_codes": [
+      200
+    ],
+    "total_ms": {
+      "min": 113.994,
+      "median": 118.052,
+      "p95": 174.71,
+      "max": 174.71
+    },
+    "server_ms": {
+      "min": 112.31,
+      "median": 116.1,
+      "p95": 172.85,
+      "max": 172.85
+    },
+    "query_count": {
+      "median": 91,
+      "p95": 109,
+      "max": 109
+    },
+    "query_time_ms": {
+      "median": 18.65,
+      "p95": 43.47,
+      "max": 43.47
+    },
+    "memory_peak_mb": {
+      "median": 14,
+      "p95": 14,
+      "max": 14
+    }
+  },
+  "samples": [
+    {
+      "run_id": "05-product-archive-pagination-1782905783030-1",
+      "http_code": 200,
+      "total_ms": 174.71,
+      "ttfb_ms": 167.155,
+      "size_download": 199806,
+      "body_bytes": 199806,
+      "profiler": {
+        "run_id": "05-product-archive-pagination-1782905783030-1",
+        "method": "GET",
+        "uri": "/shop/page/80/?orderby=date",
+        "status": 200,
+        "server_ms": 172.85,
+        "query_count": 109,
+        "query_time_ms": 43.47,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:23+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-product-archive-pagination-1782905783211-2",
+      "http_code": 200,
+      "total_ms": 113.994,
+      "ttfb_ms": 106.932,
+      "size_download": 199806,
+      "body_bytes": 199806,
+      "profiler": {
+        "run_id": "05-product-archive-pagination-1782905783211-2",
+        "method": "GET",
+        "uri": "/shop/page/80/?orderby=date",
+        "status": 200,
+        "server_ms": 112.31,
+        "query_count": 91,
+        "query_time_ms": 16.2,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:23+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-product-archive-pagination-1782905783332-3",
+      "http_code": 200,
+      "total_ms": 118.052,
+      "ttfb_ms": 110.419,
+      "size_download": 199806,
+      "body_bytes": 199806,
+      "profiler": {
+        "run_id": "05-product-archive-pagination-1782905783332-3",
+        "method": "GET",
+        "uri": "/shop/page/80/?orderby=date",
+        "status": 200,
+        "server_ms": 116.1,
+        "query_count": 91,
+        "query_time_ms": 18.66,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:23+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-product-archive-pagination-1782905783457-4",
+      "http_code": 200,
+      "total_ms": 121.796,
+      "ttfb_ms": 114.623,
+      "size_download": 199806,
+      "body_bytes": 199806,
+      "profiler": {
+        "run_id": "05-product-archive-pagination-1782905783457-4",
+        "method": "GET",
+        "uri": "/shop/page/80/?orderby=date",
+        "status": 200,
+        "server_ms": 119.8,
+        "query_count": 91,
+        "query_time_ms": 16.82,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:23+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-product-archive-pagination-1782905783586-5",
+      "http_code": 200,
+      "total_ms": 114.778,
+      "ttfb_ms": 107.661,
+      "size_download": 199806,
+      "body_bytes": 199806,
+      "profiler": {
+        "run_id": "05-product-archive-pagination-1782905783586-5",
+        "method": "GET",
+        "uri": "/shop/page/80/?orderby=date",
+        "status": 200,
+        "server_ms": 112.95,
+        "query_count": 91,
+        "query_time_ms": 18.67,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:23+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-product-archive-pagination-1782905783708-6",
+      "http_code": 200,
+      "total_ms": 118.55799999999999,
+      "ttfb_ms": 111.211,
+      "size_download": 199806,
+      "body_bytes": 199806,
+      "profiler": {
+        "run_id": "05-product-archive-pagination-1782905783708-6",
+        "method": "GET",
+        "uri": "/shop/page/80/?orderby=date",
+        "status": 200,
+        "server_ms": 116.99,
+        "query_count": 91,
+        "query_time_ms": 18.65,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:23+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-product-archive-pagination-1782905783834-7",
+      "http_code": 200,
+      "total_ms": 114.85,
+      "ttfb_ms": 107.31,
+      "size_download": 199806,
+      "body_bytes": 199806,
+      "profiler": {
+        "run_id": "05-product-archive-pagination-1782905783834-7",
+        "method": "GET",
+        "uri": "/shop/page/80/?orderby=date",
+        "status": 200,
+        "server_ms": 113.13,
+        "query_count": 91,
+        "query_time_ms": 17.38,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:23+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    }
+  ],
+  "fixture": {
+    "orders": 60000,
+    "products": 6000,
+    "variations": 800,
+    "variable_parent_id": 6014,
+    "first_product_id": 14,
+    "first_order_id": 9000001,
+    "last_order_id": 9060000,
+    "created_gmt": "2026-07-01T11:27:24+00:00"
+  },
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "site_url": "http://localhost:8099"
+  },
+  "measured_at_gmt": "2026-07-01T11:36:28.150Z"
+}

@@ -1,0 +1,229 @@
+{
+  "scenario": {
+    "id": "09-admin-edit-order",
+    "rank": 9,
+    "title": "Admin Edit Order and Metaboxes",
+    "codePath": "wc-orders action=edit",
+    "trigger": "HPOS order edit screen with address, item, operational, and metadata metabox reads.",
+    "iterations": 7
+  },
+  "request": {
+    "path": "/wp-admin/admin.php?page=wc-orders&action=edit&id=9060000",
+    "headers": []
+  },
+  "summary": {
+    "requests": 7,
+    "http_codes": [
+      200
+    ],
+    "total_ms": {
+      "min": 102.797,
+      "median": 106.056,
+      "p95": 154.362,
+      "max": 154.362
+    },
+    "server_ms": {
+      "min": 100.49,
+      "median": 103.87,
+      "p95": 139.23,
+      "max": 139.23
+    },
+    "query_count": {
+      "median": 144,
+      "p95": 153,
+      "max": 153
+    },
+    "query_time_ms": {
+      "median": 30.49,
+      "p95": 52.11,
+      "max": 52.11
+    },
+    "memory_peak_mb": {
+      "median": 20,
+      "p95": 20,
+      "max": 20
+    }
+  },
+  "samples": [
+    {
+      "run_id": "09-admin-edit-order-1782905802874-1",
+      "http_code": 200,
+      "total_ms": 154.362,
+      "ttfb_ms": 139.75099999999998,
+      "size_download": 343752,
+      "body_bytes": 343752,
+      "profiler": {
+        "run_id": "09-admin-edit-order-1782905802874-1",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&action=edit&id=9060000",
+        "status": 200,
+        "server_ms": 139.23,
+        "query_count": 153,
+        "query_time_ms": 52.11,
+        "memory_peak_mb": 20,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:43+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "09-admin-edit-order-1782905803036-2",
+      "http_code": 200,
+      "total_ms": 116.283,
+      "ttfb_ms": 114.995,
+      "size_download": 343752,
+      "body_bytes": 343752,
+      "profiler": {
+        "run_id": "09-admin-edit-order-1782905803036-2",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&action=edit&id=9060000",
+        "status": 200,
+        "server_ms": 114.42,
+        "query_count": 149,
+        "query_time_ms": 39.71,
+        "memory_peak_mb": 20,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:43+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "09-admin-edit-order-1782905803159-3",
+      "http_code": 200,
+      "total_ms": 105.171,
+      "ttfb_ms": 103.95400000000001,
+      "size_download": 343752,
+      "body_bytes": 343752,
+      "profiler": {
+        "run_id": "09-admin-edit-order-1782905803159-3",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&action=edit&id=9060000",
+        "status": 200,
+        "server_ms": 103.19,
+        "query_count": 144,
+        "query_time_ms": 30.49,
+        "memory_peak_mb": 20,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:43+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "09-admin-edit-order-1782905803271-4",
+      "http_code": 200,
+      "total_ms": 102.797,
+      "ttfb_ms": 101.12899999999999,
+      "size_download": 343752,
+      "body_bytes": 343752,
+      "profiler": {
+        "run_id": "09-admin-edit-order-1782905803271-4",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&action=edit&id=9060000",
+        "status": 200,
+        "server_ms": 100.49,
+        "query_count": 144,
+        "query_time_ms": 29.54,
+        "memory_peak_mb": 20,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:43+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "09-admin-edit-order-1782905803381-5",
+      "http_code": 200,
+      "total_ms": 106.753,
+      "ttfb_ms": 104.91300000000001,
+      "size_download": 343752,
+      "body_bytes": 343752,
+      "profiler": {
+        "run_id": "09-admin-edit-order-1782905803381-5",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&action=edit&id=9060000",
+        "status": 200,
+        "server_ms": 104.25,
+        "query_count": 144,
+        "query_time_ms": 30.36,
+        "memory_peak_mb": 20,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:43+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "09-admin-edit-order-1782905803496-6",
+      "http_code": 200,
+      "total_ms": 106.056,
+      "ttfb_ms": 104.464,
+      "size_download": 343752,
+      "body_bytes": 343752,
+      "profiler": {
+        "run_id": "09-admin-edit-order-1782905803496-6",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&action=edit&id=9060000",
+        "status": 200,
+        "server_ms": 103.87,
+        "query_count": 144,
+        "query_time_ms": 31,
+        "memory_peak_mb": 20,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:43+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "09-admin-edit-order-1782905803609-7",
+      "http_code": 200,
+      "total_ms": 104.685,
+      "ttfb_ms": 103.248,
+      "size_download": 343752,
+      "body_bytes": 343752,
+      "profiler": {
+        "run_id": "09-admin-edit-order-1782905803609-7",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&action=edit&id=9060000",
+        "status": 200,
+        "server_ms": 102.64,
+        "query_count": 144,
+        "query_time_ms": 28.85,
+        "memory_peak_mb": 20,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:43+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    }
+  ],
+  "fixture": {
+    "orders": 60000,
+    "products": 6000,
+    "variations": 800,
+    "variable_parent_id": 6014,
+    "first_product_id": 14,
+    "first_order_id": 9000001,
+    "last_order_id": 9060000,
+    "created_gmt": "2026-07-01T11:27:24+00:00"
+  },
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "site_url": "http://localhost:8099"
+  },
+  "measured_at_gmt": "2026-07-01T11:36:47.907Z"
+}

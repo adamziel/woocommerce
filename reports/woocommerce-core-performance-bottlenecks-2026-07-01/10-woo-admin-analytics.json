@@ -1,0 +1,234 @@
+{
+  "scenario": {
+    "id": "10-woo-admin-analytics",
+    "rank": 10,
+    "title": "Woo Admin Analytics Dashboard Preload",
+    "codePath": "wc-admin dashboard",
+    "trigger": "Woo Admin page load, exercising shared settings, preloaded endpoints, dashboard/status widgets, and analytics bootstrap.",
+    "iterations": 7
+  },
+  "request": {
+    "path": "/wp-admin/admin.php?page=wc-admin",
+    "headers": []
+  },
+  "summary": {
+    "requests": 7,
+    "http_codes": [
+      200
+    ],
+    "total_ms": {
+      "min": 100.095,
+      "median": 105.85600000000001,
+      "p95": 177.33599999999998,
+      "max": 177.33599999999998
+    },
+    "server_ms": {
+      "min": 98.3,
+      "median": 103.66,
+      "p95": 174.44,
+      "max": 174.44
+    },
+    "query_count": {
+      "median": 120,
+      "p95": 125,
+      "max": 125
+    },
+    "query_time_ms": {
+      "median": 26.73,
+      "p95": 63.47,
+      "max": 63.47
+    },
+    "memory_peak_mb": {
+      "median": 26,
+      "p95": 26,
+      "max": 26
+    }
+  },
+  "samples": [
+    {
+      "run_id": "10-woo-admin-analytics-1782905807967-1",
+      "http_code": 200,
+      "total_ms": 177.33599999999998,
+      "ttfb_ms": 175.76,
+      "size_download": 845922,
+      "body_bytes": 845922,
+      "profiler": {
+        "run_id": "10-woo-admin-analytics-1782905807967-1",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-admin",
+        "status": 200,
+        "server_ms": 174.44,
+        "query_count": 125,
+        "query_time_ms": 63.47,
+        "memory_peak_mb": 26,
+        "slow_queries": [
+          {
+            "seconds": 0.027981042861938477,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('woocommerce_admin_created_default_shipping_zones', 'yes', 'auto') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T11:36:48+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "10-woo-admin-analytics-1782905808151-2",
+      "http_code": 200,
+      "total_ms": 104.80799999999999,
+      "ttfb_ms": 103.438,
+      "size_download": 845922,
+      "body_bytes": 845922,
+      "profiler": {
+        "run_id": "10-woo-admin-analytics-1782905808151-2",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-admin",
+        "status": 200,
+        "server_ms": 102.76,
+        "query_count": 120,
+        "query_time_ms": 27.94,
+        "memory_peak_mb": 26,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:48+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "10-woo-admin-analytics-1782905808262-3",
+      "http_code": 200,
+      "total_ms": 103.987,
+      "ttfb_ms": 102.705,
+      "size_download": 845922,
+      "body_bytes": 845922,
+      "profiler": {
+        "run_id": "10-woo-admin-analytics-1782905808262-3",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-admin",
+        "status": 200,
+        "server_ms": 102.08,
+        "query_count": 120,
+        "query_time_ms": 26.09,
+        "memory_peak_mb": 26,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:48+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "10-woo-admin-analytics-1782905808373-4",
+      "http_code": 200,
+      "total_ms": 109.56200000000001,
+      "ttfb_ms": 107.86999999999999,
+      "size_download": 845922,
+      "body_bytes": 845922,
+      "profiler": {
+        "run_id": "10-woo-admin-analytics-1782905808373-4",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-admin",
+        "status": 200,
+        "server_ms": 107.34,
+        "query_count": 120,
+        "query_time_ms": 26.73,
+        "memory_peak_mb": 26,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:48+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "10-woo-admin-analytics-1782905808489-5",
+      "http_code": 200,
+      "total_ms": 105.85600000000001,
+      "ttfb_ms": 104.35600000000001,
+      "size_download": 845922,
+      "body_bytes": 845922,
+      "profiler": {
+        "run_id": "10-woo-admin-analytics-1782905808489-5",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-admin",
+        "status": 200,
+        "server_ms": 103.66,
+        "query_count": 120,
+        "query_time_ms": 28.99,
+        "memory_peak_mb": 26,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:48+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "10-woo-admin-analytics-1782905808602-6",
+      "http_code": 200,
+      "total_ms": 105.944,
+      "ttfb_ms": 104.617,
+      "size_download": 845922,
+      "body_bytes": 845922,
+      "profiler": {
+        "run_id": "10-woo-admin-analytics-1782905808602-6",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-admin",
+        "status": 200,
+        "server_ms": 103.94,
+        "query_count": 120,
+        "query_time_ms": 25.69,
+        "memory_peak_mb": 26,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:48+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "10-woo-admin-analytics-1782905808716-7",
+      "http_code": 200,
+      "total_ms": 100.095,
+      "ttfb_ms": 98.903,
+      "size_download": 845922,
+      "body_bytes": 845922,
+      "profiler": {
+        "run_id": "10-woo-admin-analytics-1782905808716-7",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-admin",
+        "status": 200,
+        "server_ms": 98.3,
+        "query_count": 120,
+        "query_time_ms": 24.81,
+        "memory_peak_mb": 26,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T11:36:48+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    }
+  ],
+  "fixture": {
+    "orders": 60000,
+    "products": 6000,
+    "variations": 800,
+    "variable_parent_id": 6014,
+    "first_product_id": 14,
+    "first_order_id": 9000001,
+    "last_order_id": 9060000,
+    "created_gmt": "2026-07-01T11:27:24+00:00"
+  },
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "site_url": "http://localhost:8099"
+  },
+  "measured_at_gmt": "2026-07-01T11:36:53.086Z"
+}

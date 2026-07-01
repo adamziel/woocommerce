@@ -1,0 +1,264 @@
+{
+  "scenario": {
+    "id": "01-hpos-order-search-broad",
+    "rank": 1,
+    "title": "HPOS Admin Order Search: Broad Non-ID Term",
+    "codePath": "wc-orders&s=admin-order-search-needle",
+    "trigger": "Broad admin order search term that forces HPOS search across orders, order addresses, order meta, and line item tables.",
+    "iterations": 7
+  },
+  "request": {
+    "path": "/wp-admin/admin.php?page=wc-orders&s=admin-order-search-needle",
+    "headers": []
+  },
+  "summary": {
+    "requests": 7,
+    "http_codes": [
+      200
+    ],
+    "total_ms": {
+      "min": 216.916,
+      "median": 221.808,
+      "p95": 231.81,
+      "max": 231.81
+    },
+    "server_ms": {
+      "min": 214.04,
+      "median": 218.01,
+      "p95": 229.81,
+      "max": 229.81
+    },
+    "query_count": {
+      "median": 122,
+      "p95": 122,
+      "max": 122
+    },
+    "query_time_ms": {
+      "median": 146.38,
+      "p95": 160.06,
+      "max": 160.06
+    },
+    "memory_peak_mb": {
+      "median": 20,
+      "p95": 20,
+      "max": 20
+    }
+  },
+  "samples": [
+    {
+      "run_id": "01-hpos-order-search-broad-1782905547925-1",
+      "http_code": 200,
+      "total_ms": 230.166,
+      "ttfb_ms": 228.433,
+      "size_download": 290983,
+      "body_bytes": 290983,
+      "profiler": {
+        "run_id": "01-hpos-order-search-broad-1782905547925-1",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&s=admin-order-search-needle",
+        "status": 200,
+        "server_ms": 227.82,
+        "query_count": 122,
+        "query_time_ms": 150.23,
+        "memory_peak_mb": 20,
+        "slow_queries": [
+          {
+            "seconds": 0.12323880195617676,
+            "sql": "SELECT wp_wc_orders.id FROM wp_wc_orders WHERE 1=1 AND (wp_wc_orders.status IN ('wc-pending','wc-processing','wc-on-hold','wc-completed','wc-cancelled','wc-refunded','wc-failed')) AND (wp_wc_orders.type = 'shop_order') AND ( ( `wp_wc_orders`.transaction_id LIKE '%admin-order-search-needle%' OR `wp_wc_orders`.billing_email LIKE 'admin-order-search-needle%' OR `wp_wc_orders`.id IN ( SELECT search_query_meta.order_id FROM wp_wc_orders_meta as search_query_meta WHERE search_query_meta.meta_key IN ( '_billing_address_index','_shipping_address_index' ) AND search_query_meta.meta_value LIKE '%admin-order-search-needle%' GROUP BY search_query_meta.order_id ) OR wp_wc_orders.id in ( SELECT order_id FROM wp_woocommerce_order_items search_query_items WHERE search_query_items.order_item_name LIKE '%admin-order-search-needle%' ) ) ) GROUP BY wp_wc_orders.id ORDER BY wp_wc_orders.date_created_gmt"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T11:32:28+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-hpos-order-search-broad-1782905548163-2",
+      "http_code": 200,
+      "total_ms": 220.49699999999999,
+      "ttfb_ms": 218.648,
+      "size_download": 290983,
+      "body_bytes": 290983,
+      "profiler": {
+        "run_id": "01-hpos-order-search-broad-1782905548163-2",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&s=admin-order-search-needle",
+        "status": 200,
+        "server_ms": 218.01,
+        "query_count": 122,
+        "query_time_ms": 143.24,
+        "memory_peak_mb": 20,
+        "slow_queries": [
+          {
+            "seconds": 0.11519598960876465,
+            "sql": "SELECT wp_wc_orders.id FROM wp_wc_orders WHERE 1=1 AND (wp_wc_orders.status IN ('wc-pending','wc-processing','wc-on-hold','wc-completed','wc-cancelled','wc-refunded','wc-failed')) AND (wp_wc_orders.type = 'shop_order') AND ( ( `wp_wc_orders`.transaction_id LIKE '%admin-order-search-needle%' OR `wp_wc_orders`.billing_email LIKE 'admin-order-search-needle%' OR `wp_wc_orders`.id IN ( SELECT search_query_meta.order_id FROM wp_wc_orders_meta as search_query_meta WHERE search_query_meta.meta_key IN ( '_billing_address_index','_shipping_address_index' ) AND search_query_meta.meta_value LIKE '%admin-order-search-needle%' GROUP BY search_query_meta.order_id ) OR wp_wc_orders.id in ( SELECT order_id FROM wp_woocommerce_order_items search_query_items WHERE search_query_items.order_item_name LIKE '%admin-order-search-needle%' ) ) ) GROUP BY wp_wc_orders.id ORDER BY wp_wc_orders.date_created_gmt"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T11:32:28+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-hpos-order-search-broad-1782905548391-3",
+      "http_code": 200,
+      "total_ms": 221.808,
+      "ttfb_ms": 219.89000000000001,
+      "size_download": 290983,
+      "body_bytes": 290983,
+      "profiler": {
+        "run_id": "01-hpos-order-search-broad-1782905548391-3",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&s=admin-order-search-needle",
+        "status": 200,
+        "server_ms": 219.26,
+        "query_count": 122,
+        "query_time_ms": 146.38,
+        "memory_peak_mb": 20,
+        "slow_queries": [
+          {
+            "seconds": 0.11963701248168945,
+            "sql": "SELECT wp_wc_orders.id FROM wp_wc_orders WHERE 1=1 AND (wp_wc_orders.status IN ('wc-pending','wc-processing','wc-on-hold','wc-completed','wc-cancelled','wc-refunded','wc-failed')) AND (wp_wc_orders.type = 'shop_order') AND ( ( `wp_wc_orders`.transaction_id LIKE '%admin-order-search-needle%' OR `wp_wc_orders`.billing_email LIKE 'admin-order-search-needle%' OR `wp_wc_orders`.id IN ( SELECT search_query_meta.order_id FROM wp_wc_orders_meta as search_query_meta WHERE search_query_meta.meta_key IN ( '_billing_address_index','_shipping_address_index' ) AND search_query_meta.meta_value LIKE '%admin-order-search-needle%' GROUP BY search_query_meta.order_id ) OR wp_wc_orders.id in ( SELECT order_id FROM wp_woocommerce_order_items search_query_items WHERE search_query_items.order_item_name LIKE '%admin-order-search-needle%' ) ) ) GROUP BY wp_wc_orders.id ORDER BY wp_wc_orders.date_created_gmt"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T11:32:28+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-hpos-order-search-broad-1782905548621-4",
+      "http_code": 200,
+      "total_ms": 231.81,
+      "ttfb_ms": 230.472,
+      "size_download": 290983,
+      "body_bytes": 290983,
+      "profiler": {
+        "run_id": "01-hpos-order-search-broad-1782905548621-4",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&s=admin-order-search-needle",
+        "status": 200,
+        "server_ms": 229.81,
+        "query_count": 122,
+        "query_time_ms": 160.06,
+        "memory_peak_mb": 20,
+        "slow_queries": [
+          {
+            "seconds": 0.13177704811096191,
+            "sql": "SELECT wp_wc_orders.id FROM wp_wc_orders WHERE 1=1 AND (wp_wc_orders.status IN ('wc-pending','wc-processing','wc-on-hold','wc-completed','wc-cancelled','wc-refunded','wc-failed')) AND (wp_wc_orders.type = 'shop_order') AND ( ( `wp_wc_orders`.transaction_id LIKE '%admin-order-search-needle%' OR `wp_wc_orders`.billing_email LIKE 'admin-order-search-needle%' OR `wp_wc_orders`.id IN ( SELECT search_query_meta.order_id FROM wp_wc_orders_meta as search_query_meta WHERE search_query_meta.meta_key IN ( '_billing_address_index','_shipping_address_index' ) AND search_query_meta.meta_value LIKE '%admin-order-search-needle%' GROUP BY search_query_meta.order_id ) OR wp_wc_orders.id in ( SELECT order_id FROM wp_woocommerce_order_items search_query_items WHERE search_query_items.order_item_name LIKE '%admin-order-search-needle%' ) ) ) GROUP BY wp_wc_orders.id ORDER BY wp_wc_orders.date_created_gmt"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T11:32:28+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-hpos-order-search-broad-1782905548859-5",
+      "http_code": 200,
+      "total_ms": 230.433,
+      "ttfb_ms": 216.464,
+      "size_download": 290983,
+      "body_bytes": 290983,
+      "profiler": {
+        "run_id": "01-hpos-order-search-broad-1782905548859-5",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&s=admin-order-search-needle",
+        "status": 200,
+        "server_ms": 215.79,
+        "query_count": 122,
+        "query_time_ms": 144.5,
+        "memory_peak_mb": 20,
+        "slow_queries": [
+          {
+            "seconds": 0.11655902862548828,
+            "sql": "SELECT wp_wc_orders.id FROM wp_wc_orders WHERE 1=1 AND (wp_wc_orders.status IN ('wc-pending','wc-processing','wc-on-hold','wc-completed','wc-cancelled','wc-refunded','wc-failed')) AND (wp_wc_orders.type = 'shop_order') AND ( ( `wp_wc_orders`.transaction_id LIKE '%admin-order-search-needle%' OR `wp_wc_orders`.billing_email LIKE 'admin-order-search-needle%' OR `wp_wc_orders`.id IN ( SELECT search_query_meta.order_id FROM wp_wc_orders_meta as search_query_meta WHERE search_query_meta.meta_key IN ( '_billing_address_index','_shipping_address_index' ) AND search_query_meta.meta_value LIKE '%admin-order-search-needle%' GROUP BY search_query_meta.order_id ) OR wp_wc_orders.id in ( SELECT order_id FROM wp_woocommerce_order_items search_query_items WHERE search_query_items.order_item_name LIKE '%admin-order-search-needle%' ) ) ) GROUP BY wp_wc_orders.id ORDER BY wp_wc_orders.date_created_gmt"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T11:32:29+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-hpos-order-search-broad-1782905549097-6",
+      "http_code": 200,
+      "total_ms": 218.424,
+      "ttfb_ms": 216.90699999999998,
+      "size_download": 290983,
+      "body_bytes": 290983,
+      "profiler": {
+        "run_id": "01-hpos-order-search-broad-1782905549097-6",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&s=admin-order-search-needle",
+        "status": 200,
+        "server_ms": 216.27,
+        "query_count": 122,
+        "query_time_ms": 146.61,
+        "memory_peak_mb": 20,
+        "slow_queries": [
+          {
+            "seconds": 0.12029099464416504,
+            "sql": "SELECT wp_wc_orders.id FROM wp_wc_orders WHERE 1=1 AND (wp_wc_orders.status IN ('wc-pending','wc-processing','wc-on-hold','wc-completed','wc-cancelled','wc-refunded','wc-failed')) AND (wp_wc_orders.type = 'shop_order') AND ( ( `wp_wc_orders`.transaction_id LIKE '%admin-order-search-needle%' OR `wp_wc_orders`.billing_email LIKE 'admin-order-search-needle%' OR `wp_wc_orders`.id IN ( SELECT search_query_meta.order_id FROM wp_wc_orders_meta as search_query_meta WHERE search_query_meta.meta_key IN ( '_billing_address_index','_shipping_address_index' ) AND search_query_meta.meta_value LIKE '%admin-order-search-needle%' GROUP BY search_query_meta.order_id ) OR wp_wc_orders.id in ( SELECT order_id FROM wp_woocommerce_order_items search_query_items WHERE search_query_items.order_item_name LIKE '%admin-order-search-needle%' ) ) ) GROUP BY wp_wc_orders.id ORDER BY wp_wc_orders.date_created_gmt"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T11:32:29+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-hpos-order-search-broad-1782905549322-7",
+      "http_code": 200,
+      "total_ms": 216.916,
+      "ttfb_ms": 214.572,
+      "size_download": 290983,
+      "body_bytes": 290983,
+      "profiler": {
+        "run_id": "01-hpos-order-search-broad-1782905549322-7",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&s=admin-order-search-needle",
+        "status": 200,
+        "server_ms": 214.04,
+        "query_count": 122,
+        "query_time_ms": 144.13,
+        "memory_peak_mb": 20,
+        "slow_queries": [
+          {
+            "seconds": 0.1174459457397461,
+            "sql": "SELECT wp_wc_orders.id FROM wp_wc_orders WHERE 1=1 AND (wp_wc_orders.status IN ('wc-pending','wc-processing','wc-on-hold','wc-completed','wc-cancelled','wc-refunded','wc-failed')) AND (wp_wc_orders.type = 'shop_order') AND ( ( `wp_wc_orders`.transaction_id LIKE '%admin-order-search-needle%' OR `wp_wc_orders`.billing_email LIKE 'admin-order-search-needle%' OR `wp_wc_orders`.id IN ( SELECT search_query_meta.order_id FROM wp_wc_orders_meta as search_query_meta WHERE search_query_meta.meta_key IN ( '_billing_address_index','_shipping_address_index' ) AND search_query_meta.meta_value LIKE '%admin-order-search-needle%' GROUP BY search_query_meta.order_id ) OR wp_wc_orders.id in ( SELECT order_id FROM wp_woocommerce_order_items search_query_items WHERE search_query_items.order_item_name LIKE '%admin-order-search-needle%' ) ) ) GROUP BY wp_wc_orders.id ORDER BY wp_wc_orders.date_created_gmt"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T11:32:29+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    }
+  ],
+  "fixture": {
+    "orders": 60000,
+    "products": 6000,
+    "variations": 800,
+    "variable_parent_id": 6014,
+    "first_product_id": 14,
+    "first_order_id": 9000001,
+    "last_order_id": 9060000,
+    "created_gmt": "2026-07-01T11:27:24+00:00"
+  },
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "site_url": "http://localhost:8099"
+  },
+  "measured_at_gmt": "2026-07-01T11:32:33.755Z"
+}
