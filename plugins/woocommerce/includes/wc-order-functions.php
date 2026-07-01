@@ -459,13 +459,19 @@ function wc_downloadable_file_permission( $download_id, $product, $order, $qty =
 /**
  * Order Status completed - give downloadable product access to customer.
  *
- * @param int  $order_id Order ID.
- * @param bool $force    Force downloadable permissions.
+ * @param int           $order_id Order ID.
+ * @param bool|WC_Order $force    Force downloadable permissions, or order object when invoked by
+ *                                an order status hook.
  */
 function wc_downloadable_product_permissions( $order_id, $force = false ) {
-	$order = wc_get_order( $order_id );
+	if ( $force instanceof WC_Order ) {
+		$order = $force;
+		$force = false;
+	} else {
+		$order = wc_get_order( $order_id );
+	}
 
-	if ( ! $order || ( $order->get_data_store()->get_download_permissions_granted( $order ) && ! $force ) ) {
+	if ( ! $order instanceof WC_Order || ( $order->get_download_permissions_granted() && ! $force ) ) {
 		return;
 	}
 
@@ -491,8 +497,8 @@ function wc_downloadable_product_permissions( $order_id, $force = false ) {
 	$order->get_data_store()->set_download_permissions_granted( $order, true );
 	do_action( 'woocommerce_grant_product_download_permissions', $order_id );
 }
-add_action( 'woocommerce_order_status_completed', 'wc_downloadable_product_permissions' );
-add_action( 'woocommerce_order_status_processing', 'wc_downloadable_product_permissions' );
+add_action( 'woocommerce_order_status_completed', 'wc_downloadable_product_permissions', 10, 2 );
+add_action( 'woocommerce_order_status_processing', 'wc_downloadable_product_permissions', 10, 2 );
 
 /**
  * Clear all transients cache for order data.
@@ -943,16 +949,19 @@ function wc_order_search( $term ) {
  * Update total sales amount for each product within a paid order.
  *
  * @since 3.0.0
- * @param int $order_id Order ID.
+ * @param int           $order_id Order ID.
+ * @param WC_Order|null $order    Order object.
  */
-function wc_update_total_sales_counts( $order_id ) {
-	$order = wc_get_order( $order_id );
+function wc_update_total_sales_counts( $order_id, $order = null ) {
+	if ( ! $order instanceof WC_Order ) {
+		$order = wc_get_order( $order_id );
+	}
 
-	if ( ! $order ) {
+	if ( ! $order instanceof WC_Order ) {
 		return;
 	}
 
-	$recorded_sales  = $order->get_data_store()->get_recorded_sales( $order );
+	$recorded_sales  = $order->get_recorded_sales();
 	$reflected_order = in_array( $order->get_status(), array( OrderStatus::CANCELLED, OrderStatus::TRASH ), true );
 
 	if ( ! $reflected_order && 'woocommerce_before_delete_order' === current_action() ) {
@@ -989,12 +998,12 @@ function wc_update_total_sales_counts( $order_id ) {
 	 */
 	do_action( 'woocommerce_recorded_sales', $order_id );
 }
-add_action( 'woocommerce_order_status_completed', 'wc_update_total_sales_counts' );
-add_action( 'woocommerce_order_status_processing', 'wc_update_total_sales_counts' );
-add_action( 'woocommerce_order_status_on-hold', 'wc_update_total_sales_counts' );
-add_action( 'woocommerce_order_status_completed_to_cancelled', 'wc_update_total_sales_counts' );
-add_action( 'woocommerce_order_status_processing_to_cancelled', 'wc_update_total_sales_counts' );
-add_action( 'woocommerce_order_status_on-hold_to_cancelled', 'wc_update_total_sales_counts' );
+add_action( 'woocommerce_order_status_completed', 'wc_update_total_sales_counts', 10, 2 );
+add_action( 'woocommerce_order_status_processing', 'wc_update_total_sales_counts', 10, 2 );
+add_action( 'woocommerce_order_status_on-hold', 'wc_update_total_sales_counts', 10, 2 );
+add_action( 'woocommerce_order_status_completed_to_cancelled', 'wc_update_total_sales_counts', 10, 2 );
+add_action( 'woocommerce_order_status_processing_to_cancelled', 'wc_update_total_sales_counts', 10, 2 );
+add_action( 'woocommerce_order_status_on-hold_to_cancelled', 'wc_update_total_sales_counts', 10, 2 );
 add_action( 'woocommerce_trash_order', 'wc_update_total_sales_counts' );
 add_action( 'woocommerce_untrash_order', 'wc_update_total_sales_counts' );
 add_action( 'woocommerce_before_delete_order', 'wc_update_total_sales_counts' );

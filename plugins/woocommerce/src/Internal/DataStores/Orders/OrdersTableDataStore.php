@@ -911,8 +911,16 @@ class OrdersTableDataStore extends \Abstract_WC_Order_Data_Store_CPT implements 
 		if ( is_int( $order ) ) {
 			$order = wc_get_order( $order );
 		}
-		$order->set_recorded_sales( $set );
-		$order->save();
+		if ( ! $order instanceof WC_Order ) {
+			return;
+		}
+		$this->set_boolean_operational_flag(
+			$order,
+			'recorded_sales',
+			'recorded_sales',
+			'set_recorded_sales',
+			$set
+		);
 	}
 
 	/**
@@ -1017,8 +1025,70 @@ class OrdersTableDataStore extends \Abstract_WC_Order_Data_Store_CPT implements 
 		if ( is_int( $order ) ) {
 			$order = wc_get_order( $order );
 		}
-		$order->set_order_stock_reduced( $set );
-		$order->save();
+		if ( ! $order instanceof WC_Order ) {
+			return;
+		}
+		$this->set_boolean_operational_flag(
+			$order,
+			'order_stock_reduced',
+			'order_stock_reduced',
+			'set_order_stock_reduced',
+			$set
+		);
+	}
+
+	/**
+	 * Stores a boolean operational data flag without saving the full order.
+	 *
+	 * @param \WC_Order $order  Order object.
+	 * @param string    $prop   Order prop name.
+	 * @param string    $column Operational data table column name.
+	 * @param string    $setter Order prop setter method.
+	 * @param bool      $set    True or false.
+	 */
+	private function set_boolean_operational_flag( WC_Order $order, string $prop, string $column, string $setter, $set ): void {
+		if ( ! is_callable( array( $order, $setter ) ) ) {
+			return;
+		}
+
+		$order->{$setter}( $set );
+		$changes = $order->get_changes();
+
+		if ( array_diff_key( $changes, array( $prop => true ) ) ) {
+			$order->save();
+			return;
+		}
+
+		global $wpdb;
+
+		$updated = $wpdb->update(
+			self::get_operational_data_table_name(),
+			array(
+				$column => wc_string_to_bool( $set ) ? 1 : 0,
+			),
+			array(
+				'order_id' => $order->get_id(),
+			),
+			array( '%d' ),
+			array( '%d' )
+		);
+		if ( false === $updated ) {
+			$order->save();
+			return;
+		}
+
+		if ( $this->should_backfill_post_record() ) {
+			$cpt_data_store = $this->get_post_data_store_for_backfill();
+			$callback       = array( $cpt_data_store, $setter );
+			if ( is_callable( $callback ) ) {
+				self::$backfilling_order_ids[] = $order->get_id();
+				call_user_func( $callback, $order, $set );
+				self::$backfilling_order_ids = array_diff( self::$backfilling_order_ids, array( $order->get_id() ) );
+			}
+		}
+
+		$order->apply_changes();
+		$this->clear_caches( $order );
 	}
 
 	/**
