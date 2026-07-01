@@ -26,6 +26,156 @@ class ProductQueryTest extends \WC_Unit_Test_Case {
 	}
 
 	/**
+	 * Get a Store API products request with the defaults needed by ProductQuery.
+	 *
+	 * @param array $params Request parameter overrides.
+	 * @return \WP_REST_Request
+	 */
+	private function get_products_request( array $params = array() ): \WP_REST_Request {
+		$request = new \WP_REST_Request( 'GET', '/wc/store/v1/products' );
+		$params  = wp_parse_args(
+			$params,
+			array(
+				'offset'         => 0,
+				'order'          => 'asc',
+				'orderby'        => 'date',
+				'page'           => 1,
+				'include'        => array(),
+				'exclude'        => array(),
+				'per_page'       => 10,
+				'parent'         => array(),
+				'parent_exclude' => array(),
+				'search'         => '',
+				'slug'           => '',
+				'attributes'     => array(),
+				'featured'       => null,
+				'on_sale'        => null,
+				'rating'         => null,
+				'related'        => null,
+			)
+		);
+
+		foreach ( $params as $key => $value ) {
+			$request->set_param( $key, $value );
+		}
+
+		return $request;
+	}
+
+	/**
+	 * @testdox prepare_objects_query stores on_sale as an internal query var without materializing sale IDs.
+	 */
+	public function test_prepare_objects_query_uses_on_sale_query_var_without_sale_ids(): void {
+		set_transient( 'wc_products_onsale', array( 101, 202, 303 ), DAY_IN_SECONDS );
+
+		try {
+			$args = $this->product_query->prepare_objects_query(
+				$this->get_products_request(
+					array(
+						'on_sale' => true,
+					)
+				)
+			);
+		} finally {
+			delete_transient( 'wc_products_onsale' );
+		}
+
+		$this->assertSame( array(), $args['post__in'] );
+		$this->assertSame( array(), $args['post__not_in'] );
+		$this->assertTrue( $args['store_api_on_sale'] );
+	}
+
+	/**
+	 * @testdox prepare_objects_query keeps explicit excludes when on_sale is false.
+	 */
+	public function test_prepare_objects_query_keeps_excludes_when_on_sale_is_false(): void {
+		set_transient( 'wc_products_onsale', array( 101, 202, 303 ), DAY_IN_SECONDS );
+
+		try {
+			$args = $this->product_query->prepare_objects_query(
+				$this->get_products_request(
+					array(
+						'exclude' => array( 404 ),
+						'on_sale' => false,
+					)
+				)
+			);
+		} finally {
+			delete_transient( 'wc_products_onsale' );
+		}
+
+		$this->assertSame( array( 404 ), $args['post__not_in'] );
+		$this->assertFalse( $args['store_api_on_sale'] );
+	}
+
+	/**
+	 * @testdox prepare_objects_query preserves include ordering while applying on_sale as a SQL clause.
+	 */
+	public function test_prepare_objects_query_preserves_include_ordering_with_on_sale_filter(): void {
+		set_transient( 'wc_products_onsale', array( 101, 202, 303 ), DAY_IN_SECONDS );
+
+		try {
+			$args = $this->product_query->prepare_objects_query(
+				$this->get_products_request(
+					array(
+						'include' => array( 606, 505 ),
+						'on_sale' => true,
+						'orderby' => 'include',
+					)
+				)
+			);
+		} finally {
+			delete_transient( 'wc_products_onsale' );
+		}
+
+		$this->assertSame( array( 606, 505 ), $args['post__in'] );
+		$this->assertSame( 'post__in', $args['orderby'] );
+		$this->assertTrue( $args['store_api_on_sale'] );
+	}
+
+	/**
+	 * @testdox add_query_clauses filters on-sale products through the lookup table.
+	 */
+	public function test_add_query_clauses_filters_on_sale_products_using_lookup_table(): void {
+		$wp_query = new \WP_Query();
+		$wp_query->set( 'store_api_on_sale', true );
+
+		$args = $this->product_query->add_query_clauses(
+			array(
+				'join'  => '',
+				'where' => '',
+			),
+			$wp_query
+		);
+
+		$this->assertStringContainsString( 'wc_product_meta_lookup', $args['join'] );
+		$this->assertStringContainsString( 'wc_product_meta_lookup.onsale = 1', $args['where'] );
+		$this->assertStringContainsString( 'on_sale_variations.post_parent', $args['where'] );
+		$this->assertStringContainsString( '.ID IN (', $args['where'] );
+	}
+
+	/**
+	 * @testdox add_query_clauses treats missing lookup rows as not on sale when on_sale is false.
+	 */
+	public function test_add_query_clauses_filters_not_on_sale_products_using_lookup_table(): void {
+		$wp_query = new \WP_Query();
+		$wp_query->set( 'store_api_on_sale', false );
+
+		$args = $this->product_query->add_query_clauses(
+			array(
+				'join'  => '',
+				'where' => '',
+			),
+			$wp_query
+		);
+
+		$this->assertStringContainsString( 'wc_product_meta_lookup', $args['join'] );
+		$this->assertStringContainsString( 'wc_product_meta_lookup.onsale IS NULL OR wc_product_meta_lookup.onsale = 0', $args['where'] );
+		$this->assertStringContainsString( 'on_sale_variations.post_parent', $args['where'] );
+		$this->assertStringContainsString( '.ID NOT IN (', $args['where'] );
+	}
+
+	/**
 	 * @testdox get_last_modified returns null when no products exist.
 	 */
 	public function test_get_last_modified_returns_null_when_no_products(): void {
