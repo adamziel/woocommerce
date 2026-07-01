@@ -49,6 +49,45 @@ class WC_Product_Variable_Test extends \WC_Unit_Test_Case {
 	}
 
 	/**
+	 * @testdox 'get_available_variations' reuses the parent price-range decision for array payloads.
+	 */
+	public function test_get_available_variations_reuses_parent_price_range_decision_for_array_payloads() {
+		$regular_price_calls = 0;
+		$sale_price_calls    = 0;
+		$product             = $this->create_counting_variable_product( $regular_price_calls, $sale_price_calls );
+
+		$variations = $product->get_available_variations( 'array' );
+
+		$this->assertCount( 6, $variations );
+		$this->assertSame( 2, $sale_price_calls );
+		$this->assertSame( 2, $regular_price_calls );
+	}
+
+	/**
+	 * @testdox 'get_available_variations' preserves price getter behavior when price filters are customized.
+	 */
+	public function test_get_available_variations_preserves_price_getter_behavior_when_price_filters_are_customized() {
+		$regular_price_calls = 0;
+		$sale_price_calls    = 0;
+		$product             = $this->create_counting_variable_product( $regular_price_calls, $sale_price_calls );
+
+		$filter = function ( $price ) {
+			return $price;
+		};
+
+		add_filter( 'woocommerce_get_variation_sale_price', $filter );
+
+		try {
+			$variations = $product->get_available_variations( 'array' );
+		} finally {
+			remove_filter( 'woocommerce_get_variation_sale_price', $filter );
+		}
+
+		$this->assertCount( 6, $variations );
+		$this->assertSame( count( $variations ) * 2, $sale_price_calls );
+	}
+
+	/**
 	 * @testdox 'has_purchasable_variations' should return true when all variations are purchasable.
 	 */
 	public function test_has_purchasable_variations_returns_true_when_all_variations_are_purchasable() {
@@ -341,5 +380,74 @@ class WC_Product_Variable_Test extends \WC_Unit_Test_Case {
 		update_post_meta( $attachment_id, '_wp_attached_file', $attached_file );
 
 		return $attachment_id;
+	}
+
+	/**
+	 * Create a variable product test double that counts parent price range checks.
+	 *
+	 * @param int $regular_price_calls Number of regular price getter calls.
+	 * @param int $sale_price_calls    Number of sale price getter calls.
+	 * @return WC_Product_Variable
+	 */
+	private function create_counting_variable_product( &$regular_price_calls, &$sale_price_calls ) {
+		$product = new class( $regular_price_calls, $sale_price_calls ) extends WC_Product_Variable {
+			/**
+			 * Number of times the regular price range getter was called.
+			 *
+			 * @var int
+			 */
+			private $regular_price_calls;
+
+			/**
+			 * Number of times the sale price range getter was called.
+			 *
+			 * @var int
+			 */
+			private $sale_price_calls;
+
+			/**
+			 * Constructor.
+			 *
+			 * @param int $regular_price_calls Number of regular price getter calls.
+			 * @param int $sale_price_calls    Number of sale price getter calls.
+			 */
+			public function __construct( &$regular_price_calls, &$sale_price_calls ) {
+				$this->regular_price_calls = &$regular_price_calls;
+				$this->sale_price_calls    = &$sale_price_calls;
+
+				parent::__construct();
+			}
+
+			/**
+			 * Get the min or max variation regular price.
+			 *
+			 * @param string  $min_or_max Min or max price.
+			 * @param boolean $for_display If true, prices will be adapted for display.
+			 * @return string
+			 */
+			public function get_variation_regular_price( $min_or_max = 'min', $for_display = false ) {
+				++$this->regular_price_calls;
+				return parent::get_variation_regular_price( $min_or_max, $for_display );
+			}
+
+			/**
+			 * Get the min or max variation sale price.
+			 *
+			 * @param string  $min_or_max Min or max price.
+			 * @param boolean $for_display If true, prices will be adapted for display.
+			 * @return string
+			 */
+			public function get_variation_sale_price( $min_or_max = 'min', $for_display = false ) {
+				++$this->sale_price_calls;
+				return parent::get_variation_sale_price( $min_or_max, $for_display );
+			}
+		};
+
+		WC_Helper_Product::create_variation_product( $product );
+
+		$regular_price_calls = 0;
+		$sale_price_calls    = 0;
+
+		return $product;
 	}
 }

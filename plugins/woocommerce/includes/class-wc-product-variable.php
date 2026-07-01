@@ -41,6 +41,20 @@ class WC_Product_Variable extends WC_Product {
 	protected $variation_attributes = null;
 
 	/**
+	 * Whether to cache the parent price-range decision while building available variation payloads.
+	 *
+	 * @var bool
+	 */
+	protected $cache_available_variation_price_ranges = false;
+
+	/**
+	 * Cached result for whether variation prices differ across this parent product.
+	 *
+	 * @var bool|null
+	 */
+	protected $available_variation_price_ranges_differ = null;
+
+	/**
 	 * Get internal type.
 	 *
 	 * @return string
@@ -329,46 +343,62 @@ class WC_Product_Variable extends WC_Product {
 		$variation_ids           = $this->get_children();
 		$hide_out_of_stock_items = ( 'yes' === get_option( 'woocommerce_hide_out_of_stock_items' ) );
 		$available_variations    = array();
+		$cache_price_ranges      = 'array' === $return && $this->should_cache_available_variation_price_ranges();
 
 		if ( ! empty( $variation_ids ) ) {
 			// Prime caches to reduce future queries.
 			_prime_post_caches( $variation_ids );
 		}
 
-		foreach ( $variation_ids as $variation_id ) {
+		if ( $cache_price_ranges ) {
+			$previous_cache_price_ranges                    = $this->cache_available_variation_price_ranges;
+			$previous_available_variation_price_ranges_diff = $this->available_variation_price_ranges_differ;
 
-			$variation = wc_get_product( $variation_id );
+			$this->cache_available_variation_price_ranges  = true;
+			$this->available_variation_price_ranges_differ = null;
+		}
 
-			// Hide out of stock variations if 'Hide out of stock items from the catalog' is checked.
-			if ( ! $variation || ! $variation->exists() || ( $hide_out_of_stock_items && ! $variation->is_in_stock() ) ) {
-				continue;
-			}
+		try {
+			foreach ( $variation_ids as $variation_id ) {
 
-			/**
-			 * Filter 'woocommerce_hide_invisible_variations' to optionally hide invisible variations (disabled variations and variations with empty price).
-			 *
-			 * @since 2.6.8
-			 *
-			 * @param  bool                  $hide        Whether to hide invisible variations. Default true.
-			 * @param  int                   $product_id  The ID of the variation.
-			 * @param  WC_Product_Variation  $variation   The variation object.
-			 */
-			if ( apply_filters( 'woocommerce_hide_invisible_variations', true, $this->get_id(), $variation ) && ! $variation->variation_is_visible() ) {
-				continue;
+				$variation = wc_get_product( $variation_id );
+
+				// Hide out of stock variations if 'Hide out of stock items from the catalog' is checked.
+				if ( ! $variation || ! $variation->exists() || ( $hide_out_of_stock_items && ! $variation->is_in_stock() ) ) {
+					continue;
+				}
+
+				/**
+				 * Filter 'woocommerce_hide_invisible_variations' to optionally hide invisible variations (disabled variations and variations with empty price).
+				 *
+				 * @since 2.6.8
+				 *
+				 * @param  bool                  $hide        Whether to hide invisible variations. Default true.
+				 * @param  int                   $product_id  The ID of the variation.
+				 * @param  WC_Product_Variation  $variation   The variation object.
+				 */
+				if ( apply_filters( 'woocommerce_hide_invisible_variations', true, $this->get_id(), $variation ) && ! $variation->variation_is_visible() ) {
+					continue;
+				}
+
+				if ( 'array' === $return ) {
+					$available_variations[] = $this->get_available_variation( $variation );
+				} else {
+					$available_variations[] = $variation;
+				}
 			}
 
 			if ( 'array' === $return ) {
-				$available_variations[] = $this->get_available_variation( $variation );
-			} else {
-				$available_variations[] = $variation;
+				$available_variations = array_values( array_filter( $available_variations ) );
+			}
+
+			return $available_variations;
+		} finally {
+			if ( $cache_price_ranges ) {
+				$this->cache_available_variation_price_ranges  = $previous_cache_price_ranges;
+				$this->available_variation_price_ranges_differ = $previous_available_variation_price_ranges_diff;
 			}
 		}
-
-		if ( 'array' === $return ) {
-			$available_variations = array_values( array_filter( $available_variations ) );
-		}
-
-		return $available_variations;
 	}
 
 	/**
@@ -456,8 +486,21 @@ class WC_Product_Variable extends WC_Product {
 			$variation_gallery_html = wc_get_product_gallery_html( $this, $gallery_html_ids );
 		}
 
-		// See if prices should be shown for each variation after selection.
-		$show_variation_price = apply_filters( 'woocommerce_show_variation_price', $variation->get_price() === '' || $this->get_variation_sale_price( 'min' ) !== $this->get_variation_sale_price( 'max' ) || $this->get_variation_regular_price( 'min' ) !== $this->get_variation_regular_price( 'max' ), $this, $variation );
+		/**
+		 * Controls whether the variation price is shown after a variation is selected.
+		 *
+		 * @since 2.4.0
+		 *
+		 * @param bool                 $show      Whether the variation price should be shown.
+		 * @param WC_Product_Variable  $product   Variable product object.
+		 * @param WC_Product_Variation $variation Variation product object.
+		 */
+		$show_variation_price = apply_filters(
+			'woocommerce_show_variation_price',
+			$variation->get_price() === '' || $this->available_variation_price_ranges_differ(),
+			$this,
+			$variation
+		);
 
 		return apply_filters(
 			'woocommerce_available_variation',
@@ -492,6 +535,51 @@ class WC_Product_Variable extends WC_Product {
 			$this,
 			$variation
 		);
+	}
+
+	/**
+	 * Whether the parent has differing regular or sale prices across variations.
+	 *
+	 * @return bool
+	 */
+	protected function available_variation_price_ranges_differ() {
+		if ( $this->cache_available_variation_price_ranges && null !== $this->available_variation_price_ranges_differ ) {
+			return $this->available_variation_price_ranges_differ;
+		}
+
+		$price_ranges_differ = $this->get_variation_sale_price( 'min' ) !== $this->get_variation_sale_price( 'max' ) || $this->get_variation_regular_price( 'min' ) !== $this->get_variation_regular_price( 'max' );
+
+		if ( $this->cache_available_variation_price_ranges ) {
+			$this->available_variation_price_ranges_differ = $price_ranges_differ;
+		}
+
+		return $price_ranges_differ;
+	}
+
+	/**
+	 * Whether to reuse the parent variation price-range decision for the current payload.
+	 *
+	 * @return bool
+	 */
+	protected function should_cache_available_variation_price_ranges() {
+		$price_filters = array(
+			'woocommerce_get_variation_regular_price',
+			'woocommerce_get_variation_sale_price',
+			'woocommerce_get_variation_prices_hash',
+			'woocommerce_variation_prices',
+			'woocommerce_variation_prices_array',
+			'woocommerce_variation_prices_price',
+			'woocommerce_variation_prices_regular_price',
+			'woocommerce_variation_prices_sale_price',
+		);
+
+		foreach ( $price_filters as $price_filter ) {
+			if ( has_filter( $price_filter ) ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/*
