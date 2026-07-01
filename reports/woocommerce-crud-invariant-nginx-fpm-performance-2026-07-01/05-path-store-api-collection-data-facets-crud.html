@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Store API Collection Data: CRUD Facet Counts</title>
+<style>
+:root{--ink:#15202b;--muted:#5d6976;--line:#d7dde3;--bg:#f6f8fa;--panel:#fff;--accent:#1f7a6d;--warn:#a84800;--bad:#a12a2a;--blue:#2764b5}
+*{box-sizing:border-box} body{margin:0;font:14px/1.45 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:var(--bg)}
+header{background:#fff;border-bottom:1px solid var(--line);padding:22px 28px 16px} main{max-width:1180px;margin:0 auto;padding:22px 24px 40px}
+h1{font-size:26px;line-height:1.15;margin:0 0 8px} h2{font-size:17px;margin:26px 0 10px} h3{font-size:14px;margin:18px 0 8px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.sub{color:var(--muted);max-width:900px}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px}
+.metric{font-size:26px;font-weight:720}.label{color:var(--muted);font-size:12px}.two{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+table{width:100%;border-collapse:collapse} th,td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left} th{font-size:12px;color:var(--muted);background:#f1f4f7} tr:last-child td{border-bottom:0}
+.barrow{display:grid;grid-template-columns:140px 1fr 70px;gap:10px;align-items:center;margin:8px 0}.bartrack{height:12px;background:#e5eaef;border-radius:4px;overflow:hidden}.bar{height:100%;background:var(--accent)}.barlabel,.barvalue{font-size:12px;color:var(--muted)}svg{width:100%;height:95px;color:var(--blue)}
+.pill{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;padding:2px 8px;background:#fff;color:var(--muted);font-size:12px}.risk{color:var(--warn);font-weight:650}.bad{color:var(--bad);font-weight:650} code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;background:#eef2f5;padding:1px 4px;border-radius:4px}
+pre{white-space:pre-wrap;word-break:break-word;background:#101820;color:#eef7ff;padding:12px;border-radius:8px;max-height:320px;overflow:auto;font-size:12px}
+.scenario-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.scenario-list a{display:block;background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px;text-decoration:none;color:var(--ink)}
+.scenario-list strong{display:block}.scenario-list span{color:var(--muted);font-size:12px}
+@media(max-width:800px){main{padding:16px}.grid,.two,.scenario-list{grid-template-columns:1fr}.barrow{grid-template-columns:100px 1fr 62px}header{padding:18px 16px}}
+</style>
+</head>
+<body>
+<header><h1>Store API Collection Data: CRUD Facet Counts</h1><div class="sub">Concurrent nginx/php-fpm benchmark using fixtures created through WooCommerce CRUD APIs, with scheduled lookup/import work drained before measurement.</div></header>
+<main>
+<section class="grid">
+  <div class="card"><div class="label">HTTP median</div><div class="metric">825ms</div></div>
+  <div class="card"><div class="label">HTTP p95</div><div class="metric">1059ms</div></div>
+  <div class="card"><div class="label">Queries p95</div><div class="metric">52.0</div></div>
+  <div class="card"><div class="label">DB time p95</div><div class="metric">270ms</div></div>
+</section>
+<h2>What Was Triggered</h2>
+<div class="card">
+  <p><strong>Rank 5:</strong> Store API Collection Data: CRUD Facet Counts</p>
+  <p>Concurrent facet aggregation over CRUD-created products: price range, stock counts, rating counts, category counts, and two attribute count sets.</p>
+  <p><span class="pill">/wp-json/wc/store/v1/products/collection-data via nginx/php-fpm</span> <span class="pill">HTTP 200</span> <span class="pill">20 samples</span></p>
+</div>
+<h2>Latency Shape</h2>
+<div class="two">
+  <div class="card">
+    <div class="barrow"><div class="barlabel">HTTP median</div><div class="bartrack"><div class="bar" style="width:78%"></div></div><div class="barvalue">825ms</div></div>
+    <div class="barrow"><div class="barlabel">HTTP p95</div><div class="bartrack"><div class="bar" style="width:100%"></div></div><div class="barvalue">1059ms</div></div>
+    <div class="barrow"><div class="barlabel">PHP p95</div><div class="bartrack"><div class="bar" style="width:47%"></div></div><div class="barvalue">498ms</div></div>
+    <div class="barrow"><div class="barlabel">DB p95</div><div class="bartrack"><div class="bar" style="width:25%"></div></div><div class="barvalue">270ms</div></div>
+  </div>
+  <div class="card"><svg viewBox="0 0 100 52" role="img" aria-label="Latency samples"><polyline points="0.0,21.3 5.3,14.6 10.5,6.0 15.8,10.8 21.1,23.5 26.3,6.1 31.6,10.9 36.8,19.7 42.1,6.2 47.4,23.6 52.6,11.0 57.9,6.2 63.2,10.7 68.4,20.2 73.7,15.3 78.9,24.1 84.2,20.3 89.5,15.4 94.7,18.1 100.0,14.6" fill="none" stroke="currentColor" stroke-width="2.5"/><line x1="0" x2="100" y1="48" y2="48" stroke="currentColor" opacity=".25"/></svg><div class="label">Each point is one measured request in run order.</div></div>
+</div>
+<h2>Fixture Context</h2>
+<table class="table"><tbody>
+  <tr><th>Orders</th><td>10000</td><th>Products</th><td>5000</td></tr>
+  <tr><th>Variations</th><td>800</td><th>Variable product</th><td>1385</td></tr>
+  <tr><th>WordPress</th><td>7.0</td><th>WooCommerce</th><td>10.9.1</td></tr>
+  <tr><th>PHP</th><td>8.3.31</td><th>MySQL</th><td>8.0.46</td></tr>
+</tbody></table>
+<h2>Samples</h2>
+<table class="table"><thead><tr><th>#</th><th>HTTP ms</th><th>PHP ms</th><th>Queries</th><th>DB ms</th><th>Peak MB</th><th>Status</th></tr></thead><tbody>
+<tr><td>1</td><td>674ms</td><td>230ms</td><td>52.0</td><td>98.4ms</td><td>14.0MB</td><td>200</td></tr><tr><td>2</td><td>843ms</td><td>123ms</td><td>52.0</td><td>98.3ms</td><td>14.0MB</td><td>200</td></tr><tr><td>3</td><td>1061ms</td><td>119ms</td><td>52.0</td><td>95.0ms</td><td>14.0MB</td><td>200</td></tr><tr><td>4</td><td>940ms</td><td>96.5ms</td><td>52.0</td><td>72.0ms</td><td>14.0MB</td><td>200</td></tr><tr><td>5</td><td>620ms</td><td>498ms</td><td>52.0</td><td>270ms</td><td>18.0MB</td><td>200</td></tr><tr><td>6</td><td>1059ms</td><td>119ms</td><td>52.0</td><td>95.0ms</td><td>14.0MB</td><td>200</td></tr><tr><td>7</td><td>938ms</td><td>95.6ms</td><td>52.0</td><td>71.8ms</td><td>14.0MB</td><td>200</td></tr><tr><td>8</td><td>715ms</td><td>96.0ms</td><td>52.0</td><td>69.1ms</td><td>16.0MB</td><td>200</td></tr><tr><td>9</td><td>1056ms</td><td>119ms</td><td>52.0</td><td>95.1ms</td><td>14.0MB</td><td>200</td></tr><tr><td>10</td><td>616ms</td><td>498ms</td><td>52.0</td><td>270ms</td><td>18.0MB</td><td>200</td></tr><tr><td>11</td><td>935ms</td><td>96.7ms</td><td>52.0</td><td>72.4ms</td><td>14.0MB</td><td>200</td></tr><tr><td>12</td><td>1056ms</td><td>101ms</td><td>52.0</td><td>76.3ms</td><td>14.0MB</td><td>200</td></tr><tr><td>13</td><td>943ms</td><td>91.9ms</td><td>52.0</td><td>68.1ms</td><td>14.0MB</td><td>200</td></tr><tr><td>14</td><td>702ms</td><td>96.5ms</td><td>52.0</td><td>71.9ms</td><td>16.0MB</td><td>200</td></tr><tr><td>15</td><td>825ms</td><td>123ms</td><td>52.0</td><td>99.6ms</td><td>14.0MB</td><td>200</td></tr><tr><td>16</td><td>603ms</td><td>498ms</td><td>52.0</td><td>270ms</td><td>18.0MB</td><td>200</td></tr><tr><td>17</td><td>701ms</td><td>96.2ms</td><td>52.0</td><td>71.4ms</td><td>16.0MB</td><td>200</td></tr><tr><td>18</td><td>824ms</td><td>122ms</td><td>52.0</td><td>99.1ms</td><td>14.0MB</td><td>200</td></tr><tr><td>19</td><td>755ms</td><td>101ms</td><td>52.0</td><td>71.8ms</td><td>14.0MB</td><td>200</td></tr><tr><td>20</td><td>844ms</td><td>88.5ms</td><td>52.0</td><td>64.3ms</td><td>14.0MB</td><td>200</td></tr>
+</tbody></table>
+<h2>Slow SQL Signatures</h2>
+<table class="table"><thead><tr><th>Seconds</th><th>SQL excerpt</th></tr></thead><tbody><tr><td>162ms</td><td><code>INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_wc_filter_data_entry_count', '1', 'off') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)</code></td></tr><tr><td>159ms</td><td><code>INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_timeout_wc_filter_data_entry_count', '1783007064', 'off') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)</code></td></tr><tr><td>155ms</td><td><code>INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_wc_filter_data_entry_count', '1', 'off') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)</code></td></tr><tr><td>31.7ms</td><td><code>UPDATE `wp_options` SET `option_value` = '1783007065' WHERE `option_name` = '_transient_timeout_wc_filter_data_entry_count'</code></td></tr><tr><td>29.0ms</td><td><code>INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_timeout_wc_filter_data_entry_count', '1783007064', 'off') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)</code></td></tr><tr><td>28.8ms</td><td><code>UPDATE `wp_options` SET `option_value` = '9' WHERE `option_name` = '_transient_wc_filter_data_entry_count'</code></td></tr><tr><td>28.8ms</td><td><code>UPDATE `wp_options` SET `option_value` = '9' WHERE `option_name` = '_transient_wc_filter_data_entry_count'</code></td></tr><tr><td>26.8ms</td><td><code>UPDATE `wp_options` SET `option_value` = '9' WHERE `option_name` = '_transient_wc_filter_data_entry_count'</code></td></tr></tbody></table>
+</main>
+</body>
+</html>

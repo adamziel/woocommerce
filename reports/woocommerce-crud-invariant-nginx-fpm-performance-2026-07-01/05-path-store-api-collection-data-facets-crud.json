@@ -1,0 +1,624 @@
+{
+  "scenario": {
+    "id": "05-path-store-api-collection-data-facets-crud",
+    "rank": 5,
+    "title": "Store API Collection Data: CRUD Facet Counts",
+    "codePath": "/wp-json/wc/store/v1/products/collection-data via nginx/php-fpm",
+    "trigger": "Concurrent facet aggregation over CRUD-created products: price range, stock counts, rating counts, category counts, and two attribute count sets.",
+    "concurrency": 20
+  },
+  "request": {
+    "path": "/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_stock_status_counts=true&calculate_rating_counts=true&calculate_taxonomy_counts=product_cat&calculate_attribute_counts[0][taxonomy]=pa_path_size&calculate_attribute_counts[0][query_type]=or&calculate_attribute_counts[1][taxonomy]=pa_path_color&calculate_attribute_counts[1][query_type]=or"
+  },
+  "summary": {
+    "requests": 20,
+    "http_codes": [
+      200
+    ],
+    "total_ms": {
+      "min": 603.182,
+      "median": 825.3009999999999,
+      "p95": 1059.4589999999998,
+      "max": 1061.4730000000002
+    },
+    "server_ms": {
+      "min": 88.46,
+      "median": 100.81,
+      "p95": 498,
+      "max": 498.03
+    },
+    "query_count": {
+      "median": 52,
+      "p95": 52,
+      "max": 52
+    },
+    "query_time_ms": {
+      "median": 76.35,
+      "p95": 269.8,
+      "max": 270.16
+    },
+    "memory_peak_mb": {
+      "median": 14,
+      "p95": 18,
+      "max": 18
+    }
+  },
+  "samples": [
+    {
+      "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-1",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 674.4639999999999,
+      "ttfb_ms": 664.802,
+      "size_download": 19566,
+      "body_bytes": 19566,
+      "profiler": {
+        "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-1",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_stock_status_counts=true&calculate_rating_counts=true&calculate_taxonomy_counts=product_cat&calculate_attribute_counts[0][taxonomy]=pa_path_size&calculate_attribute_counts[0][query_type]=or&calculate_attribute_counts[1][taxonomy]=pa_path_color&calculate_attribute_counts[1][query_type]=or",
+        "status": 200,
+        "server_ms": 230.38,
+        "query_count": 52,
+        "query_time_ms": 98.44,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.03167295455932617,
+            "sql": "UPDATE `wp_options` SET `option_value` = '1783007065' WHERE `option_name` = '_transient_timeout_wc_filter_data_entry_count'"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:44:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-2",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 843.081,
+      "ttfb_ms": 841.7099999999999,
+      "size_download": 19566,
+      "body_bytes": 19566,
+      "profiler": {
+        "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-2",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_stock_status_counts=true&calculate_rating_counts=true&calculate_taxonomy_counts=product_cat&calculate_attribute_counts[0][taxonomy]=pa_path_size&calculate_attribute_counts[0][query_type]=or&calculate_attribute_counts[1][taxonomy]=pa_path_color&calculate_attribute_counts[1][query_type]=or",
+        "status": 200,
+        "server_ms": 123.16,
+        "query_count": 52,
+        "query_time_ms": 98.34,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-3",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 1061.4730000000002,
+      "ttfb_ms": 1059.408,
+      "size_download": 19566,
+      "body_bytes": 19566,
+      "profiler": {
+        "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-3",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_stock_status_counts=true&calculate_rating_counts=true&calculate_taxonomy_counts=product_cat&calculate_attribute_counts[0][taxonomy]=pa_path_size&calculate_attribute_counts[0][query_type]=or&calculate_attribute_counts[1][taxonomy]=pa_path_color&calculate_attribute_counts[1][query_type]=or",
+        "status": 200,
+        "server_ms": 118.66,
+        "query_count": 52,
+        "query_time_ms": 95.04,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.028769969940185547,
+            "sql": "UPDATE `wp_options` SET `option_value` = '9' WHERE `option_name` = '_transient_wc_filter_data_entry_count'"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:44:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-4",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 940.489,
+      "ttfb_ms": 938.7379999999999,
+      "size_download": 19566,
+      "body_bytes": 19566,
+      "profiler": {
+        "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-4",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_stock_status_counts=true&calculate_rating_counts=true&calculate_taxonomy_counts=product_cat&calculate_attribute_counts[0][taxonomy]=pa_path_size&calculate_attribute_counts[0][query_type]=or&calculate_attribute_counts[1][taxonomy]=pa_path_color&calculate_attribute_counts[1][query_type]=or",
+        "status": 200,
+        "server_ms": 96.51,
+        "query_count": 52,
+        "query_time_ms": 71.96,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-5",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 619.6089999999999,
+      "ttfb_ms": 556.689,
+      "size_download": 19566,
+      "body_bytes": 19566,
+      "profiler": {
+        "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-5",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_stock_status_counts=true&calculate_rating_counts=true&calculate_taxonomy_counts=product_cat&calculate_attribute_counts[0][taxonomy]=pa_path_size&calculate_attribute_counts[0][query_type]=or&calculate_attribute_counts[1][taxonomy]=pa_path_color&calculate_attribute_counts[1][query_type]=or",
+        "status": 200,
+        "server_ms": 498.03,
+        "query_count": 52,
+        "query_time_ms": 269.8,
+        "memory_peak_mb": 18,
+        "slow_queries": [
+          {
+            "seconds": 0.15503406524658203,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_wc_filter_data_entry_count', '1', 'off') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          },
+          {
+            "seconds": 0.029035091400146484,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_timeout_wc_filter_data_entry_count', '1783007064', 'off') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:44:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-6",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 1059.4589999999998,
+      "ttfb_ms": 1057.409,
+      "size_download": 19566,
+      "body_bytes": 19566,
+      "profiler": {
+        "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-6",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_stock_status_counts=true&calculate_rating_counts=true&calculate_taxonomy_counts=product_cat&calculate_attribute_counts[0][taxonomy]=pa_path_size&calculate_attribute_counts[0][query_type]=or&calculate_attribute_counts[1][taxonomy]=pa_path_color&calculate_attribute_counts[1][query_type]=or",
+        "status": 200,
+        "server_ms": 118.57,
+        "query_count": 52,
+        "query_time_ms": 95.01,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.028783798217773438,
+            "sql": "UPDATE `wp_options` SET `option_value` = '9' WHERE `option_name` = '_transient_wc_filter_data_entry_count'"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:44:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-7",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 937.524,
+      "ttfb_ms": 936.605,
+      "size_download": 19566,
+      "body_bytes": 19566,
+      "profiler": {
+        "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-7",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_stock_status_counts=true&calculate_rating_counts=true&calculate_taxonomy_counts=product_cat&calculate_attribute_counts[0][taxonomy]=pa_path_size&calculate_attribute_counts[0][query_type]=or&calculate_attribute_counts[1][taxonomy]=pa_path_color&calculate_attribute_counts[1][query_type]=or",
+        "status": 200,
+        "server_ms": 95.58,
+        "query_count": 52,
+        "query_time_ms": 71.84,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-8",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 714.8870000000001,
+      "ttfb_ms": 713.9839999999999,
+      "size_download": 19566,
+      "body_bytes": 19566,
+      "profiler": {
+        "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-8",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_stock_status_counts=true&calculate_rating_counts=true&calculate_taxonomy_counts=product_cat&calculate_attribute_counts[0][taxonomy]=pa_path_size&calculate_attribute_counts[0][query_type]=or&calculate_attribute_counts[1][taxonomy]=pa_path_color&calculate_attribute_counts[1][query_type]=or",
+        "status": 200,
+        "server_ms": 96,
+        "query_count": 52,
+        "query_time_ms": 69.14,
+        "memory_peak_mb": 16,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-9",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 1056.493,
+      "ttfb_ms": 1055.578,
+      "size_download": 19566,
+      "body_bytes": 19566,
+      "profiler": {
+        "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-9",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_stock_status_counts=true&calculate_rating_counts=true&calculate_taxonomy_counts=product_cat&calculate_attribute_counts[0][taxonomy]=pa_path_size&calculate_attribute_counts[0][query_type]=or&calculate_attribute_counts[1][taxonomy]=pa_path_color&calculate_attribute_counts[1][query_type]=or",
+        "status": 200,
+        "server_ms": 118.53,
+        "query_count": 52,
+        "query_time_ms": 95.13,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.02676105499267578,
+            "sql": "UPDATE `wp_options` SET `option_value` = '9' WHERE `option_name` = '_transient_wc_filter_data_entry_count'"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:44:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-10",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 616.171,
+      "ttfb_ms": 553.148,
+      "size_download": 19566,
+      "body_bytes": 19566,
+      "profiler": {
+        "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-10",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_stock_status_counts=true&calculate_rating_counts=true&calculate_taxonomy_counts=product_cat&calculate_attribute_counts[0][taxonomy]=pa_path_size&calculate_attribute_counts[0][query_type]=or&calculate_attribute_counts[1][taxonomy]=pa_path_color&calculate_attribute_counts[1][query_type]=or",
+        "status": 200,
+        "server_ms": 497.96,
+        "query_count": 52,
+        "query_time_ms": 269.8,
+        "memory_peak_mb": 18,
+        "slow_queries": [
+          {
+            "seconds": 0.15888381004333496,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_timeout_wc_filter_data_entry_count', '1783007064', 'off') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          },
+          {
+            "seconds": 0.02500009536743164,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_wc_filter_data_entry_count', '1', 'off') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:44:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-11",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 935.231,
+      "ttfb_ms": 934.431,
+      "size_download": 19566,
+      "body_bytes": 19566,
+      "profiler": {
+        "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-11",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_stock_status_counts=true&calculate_rating_counts=true&calculate_taxonomy_counts=product_cat&calculate_attribute_counts[0][taxonomy]=pa_path_size&calculate_attribute_counts[0][query_type]=or&calculate_attribute_counts[1][taxonomy]=pa_path_color&calculate_attribute_counts[1][query_type]=or",
+        "status": 200,
+        "server_ms": 96.72,
+        "query_count": 52,
+        "query_time_ms": 72.43,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-12",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 1055.684,
+      "ttfb_ms": 1053.645,
+      "size_download": 19566,
+      "body_bytes": 19566,
+      "profiler": {
+        "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-12",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_stock_status_counts=true&calculate_rating_counts=true&calculate_taxonomy_counts=product_cat&calculate_attribute_counts[0][taxonomy]=pa_path_size&calculate_attribute_counts[0][query_type]=or&calculate_attribute_counts[1][taxonomy]=pa_path_color&calculate_attribute_counts[1][query_type]=or",
+        "status": 200,
+        "server_ms": 100.71,
+        "query_count": 52,
+        "query_time_ms": 76.35,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.02243208885192871,
+            "sql": "UPDATE `wp_options` SET `option_value` = '9' WHERE `option_name` = '_transient_wc_filter_data_entry_count'"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:44:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-13",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 942.984,
+      "ttfb_ms": 942.065,
+      "size_download": 19566,
+      "body_bytes": 19566,
+      "profiler": {
+        "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-13",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_stock_status_counts=true&calculate_rating_counts=true&calculate_taxonomy_counts=product_cat&calculate_attribute_counts[0][taxonomy]=pa_path_size&calculate_attribute_counts[0][query_type]=or&calculate_attribute_counts[1][taxonomy]=pa_path_color&calculate_attribute_counts[1][query_type]=or",
+        "status": 200,
+        "server_ms": 91.93,
+        "query_count": 52,
+        "query_time_ms": 68.14,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-14",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 702.474,
+      "ttfb_ms": 700.9609999999999,
+      "size_download": 19566,
+      "body_bytes": 19566,
+      "profiler": {
+        "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-14",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_stock_status_counts=true&calculate_rating_counts=true&calculate_taxonomy_counts=product_cat&calculate_attribute_counts[0][taxonomy]=pa_path_size&calculate_attribute_counts[0][query_type]=or&calculate_attribute_counts[1][taxonomy]=pa_path_color&calculate_attribute_counts[1][query_type]=or",
+        "status": 200,
+        "server_ms": 96.52,
+        "query_count": 52,
+        "query_time_ms": 71.94,
+        "memory_peak_mb": 16,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-15",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 825.3009999999999,
+      "ttfb_ms": 823.712,
+      "size_download": 19566,
+      "body_bytes": 19566,
+      "profiler": {
+        "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-15",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_stock_status_counts=true&calculate_rating_counts=true&calculate_taxonomy_counts=product_cat&calculate_attribute_counts[0][taxonomy]=pa_path_size&calculate_attribute_counts[0][query_type]=or&calculate_attribute_counts[1][taxonomy]=pa_path_color&calculate_attribute_counts[1][query_type]=or",
+        "status": 200,
+        "server_ms": 122.62,
+        "query_count": 52,
+        "query_time_ms": 99.57,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-16",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 603.182,
+      "ttfb_ms": 540.1270000000001,
+      "size_download": 19566,
+      "body_bytes": 19566,
+      "profiler": {
+        "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-16",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_stock_status_counts=true&calculate_rating_counts=true&calculate_taxonomy_counts=product_cat&calculate_attribute_counts[0][taxonomy]=pa_path_size&calculate_attribute_counts[0][query_type]=or&calculate_attribute_counts[1][taxonomy]=pa_path_color&calculate_attribute_counts[1][query_type]=or",
+        "status": 200,
+        "server_ms": 498,
+        "query_count": 52,
+        "query_time_ms": 270.16,
+        "memory_peak_mb": 18,
+        "slow_queries": [
+          {
+            "seconds": 0.1620171070098877,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_wc_filter_data_entry_count', '1', 'off') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:44:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-17",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 700.923,
+      "ttfb_ms": 699.6569999999999,
+      "size_download": 19566,
+      "body_bytes": 19566,
+      "profiler": {
+        "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-17",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_stock_status_counts=true&calculate_rating_counts=true&calculate_taxonomy_counts=product_cat&calculate_attribute_counts[0][taxonomy]=pa_path_size&calculate_attribute_counts[0][query_type]=or&calculate_attribute_counts[1][taxonomy]=pa_path_color&calculate_attribute_counts[1][query_type]=or",
+        "status": 200,
+        "server_ms": 96.24,
+        "query_count": 52,
+        "query_time_ms": 71.38,
+        "memory_peak_mb": 16,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-18",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 823.9100000000001,
+      "ttfb_ms": 822.984,
+      "size_download": 19566,
+      "body_bytes": 19566,
+      "profiler": {
+        "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-18",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_stock_status_counts=true&calculate_rating_counts=true&calculate_taxonomy_counts=product_cat&calculate_attribute_counts[0][taxonomy]=pa_path_size&calculate_attribute_counts[0][query_type]=or&calculate_attribute_counts[1][taxonomy]=pa_path_color&calculate_attribute_counts[1][query_type]=or",
+        "status": 200,
+        "server_ms": 122.32,
+        "query_count": 52,
+        "query_time_ms": 99.07,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.020373821258544922,
+            "sql": " SELECT COUNT( DISTINCT posts.ID ) as status_count FROM wp_posts as posts INNER JOIN wp_postmeta as postmeta ON posts.ID = postmeta.post_id AND postmeta.meta_key = '_stock_status' AND postmeta.meta_value = 'instock' WHERE posts.ID IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:44:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-19",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 755.285,
+      "ttfb_ms": 754.174,
+      "size_download": 19566,
+      "body_bytes": 19566,
+      "profiler": {
+        "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-19",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_stock_status_counts=true&calculate_rating_counts=true&calculate_taxonomy_counts=product_cat&calculate_attribute_counts[0][taxonomy]=pa_path_size&calculate_attribute_counts[0][query_type]=or&calculate_attribute_counts[1][taxonomy]=pa_path_color&calculate_attribute_counts[1][query_type]=or",
+        "status": 200,
+        "server_ms": 100.81,
+        "query_count": 52,
+        "query_time_ms": 71.77,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-20",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 843.938,
+      "ttfb_ms": 842.975,
+      "size_download": 19566,
+      "body_bytes": 19566,
+      "profiler": {
+        "run_id": "05-path-store-api-collection-data-facets-crud-1782920664490-20",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_stock_status_counts=true&calculate_rating_counts=true&calculate_taxonomy_counts=product_cat&calculate_attribute_counts[0][taxonomy]=pa_path_size&calculate_attribute_counts[0][query_type]=or&calculate_attribute_counts[1][taxonomy]=pa_path_color&calculate_attribute_counts[1][query_type]=or",
+        "status": 200,
+        "server_ms": 88.46,
+        "query_count": 52,
+        "query_time_ms": 64.28,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    }
+  ],
+  "fixture": {
+    "fixture_mode": "woocommerce-crud",
+    "orders": 10000,
+    "products": 5000,
+    "variations": 800,
+    "heavy_order_id": 15869,
+    "heavy_order_items": 500,
+    "first_product_id": 13,
+    "last_product_id": 8267,
+    "variable_parent_id": 1385,
+    "created_gmt": "2026-07-01T15:39:02+00:00"
+  },
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "site_url": "http://localhost:8100",
+    "server": "nginx -> php-fpm"
+  },
+  "measured_at_gmt": "2026-07-01T15:44:25.562Z",
+  "batch_ms": 1080
+}

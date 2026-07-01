@@ -1,0 +1,903 @@
+{
+  "scenario": {
+    "id": "01-path-hpos-order-search-all-crud",
+    "rank": 1,
+    "title": "HPOS Admin Order Search: CRUD All-Filter Fanout",
+    "codePath": "wc-orders&s=pathology-needle&search-filter=all via nginx/php-fpm",
+    "trigger": "Concurrent HPOS all-filter admin searches over CRUD-created HPOS orders.",
+    "concurrency": 16
+  },
+  "request": {
+    "path": "/wp-admin/admin.php?page=wc-orders&s=pathology-needle&search-filter=all"
+  },
+  "summary": {
+    "requests": 16,
+    "http_codes": [
+      200
+    ],
+    "total_ms": {
+      "min": 4676.121,
+      "median": 5058.268,
+      "p95": 5574.703,
+      "max": 5574.703
+    },
+    "server_ms": {
+      "min": 231.89,
+      "median": 380.56,
+      "p95": 4649.25,
+      "max": 4649.25
+    },
+    "query_count": {
+      "median": 123,
+      "p95": 229,
+      "max": 229
+    },
+    "query_time_ms": {
+      "median": 255.97,
+      "p95": 3669.28,
+      "max": 3669.28
+    },
+    "memory_peak_mb": {
+      "median": 48,
+      "p95": 48,
+      "max": 48
+    }
+  },
+  "samples": [
+    {
+      "run_id": "01-path-hpos-order-search-all-crud-1782920779273-1",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 4680.892,
+      "ttfb_ms": 4649.177,
+      "size_download": 363918,
+      "body_bytes": 363918,
+      "profiler": {
+        "run_id": "01-path-hpos-order-search-all-crud-1782920779273-1",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&s=pathology-needle&search-filter=all",
+        "status": 200,
+        "server_ms": 4648.17,
+        "query_count": 229,
+        "query_time_ms": 3604.55,
+        "memory_peak_mb": 46,
+        "slow_queries": [
+          {
+            "seconds": 0.3942301273345947,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:14:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.25818920135498047,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:13:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.15085482597351074,
+            "sql": "INSERT INTO `wp_actionscheduler_logs` (`action_id`, `message`, `log_date_gmt`, `log_date_local`) VALUES (15945, 'action created', '2026-07-01 15:46:22', '2026-07-01 15:46:22')"
+          },
+          {
+            "seconds": 0.13033103942871094,
+            "sql": "INSERT INTO `wp_wc_admin_notes` (`name`, `type`, `locale`, `title`, `content`, `status`, `source`, `is_snoozable`, `layout`, `image`, `is_deleted`, `is_read`, `content_data`, `date_created`, `date_reminder`) VALUES ('wc-refund-returns-page', 'info', 'en_US', 'Setup a Refund and Returns Policy page to boost your store\\'s credibility.', 'We have created a sample draft Refund and Returns Policy page for you. Please have a look and update it to fit your store.', 'unactioned', 'woocommerce-core', '0', 'plain', '', '0', '0', '{}', '2026-07-01 15:46:21', NULL)"
+          },
+          {
+            "seconds": 0.11435914039611816,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_timeout__woocommerce_helper_subscriptions', '1782921680', 'off') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          },
+          {
+            "seconds": 0.10358810424804688,
+            "sql": "UPDATE `wp_usermeta` SET `meta_value` = 'woo:4fbzgl4dcE/TlaTEHGZXN/P4' WHERE `user_id` = 1 AND `meta_key` = '_woocommerce_tracks_anon_id'"
+          },
+          {
+            "seconds": 0.09918689727783203,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_action_scheduler_last_pastdue_actions_check', '1782920783', 'off') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          },
+          {
+            "seconds": 0.0964820384979248,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_woocommerce_admin_pes_incentive_woopayments_store_has_orders', 'yes', 'off') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          },
+          {
+            "seconds": 0.09361696243286133,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('woocommerce_admin_scheduler_last_processed_order_modified_date', '2026-07-01 15:45:22', 'auto') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          },
+          {
+            "seconds": 0.09124994277954102,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('woocommerce_email_improvements_last_enabled_at', '2026-07-01 15:46:22', 'auto') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:46:23+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-path-hpos-order-search-all-crud-1782920779273-2",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 4681.305,
+      "ttfb_ms": 4649.706,
+      "size_download": 363917,
+      "body_bytes": 363917,
+      "profiler": {
+        "run_id": "01-path-hpos-order-search-all-crud-1782920779273-2",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&s=pathology-needle&search-filter=all",
+        "status": 200,
+        "server_ms": 4649.25,
+        "query_count": 220,
+        "query_time_ms": 3669.28,
+        "memory_peak_mb": 44,
+        "slow_queries": [
+          {
+            "seconds": 0.45164012908935547,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:15:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.27968692779541016,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:14:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.1622002124786377,
+            "sql": "INSERT INTO `wp_usermeta` (`user_id`, `meta_key`, `meta_value`) VALUES (1, '_woocommerce_tracks_anon_id', 'woo:wiGpa4CgxyDz2advxgjRW+6D')"
+          },
+          {
+            "seconds": 0.14722418785095215,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_site_transient_update_plugins', 'O:8:\\\"stdClass\\\":2:{s:12:\\\"last_checked\\\";i:1782920780;s:12:\\\"translations\\\";a:0:{}}', 'off') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          },
+          {
+            "seconds": 0.12479805946350098,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('wc_blocks_db_schema_version', '260', 'auto') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          },
+          {
+            "seconds": 0.11942481994628906,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:13:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.11258792877197266,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_site_transient_timeout_theme_roots', '1782922581', 'off') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          },
+          {
+            "seconds": 0.10916686058044434,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('woocommerce_email_improvements_default_enabled', 'yes', 'auto') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          },
+          {
+            "seconds": 0.1091151237487793,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient__woocommerce_helper_subscriptions', 'a:0:{}', 'off') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          },
+          {
+            "seconds": 0.1019129753112793,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient__woocommerce_helper_subscriptions', 'a:0:{}', 'off') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:46:23+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-path-hpos-order-search-all-crud-1782920779273-3",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 4679.844,
+      "ttfb_ms": 4647.679,
+      "size_download": 363917,
+      "body_bytes": 363917,
+      "profiler": {
+        "run_id": "01-path-hpos-order-search-all-crud-1782920779273-3",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&s=pathology-needle&search-filter=all",
+        "status": 200,
+        "server_ms": 4646.76,
+        "query_count": 224,
+        "query_time_ms": 3601.79,
+        "memory_peak_mb": 44,
+        "slow_queries": [
+          {
+            "seconds": 0.335284948348999,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:15:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.32443714141845703,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:14:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.24784493446350098,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:13:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.16161584854125977,
+            "sql": "INSERT INTO `wp_usermeta` (`user_id`, `meta_key`, `meta_value`) VALUES (1, '_woocommerce_tracks_anon_id', 'woo:T+RmxNE+cbSwG10N9ILMI0Bp')"
+          },
+          {
+            "seconds": 0.13937997817993164,
+            "sql": "INSERT INTO `wp_wc_admin_notes` (`name`, `type`, `locale`, `title`, `content`, `status`, `source`, `is_snoozable`, `layout`, `image`, `is_deleted`, `is_read`, `content_data`, `date_created`, `date_reminder`) VALUES ('wc-refund-returns-page', 'info', 'en_US', 'Setup a Refund and Returns Policy page to boost your store\\'s credibility.', 'We have created a sample draft Refund and Returns Policy page for you. Please have a look and update it to fit your store.', 'unactioned', 'woocommerce-core', '0', 'plain', '', '0', '0', '{}', '2026-07-01 15:46:21', NULL)"
+          },
+          {
+            "seconds": 0.12409591674804688,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('wc_blocks_db_schema_version', '260', 'auto') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          },
+          {
+            "seconds": 0.12253904342651367,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_site_transient_update_plugins', 'O:8:\\\"stdClass\\\":2:{s:12:\\\"last_checked\\\";i:1782920780;s:12:\\\"translations\\\";a:0:{}}', 'off') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          },
+          {
+            "seconds": 0.11619997024536133,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient__wc_activation_redirect','_transient_timeout__wc_activation_redirect')"
+          },
+          {
+            "seconds": 0.11254191398620605,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_site_transient_timeout_theme_roots', '1782922581', 'off') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          },
+          {
+            "seconds": 0.10900592803955078,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('woocommerce_email_improvements_default_enabled', 'yes', 'auto') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:46:23+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-path-hpos-order-search-all-crud-1782920779273-4",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 4677.554,
+      "ttfb_ms": 4646.056,
+      "size_download": 363917,
+      "body_bytes": 363917,
+      "profiler": {
+        "run_id": "01-path-hpos-order-search-all-crud-1782920779273-4",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&s=pathology-needle&search-filter=all",
+        "status": 200,
+        "server_ms": 3961.55,
+        "query_count": 201,
+        "query_time_ms": 3072,
+        "memory_peak_mb": 48,
+        "slow_queries": [
+          {
+            "seconds": 0.23809099197387695,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:13:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.20621514320373535,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:15:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.1800708770751953,
+            "sql": "DELETE FROM `wp_options` WHERE `option_name` = '_transient_timeout__wc_activation_redirect'"
+          },
+          {
+            "seconds": 0.17041587829589844,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_site_transient_update_plugins', 'O:8:\\\"stdClass\\\":2:{s:12:\\\"last_checked\\\";i:1782920781;s:12:\\\"translations\\\";a:0:{}}', 'off') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          },
+          {
+            "seconds": 0.1486809253692627,
+            "sql": "DELETE FROM `wp_options` WHERE `option_name` = '_transient__wc_activation_redirect'"
+          },
+          {
+            "seconds": 0.1427760124206543,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_woocommerce_admin_settings_payments_has_providers_with_incentive', 'no', 'off') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          },
+          {
+            "seconds": 0.1363990306854248,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:14:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.136307954788208,
+            "sql": "INSERT INTO `wp_wc_admin_notes` (`name`, `type`, `locale`, `title`, `content`, `status`, `source`, `is_snoozable`, `layout`, `image`, `is_deleted`, `is_read`, `content_data`, `date_created`, `date_reminder`) VALUES ('wc-refund-returns-page', 'info', 'en_US', 'Setup a Refund and Returns Policy page to boost your store\\'s credibility.', 'We have created a sample draft Refund and Returns Policy page for you. Please have a look and update it to fit your store.', 'unactioned', 'woocommerce-core', '0', 'plain', '', '0', '0', '{}', '2026-07-01 15:46:21', NULL)"
+          },
+          {
+            "seconds": 0.12503695487976074,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('wc_blocks_db_schema_version', '260', 'auto') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          },
+          {
+            "seconds": 0.1124429702758789,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_site_transient_timeout_theme_roots', '1782922581', 'off') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:46:23+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-path-hpos-order-search-all-crud-1782920779273-5",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 5060.949,
+      "ttfb_ms": 5058.401,
+      "size_download": 363879,
+      "body_bytes": 363879,
+      "profiler": {
+        "run_id": "01-path-hpos-order-search-all-crud-1782920779273-5",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&s=pathology-needle&search-filter=all",
+        "status": 200,
+        "server_ms": 382.23,
+        "query_count": 123,
+        "query_time_ms": 257.32,
+        "memory_peak_mb": 48,
+        "slow_queries": [
+          {
+            "seconds": 0.0726170539855957,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:15:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.0397648811340332,
+            "sql": "SELECT COUNT(*) FROM wp_wc_orders WHERE 1=1 AND (wp_wc_orders.status IN ('wc-pending','wc-processing','wc-on-hold','wc-completed','wc-cancelled','wc-refunded','wc-failed')) AND (wp_wc_orders.type = 'shop_order') AND ( ( `wp_wc_orders`.transaction_id LIKE '%pathology-needle%' OR `wp_wc_orders`.billing_email LIKE 'pathology-needle%' OR `wp_wc_orders`.id IN ( SELECT search_query_meta.order_id FROM wp_wc_orders_meta as search_query_meta WHERE search_query_meta.meta_key IN ( '_billing_address_index','_shipping_address_index' ) AND search_query_meta.meta_value LIKE '%pathology-needle%' GROUP BY search_query_meta.order_id ) OR wp_wc_orders.id in ( SELECT order_id FROM wp_woocommerce_order_items search_query_items WHERE search_query_items.order_item_name LIKE '%pathology-needle%' ) ) )"
+          },
+          {
+            "seconds": 0.03905200958251953,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:15:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.02886819839477539,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (769,770,771,772,773,774,775,776,777,778,779,780,781,782,783,784,785,786,787,788,789,790,791,792,793,794,795,796,797,798,799,800,801,802,803,804,805,806,807,808,809,810,811,812,813,814,815,816,817,818,819,820,821,822,823,824,825,826,827,828,829,830,831,832,833,834,835,836,837,838,839,840,841,842,843,844,845,846,847,848,849,850,851,852,853,854,855,856,857,858,859,860,861,862,863,864,865,866,867,868,869,870,871,872,873,874,875,876,877,878,879,880,881,882,883,884,885,886,887,888,889,890,891,892,893,894,895,896,897,898,899,900,901,902,903,904,905,906,907,908,909,910,911,912,913,914,915,916,917,918,919,920,921,922,923,924,925,926,927,928,929,930,931,932,933,934,935,936,937,938,939,940,941,942,943,944,945,946,947,948,949,950,951,952,953,954,955,956,957,958,959,960,961,962,963,964,965,966,967,968,969,970,971,972,973,974,975,"
+          },
+          {
+            "seconds": 0.020134925842285156,
+            "sql": "SELECT order_item_id as object_id, meta_id, meta_key, meta_value FROM wp_woocommerce_order_itemmeta WHERE order_item_id IN (7501, 7502, 7503, 7504, 7505, 7506, 7507, 7508, 7509, 7510, 7511, 7512, 7513, 7514, 7515, 7516, 7517, 7518, 7519, 7520, 7521, 7522, 7523, 7524, 7525, 7526, 7527, 7528, 7529, 7530, 7531, 7532, 7533, 7534, 7535, 7536, 7537, 7538, 7539, 7540, 7541, 7542, 7543, 7544, 7545, 7546, 7547, 7548, 7549, 7550, 7551, 7552, 7553, 7554, 7555, 7556, 7557, 7558, 7559, 7560, 7561, 7562, 7563, 7564, 7565, 7566, 7567, 7568, 7569, 7570, 7571, 7572, 7573, 7574, 7575, 7576, 7577, 7578, 7579, 7580, 7581, 7582, 7583, 7584, 7585, 7586, 7587, 7588, 7589, 7590, 7591, 7592, 7593, 7594, 7595, 7596, 7597, 7598, 7599, 7600, 7601, 7602, 7603, 7604, 7605, 7606, 7607, 7608, 7609, 7610, 7611, 7612, 7613, 7614, 7615, 7616, 7617, 7618, 7619, 7620, 7621, 7622, 7623, 7624, 7625, 7626, 7627, 7628, 7629, 76"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:46:24+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-path-hpos-order-search-all-crud-1782920779273-6",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 4676.121,
+      "ttfb_ms": 4644.650000000001,
+      "size_download": 363877,
+      "body_bytes": 363877,
+      "profiler": {
+        "run_id": "01-path-hpos-order-search-all-crud-1782920779273-6",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&s=pathology-needle&search-filter=all",
+        "status": 200,
+        "server_ms": 2961.09,
+        "query_count": 195,
+        "query_time_ms": 2336.92,
+        "memory_peak_mb": 48,
+        "slow_queries": [
+          {
+            "seconds": 0.2513449192047119,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:15:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.20354294776916504,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('wc_blocks_db_schema_version', '260', 'auto') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          },
+          {
+            "seconds": 0.15070891380310059,
+            "sql": "INSERT INTO `wp_usermeta` (`user_id`, `meta_key`, `meta_value`) VALUES (1, '_woocommerce_tracks_anon_id', 'woo:ARRpynFR6gTvuuVNvWZRy8gM')"
+          },
+          {
+            "seconds": 0.13941383361816406,
+            "sql": "INSERT INTO `wp_wc_admin_notes` (`name`, `type`, `locale`, `title`, `content`, `status`, `source`, `is_snoozable`, `layout`, `image`, `is_deleted`, `is_read`, `content_data`, `date_created`, `date_reminder`) VALUES ('wc-refund-returns-page', 'info', 'en_US', 'Setup a Refund and Returns Policy page to boost your store\\'s credibility.', 'We have created a sample draft Refund and Returns Policy page for you. Please have a look and update it to fit your store.', 'unactioned', 'woocommerce-core', '0', 'plain', '', '0', '0', '{}', '2026-07-01 15:46:21', NULL)"
+          },
+          {
+            "seconds": 0.08323788642883301,
+            "sql": "DELETE FROM `wp_options` WHERE `option_name` = '_transient_timeout__wc_activation_redirect'"
+          },
+          {
+            "seconds": 0.08216285705566406,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('woocommerce_email_improvements_default_enabled', 'yes', 'auto') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          },
+          {
+            "seconds": 0.07862687110900879,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'yes' WHERE `option_name` = 'woocommerce_email_auto_sync_with_theme'"
+          },
+          {
+            "seconds": 0.07506704330444336,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_site_transient_timeout_theme_roots', '1782922581', 'off') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          },
+          {
+            "seconds": 0.07281088829040527,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:14:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.06940603256225586,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('woocommerce_email_improvements_last_enabled_at', '2026-07-01 15:46:22', 'auto') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:46:23+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-path-hpos-order-search-all-crud-1782920779273-7",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 5059.764999999999,
+      "ttfb_ms": 5058.115,
+      "size_download": 363879,
+      "body_bytes": 363879,
+      "profiler": {
+        "run_id": "01-path-hpos-order-search-all-crud-1782920779273-7",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&s=pathology-needle&search-filter=all",
+        "status": 200,
+        "server_ms": 382,
+        "query_count": 123,
+        "query_time_ms": 255.97,
+        "memory_peak_mb": 48,
+        "slow_queries": [
+          {
+            "seconds": 0.07259798049926758,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:15:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.0391390323638916,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:15:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.03250694274902344,
+            "sql": "SELECT COUNT(*) FROM wp_wc_orders WHERE 1=1 AND (wp_wc_orders.status IN ('wc-pending','wc-processing','wc-on-hold','wc-completed','wc-cancelled','wc-refunded','wc-failed')) AND (wp_wc_orders.type = 'shop_order') AND ( ( `wp_wc_orders`.transaction_id LIKE '%pathology-needle%' OR `wp_wc_orders`.billing_email LIKE 'pathology-needle%' OR `wp_wc_orders`.id IN ( SELECT search_query_meta.order_id FROM wp_wc_orders_meta as search_query_meta WHERE search_query_meta.meta_key IN ( '_billing_address_index','_shipping_address_index' ) AND search_query_meta.meta_value LIKE '%pathology-needle%' GROUP BY search_query_meta.order_id ) OR wp_wc_orders.id in ( SELECT order_id FROM wp_woocommerce_order_items search_query_items WHERE search_query_items.order_item_name LIKE '%pathology-needle%' ) ) )"
+          },
+          {
+            "seconds": 0.028242826461791992,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (769,770,771,772,773,774,775,776,777,778,779,780,781,782,783,784,785,786,787,788,789,790,791,792,793,794,795,796,797,798,799,800,801,802,803,804,805,806,807,808,809,810,811,812,813,814,815,816,817,818,819,820,821,822,823,824,825,826,827,828,829,830,831,832,833,834,835,836,837,838,839,840,841,842,843,844,845,846,847,848,849,850,851,852,853,854,855,856,857,858,859,860,861,862,863,864,865,866,867,868,869,870,871,872,873,874,875,876,877,878,879,880,881,882,883,884,885,886,887,888,889,890,891,892,893,894,895,896,897,898,899,900,901,902,903,904,905,906,907,908,909,910,911,912,913,914,915,916,917,918,919,920,921,922,923,924,925,926,927,928,929,930,931,932,933,934,935,936,937,938,939,940,941,942,943,944,945,946,947,948,949,950,951,952,953,954,955,956,957,958,959,960,961,962,963,964,965,966,967,968,969,970,971,972,973,974,975,"
+          },
+          {
+            "seconds": 0.023678064346313477,
+            "sql": "SELECT order_item_id, meta_key, meta_value FROM wp_woocommerce_order_itemmeta WHERE order_item_id IN (7501,7502,7503,7504,7505,7506,7507,7508,7509,7510,7511,7512,7513,7514,7515,7516,7517,7518,7519,7520,7521,7522,7523,7524,7525,7526,7527,7528,7529,7530,7531,7532,7533,7534,7535,7536,7537,7538,7539,7540,7541,7542,7543,7544,7545,7546,7547,7548,7549,7550,7551,7552,7553,7554,7555,7556,7557,7558,7559,7560,7561,7562,7563,7564,7565,7566,7567,7568,7569,7570,7571,7572,7573,7574,7575,7576,7577,7578,7579,7580,7581,7582,7583,7584,7585,7586,7587,7588,7589,7590,7591,7592,7593,7594,7595,7596,7597,7598,7599,7600,7601,7602,7603,7604,7605,7606,7607,7608,7609,7610,7611,7612,7613,7614,7615,7616,7617,7618,7619,7620,7621,7622,7623,7624,7625,7626,7627,7628,7629,7630,7631,7632,7633,7634,7635,7636,7637,7638,7639,7640,7641,7642,7643,7644,7645,7646,7647,7648,7649,7650,7651,7652,7653,7654,7655,7656,7657,7658,7659,766"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:46:24+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-path-hpos-order-search-all-crud-1782920779273-8",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 5058.268,
+      "ttfb_ms": 5055.397,
+      "size_download": 363879,
+      "body_bytes": 363879,
+      "profiler": {
+        "run_id": "01-path-hpos-order-search-all-crud-1782920779273-8",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&s=pathology-needle&search-filter=all",
+        "status": 200,
+        "server_ms": 381.65,
+        "query_count": 123,
+        "query_time_ms": 259.4,
+        "memory_peak_mb": 48,
+        "slow_queries": [
+          {
+            "seconds": 0.07274508476257324,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:15:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.039200782775878906,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:15:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.032492876052856445,
+            "sql": "SELECT COUNT(*) FROM wp_wc_orders WHERE 1=1 AND (wp_wc_orders.status IN ('wc-pending','wc-processing','wc-on-hold','wc-completed','wc-cancelled','wc-refunded','wc-failed')) AND (wp_wc_orders.type = 'shop_order') AND ( ( `wp_wc_orders`.transaction_id LIKE '%pathology-needle%' OR `wp_wc_orders`.billing_email LIKE 'pathology-needle%' OR `wp_wc_orders`.id IN ( SELECT search_query_meta.order_id FROM wp_wc_orders_meta as search_query_meta WHERE search_query_meta.meta_key IN ( '_billing_address_index','_shipping_address_index' ) AND search_query_meta.meta_value LIKE '%pathology-needle%' GROUP BY search_query_meta.order_id ) OR wp_wc_orders.id in ( SELECT order_id FROM wp_woocommerce_order_items search_query_items WHERE search_query_items.order_item_name LIKE '%pathology-needle%' ) ) )"
+          },
+          {
+            "seconds": 0.02993607521057129,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (769,770,771,772,773,774,775,776,777,778,779,780,781,782,783,784,785,786,787,788,789,790,791,792,793,794,795,796,797,798,799,800,801,802,803,804,805,806,807,808,809,810,811,812,813,814,815,816,817,818,819,820,821,822,823,824,825,826,827,828,829,830,831,832,833,834,835,836,837,838,839,840,841,842,843,844,845,846,847,848,849,850,851,852,853,854,855,856,857,858,859,860,861,862,863,864,865,866,867,868,869,870,871,872,873,874,875,876,877,878,879,880,881,882,883,884,885,886,887,888,889,890,891,892,893,894,895,896,897,898,899,900,901,902,903,904,905,906,907,908,909,910,911,912,913,914,915,916,917,918,919,920,921,922,923,924,925,926,927,928,929,930,931,932,933,934,935,936,937,938,939,940,941,942,943,944,945,946,947,948,949,950,951,952,953,954,955,956,957,958,959,960,961,962,963,964,965,966,967,968,969,970,971,972,973,974,975,"
+          },
+          {
+            "seconds": 0.02338099479675293,
+            "sql": "SELECT order_item_id as object_id, meta_id, meta_key, meta_value FROM wp_woocommerce_order_itemmeta WHERE order_item_id IN (7501, 7502, 7503, 7504, 7505, 7506, 7507, 7508, 7509, 7510, 7511, 7512, 7513, 7514, 7515, 7516, 7517, 7518, 7519, 7520, 7521, 7522, 7523, 7524, 7525, 7526, 7527, 7528, 7529, 7530, 7531, 7532, 7533, 7534, 7535, 7536, 7537, 7538, 7539, 7540, 7541, 7542, 7543, 7544, 7545, 7546, 7547, 7548, 7549, 7550, 7551, 7552, 7553, 7554, 7555, 7556, 7557, 7558, 7559, 7560, 7561, 7562, 7563, 7564, 7565, 7566, 7567, 7568, 7569, 7570, 7571, 7572, 7573, 7574, 7575, 7576, 7577, 7578, 7579, 7580, 7581, 7582, 7583, 7584, 7585, 7586, 7587, 7588, 7589, 7590, 7591, 7592, 7593, 7594, 7595, 7596, 7597, 7598, 7599, 7600, 7601, 7602, 7603, 7604, 7605, 7606, 7607, 7608, 7609, 7610, 7611, 7612, 7613, 7614, 7615, 7616, 7617, 7618, 7619, 7620, 7621, 7622, 7623, 7624, 7625, 7626, 7627, 7628, 7629, 76"
+          },
+          {
+            "seconds": 0.020243167877197266,
+            "sql": "SELECT order_item_id, meta_key, meta_value FROM wp_woocommerce_order_itemmeta WHERE order_item_id IN (7501,7502,7503,7504,7505,7506,7507,7508,7509,7510,7511,7512,7513,7514,7515,7516,7517,7518,7519,7520,7521,7522,7523,7524,7525,7526,7527,7528,7529,7530,7531,7532,7533,7534,7535,7536,7537,7538,7539,7540,7541,7542,7543,7544,7545,7546,7547,7548,7549,7550,7551,7552,7553,7554,7555,7556,7557,7558,7559,7560,7561,7562,7563,7564,7565,7566,7567,7568,7569,7570,7571,7572,7573,7574,7575,7576,7577,7578,7579,7580,7581,7582,7583,7584,7585,7586,7587,7588,7589,7590,7591,7592,7593,7594,7595,7596,7597,7598,7599,7600,7601,7602,7603,7604,7605,7606,7607,7608,7609,7610,7611,7612,7613,7614,7615,7616,7617,7618,7619,7620,7621,7622,7623,7624,7625,7626,7627,7628,7629,7630,7631,7632,7633,7634,7635,7636,7637,7638,7639,7640,7641,7642,7643,7644,7645,7646,7647,7648,7649,7650,7651,7652,7653,7654,7655,7656,7657,7658,7659,766"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:46:24+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-path-hpos-order-search-all-crud-1782920779273-9",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 5057.540999999999,
+      "ttfb_ms": 5055.287,
+      "size_download": 363879,
+      "body_bytes": 363879,
+      "profiler": {
+        "run_id": "01-path-hpos-order-search-all-crud-1782920779273-9",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&s=pathology-needle&search-filter=all",
+        "status": 200,
+        "server_ms": 380.56,
+        "query_count": 123,
+        "query_time_ms": 258.79,
+        "memory_peak_mb": 48,
+        "slow_queries": [
+          {
+            "seconds": 0.07265615463256836,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:15:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.03905892372131348,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:15:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.03219294548034668,
+            "sql": "SELECT COUNT(*) FROM wp_wc_orders WHERE 1=1 AND (wp_wc_orders.status IN ('wc-pending','wc-processing','wc-on-hold','wc-completed','wc-cancelled','wc-refunded','wc-failed')) AND (wp_wc_orders.type = 'shop_order') AND ( ( `wp_wc_orders`.transaction_id LIKE '%pathology-needle%' OR `wp_wc_orders`.billing_email LIKE 'pathology-needle%' OR `wp_wc_orders`.id IN ( SELECT search_query_meta.order_id FROM wp_wc_orders_meta as search_query_meta WHERE search_query_meta.meta_key IN ( '_billing_address_index','_shipping_address_index' ) AND search_query_meta.meta_value LIKE '%pathology-needle%' GROUP BY search_query_meta.order_id ) OR wp_wc_orders.id in ( SELECT order_id FROM wp_woocommerce_order_items search_query_items WHERE search_query_items.order_item_name LIKE '%pathology-needle%' ) ) )"
+          },
+          {
+            "seconds": 0.025372028350830078,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (769,770,771,772,773,774,775,776,777,778,779,780,781,782,783,784,785,786,787,788,789,790,791,792,793,794,795,796,797,798,799,800,801,802,803,804,805,806,807,808,809,810,811,812,813,814,815,816,817,818,819,820,821,822,823,824,825,826,827,828,829,830,831,832,833,834,835,836,837,838,839,840,841,842,843,844,845,846,847,848,849,850,851,852,853,854,855,856,857,858,859,860,861,862,863,864,865,866,867,868,869,870,871,872,873,874,875,876,877,878,879,880,881,882,883,884,885,886,887,888,889,890,891,892,893,894,895,896,897,898,899,900,901,902,903,904,905,906,907,908,909,910,911,912,913,914,915,916,917,918,919,920,921,922,923,924,925,926,927,928,929,930,931,932,933,934,935,936,937,938,939,940,941,942,943,944,945,946,947,948,949,950,951,952,953,954,955,956,957,958,959,960,961,962,963,964,965,966,967,968,969,970,971,972,973,974,975,"
+          },
+          {
+            "seconds": 0.024227142333984375,
+            "sql": "SELECT order_item_id, meta_key, meta_value FROM wp_woocommerce_order_itemmeta WHERE order_item_id IN (7501,7502,7503,7504,7505,7506,7507,7508,7509,7510,7511,7512,7513,7514,7515,7516,7517,7518,7519,7520,7521,7522,7523,7524,7525,7526,7527,7528,7529,7530,7531,7532,7533,7534,7535,7536,7537,7538,7539,7540,7541,7542,7543,7544,7545,7546,7547,7548,7549,7550,7551,7552,7553,7554,7555,7556,7557,7558,7559,7560,7561,7562,7563,7564,7565,7566,7567,7568,7569,7570,7571,7572,7573,7574,7575,7576,7577,7578,7579,7580,7581,7582,7583,7584,7585,7586,7587,7588,7589,7590,7591,7592,7593,7594,7595,7596,7597,7598,7599,7600,7601,7602,7603,7604,7605,7606,7607,7608,7609,7610,7611,7612,7613,7614,7615,7616,7617,7618,7619,7620,7621,7622,7623,7624,7625,7626,7627,7628,7629,7630,7631,7632,7633,7634,7635,7636,7637,7638,7639,7640,7641,7642,7643,7644,7645,7646,7647,7648,7649,7650,7651,7652,7653,7654,7655,7656,7657,7658,7659,766"
+          },
+          {
+            "seconds": 0.023746967315673828,
+            "sql": "SELECT order_item_id as object_id, meta_id, meta_key, meta_value FROM wp_woocommerce_order_itemmeta WHERE order_item_id IN (7501, 7502, 7503, 7504, 7505, 7506, 7507, 7508, 7509, 7510, 7511, 7512, 7513, 7514, 7515, 7516, 7517, 7518, 7519, 7520, 7521, 7522, 7523, 7524, 7525, 7526, 7527, 7528, 7529, 7530, 7531, 7532, 7533, 7534, 7535, 7536, 7537, 7538, 7539, 7540, 7541, 7542, 7543, 7544, 7545, 7546, 7547, 7548, 7549, 7550, 7551, 7552, 7553, 7554, 7555, 7556, 7557, 7558, 7559, 7560, 7561, 7562, 7563, 7564, 7565, 7566, 7567, 7568, 7569, 7570, 7571, 7572, 7573, 7574, 7575, 7576, 7577, 7578, 7579, 7580, 7581, 7582, 7583, 7584, 7585, 7586, 7587, 7588, 7589, 7590, 7591, 7592, 7593, 7594, 7595, 7596, 7597, 7598, 7599, 7600, 7601, 7602, 7603, 7604, 7605, 7606, 7607, 7608, 7609, 7610, 7611, 7612, 7613, 7614, 7615, 7616, 7617, 7618, 7619, 7620, 7621, 7622, 7623, 7624, 7625, 7626, 7627, 7628, 7629, 76"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:46:24+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-path-hpos-order-search-all-crud-1782920779273-10",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 4994.507,
+      "ttfb_ms": 4993.286,
+      "size_download": 363879,
+      "body_bytes": 363879,
+      "profiler": {
+        "run_id": "01-path-hpos-order-search-all-crud-1782920779273-10",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&s=pathology-needle&search-filter=all",
+        "status": 200,
+        "server_ms": 318.46,
+        "query_count": 123,
+        "query_time_ms": 200.61,
+        "memory_peak_mb": 48,
+        "slow_queries": [
+          {
+            "seconds": 0.03894400596618652,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:15:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.03389692306518555,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:16:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.02856588363647461,
+            "sql": "SELECT COUNT(*) FROM wp_wc_orders WHERE 1=1 AND (wp_wc_orders.status IN ('wc-pending','wc-processing','wc-on-hold','wc-completed','wc-cancelled','wc-refunded','wc-failed')) AND (wp_wc_orders.type = 'shop_order') AND ( ( `wp_wc_orders`.transaction_id LIKE '%pathology-needle%' OR `wp_wc_orders`.billing_email LIKE 'pathology-needle%' OR `wp_wc_orders`.id IN ( SELECT search_query_meta.order_id FROM wp_wc_orders_meta as search_query_meta WHERE search_query_meta.meta_key IN ( '_billing_address_index','_shipping_address_index' ) AND search_query_meta.meta_value LIKE '%pathology-needle%' GROUP BY search_query_meta.order_id ) OR wp_wc_orders.id in ( SELECT order_id FROM wp_woocommerce_order_items search_query_items WHERE search_query_items.order_item_name LIKE '%pathology-needle%' ) ) )"
+          },
+          {
+            "seconds": 0.022693872451782227,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (769,770,771,772,773,774,775,776,777,778,779,780,781,782,783,784,785,786,787,788,789,790,791,792,793,794,795,796,797,798,799,800,801,802,803,804,805,806,807,808,809,810,811,812,813,814,815,816,817,818,819,820,821,822,823,824,825,826,827,828,829,830,831,832,833,834,835,836,837,838,839,840,841,842,843,844,845,846,847,848,849,850,851,852,853,854,855,856,857,858,859,860,861,862,863,864,865,866,867,868,869,870,871,872,873,874,875,876,877,878,879,880,881,882,883,884,885,886,887,888,889,890,891,892,893,894,895,896,897,898,899,900,901,902,903,904,905,906,907,908,909,910,911,912,913,914,915,916,917,918,919,920,921,922,923,924,925,926,927,928,929,930,931,932,933,934,935,936,937,938,939,940,941,942,943,944,945,946,947,948,949,950,951,952,953,954,955,956,957,958,959,960,961,962,963,964,965,966,967,968,969,970,971,972,973,974,975,"
+          },
+          {
+            "seconds": 0.02240586280822754,
+            "sql": "SELECT order_item_id, meta_key, meta_value FROM wp_woocommerce_order_itemmeta WHERE order_item_id IN (7501,7502,7503,7504,7505,7506,7507,7508,7509,7510,7511,7512,7513,7514,7515,7516,7517,7518,7519,7520,7521,7522,7523,7524,7525,7526,7527,7528,7529,7530,7531,7532,7533,7534,7535,7536,7537,7538,7539,7540,7541,7542,7543,7544,7545,7546,7547,7548,7549,7550,7551,7552,7553,7554,7555,7556,7557,7558,7559,7560,7561,7562,7563,7564,7565,7566,7567,7568,7569,7570,7571,7572,7573,7574,7575,7576,7577,7578,7579,7580,7581,7582,7583,7584,7585,7586,7587,7588,7589,7590,7591,7592,7593,7594,7595,7596,7597,7598,7599,7600,7601,7602,7603,7604,7605,7606,7607,7608,7609,7610,7611,7612,7613,7614,7615,7616,7617,7618,7619,7620,7621,7622,7623,7624,7625,7626,7627,7628,7629,7630,7631,7632,7633,7634,7635,7636,7637,7638,7639,7640,7641,7642,7643,7644,7645,7646,7647,7648,7649,7650,7651,7652,7653,7654,7655,7656,7657,7658,7659,766"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:46:24+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-path-hpos-order-search-all-crud-1782920779273-11",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 5363.581,
+      "ttfb_ms": 5361.875999999999,
+      "size_download": 363879,
+      "body_bytes": 363879,
+      "profiler": {
+        "run_id": "01-path-hpos-order-search-all-crud-1782920779273-11",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&s=pathology-needle&search-filter=all",
+        "status": 200,
+        "server_ms": 368.86,
+        "query_count": 122,
+        "query_time_ms": 241.16,
+        "memory_peak_mb": 48,
+        "slow_queries": [
+          {
+            "seconds": 0.08287215232849121,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:15:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.03519415855407715,
+            "sql": "SELECT order_item_id, meta_key, meta_value FROM wp_woocommerce_order_itemmeta WHERE order_item_id IN (7501,7502,7503,7504,7505,7506,7507,7508,7509,7510,7511,7512,7513,7514,7515,7516,7517,7518,7519,7520,7521,7522,7523,7524,7525,7526,7527,7528,7529,7530,7531,7532,7533,7534,7535,7536,7537,7538,7539,7540,7541,7542,7543,7544,7545,7546,7547,7548,7549,7550,7551,7552,7553,7554,7555,7556,7557,7558,7559,7560,7561,7562,7563,7564,7565,7566,7567,7568,7569,7570,7571,7572,7573,7574,7575,7576,7577,7578,7579,7580,7581,7582,7583,7584,7585,7586,7587,7588,7589,7590,7591,7592,7593,7594,7595,7596,7597,7598,7599,7600,7601,7602,7603,7604,7605,7606,7607,7608,7609,7610,7611,7612,7613,7614,7615,7616,7617,7618,7619,7620,7621,7622,7623,7624,7625,7626,7627,7628,7629,7630,7631,7632,7633,7634,7635,7636,7637,7638,7639,7640,7641,7642,7643,7644,7645,7646,7647,7648,7649,7650,7651,7652,7653,7654,7655,7656,7657,7658,7659,766"
+          },
+          {
+            "seconds": 0.029505014419555664,
+            "sql": "SELECT COUNT(*) FROM wp_wc_orders WHERE 1=1 AND (wp_wc_orders.status IN ('wc-pending','wc-processing','wc-on-hold','wc-completed','wc-cancelled','wc-refunded','wc-failed')) AND (wp_wc_orders.type = 'shop_order') AND ( ( `wp_wc_orders`.transaction_id LIKE '%pathology-needle%' OR `wp_wc_orders`.billing_email LIKE 'pathology-needle%' OR `wp_wc_orders`.id IN ( SELECT search_query_meta.order_id FROM wp_wc_orders_meta as search_query_meta WHERE search_query_meta.meta_key IN ( '_billing_address_index','_shipping_address_index' ) AND search_query_meta.meta_value LIKE '%pathology-needle%' GROUP BY search_query_meta.order_id ) OR wp_wc_orders.id in ( SELECT order_id FROM wp_woocommerce_order_items search_query_items WHERE search_query_items.order_item_name LIKE '%pathology-needle%' ) ) )"
+          },
+          {
+            "seconds": 0.02768397331237793,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (769,770,771,772,773,774,775,776,777,778,779,780,781,782,783,784,785,786,787,788,789,790,791,792,793,794,795,796,797,798,799,800,801,802,803,804,805,806,807,808,809,810,811,812,813,814,815,816,817,818,819,820,821,822,823,824,825,826,827,828,829,830,831,832,833,834,835,836,837,838,839,840,841,842,843,844,845,846,847,848,849,850,851,852,853,854,855,856,857,858,859,860,861,862,863,864,865,866,867,868,869,870,871,872,873,874,875,876,877,878,879,880,881,882,883,884,885,886,887,888,889,890,891,892,893,894,895,896,897,898,899,900,901,902,903,904,905,906,907,908,909,910,911,912,913,914,915,916,917,918,919,920,921,922,923,924,925,926,927,928,929,930,931,932,933,934,935,936,937,938,939,940,941,942,943,944,945,946,947,948,949,950,951,952,953,954,955,956,957,958,959,960,961,962,963,964,965,966,967,968,969,970,971,972,973,974,975,"
+          },
+          {
+            "seconds": 0.02564692497253418,
+            "sql": "SELECT order_item_id as object_id, meta_id, meta_key, meta_value FROM wp_woocommerce_order_itemmeta WHERE order_item_id IN (7501, 7502, 7503, 7504, 7505, 7506, 7507, 7508, 7509, 7510, 7511, 7512, 7513, 7514, 7515, 7516, 7517, 7518, 7519, 7520, 7521, 7522, 7523, 7524, 7525, 7526, 7527, 7528, 7529, 7530, 7531, 7532, 7533, 7534, 7535, 7536, 7537, 7538, 7539, 7540, 7541, 7542, 7543, 7544, 7545, 7546, 7547, 7548, 7549, 7550, 7551, 7552, 7553, 7554, 7555, 7556, 7557, 7558, 7559, 7560, 7561, 7562, 7563, 7564, 7565, 7566, 7567, 7568, 7569, 7570, 7571, 7572, 7573, 7574, 7575, 7576, 7577, 7578, 7579, 7580, 7581, 7582, 7583, 7584, 7585, 7586, 7587, 7588, 7589, 7590, 7591, 7592, 7593, 7594, 7595, 7596, 7597, 7598, 7599, 7600, 7601, 7602, 7603, 7604, 7605, 7606, 7607, 7608, 7609, 7610, 7611, 7612, 7613, 7614, 7615, 7616, 7617, 7618, 7619, 7620, 7621, 7622, 7623, 7624, 7625, 7626, 7627, 7628, 7629, 76"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:46:24+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-path-hpos-order-search-all-crud-1782920779273-12",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 5361.584,
+      "ttfb_ms": 5360.003,
+      "size_download": 363879,
+      "body_bytes": 363879,
+      "profiler": {
+        "run_id": "01-path-hpos-order-search-all-crud-1782920779273-12",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&s=pathology-needle&search-filter=all",
+        "status": 200,
+        "server_ms": 306.97,
+        "query_count": 122,
+        "query_time_ms": 191.76,
+        "memory_peak_mb": 48,
+        "slow_queries": [
+          {
+            "seconds": 0.03308701515197754,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (769,770,771,772,773,774,775,776,777,778,779,780,781,782,783,784,785,786,787,788,789,790,791,792,793,794,795,796,797,798,799,800,801,802,803,804,805,806,807,808,809,810,811,812,813,814,815,816,817,818,819,820,821,822,823,824,825,826,827,828,829,830,831,832,833,834,835,836,837,838,839,840,841,842,843,844,845,846,847,848,849,850,851,852,853,854,855,856,857,858,859,860,861,862,863,864,865,866,867,868,869,870,871,872,873,874,875,876,877,878,879,880,881,882,883,884,885,886,887,888,889,890,891,892,893,894,895,896,897,898,899,900,901,902,903,904,905,906,907,908,909,910,911,912,913,914,915,916,917,918,919,920,921,922,923,924,925,926,927,928,929,930,931,932,933,934,935,936,937,938,939,940,941,942,943,944,945,946,947,948,949,950,951,952,953,954,955,956,957,958,959,960,961,962,963,964,965,966,967,968,969,970,971,972,973,974,975,"
+          },
+          {
+            "seconds": 0.0328059196472168,
+            "sql": "SELECT order_item_id, meta_key, meta_value FROM wp_woocommerce_order_itemmeta WHERE order_item_id IN (7501,7502,7503,7504,7505,7506,7507,7508,7509,7510,7511,7512,7513,7514,7515,7516,7517,7518,7519,7520,7521,7522,7523,7524,7525,7526,7527,7528,7529,7530,7531,7532,7533,7534,7535,7536,7537,7538,7539,7540,7541,7542,7543,7544,7545,7546,7547,7548,7549,7550,7551,7552,7553,7554,7555,7556,7557,7558,7559,7560,7561,7562,7563,7564,7565,7566,7567,7568,7569,7570,7571,7572,7573,7574,7575,7576,7577,7578,7579,7580,7581,7582,7583,7584,7585,7586,7587,7588,7589,7590,7591,7592,7593,7594,7595,7596,7597,7598,7599,7600,7601,7602,7603,7604,7605,7606,7607,7608,7609,7610,7611,7612,7613,7614,7615,7616,7617,7618,7619,7620,7621,7622,7623,7624,7625,7626,7627,7628,7629,7630,7631,7632,7633,7634,7635,7636,7637,7638,7639,7640,7641,7642,7643,7644,7645,7646,7647,7648,7649,7650,7651,7652,7653,7654,7655,7656,7657,7658,7659,766"
+          },
+          {
+            "seconds": 0.031613826751708984,
+            "sql": "SELECT COUNT(*) FROM wp_wc_orders WHERE 1=1 AND (wp_wc_orders.status IN ('wc-pending','wc-processing','wc-on-hold','wc-completed','wc-cancelled','wc-refunded','wc-failed')) AND (wp_wc_orders.type = 'shop_order') AND ( ( `wp_wc_orders`.transaction_id LIKE '%pathology-needle%' OR `wp_wc_orders`.billing_email LIKE 'pathology-needle%' OR `wp_wc_orders`.id IN ( SELECT search_query_meta.order_id FROM wp_wc_orders_meta as search_query_meta WHERE search_query_meta.meta_key IN ( '_billing_address_index','_shipping_address_index' ) AND search_query_meta.meta_value LIKE '%pathology-needle%' GROUP BY search_query_meta.order_id ) OR wp_wc_orders.id in ( SELECT order_id FROM wp_woocommerce_order_items search_query_items WHERE search_query_items.order_item_name LIKE '%pathology-needle%' ) ) )"
+          },
+          {
+            "seconds": 0.027213096618652344,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:15:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.027161121368408203,
+            "sql": "SELECT order_item_id as object_id, meta_id, meta_key, meta_value FROM wp_woocommerce_order_itemmeta WHERE order_item_id IN (7501, 7502, 7503, 7504, 7505, 7506, 7507, 7508, 7509, 7510, 7511, 7512, 7513, 7514, 7515, 7516, 7517, 7518, 7519, 7520, 7521, 7522, 7523, 7524, 7525, 7526, 7527, 7528, 7529, 7530, 7531, 7532, 7533, 7534, 7535, 7536, 7537, 7538, 7539, 7540, 7541, 7542, 7543, 7544, 7545, 7546, 7547, 7548, 7549, 7550, 7551, 7552, 7553, 7554, 7555, 7556, 7557, 7558, 7559, 7560, 7561, 7562, 7563, 7564, 7565, 7566, 7567, 7568, 7569, 7570, 7571, 7572, 7573, 7574, 7575, 7576, 7577, 7578, 7579, 7580, 7581, 7582, 7583, 7584, 7585, 7586, 7587, 7588, 7589, 7590, 7591, 7592, 7593, 7594, 7595, 7596, 7597, 7598, 7599, 7600, 7601, 7602, 7603, 7604, 7605, 7606, 7607, 7608, 7609, 7610, 7611, 7612, 7613, 7614, 7615, 7616, 7617, 7618, 7619, 7620, 7621, 7622, 7623, 7624, 7625, 7626, 7627, 7628, 7629, 76"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:46:24+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-path-hpos-order-search-all-crud-1782920779273-13",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 5346.5689999999995,
+      "ttfb_ms": 5344.8859999999995,
+      "size_download": 363879,
+      "body_bytes": 363879,
+      "profiler": {
+        "run_id": "01-path-hpos-order-search-all-crud-1782920779273-13",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&s=pathology-needle&search-filter=all",
+        "status": 200,
+        "server_ms": 303.73,
+        "query_count": 122,
+        "query_time_ms": 184.13,
+        "memory_peak_mb": 48,
+        "slow_queries": [
+          {
+            "seconds": 0.03355097770690918,
+            "sql": "SELECT COUNT(*) FROM wp_wc_orders WHERE 1=1 AND (wp_wc_orders.status IN ('wc-pending','wc-processing','wc-on-hold','wc-completed','wc-cancelled','wc-refunded','wc-failed')) AND (wp_wc_orders.type = 'shop_order') AND ( ( `wp_wc_orders`.transaction_id LIKE '%pathology-needle%' OR `wp_wc_orders`.billing_email LIKE 'pathology-needle%' OR `wp_wc_orders`.id IN ( SELECT search_query_meta.order_id FROM wp_wc_orders_meta as search_query_meta WHERE search_query_meta.meta_key IN ( '_billing_address_index','_shipping_address_index' ) AND search_query_meta.meta_value LIKE '%pathology-needle%' GROUP BY search_query_meta.order_id ) OR wp_wc_orders.id in ( SELECT order_id FROM wp_woocommerce_order_items search_query_items WHERE search_query_items.order_item_name LIKE '%pathology-needle%' ) ) )"
+          },
+          {
+            "seconds": 0.03125882148742676,
+            "sql": "SELECT order_item_id, meta_key, meta_value FROM wp_woocommerce_order_itemmeta WHERE order_item_id IN (7501,7502,7503,7504,7505,7506,7507,7508,7509,7510,7511,7512,7513,7514,7515,7516,7517,7518,7519,7520,7521,7522,7523,7524,7525,7526,7527,7528,7529,7530,7531,7532,7533,7534,7535,7536,7537,7538,7539,7540,7541,7542,7543,7544,7545,7546,7547,7548,7549,7550,7551,7552,7553,7554,7555,7556,7557,7558,7559,7560,7561,7562,7563,7564,7565,7566,7567,7568,7569,7570,7571,7572,7573,7574,7575,7576,7577,7578,7579,7580,7581,7582,7583,7584,7585,7586,7587,7588,7589,7590,7591,7592,7593,7594,7595,7596,7597,7598,7599,7600,7601,7602,7603,7604,7605,7606,7607,7608,7609,7610,7611,7612,7613,7614,7615,7616,7617,7618,7619,7620,7621,7622,7623,7624,7625,7626,7627,7628,7629,7630,7631,7632,7633,7634,7635,7636,7637,7638,7639,7640,7641,7642,7643,7644,7645,7646,7647,7648,7649,7650,7651,7652,7653,7654,7655,7656,7657,7658,7659,766"
+          },
+          {
+            "seconds": 0.027550935745239258,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (769,770,771,772,773,774,775,776,777,778,779,780,781,782,783,784,785,786,787,788,789,790,791,792,793,794,795,796,797,798,799,800,801,802,803,804,805,806,807,808,809,810,811,812,813,814,815,816,817,818,819,820,821,822,823,824,825,826,827,828,829,830,831,832,833,834,835,836,837,838,839,840,841,842,843,844,845,846,847,848,849,850,851,852,853,854,855,856,857,858,859,860,861,862,863,864,865,866,867,868,869,870,871,872,873,874,875,876,877,878,879,880,881,882,883,884,885,886,887,888,889,890,891,892,893,894,895,896,897,898,899,900,901,902,903,904,905,906,907,908,909,910,911,912,913,914,915,916,917,918,919,920,921,922,923,924,925,926,927,928,929,930,931,932,933,934,935,936,937,938,939,940,941,942,943,944,945,946,947,948,949,950,951,952,953,954,955,956,957,958,959,960,961,962,963,964,965,966,967,968,969,970,971,972,973,974,975,"
+          },
+          {
+            "seconds": 0.02729487419128418,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:15:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.025556087493896484,
+            "sql": "SELECT order_item_id as object_id, meta_id, meta_key, meta_value FROM wp_woocommerce_order_itemmeta WHERE order_item_id IN (7501, 7502, 7503, 7504, 7505, 7506, 7507, 7508, 7509, 7510, 7511, 7512, 7513, 7514, 7515, 7516, 7517, 7518, 7519, 7520, 7521, 7522, 7523, 7524, 7525, 7526, 7527, 7528, 7529, 7530, 7531, 7532, 7533, 7534, 7535, 7536, 7537, 7538, 7539, 7540, 7541, 7542, 7543, 7544, 7545, 7546, 7547, 7548, 7549, 7550, 7551, 7552, 7553, 7554, 7555, 7556, 7557, 7558, 7559, 7560, 7561, 7562, 7563, 7564, 7565, 7566, 7567, 7568, 7569, 7570, 7571, 7572, 7573, 7574, 7575, 7576, 7577, 7578, 7579, 7580, 7581, 7582, 7583, 7584, 7585, 7586, 7587, 7588, 7589, 7590, 7591, 7592, 7593, 7594, 7595, 7596, 7597, 7598, 7599, 7600, 7601, 7602, 7603, 7604, 7605, 7606, 7607, 7608, 7609, 7610, 7611, 7612, 7613, 7614, 7615, 7616, 7617, 7618, 7619, 7620, 7621, 7622, 7623, 7624, 7625, 7626, 7627, 7628, 7629, 76"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:46:24+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-path-hpos-order-search-all-crud-1782920779273-14",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 5343.971,
+      "ttfb_ms": 5342.5,
+      "size_download": 363879,
+      "body_bytes": 363879,
+      "profiler": {
+        "run_id": "01-path-hpos-order-search-all-crud-1782920779273-14",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&s=pathology-needle&search-filter=all",
+        "status": 200,
+        "server_ms": 301.37,
+        "query_count": 122,
+        "query_time_ms": 185.16,
+        "memory_peak_mb": 48,
+        "slow_queries": [
+          {
+            "seconds": 0.03191399574279785,
+            "sql": "SELECT order_item_id, meta_key, meta_value FROM wp_woocommerce_order_itemmeta WHERE order_item_id IN (7501,7502,7503,7504,7505,7506,7507,7508,7509,7510,7511,7512,7513,7514,7515,7516,7517,7518,7519,7520,7521,7522,7523,7524,7525,7526,7527,7528,7529,7530,7531,7532,7533,7534,7535,7536,7537,7538,7539,7540,7541,7542,7543,7544,7545,7546,7547,7548,7549,7550,7551,7552,7553,7554,7555,7556,7557,7558,7559,7560,7561,7562,7563,7564,7565,7566,7567,7568,7569,7570,7571,7572,7573,7574,7575,7576,7577,7578,7579,7580,7581,7582,7583,7584,7585,7586,7587,7588,7589,7590,7591,7592,7593,7594,7595,7596,7597,7598,7599,7600,7601,7602,7603,7604,7605,7606,7607,7608,7609,7610,7611,7612,7613,7614,7615,7616,7617,7618,7619,7620,7621,7622,7623,7624,7625,7626,7627,7628,7629,7630,7631,7632,7633,7634,7635,7636,7637,7638,7639,7640,7641,7642,7643,7644,7645,7646,7647,7648,7649,7650,7651,7652,7653,7654,7655,7656,7657,7658,7659,766"
+          },
+          {
+            "seconds": 0.03029489517211914,
+            "sql": "SELECT COUNT(*) FROM wp_wc_orders WHERE 1=1 AND (wp_wc_orders.status IN ('wc-pending','wc-processing','wc-on-hold','wc-completed','wc-cancelled','wc-refunded','wc-failed')) AND (wp_wc_orders.type = 'shop_order') AND ( ( `wp_wc_orders`.transaction_id LIKE '%pathology-needle%' OR `wp_wc_orders`.billing_email LIKE 'pathology-needle%' OR `wp_wc_orders`.id IN ( SELECT search_query_meta.order_id FROM wp_wc_orders_meta as search_query_meta WHERE search_query_meta.meta_key IN ( '_billing_address_index','_shipping_address_index' ) AND search_query_meta.meta_value LIKE '%pathology-needle%' GROUP BY search_query_meta.order_id ) OR wp_wc_orders.id in ( SELECT order_id FROM wp_woocommerce_order_items search_query_items WHERE search_query_items.order_item_name LIKE '%pathology-needle%' ) ) )"
+          },
+          {
+            "seconds": 0.02759099006652832,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (769,770,771,772,773,774,775,776,777,778,779,780,781,782,783,784,785,786,787,788,789,790,791,792,793,794,795,796,797,798,799,800,801,802,803,804,805,806,807,808,809,810,811,812,813,814,815,816,817,818,819,820,821,822,823,824,825,826,827,828,829,830,831,832,833,834,835,836,837,838,839,840,841,842,843,844,845,846,847,848,849,850,851,852,853,854,855,856,857,858,859,860,861,862,863,864,865,866,867,868,869,870,871,872,873,874,875,876,877,878,879,880,881,882,883,884,885,886,887,888,889,890,891,892,893,894,895,896,897,898,899,900,901,902,903,904,905,906,907,908,909,910,911,912,913,914,915,916,917,918,919,920,921,922,923,924,925,926,927,928,929,930,931,932,933,934,935,936,937,938,939,940,941,942,943,944,945,946,947,948,949,950,951,952,953,954,955,956,957,958,959,960,961,962,963,964,965,966,967,968,969,970,971,972,973,974,975,"
+          },
+          {
+            "seconds": 0.027409076690673828,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:15:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.026717185974121094,
+            "sql": "SELECT order_item_id as object_id, meta_id, meta_key, meta_value FROM wp_woocommerce_order_itemmeta WHERE order_item_id IN (7501, 7502, 7503, 7504, 7505, 7506, 7507, 7508, 7509, 7510, 7511, 7512, 7513, 7514, 7515, 7516, 7517, 7518, 7519, 7520, 7521, 7522, 7523, 7524, 7525, 7526, 7527, 7528, 7529, 7530, 7531, 7532, 7533, 7534, 7535, 7536, 7537, 7538, 7539, 7540, 7541, 7542, 7543, 7544, 7545, 7546, 7547, 7548, 7549, 7550, 7551, 7552, 7553, 7554, 7555, 7556, 7557, 7558, 7559, 7560, 7561, 7562, 7563, 7564, 7565, 7566, 7567, 7568, 7569, 7570, 7571, 7572, 7573, 7574, 7575, 7576, 7577, 7578, 7579, 7580, 7581, 7582, 7583, 7584, 7585, 7586, 7587, 7588, 7589, 7590, 7591, 7592, 7593, 7594, 7595, 7596, 7597, 7598, 7599, 7600, 7601, 7602, 7603, 7604, 7605, 7606, 7607, 7608, 7609, 7610, 7611, 7612, 7613, 7614, 7615, 7616, 7617, 7618, 7619, 7620, 7621, 7622, 7623, 7624, 7625, 7626, 7627, 7628, 7629, 76"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:46:24+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-path-hpos-order-search-all-crud-1782920779273-15",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 5347.984,
+      "ttfb_ms": 5345.964999999999,
+      "size_download": 363879,
+      "body_bytes": 363879,
+      "profiler": {
+        "run_id": "01-path-hpos-order-search-all-crud-1782920779273-15",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&s=pathology-needle&search-filter=all",
+        "status": 200,
+        "server_ms": 306.58,
+        "query_count": 122,
+        "query_time_ms": 185.6,
+        "memory_peak_mb": 48,
+        "slow_queries": [
+          {
+            "seconds": 0.033514976501464844,
+            "sql": "SELECT order_item_id, meta_key, meta_value FROM wp_woocommerce_order_itemmeta WHERE order_item_id IN (7501,7502,7503,7504,7505,7506,7507,7508,7509,7510,7511,7512,7513,7514,7515,7516,7517,7518,7519,7520,7521,7522,7523,7524,7525,7526,7527,7528,7529,7530,7531,7532,7533,7534,7535,7536,7537,7538,7539,7540,7541,7542,7543,7544,7545,7546,7547,7548,7549,7550,7551,7552,7553,7554,7555,7556,7557,7558,7559,7560,7561,7562,7563,7564,7565,7566,7567,7568,7569,7570,7571,7572,7573,7574,7575,7576,7577,7578,7579,7580,7581,7582,7583,7584,7585,7586,7587,7588,7589,7590,7591,7592,7593,7594,7595,7596,7597,7598,7599,7600,7601,7602,7603,7604,7605,7606,7607,7608,7609,7610,7611,7612,7613,7614,7615,7616,7617,7618,7619,7620,7621,7622,7623,7624,7625,7626,7627,7628,7629,7630,7631,7632,7633,7634,7635,7636,7637,7638,7639,7640,7641,7642,7643,7644,7645,7646,7647,7648,7649,7650,7651,7652,7653,7654,7655,7656,7657,7658,7659,766"
+          },
+          {
+            "seconds": 0.0316309928894043,
+            "sql": "SELECT COUNT(*) FROM wp_wc_orders WHERE 1=1 AND (wp_wc_orders.status IN ('wc-pending','wc-processing','wc-on-hold','wc-completed','wc-cancelled','wc-refunded','wc-failed')) AND (wp_wc_orders.type = 'shop_order') AND ( ( `wp_wc_orders`.transaction_id LIKE '%pathology-needle%' OR `wp_wc_orders`.billing_email LIKE 'pathology-needle%' OR `wp_wc_orders`.id IN ( SELECT search_query_meta.order_id FROM wp_wc_orders_meta as search_query_meta WHERE search_query_meta.meta_key IN ( '_billing_address_index','_shipping_address_index' ) AND search_query_meta.meta_value LIKE '%pathology-needle%' GROUP BY search_query_meta.order_id ) OR wp_wc_orders.id in ( SELECT order_id FROM wp_woocommerce_order_items search_query_items WHERE search_query_items.order_item_name LIKE '%pathology-needle%' ) ) )"
+          },
+          {
+            "seconds": 0.029133081436157227,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (769,770,771,772,773,774,775,776,777,778,779,780,781,782,783,784,785,786,787,788,789,790,791,792,793,794,795,796,797,798,799,800,801,802,803,804,805,806,807,808,809,810,811,812,813,814,815,816,817,818,819,820,821,822,823,824,825,826,827,828,829,830,831,832,833,834,835,836,837,838,839,840,841,842,843,844,845,846,847,848,849,850,851,852,853,854,855,856,857,858,859,860,861,862,863,864,865,866,867,868,869,870,871,872,873,874,875,876,877,878,879,880,881,882,883,884,885,886,887,888,889,890,891,892,893,894,895,896,897,898,899,900,901,902,903,904,905,906,907,908,909,910,911,912,913,914,915,916,917,918,919,920,921,922,923,924,925,926,927,928,929,930,931,932,933,934,935,936,937,938,939,940,941,942,943,944,945,946,947,948,949,950,951,952,953,954,955,956,957,958,959,960,961,962,963,964,965,966,967,968,969,970,971,972,973,974,975,"
+          },
+          {
+            "seconds": 0.025933027267456055,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:15:{i:1782914156;a:1:{s:34:\\\"wp_privacy_delete_old_export_files\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}}i:1782914157;a:1:{s:30:\\\"wp_delete_temp_updater_backups\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"weekly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:604800;}}}i:1782914160;a:1:{s:26:\\\"action_scheduler_run_queue\\\";a:1:{s:32:\\\"0d04ed39571b55704c122d726248bbac\\\";a:3:{s:8:\\\"schedule\\\";s:12:\\\"every_minute\\\";s:4:\\\"args\\\";a:1:{i:0;s:7:\\\"WP Cron\\\";}s:8:\\\"interval\\\";i:60;}}}i:1782914167;a:3:{s:20:\\\"jetpack_clean_nonces\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:8:\\\"schedule\\\";s:6:\\\"hourly\\\";s:4:\\\"args\\\";a:0:{}s:8:\\\"interval\\\";i:3600;}}s:20:\\\"jetpack_v2_heartbeat\\\";a:1:{s:32:\\\"40cd750bba9870f18aada2478b24840a\\\";a:3:{s:"
+          },
+          {
+            "seconds": 0.02563786506652832,
+            "sql": "SELECT order_item_id as object_id, meta_id, meta_key, meta_value FROM wp_woocommerce_order_itemmeta WHERE order_item_id IN (7501, 7502, 7503, 7504, 7505, 7506, 7507, 7508, 7509, 7510, 7511, 7512, 7513, 7514, 7515, 7516, 7517, 7518, 7519, 7520, 7521, 7522, 7523, 7524, 7525, 7526, 7527, 7528, 7529, 7530, 7531, 7532, 7533, 7534, 7535, 7536, 7537, 7538, 7539, 7540, 7541, 7542, 7543, 7544, 7545, 7546, 7547, 7548, 7549, 7550, 7551, 7552, 7553, 7554, 7555, 7556, 7557, 7558, 7559, 7560, 7561, 7562, 7563, 7564, 7565, 7566, 7567, 7568, 7569, 7570, 7571, 7572, 7573, 7574, 7575, 7576, 7577, 7578, 7579, 7580, 7581, 7582, 7583, 7584, 7585, 7586, 7587, 7588, 7589, 7590, 7591, 7592, 7593, 7594, 7595, 7596, 7597, 7598, 7599, 7600, 7601, 7602, 7603, 7604, 7605, 7606, 7607, 7608, 7609, 7610, 7611, 7612, 7613, 7614, 7615, 7616, 7617, 7618, 7619, 7620, 7621, 7622, 7623, 7624, 7625, 7626, 7627, 7628, 7629, 76"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:46:24+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-path-hpos-order-search-all-crud-1782920779273-16",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 5574.703,
+      "ttfb_ms": 5573.292,
+      "size_download": 363879,
+      "body_bytes": 363879,
+      "profiler": {
+        "run_id": "01-path-hpos-order-search-all-crud-1782920779273-16",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&s=pathology-needle&search-filter=all",
+        "status": 200,
+        "server_ms": 231.89,
+        "query_count": 120,
+        "query_time_ms": 119.64,
+        "memory_peak_mb": 48,
+        "slow_queries": [
+          {
+            "seconds": 0.02892780303955078,
+            "sql": "SELECT COUNT(*) FROM wp_wc_orders WHERE 1=1 AND (wp_wc_orders.status IN ('wc-pending','wc-processing','wc-on-hold','wc-completed','wc-cancelled','wc-refunded','wc-failed')) AND (wp_wc_orders.type = 'shop_order') AND ( ( `wp_wc_orders`.transaction_id LIKE '%pathology-needle%' OR `wp_wc_orders`.billing_email LIKE 'pathology-needle%' OR `wp_wc_orders`.id IN ( SELECT search_query_meta.order_id FROM wp_wc_orders_meta as search_query_meta WHERE search_query_meta.meta_key IN ( '_billing_address_index','_shipping_address_index' ) AND search_query_meta.meta_value LIKE '%pathology-needle%' GROUP BY search_query_meta.order_id ) OR wp_wc_orders.id in ( SELECT order_id FROM wp_woocommerce_order_items search_query_items WHERE search_query_items.order_item_name LIKE '%pathology-needle%' ) ) )"
+          },
+          {
+            "seconds": 0.021020889282226562,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (769,770,771,772,773,774,775,776,777,778,779,780,781,782,783,784,785,786,787,788,789,790,791,792,793,794,795,796,797,798,799,800,801,802,803,804,805,806,807,808,809,810,811,812,813,814,815,816,817,818,819,820,821,822,823,824,825,826,827,828,829,830,831,832,833,834,835,836,837,838,839,840,841,842,843,844,845,846,847,848,849,850,851,852,853,854,855,856,857,858,859,860,861,862,863,864,865,866,867,868,869,870,871,872,873,874,875,876,877,878,879,880,881,882,883,884,885,886,887,888,889,890,891,892,893,894,895,896,897,898,899,900,901,902,903,904,905,906,907,908,909,910,911,912,913,914,915,916,917,918,919,920,921,922,923,924,925,926,927,928,929,930,931,932,933,934,935,936,937,938,939,940,941,942,943,944,945,946,947,948,949,950,951,952,953,954,955,956,957,958,959,960,961,962,963,964,965,966,967,968,969,970,971,972,973,974,975,"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:46:24+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    }
+  ],
+  "fixture": {
+    "fixture_mode": "woocommerce-crud",
+    "orders": 10000,
+    "products": 5000,
+    "variations": 800,
+    "heavy_order_id": 15869,
+    "heavy_order_items": 500,
+    "first_product_id": 13,
+    "last_product_id": 8267,
+    "variable_parent_id": 1385,
+    "created_gmt": "2026-07-01T15:39:02+00:00"
+  },
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "site_url": "http://localhost:8100",
+    "server": "nginx -> php-fpm"
+  },
+  "measured_at_gmt": "2026-07-01T15:46:24.884Z",
+  "batch_ms": 5611
+}

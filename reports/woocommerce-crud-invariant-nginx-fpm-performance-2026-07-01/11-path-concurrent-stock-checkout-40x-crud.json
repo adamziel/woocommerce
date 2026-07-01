@@ -1,0 +1,1661 @@
+{
+  "scenario": {
+    "id": "11-path-concurrent-stock-checkout-40x-crud",
+    "rank": 11,
+    "title": "Concurrent Store API Checkout: CRUD Same SKU",
+    "codePath": "/wp-json/wc/store/v1/checkout concurrent through nginx/php-fpm",
+    "trigger": "Simultaneous Store API checkout submissions, each with the same managed-stock CRUD-created product.",
+    "concurrency": 40,
+    "reportRequest": {
+      "method": "POST",
+      "path": "/wp-json/wc/store/v1/checkout",
+      "headers": [
+        "Content-Type: application/json"
+      ]
+    }
+  },
+  "request": {
+    "method": "POST",
+    "path": "/wp-json/wc/store/v1/checkout",
+    "headers": [
+      "Content-Type: application/json"
+    ]
+  },
+  "summary": {
+    "requests": 40,
+    "http_codes": [
+      200
+    ],
+    "total_ms": {
+      "min": 2209.02,
+      "median": 13335.625,
+      "p95": 15118.774,
+      "max": 15386.860999999999
+    },
+    "server_ms": {
+      "min": 432.98,
+      "median": 561.16,
+      "p95": 6398.38,
+      "max": 6880.37
+    },
+    "query_count": {
+      "median": 518,
+      "p95": 570,
+      "max": 576
+    },
+    "query_time_ms": {
+      "median": 457.33,
+      "p95": 6290.12,
+      "max": 6775.93
+    },
+    "memory_peak_mb": {
+      "median": 14,
+      "p95": 14,
+      "max": 14
+    }
+  },
+  "samples": [
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-1",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 2226.209,
+      "ttfb_ms": 2226.119,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-1",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 2180.25,
+        "query_count": 576,
+        "query_time_ms": 2081.33,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.06691312789916992,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `download_permission_granted`, `order_id` ) VALUES ( 1, 15871 ) ON DUPLICATE KEY UPDATE `download_permission_granted` = VALUES( `download_permission_granted` ), `order_id` = VALUES( `order_id` ) "
+          },
+          {
+            "seconds": 0.061517953872680664,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26135', '_qty', '1')"
+          },
+          {
+            "seconds": 0.053581953048706055,
+            "sql": "INSERT INTO `wp_woocommerce_order_items` (`order_item_name`, `order_item_type`, `order_id`) VALUES ('CRUD Product 000001 CatalogNeedle001', 'line_item', '15871')"
+          },
+          {
+            "seconds": 0.05025792121887207,
+            "sql": "UPDATE `wp_posts` SET `comment_count` = 3 WHERE `ID` = 15871"
+          },
+          {
+            "seconds": 0.048712968826293945,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 1.000000 WHERE post_id = 13 AND meta_key='total_sales'"
+          },
+          {
+            "seconds": 0.04493999481201172,
+            "sql": "UPDATE `wp_posts` SET `comment_count` = 2 WHERE `ID` = 15871"
+          },
+          {
+            "seconds": 0.044667959213256836,
+            "sql": "INSERT INTO `wp_actionscheduler_logs` (`action_id`, `message`, `log_date_gmt`, `log_date_local`) VALUES (15891, 'action created', '2026-07-01 15:44:29', '2026-07-01 15:44:29')"
+          },
+          {
+            "seconds": 0.043473005294799805,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `status`, `type` ) VALUES ( '2026-07-01 15:44:30', 15871, 'wc-pending', 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `status` = VALUES( `status` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.0425419807434082,
+            "sql": "DELETE FROM `wp_options` WHERE `option_name` = '_transient_timeout_wc_filter_data_entry_count'"
+          },
+          {
+            "seconds": 0.04102516174316406,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26135', '_variation_id', '0')"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:44:31+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-2",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 2209.02,
+      "ttfb_ms": 2208.903,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-2",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 2177.82,
+        "query_count": 520,
+        "query_time_ms": 2072.12,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.06409978866577148,
+            "sql": "INSERT INTO `wp_commentmeta` (`comment_id`, `meta_key`, `meta_value`) VALUES ('20385', 'note_group', 'order_update')"
+          },
+          {
+            "seconds": 0.06181001663208008,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `download_permission_granted`, `order_id` ) VALUES ( 1, 15870 ) ON DUPLICATE KEY UPDATE `download_permission_granted` = VALUES( `download_permission_granted` ), `order_id` = VALUES( `order_id` ) "
+          },
+          {
+            "seconds": 0.061293840408325195,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `coupon_usages_are_counted`, `order_id` ) VALUES ( 1, 15870 ) ON DUPLICATE KEY UPDATE `coupon_usages_are_counted` = VALUES( `coupon_usages_are_counted` ), `order_id` = VALUES( `order_id` ) "
+          },
+          {
+            "seconds": 0.05548810958862305,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26133', '_product_id', '13')"
+          },
+          {
+            "seconds": 0.05322909355163574,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26133', '_tax_class', '')"
+          },
+          {
+            "seconds": 0.048403024673461914,
+            "sql": "INSERT INTO `wp_comments` (`comment_post_ID`, `comment_author_IP`, `comment_author`, `comment_author_email`, `comment_author_url`, `comment_date`, `comment_date_gmt`, `comment_content`, `comment_karma`, `comment_approved`, `comment_agent`, `comment_type`, `comment_parent`, `user_id`) VALUES (15870, '', 'WooCommerce', '', '', '2026-07-01 15:44:31', '2026-07-01 15:44:31', 'Email \\\"Processing order\\\" failed to send: Could not instantiate mail function..', 0, '1', 'WooCommerce', 'order_note', 0, 0)"
+          },
+          {
+            "seconds": 0.044612884521484375,
+            "sql": "INSERT INTO `wp_commentmeta` (`comment_id`, `meta_key`, `meta_value`) VALUES ('20381', 'note_group', 'product_stock')"
+          },
+          {
+            "seconds": 0.04329395294189453,
+            "sql": "REPLACE INTO `wp_wc_product_meta_lookup` (`product_id`, `sku`, `virtual`, `downloadable`, `min_price`, `max_price`, `onsale`, `stock_quantity`, `stock_status`, `rating_count`, `average_rating`, `total_sales`, `tax_status`, `tax_class`, `global_unique_id`) VALUES ('13', 'CRUD-SKU-000001', '0', '0', '11', '11', '0', '429', 'instock', '0', '0', '73', 'taxable', '', '')"
+          },
+          {
+            "seconds": 0.040595054626464844,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26133', '_reduced_stock', '1')"
+          },
+          {
+            "seconds": 0.0384058952331543,
+            "sql": "INSERT INTO `wp_woocommerce_order_items` (`order_item_name`, `order_item_type`, `order_id`) VALUES ('CRUD Product 000001 CatalogNeedle001', 'line_item', '15870')"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:44:31+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-3",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 2234.9230000000002,
+      "ttfb_ms": 2234.829,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-3",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 2187.04,
+        "query_count": 576,
+        "query_time_ms": 2063.38,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.04469490051269531,
+            "sql": "INSERT INTO `wp_actionscheduler_logs` (`action_id`, `message`, `log_date_gmt`, `log_date_local`) VALUES (15890, 'action created', '2026-07-01 15:44:29', '2026-07-01 15:44:29')"
+          },
+          {
+            "seconds": 0.04422497749328613,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('15872', '_debug_log_source', 'place-order-debug-a3dab091')"
+          },
+          {
+            "seconds": 0.04239010810852051,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26134', '_product_id', '13')"
+          },
+          {
+            "seconds": 0.04088091850280762,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26134', '_variation_id', '0')"
+          },
+          {
+            "seconds": 0.04083108901977539,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26134', '_reduced_stock', '1')"
+          },
+          {
+            "seconds": 0.04045891761779785,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `status`, `type` ) VALUES ( '2026-07-01 15:44:30', 15872, 'wc-processing', 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `status` = VALUES( `status` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.038973093032836914,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26134', '_tax_class', '')"
+          },
+          {
+            "seconds": 0.03863096237182617,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 41109 AND `order_id` = 15872"
+          },
+          {
+            "seconds": 0.03841590881347656,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 1.000000 WHERE post_id = 13 AND meta_key='total_sales'"
+          },
+          {
+            "seconds": 0.03737592697143555,
+            "sql": "INSERT INTO `wp_commentmeta` (`comment_id`, `meta_key`, `meta_value`) VALUES ('20390', 'note_group', 'email_notification')"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:44:31+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-4",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 7398.54,
+      "ttfb_ms": 7398.445,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-4",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 5726.63,
+        "query_count": 558,
+        "query_time_ms": 5599.98,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.14708995819091797,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('15874', '_debug_log_source_pending_deletion', 'place-order-debug-a9d46a79')"
+          },
+          {
+            "seconds": 0.12413501739501953,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `status`, `type` ) VALUES ( '2026-07-01 15:44:33', 15874, 'wc-pending', 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `status` = VALUES( `status` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.12184000015258789,
+            "sql": "INSERT INTO `wp_comments` (`comment_post_ID`, `comment_author_IP`, `comment_author`, `comment_author_email`, `comment_author_url`, `comment_date`, `comment_date_gmt`, `comment_content`, `comment_karma`, `comment_approved`, `comment_agent`, `comment_type`, `comment_parent`, `user_id`) VALUES (15874, '', 'WooCommerce', '', '', '2026-07-01 15:44:33', '2026-07-01 15:44:33', 'Stock hold of 60 minutes applied to: <br>- CRUD Product 000001 CatalogNeedle001 (CRUD-SKU-000001) &times; 1', 0, '1', 'WooCommerce', 'order_note', 0, 0)"
+          },
+          {
+            "seconds": 0.12135505676269531,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('15874', '_debug_log_source', 'place-order-debug-a9d46a79')"
+          },
+          {
+            "seconds": 0.12094616889953613,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 41175 AND `order_id` = 15874"
+          },
+          {
+            "seconds": 0.11719107627868652,
+            "sql": "INSERT INTO `wp_commentmeta` (`comment_id`, `meta_key`, `meta_value`) VALUES ('20397', 'note_group', 'product_stock')"
+          },
+          {
+            "seconds": 0.11571502685546875,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 15:44:33', 15874, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.11103606224060059,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26142', 'method_id', 'flat_rate')"
+          },
+          {
+            "seconds": 0.10519599914550781,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 41213 AND `order_id` = 15874"
+          },
+          {
+            "seconds": 0.10230398178100586,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('15874', '_debug_log_source', 'place-order-debug-a9d46a79')"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:44:36+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-5",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 4343.110000000001,
+      "ttfb_ms": 4342.999,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-5",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 3620.87,
+        "query_count": 544,
+        "query_time_ms": 3508.14,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.17064309120178223,
+            "sql": "UPDATE `wp_posts` SET `comment_count` = 5 WHERE `ID` = 15873"
+          },
+          {
+            "seconds": 0.1193089485168457,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 15:44:33', 15873, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.10337305068969727,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 15:44:32', 15873, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.10201406478881836,
+            "sql": "UPDATE `wp_posts` SET `comment_count` = 3 WHERE `ID` = 15873"
+          },
+          {
+            "seconds": 0.09979605674743652,
+            "sql": "UPDATE `wp_options` SET `option_value` = '1782920672' WHERE `option_name` = '_transient_orders-transient-version'"
+          },
+          {
+            "seconds": 0.09112000465393066,
+            "sql": "INSERT INTO `wp_comments` (`comment_post_ID`, `comment_author_IP`, `comment_author`, `comment_author_email`, `comment_author_url`, `comment_date`, `comment_date_gmt`, `comment_content`, `comment_karma`, `comment_approved`, `comment_agent`, `comment_type`, `comment_parent`, `user_id`) VALUES (15873, '', 'WooCommerce', '', '', '2026-07-01 15:44:32', '2026-07-01 15:44:32', 'Email \\\"Processing order\\\" failed to send: Could not instantiate mail function..', 0, '1', 'WooCommerce', 'order_note', 0, 0)"
+          },
+          {
+            "seconds": 0.08782291412353516,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `order_id`, `order_stock_reduced` ) VALUES ( 15873, 1 ) ON DUPLICATE KEY UPDATE `order_id` = VALUES( `order_id` ), `order_stock_reduced` = VALUES( `order_stock_reduced` ) "
+          },
+          {
+            "seconds": 0.08479118347167969,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 41178 AND `order_id` = 15873"
+          },
+          {
+            "seconds": 0.08241081237792969,
+            "sql": "INSERT INTO `wp_commentmeta` (`comment_id`, `meta_key`, `meta_value`) VALUES ('20394', 'note_group', 'order_update')"
+          },
+          {
+            "seconds": 0.08104991912841797,
+            "sql": "INSERT INTO `wp_comments` (`comment_post_ID`, `comment_author_IP`, `comment_author`, `comment_author_email`, `comment_author_url`, `comment_date`, `comment_date_gmt`, `comment_content`, `comment_karma`, `comment_approved`, `comment_agent`, `comment_type`, `comment_parent`, `user_id`) VALUES (15873, '', 'WooCommerce', '', '', '2026-07-01 15:44:32', '2026-07-01 15:44:32', 'Email \\\"New order\\\" failed to send: Could not instantiate mail function..', 0, '1', 'WooCommerce', 'order_note', 0, 0)"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:44:33+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-6",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 9140.064,
+      "ttfb_ms": 9139.88,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-6",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 6880.37,
+        "query_count": 546,
+        "query_time_ms": 6775.93,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.2591419219970703,
+            "sql": " INSERT INTO wp_actionscheduler_actions ( `hook`, `status`, `scheduled_date_gmt`, `scheduled_date_local`, `schedule`, `group_id`, `priority`, `args` ) SELECT 'wc-admin_import_orders', 'pending', '2026-07-01 15:44:38', '2026-07-01 15:44:38', 'O:30:\\\"ActionScheduler_SimpleSchedule\\\":2:{s:22:\\\"\\0*\\0scheduled_timestamp\\\";i:1782920678;s:41:\\\"\\0ActionScheduler_SimpleSchedule\\0timestamp\\\";i:1782920678;}', 4, 10, '[15876]' FROM DUAL WHERE ( SELECT NULL FROM DUAL ) IS NULL"
+          },
+          {
+            "seconds": 0.19237685203552246,
+            "sql": "INSERT INTO `wp_comments` (`comment_post_ID`, `comment_author_IP`, `comment_author`, `comment_author_email`, `comment_author_url`, `comment_date`, `comment_date_gmt`, `comment_content`, `comment_karma`, `comment_approved`, `comment_agent`, `comment_type`, `comment_parent`, `user_id`) VALUES (15876, '', 'WooCommerce', '', '', '2026-07-01 15:44:37', '2026-07-01 15:44:37', 'Email \\\"Processing order\\\" failed to send: Could not instantiate mail function..', 0, '1', 'WooCommerce', 'order_note', 0, 0)"
+          },
+          {
+            "seconds": 0.17923498153686523,
+            "sql": "INSERT INTO `wp_comments` (`comment_post_ID`, `comment_author_IP`, `comment_author`, `comment_author_email`, `comment_author_url`, `comment_date`, `comment_date_gmt`, `comment_content`, `comment_karma`, `comment_approved`, `comment_agent`, `comment_type`, `comment_parent`, `user_id`) VALUES (15876, '', 'WooCommerce', '', '', '2026-07-01 15:44:36', '2026-07-01 15:44:36', 'Stock levels reduced: CRUD Product 000001 CatalogNeedle001 (422&rarr;421)', 0, '1', 'WooCommerce', 'order_note', 0, 0)"
+          },
+          {
+            "seconds": 0.14655685424804688,
+            "sql": "REPLACE INTO `wp_wc_product_meta_lookup` (`product_id`, `sku`, `virtual`, `downloadable`, `min_price`, `max_price`, `onsale`, `stock_quantity`, `stock_status`, `rating_count`, `average_rating`, `total_sales`, `tax_status`, `tax_class`, `global_unique_id`) VALUES ('13', 'CRUD-SKU-000001', '0', '0', '11', '11', '0', '421', 'instock', '0', '0', '80', 'taxable', '', '')"
+          },
+          {
+            "seconds": 0.12074112892150879,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26145', '_tax_class', '')"
+          },
+          {
+            "seconds": 0.11293411254882812,
+            "sql": "SELECT meta_id as meta_id, meta_key, meta_value FROM wp_woocommerce_order_itemmeta WHERE order_item_id = 26145 ORDER BY meta_id"
+          },
+          {
+            "seconds": 0.10858583450317383,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 13 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.1064150333404541,
+            "sql": "UPDATE `wp_posts` SET `comment_count` = 2 WHERE `ID` = 15876"
+          },
+          {
+            "seconds": 0.10568618774414062,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26148', 'total_tax', '0')"
+          },
+          {
+            "seconds": 0.10541296005249023,
+            "sql": "UPDATE `wp_posts` SET `comment_count` = 5 WHERE `ID` = 15876"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:44:38+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-7",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 8704.065,
+      "ttfb_ms": 8703.960000000001,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-7",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 6398.38,
+        "query_count": 546,
+        "query_time_ms": 6290.12,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.19852590560913086,
+            "sql": "INSERT INTO `wp_comments` (`comment_post_ID`, `comment_author_IP`, `comment_author`, `comment_author_email`, `comment_author_url`, `comment_date`, `comment_date_gmt`, `comment_content`, `comment_karma`, `comment_approved`, `comment_agent`, `comment_type`, `comment_parent`, `user_id`) VALUES (15875, '', 'WooCommerce', '', '', '2026-07-01 15:44:36', '2026-07-01 15:44:36', 'Payment to be made upon delivery. Order status changed from Pending payment to Processing.', 0, '1', 'WooCommerce', 'order_note', 0, 0)"
+          },
+          {
+            "seconds": 0.17262482643127441,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 41226 AND `order_id` = 15875"
+          },
+          {
+            "seconds": 0.14620280265808105,
+            "sql": "INSERT INTO `wp_commentmeta` (`comment_id`, `meta_key`, `meta_value`) VALUES ('20405', 'note_group', 'product_stock')"
+          },
+          {
+            "seconds": 0.1206049919128418,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26143', '_line_subtotal', '11')"
+          },
+          {
+            "seconds": 0.11539697647094727,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('15875', '_coupons_hash', 'd751713988987e9331980363e24189ce')"
+          },
+          {
+            "seconds": 0.11131906509399414,
+            "sql": "UPDATE `wp_posts` SET `guid` = 'http://localhost:8100/?post_type=shop_order_placehold&p=15875' WHERE `ID` = 15875"
+          },
+          {
+            "seconds": 0.10568785667419434,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26146', 'taxes', 'a:1:{s:5:\\\"total\\\";a:0:{}}')"
+          },
+          {
+            "seconds": 0.10364985466003418,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26143', '_line_total', '11')"
+          },
+          {
+            "seconds": 0.10172295570373535,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26143', '_qty', '1')"
+          },
+          {
+            "seconds": 0.09865212440490723,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `order_id`, `order_stock_reduced` ) VALUES ( 15875, 1 ) ON DUPLICATE KEY UPDATE `order_id` = VALUES( `order_id` ), `order_stock_reduced` = VALUES( `order_stock_reduced` ) "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:44:37+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-8",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 8796.829000000002,
+      "ttfb_ms": 8796.735,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-8",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 6454.63,
+        "query_count": 570,
+        "query_time_ms": 6350.86,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.19811701774597168,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26144', '_reduced_stock', '1')"
+          },
+          {
+            "seconds": 0.1311659812927246,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('15877', '_debug_log_source', 'place-order-debug-76615c5f')"
+          },
+          {
+            "seconds": 0.13076281547546387,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 15877, 13, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 13 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 13 AND stock_table.`order_id` != 15877 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.12659096717834473,
+            "sql": "INSERT INTO `wp_actionscheduler_logs` (`action_id`, `message`, `log_date_gmt`, `log_date_local`) VALUES (15899, 'action created', '2026-07-01 15:44:33', '2026-07-01 15:44:33')"
+          },
+          {
+            "seconds": 0.1094200611114502,
+            "sql": " INSERT INTO wp_actionscheduler_actions ( `hook`, `status`, `scheduled_date_gmt`, `scheduled_date_local`, `schedule`, `group_id`, `priority`, `args` ) SELECT 'wc-admin_import_orders', 'pending', '2026-07-01 15:44:38', '2026-07-01 15:44:38', 'O:30:\\\"ActionScheduler_SimpleSchedule\\\":2:{s:22:\\\"\\0*\\0scheduled_timestamp\\\";i:1782920678;s:41:\\\"\\0ActionScheduler_SimpleSchedule\\0timestamp\\\";i:1782920678;}', 4, 10, '[15877]' FROM DUAL WHERE ( SELECT NULL FROM DUAL ) IS NULL"
+          },
+          {
+            "seconds": 0.10859298706054688,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `coupon_usages_are_counted`, `order_id` ) VALUES ( 1, 15877 ) ON DUPLICATE KEY UPDATE `coupon_usages_are_counted` = VALUES( `coupon_usages_are_counted` ), `order_id` = VALUES( `order_id` ) "
+          },
+          {
+            "seconds": 0.10683083534240723,
+            "sql": "INSERT INTO `wp_comments` (`comment_post_ID`, `comment_author_IP`, `comment_author`, `comment_author_email`, `comment_author_url`, `comment_date`, `comment_date_gmt`, `comment_content`, `comment_karma`, `comment_approved`, `comment_agent`, `comment_type`, `comment_parent`, `user_id`) VALUES (15877, '', 'WooCommerce', '', '', '2026-07-01 15:44:36', '2026-07-01 15:44:36', 'Payment to be made upon delivery. Order status changed from Pending payment to Processing.', 0, '1', 'WooCommerce', 'order_note', 0, 0)"
+          },
+          {
+            "seconds": 0.10569000244140625,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26147', 'taxes', 'a:1:{s:5:\\\"total\\\";a:0:{}}')"
+          },
+          {
+            "seconds": 0.1046590805053711,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `download_permission_granted`, `order_id` ) VALUES ( 1, 15877 ) ON DUPLICATE KEY UPDATE `download_permission_granted` = VALUES( `download_permission_granted` ), `order_id` = VALUES( `order_id` ) "
+          },
+          {
+            "seconds": 0.1027369499206543,
+            "sql": "INSERT INTO `wp_comments` (`comment_post_ID`, `comment_author_IP`, `comment_author`, `comment_author_email`, `comment_author_url`, `comment_date`, `comment_date_gmt`, `comment_content`, `comment_karma`, `comment_approved`, `comment_agent`, `comment_type`, `comment_parent`, `user_id`) VALUES (15877, '', 'WooCommerce', '', '', '2026-07-01 15:44:36', '2026-07-01 15:44:36', 'Stock levels reduced: CRUD Product 000001 CatalogNeedle001 (423&rarr;422)', 0, '1', 'WooCommerce', 'order_note', 0, 0)"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:44:37+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-9",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 10705.653999999999,
+      "ttfb_ms": 10705.526000000002,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-9",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 6251.22,
+        "query_count": 548,
+        "query_time_ms": 6137.76,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.143082857131958,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 41214 AND `order_id` = 15878"
+          },
+          {
+            "seconds": 0.13909101486206055,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 1.000000 WHERE post_id = 13 AND meta_key='total_sales'"
+          },
+          {
+            "seconds": 0.13507390022277832,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26149', '_variation_id', '0')"
+          },
+          {
+            "seconds": 0.13243389129638672,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `payment_method_title`, `type` ) VALUES ( '2026-07-01 15:44:36', 15878, 'Cash on delivery', 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `payment_method_title` = VALUES( `payment_method_title` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.12183189392089844,
+            "sql": "INSERT INTO `wp_commentmeta` (`comment_id`, `meta_key`, `meta_value`) VALUES ('20418', 'note_group', 'product_stock')"
+          },
+          {
+            "seconds": 0.11939883232116699,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 15:44:38', 15878, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.11857295036315918,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 15878, 13, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 13 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 13 AND stock_table.`order_id` != 15878 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.10436320304870605,
+            "sql": "REPLACE INTO `wp_wc_product_meta_lookup` (`product_id`, `sku`, `virtual`, `downloadable`, `min_price`, `max_price`, `onsale`, `stock_quantity`, `stock_status`, `rating_count`, `average_rating`, `total_sales`, `tax_status`, `tax_class`, `global_unique_id`) VALUES ('13', 'CRUD-SKU-000001', '0', '0', '11', '11', '0', '421', 'instock', '0', '0', '81', 'taxable', '', '')"
+          },
+          {
+            "seconds": 0.10423994064331055,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('15878', '_debug_log_source_pending_deletion', 'place-order-debug-64946c88')"
+          },
+          {
+            "seconds": 0.10032200813293457,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 41212 AND `order_id` = 15878"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:44:39+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-10",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 12224.79,
+      "ttfb_ms": 12224.679999999998,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-10",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 4827.49,
+        "query_count": 550,
+        "query_time_ms": 4720.03,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.2030029296875,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26151', '_qty', '1')"
+          },
+          {
+            "seconds": 0.1577749252319336,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 15879, 13, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 13 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 13 AND stock_table.`order_id` != 15879 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.1513810157775879,
+            "sql": "INSERT INTO `wp_comments` (`comment_post_ID`, `comment_author_IP`, `comment_author`, `comment_author_email`, `comment_author_url`, `comment_date`, `comment_date_gmt`, `comment_content`, `comment_karma`, `comment_approved`, `comment_agent`, `comment_type`, `comment_parent`, `user_id`) VALUES (15879, '', 'WooCommerce', '', '', '2026-07-01 15:44:39', '2026-07-01 15:44:39', 'Stock hold of 60 minutes applied to: <br>- CRUD Product 000001 CatalogNeedle001 (CRUD-SKU-000001) &times; 1', 0, '1', 'WooCommerce', 'order_note', 0, 0)"
+          },
+          {
+            "seconds": 0.1480870246887207,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `download_permission_granted`, `order_id` ) VALUES ( 1, 15879 ) ON DUPLICATE KEY UPDATE `download_permission_granted` = VALUES( `download_permission_granted` ), `order_id` = VALUES( `order_id` ) "
+          },
+          {
+            "seconds": 0.14640402793884277,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 1.000000 WHERE post_id = 13 AND meta_key='total_sales'"
+          },
+          {
+            "seconds": 0.12446188926696777,
+            "sql": "UPDATE `wp_posts` SET `comment_count` = 1 WHERE `ID` = 15879"
+          },
+          {
+            "seconds": 0.12105321884155273,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 41257 AND `order_id` = 15879"
+          },
+          {
+            "seconds": 0.11522102355957031,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26151', '_line_subtotal_tax', '0')"
+          },
+          {
+            "seconds": 0.11086583137512207,
+            "sql": "REPLACE INTO `wp_wc_product_meta_lookup` (`product_id`, `sku`, `virtual`, `downloadable`, `min_price`, `max_price`, `onsale`, `stock_quantity`, `stock_status`, `rating_count`, `average_rating`, `total_sales`, `tax_status`, `tax_class`, `global_unique_id`) VALUES ('13', 'CRUD-SKU-000001', '0', '0', '11', '11', '0', '420', 'instock', '0', '0', '82', 'taxable', '', '')"
+          },
+          {
+            "seconds": 0.10905599594116211,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `status`, `type` ) VALUES ( '2026-07-01 15:44:40', 15879, 'wc-processing', 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `status` = VALUES( `status` ), `type` = VALUES( `type` ) "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:44:41+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-11",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 12349.085000000001,
+      "ttfb_ms": 12349.009,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-11",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 3648.23,
+        "query_count": 556,
+        "query_time_ms": 3541.02,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.19390201568603516,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26156', 'Items', 'CRUD Product 000001 CatalogNeedle001 &times; 1')"
+          },
+          {
+            "seconds": 0.15249991416931152,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `total_amount`, `type` ) VALUES ( '2026-07-01 15:44:39', 15880, 11.000000, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `total_amount` = VALUES( `total_amount` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.15206694602966309,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `payment_method_title`, `type` ) VALUES ( '2026-07-01 15:44:40', 15880, 'Cash on delivery', 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `payment_method_title` = VALUES( `payment_method_title` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.14984893798828125,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 41267 AND `order_id` = 15880"
+          },
+          {
+            "seconds": 0.1391279697418213,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26156', 'taxes', 'a:1:{s:5:\\\"total\\\";a:0:{}}')"
+          },
+          {
+            "seconds": 0.12288999557495117,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('15880', '_shipping_address_index', 'CRUD Buyer 1 FPM Way Perf City CA 94105 US 5551234567')"
+          },
+          {
+            "seconds": 0.11762285232543945,
+            "sql": "INSERT INTO `wp_woocommerce_order_items` (`order_item_name`, `order_item_type`, `order_id`) VALUES ('CRUD Product 000001 CatalogNeedle001', 'line_item', '15880')"
+          },
+          {
+            "seconds": 0.1132509708404541,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('15880', '_debug_log_source', 'place-order-debug-8c1bcdf3')"
+          },
+          {
+            "seconds": 0.10024905204772949,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `discount_tax_amount`, `discount_total_amount`, `order_id` ) VALUES ( 0.000000, 0.000000, 15880 ) ON DUPLICATE KEY UPDATE `discount_tax_amount` = VALUES( `discount_tax_amount` ), `discount_total_amount` = VALUES( `discount_total_amount` ), `order_id` = VALUES( `order_id` ) "
+          },
+          {
+            "seconds": 0.09069180488586426,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('15880', '_debug_log_source', 'place-order-debug-8c1bcdf3')"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:44:41+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-12",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 12346.911,
+      "ttfb_ms": 12346.807,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-12",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 3552.89,
+        "query_count": 570,
+        "query_time_ms": 3445.53,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.19297099113464355,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26157', 'total_tax', '0')"
+          },
+          {
+            "seconds": 0.15172481536865234,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26157', 'taxes', 'a:1:{s:5:\\\"total\\\";a:0:{}}')"
+          },
+          {
+            "seconds": 0.12968897819519043,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `payment_method_title`, `type` ) VALUES ( '2026-07-01 15:44:40', 15881, 'Cash on delivery', 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `payment_method_title` = VALUES( `payment_method_title` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.1248159408569336,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26157', 'Items', 'CRUD Product 000001 CatalogNeedle001 &times; 1')"
+          },
+          {
+            "seconds": 0.12297606468200684,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('15881', 'is_vat_exempt', 'no')"
+          },
+          {
+            "seconds": 0.11216497421264648,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('15881', '_debug_log_source', 'place-order-debug-cf03ff2d')"
+          },
+          {
+            "seconds": 0.11115694046020508,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 41269 AND `order_id` = 15881"
+          },
+          {
+            "seconds": 0.10638308525085449,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('15881', '_debug_log_source', 'place-order-debug-cf03ff2d')"
+          },
+          {
+            "seconds": 0.10357093811035156,
+            "sql": "INSERT INTO `wp_posts` (`post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_content_filtered`, `post_title`, `post_excerpt`, `post_status`, `post_type`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_parent`, `menu_order`, `post_mime_type`, `guid`) VALUES (0, '2026-07-01 15:44:38', '2026-07-01 15:44:38', '', '', '', '', 'draft', 'shop_order_placehold', 'closed', 'closed', '', '', '', '', '2026-07-01 15:44:38', '2026-07-01 15:44:38', 0, 0, '', '')"
+          },
+          {
+            "seconds": 0.09525489807128906,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('15881', '_billing_address_index', 'CRUD Buyer 1 FPM Way Perf City CA 94105 US crud-concurrent-1782920666782@example.test 5551234567')"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:44:41+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-13",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 12356.131,
+      "ttfb_ms": 12356.051000000001,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-13",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 3220.98,
+        "query_count": 516,
+        "query_time_ms": 3117.46,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.1933741569519043,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26155', '_line_tax_data', 'a:2:{s:5:\\\"total\\\";a:0:{}s:8:\\\"subtotal\\\";a:0:{}}')"
+          },
+          {
+            "seconds": 0.15228819847106934,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('15882', '_debug_log_source', 'place-order-debug-ff8c4ec4')"
+          },
+          {
+            "seconds": 0.14604616165161133,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 41271 AND `order_id` = 15882"
+          },
+          {
+            "seconds": 0.131134033203125,
+            "sql": "INSERT INTO `wp_woocommerce_order_items` (`order_item_name`, `order_item_type`, `order_id`) VALUES ('Flat rate', 'shipping', '15882')"
+          },
+          {
+            "seconds": 0.112091064453125,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('15882', '_debug_log_source', 'place-order-debug-ff8c4ec4')"
+          },
+          {
+            "seconds": 0.10256004333496094,
+            "sql": "INSERT INTO `wp_wc_order_addresses` (`address_1`, `address_type`, `city`, `country`, `first_name`, `last_name`, `order_id`, `phone`, `postcode`, `state`) VALUES ('1 FPM Way', 'shipping', 'Perf City', 'US', 'CRUD', 'Buyer', 15882, '5551234567', '94105', 'CA')"
+          },
+          {
+            "seconds": 0.0969228744506836,
+            "sql": "INSERT INTO `wp_wc_order_addresses` (`address_1`, `address_type`, `city`, `country`, `email`, `first_name`, `last_name`, `order_id`, `phone`, `postcode`, `state`) VALUES ('1 FPM Way', 'billing', 'Perf City', 'US', 'crud-concurrent-1782920666858@example.test', 'CRUD', 'Buyer', 15882, '5551234567', '94105', 'CA')"
+          },
+          {
+            "seconds": 0.09571599960327148,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26155', '_line_tax', '0')"
+          },
+          {
+            "seconds": 0.08843708038330078,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26155', '_product_id', '13')"
+          },
+          {
+            "seconds": 0.08691000938415527,
+            "sql": "INSERT INTO `wp_actionscheduler_logs` (`action_id`, `message`, `log_date_gmt`, `log_date_local`) VALUES (15905, 'action created', '2026-07-01 15:44:40', '2026-07-01 15:44:40')"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:44:41+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-14",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 12485.813,
+      "ttfb_ms": 12485.699999999999,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-14",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1781.04,
+        "query_count": 570,
+        "query_time_ms": 1675.66,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.16492986679077148,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('15883', 'is_vat_exempt', 'no')"
+          },
+          {
+            "seconds": 0.11840987205505371,
+            "sql": "UPDATE `wp_posts` SET `guid` = 'http://localhost:8100/?post_type=shop_order_placehold&p=15883' WHERE `ID` = 15883"
+          },
+          {
+            "seconds": 0.1132199764251709,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('15883', '_fees_hash', 'd751713988987e9331980363e24189ce')"
+          },
+          {
+            "seconds": 0.10381197929382324,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `cart_hash`, `coupon_usages_are_counted`, `created_via`, `date_completed_gmt`, `date_paid_gmt`, `discount_tax_amount`, `discount_total_amount`, `download_permission_granted`, `new_order_email_sent`, `order_id`, `order_key`, `order_stock_reduced`, `prices_include_tax`, `recorded_sales`, `shipping_tax_amount`, `shipping_total_amount`, `woocommerce_version` ) VALUES ( '0fb103b1549a6ed347081e345a8c5b30', 0, 'store-api', NULL, NULL, 0.000000, 0.000000, 0, 0, 15883, 'wc_order_UHgwY7KBlxbXE', 0, 0, 0, 0.000000, 0.000000, '10.9.1' ) ON DUPLICATE KEY UPDATE `cart_hash` = VALUES( `cart_hash` ), `coupon_usages_are_counted` = VALUES( `coupon_usages_are_counted` ), `created_via` = VALUES( `created_via` ), `date_completed_gmt` = VALUES( `date_completed_gmt` ), `date_paid_gmt` = VALUES( `date_paid_gmt` ), `discount_tax_amount` = VALUES( `discount_tax_amount` "
+          },
+          {
+            "seconds": 0.09869503974914551,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('15883', '_billing_address_index', 'CRUD Buyer 1 FPM Way Perf City CA 94105 US crud-concurrent-1782920667017@example.test 5551234567')"
+          },
+          {
+            "seconds": 0.08557295799255371,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('26159', '_product_id', '13')"
+          },
+          {
+            "seconds": 0.07907485961914062,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('15883', '_taxes_hash', 'd751713988987e9331980363e24189ce')"
+          },
+          {
+            "seconds": 0.07739686965942383,
+            "sql": "INSERT INTO `wp_posts` (`post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_content_filtered`, `post_title`, `post_excerpt`, `post_status`, `post_type`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_parent`, `menu_order`, `post_mime_type`, `guid`) VALUES (0, '2026-07-01 15:44:39', '2026-07-01 15:44:39', '', '', '', '', 'draft', 'shop_order_placehold', 'closed', 'closed', '', '', '', '', '2026-07-01 15:44:39', '2026-07-01 15:44:39', 0, 0, '', '')"
+          },
+          {
+            "seconds": 0.07573580741882324,
+            "sql": "UPDATE `wp_options` SET `option_value` = '1782920681' WHERE `option_name` = '_transient_orders-transient-version'"
+          },
+          {
+            "seconds": 0.07342290878295898,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('15883', '_shipping_address_index', 'CRUD Buyer 1 FPM Way Perf City CA 94105 US 5551234567')"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:44:41+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-15",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 13430.661,
+      "ttfb_ms": 13430.567,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-15",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 517.92,
+        "query_count": 495,
+        "query_time_ms": 423.51,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:42+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-16",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 12770.743,
+      "ttfb_ms": 12770.597,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-16",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 546,
+        "query_count": 495,
+        "query_time_ms": 434.45,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:42+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-17",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 12920.94,
+      "ttfb_ms": 12920.859999999999,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-17",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 561.79,
+        "query_count": 508,
+        "query_time_ms": 460.73,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:42+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-18",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 12909.514,
+      "ttfb_ms": 12909.434,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-18",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 559.67,
+        "query_count": 508,
+        "query_time_ms": 446.22,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:42+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-19",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 12900.479000000001,
+      "ttfb_ms": 12900.387,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-19",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 544.17,
+        "query_count": 508,
+        "query_time_ms": 435.79,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:42+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-20",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 13054.449,
+      "ttfb_ms": 13054.331,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-20",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 569.63,
+        "query_count": 504,
+        "query_time_ms": 465.72,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:42+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-21",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 13466.365,
+      "ttfb_ms": 13466.281,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-21",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 546.1,
+        "query_count": 495,
+        "query_time_ms": 448.83,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.021161794662475586,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `download_permission_granted`, `order_id` ) VALUES ( 1, 15892 ) ON DUPLICATE KEY UPDATE `download_permission_granted` = VALUES( `download_permission_granted` ), `order_id` = VALUES( `order_id` ) "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T15:44:42+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-22",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 13335.625,
+      "ttfb_ms": 13335.475,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-22",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 562.5,
+        "query_count": 570,
+        "query_time_ms": 454.86,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:42+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-23",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 13434.405999999999,
+      "ttfb_ms": 13434.284,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-23",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 532.67,
+        "query_count": 500,
+        "query_time_ms": 432.9,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:42+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-24",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 13609.795999999998,
+      "ttfb_ms": 13609.71,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-24",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 550.88,
+        "query_count": 495,
+        "query_time_ms": 448.87,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:42+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-25",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 13985.746000000001,
+      "ttfb_ms": 13985.658000000001,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-25",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 549.34,
+        "query_count": 532,
+        "query_time_ms": 452.26,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:43+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-26",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 13858.974,
+      "ttfb_ms": 13858.866,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-26",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 520.17,
+        "query_count": 504,
+        "query_time_ms": 414.78,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:43+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-27",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 13996.269,
+      "ttfb_ms": 13996.186,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-27",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 563.77,
+        "query_count": 504,
+        "query_time_ms": 464.81,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:43+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-28",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 14015.019,
+      "ttfb_ms": 14014.922,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-28",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 547.16,
+        "query_count": 540,
+        "query_time_ms": 449.54,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:43+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-29",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 14162.278,
+      "ttfb_ms": 14162.149,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-29",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 550.87,
+        "query_count": 568,
+        "query_time_ms": 447.83,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:43+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-30",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 14400.258,
+      "ttfb_ms": 14400.164,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-30",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 538.31,
+        "query_count": 495,
+        "query_time_ms": 436.12,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:43+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-31",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 14552.748,
+      "ttfb_ms": 14552.597,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-31",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 561.16,
+        "query_count": 495,
+        "query_time_ms": 458.62,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:43+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-32",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 14543.044,
+      "ttfb_ms": 14542.923,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-32",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 559.45,
+        "query_count": 495,
+        "query_time_ms": 453.18,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:43+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-33",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 14552.198,
+      "ttfb_ms": 14552.122000000001,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-33",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 541.75,
+        "query_count": 495,
+        "query_time_ms": 434.49,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:43+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-34",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 14715.715,
+      "ttfb_ms": 14715.586,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-34",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 555.95,
+        "query_count": 495,
+        "query_time_ms": 450.68,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:43+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-35",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 14955.645,
+      "ttfb_ms": 14955.527999999998,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-35",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 560.84,
+        "query_count": 518,
+        "query_time_ms": 457.33,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:44+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-36",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 15078.402,
+      "ttfb_ms": 15078.305999999999,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-36",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 540.81,
+        "query_count": 564,
+        "query_time_ms": 435.83,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:44+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-37",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 15114.674,
+      "ttfb_ms": 15114.579000000002,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-37",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 566.72,
+        "query_count": 566,
+        "query_time_ms": 470.12,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:44+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-38",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 15233.736,
+      "ttfb_ms": 15233.615,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-38",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 519.42,
+        "query_count": 570,
+        "query_time_ms": 416.66,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:44+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-39",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 15118.774,
+      "ttfb_ms": 15118.7,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-39",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 566.64,
+        "query_count": 506,
+        "query_time_ms": 466.12,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:44+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-40",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 15386.860999999999,
+      "ttfb_ms": 15386.768,
+      "size_download": 994,
+      "body_bytes": 994,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-crud-1782920669213-40",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 432.98,
+        "query_count": 495,
+        "query_time_ms": 341.46,
+        "memory_peak_mb": 14,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T15:44:44+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    }
+  ],
+  "fixture": {
+    "fixture_mode": "woocommerce-crud",
+    "orders": 10000,
+    "products": 5000,
+    "variations": 800,
+    "heavy_order_id": 15869,
+    "heavy_order_items": 500,
+    "first_product_id": 13,
+    "last_product_id": 8267,
+    "variable_parent_id": 1385,
+    "created_gmt": "2026-07-01T15:39:02+00:00"
+  },
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "site_url": "http://localhost:8100",
+    "server": "nginx -> php-fpm"
+  },
+  "measured_at_gmt": "2026-07-01T15:44:44.659Z",
+  "batch_ms": 15446
+}
