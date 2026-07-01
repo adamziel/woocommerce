@@ -1,0 +1,229 @@
+{
+  "scenario": {
+    "id": "06-path-store-api-products-deep",
+    "rank": 6,
+    "title": "Store API Products: 200,000 Deep Hydration Page",
+    "codePath": "/wp-json/wc/store/v1/products",
+    "trigger": "Store API product collection at a deep page over 200,000 products with 100 hydrated products per response.",
+    "iterations": 5
+  },
+  "request": {
+    "path": "/wp-json/wc/store/v1/products?per_page=100&page=400&orderby=date&order=desc",
+    "headers": []
+  },
+  "summary": {
+    "requests": 5,
+    "http_codes": [
+      200
+    ],
+    "total_ms": {
+      "min": 244.01700000000002,
+      "median": 244.90200000000002,
+      "p95": 261.914,
+      "max": 261.914
+    },
+    "server_ms": {
+      "min": 241.84,
+      "median": 242.75,
+      "p95": 259.41,
+      "max": 259.41
+    },
+    "query_count": {
+      "median": 143,
+      "p95": 143,
+      "max": 143
+    },
+    "query_time_ms": {
+      "median": 126.61,
+      "p95": 130.13,
+      "max": 130.13
+    },
+    "memory_peak_mb": {
+      "median": 16,
+      "p95": 16,
+      "max": 16
+    }
+  },
+  "samples": [
+    {
+      "run_id": "06-path-store-api-products-deep-1782911154407-1",
+      "http_code": 200,
+      "total_ms": 261.914,
+      "ttfb_ms": 260.63199999999995,
+      "size_download": 228776,
+      "body_bytes": 228776,
+      "profiler": {
+        "run_id": "06-path-store-api-products-deep-1782911154407-1",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products?per_page=100&page=400&orderby=date&order=desc",
+        "status": 200,
+        "server_ms": 259.41,
+        "query_count": 143,
+        "query_time_ms": 130.13,
+        "memory_peak_mb": 16,
+        "slow_queries": [
+          {
+            "seconds": 0.05746197700500488,
+            "sql": "SELECT MAX( post_modified_gmt ) FROM wp_posts WHERE post_type IN ( 'product', 'product_variation' )"
+          },
+          {
+            "seconds": 0.03411602973937988,
+            "sql": "SELECT SQL_CALC_FOUND_ROWS wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC LIMIT 39900, 100"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:05:54+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "06-path-store-api-products-deep-1782911154676-2",
+      "http_code": 200,
+      "total_ms": 244.01700000000002,
+      "ttfb_ms": 242.342,
+      "size_download": 228776,
+      "body_bytes": 228776,
+      "profiler": {
+        "run_id": "06-path-store-api-products-deep-1782911154676-2",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products?per_page=100&page=400&orderby=date&order=desc",
+        "status": 200,
+        "server_ms": 241.84,
+        "query_count": 143,
+        "query_time_ms": 126.61,
+        "memory_peak_mb": 16,
+        "slow_queries": [
+          {
+            "seconds": 0.05740499496459961,
+            "sql": "SELECT MAX( post_modified_gmt ) FROM wp_posts WHERE post_type IN ( 'product', 'product_variation' )"
+          },
+          {
+            "seconds": 0.03490710258483887,
+            "sql": "SELECT SQL_CALC_FOUND_ROWS wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC LIMIT 39900, 100"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:05:54+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "06-path-store-api-products-deep-1782911154928-3",
+      "http_code": 200,
+      "total_ms": 244.90200000000002,
+      "ttfb_ms": 243.27599999999998,
+      "size_download": 228776,
+      "body_bytes": 228776,
+      "profiler": {
+        "run_id": "06-path-store-api-products-deep-1782911154928-3",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products?per_page=100&page=400&orderby=date&order=desc",
+        "status": 200,
+        "server_ms": 241.94,
+        "query_count": 143,
+        "query_time_ms": 124.43,
+        "memory_peak_mb": 16,
+        "slow_queries": [
+          {
+            "seconds": 0.05541396141052246,
+            "sql": "SELECT MAX( post_modified_gmt ) FROM wp_posts WHERE post_type IN ( 'product', 'product_variation' )"
+          },
+          {
+            "seconds": 0.034664154052734375,
+            "sql": "SELECT SQL_CALC_FOUND_ROWS wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC LIMIT 39900, 100"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:05:55+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "06-path-store-api-products-deep-1782911155180-4",
+      "http_code": 200,
+      "total_ms": 244.885,
+      "ttfb_ms": 243.388,
+      "size_download": 228776,
+      "body_bytes": 228776,
+      "profiler": {
+        "run_id": "06-path-store-api-products-deep-1782911155180-4",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products?per_page=100&page=400&orderby=date&order=desc",
+        "status": 200,
+        "server_ms": 242.75,
+        "query_count": 143,
+        "query_time_ms": 124.52,
+        "memory_peak_mb": 16,
+        "slow_queries": [
+          {
+            "seconds": 0.054930925369262695,
+            "sql": "SELECT MAX( post_modified_gmt ) FROM wp_posts WHERE post_type IN ( 'product', 'product_variation' )"
+          },
+          {
+            "seconds": 0.03449702262878418,
+            "sql": "SELECT SQL_CALC_FOUND_ROWS wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC LIMIT 39900, 100"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:05:55+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "06-path-store-api-products-deep-1782911155433-5",
+      "http_code": 200,
+      "total_ms": 249.364,
+      "ttfb_ms": 247.39600000000002,
+      "size_download": 228776,
+      "body_bytes": 228776,
+      "profiler": {
+        "run_id": "06-path-store-api-products-deep-1782911155433-5",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products?per_page=100&page=400&orderby=date&order=desc",
+        "status": 200,
+        "server_ms": 246.75,
+        "query_count": 143,
+        "query_time_ms": 127.05,
+        "memory_peak_mb": 16,
+        "slow_queries": [
+          {
+            "seconds": 0.05543208122253418,
+            "sql": "SELECT MAX( post_modified_gmt ) FROM wp_posts WHERE post_type IN ( 'product', 'product_variation' )"
+          },
+          {
+            "seconds": 0.03404593467712402,
+            "sql": "SELECT SQL_CALC_FOUND_ROWS wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC LIMIT 39900, 100"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:05:55+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    }
+  ],
+  "fixture": {
+    "orders": 1000000,
+    "products": 200000,
+    "variations": 800,
+    "analytics_rows": 1000000,
+    "heavy_order_id": 9999001,
+    "heavy_order_items": 1000,
+    "first_product_id": 14,
+    "last_product_id": 200877,
+    "created_gmt": "2026-07-01T12:58:15+00:00"
+  },
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "site_url": "http://localhost:8099"
+  },
+  "measured_at_gmt": "2026-07-01T13:06:00.259Z"
+}

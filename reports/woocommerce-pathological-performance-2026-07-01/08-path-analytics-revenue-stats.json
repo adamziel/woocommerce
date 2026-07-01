@@ -1,0 +1,270 @@
+{
+  "scenario": {
+    "id": "08-path-analytics-revenue-stats",
+    "rank": 8,
+    "title": "Woo Analytics Revenue Stats: 1,000,000 Rows",
+    "codePath": "/wp-json/wc-analytics/reports/revenue/stats",
+    "trigger": "Revenue stats REST endpoint over 1,000,000 analytics rows with cache refresh forced.",
+    "iterations": 5,
+    "admin": true
+  },
+  "request": {
+    "path": "/wp-json/wc-analytics/reports/revenue/stats?after=2024-01-01T00:00:00&before=2026-07-01T23:59:59&interval=month&force_cache_refresh=1",
+    "headers": []
+  },
+  "summary": {
+    "requests": 5,
+    "http_codes": [
+      200
+    ],
+    "total_ms": {
+      "min": 2080.594,
+      "median": 2112.418,
+      "p95": 2595.0370000000003,
+      "max": 2595.0370000000003
+    },
+    "server_ms": {
+      "min": 2078.61,
+      "median": 2110.21,
+      "p95": 2592.84,
+      "max": 2592.84
+    },
+    "query_count": {
+      "median": 58,
+      "p95": 58,
+      "max": 58
+    },
+    "query_time_ms": {
+      "median": 2066.23,
+      "p95": 2549.45,
+      "max": 2549.45
+    },
+    "memory_peak_mb": {
+      "median": 16,
+      "p95": 16,
+      "max": 16
+    }
+  },
+  "samples": [
+    {
+      "run_id": "08-path-analytics-revenue-stats-1782911171785-1",
+      "http_code": 200,
+      "total_ms": 2595.0370000000003,
+      "ttfb_ms": 2594.927,
+      "size_download": 4979,
+      "body_bytes": 4979,
+      "profiler": {
+        "run_id": "08-path-analytics-revenue-stats-1782911171785-1",
+        "method": "GET",
+        "uri": "/wp-json/wc-analytics/reports/revenue/stats?after=2024-01-01T00:00:00&before=2026-07-01T23:59:59&interval=month&force_cache_refresh=1",
+        "status": 200,
+        "server_ms": 2592.84,
+        "query_count": 58,
+        "query_time_ms": 2549.45,
+        "memory_peak_mb": 16,
+        "slow_queries": [
+          {
+            "seconds": 1.0549800395965576,
+            "sql": "SELECT COUNT( DISTINCT wp_wc_order_product_lookup.product_id ) FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND wp_wc_order_stats.`date_paid` <= '2026-07-01 23:59:59' AND wp_wc_order_stats.`date_paid` >= '2024-01-01 00:00:00' AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) )"
+          },
+          {
+            "seconds": 0.6654911041259766,
+            "sql": " SELECT SUM( CASE WHEN wp_wc_order_stats.parent_id = 0 THEN 1 ELSE 0 END ) as orders_count, SUM(wp_wc_order_stats.num_items_sold) as num_items_sold, SUM( CASE WHEN wp_wc_order_stats.parent_id = 0 THEN wp_wc_order_stats.total_sales - wp_wc_order_stats.tax_total - wp_wc_order_stats.shipping_total ELSE 0 END ) + COALESCE( SUM(discount_amount), 0 ) as gross_sales, SUM(wp_wc_order_stats.total_sales) AS total_sales, COALESCE( SUM(discount_amount), 0 ) AS coupons, COALESCE( coupons_count, 0 ) as coupons_count, ABS( SUM( CASE WHEN wp_wc_order_stats.net_total < 0 THEN wp_wc_order_stats.net_total + wp_wc_order_stats.tax_total + wp_wc_order_stats.shipping_total ELSE 0 END ) ) AS refunds, SUM(wp_wc_order_stats.tax_total) AS taxes, SUM(wp_wc_order_stats.shipping_total) AS shipping, SUM(wp_wc_order_stats.net_total) AS net_revenue, SUM( CASE WHEN wp_wc_order_stats.parent_id = 0 THEN wp_wc_order_"
+          },
+          {
+            "seconds": 0.6507558822631836,
+            "sql": " SELECT DATE_FORMAT(wp_wc_order_stats.`date_paid`, '%Y-%m') AS time_interval , MAX(wp_wc_order_stats.date_paid) AS datetime_anchor , SUM( CASE WHEN wp_wc_order_stats.parent_id = 0 THEN 1 ELSE 0 END ) as orders_count, SUM(wp_wc_order_stats.num_items_sold) as num_items_sold, SUM( CASE WHEN wp_wc_order_stats.parent_id = 0 THEN wp_wc_order_stats.total_sales - wp_wc_order_stats.tax_total - wp_wc_order_stats.shipping_total ELSE 0 END ) + COALESCE( SUM(discount_amount), 0 ) as gross_sales, SUM(wp_wc_order_stats.total_sales) AS total_sales, COALESCE( SUM(discount_amount), 0 ) AS coupons, COALESCE( coupons_count, 0 ) as coupons_count, ABS( SUM( CASE WHEN wp_wc_order_stats.net_total < 0 THEN wp_wc_order_stats.net_total + wp_wc_order_stats.tax_total + wp_wc_order_stats.shipping_total ELSE 0 END ) ) AS refunds, SUM(wp_wc_order_stats.tax_total) AS taxes, SUM(wp_wc_order_stats.shipping_total) A"
+          },
+          {
+            "seconds": 0.15790700912475586,
+            "sql": " SELECT DATE_FORMAT(wp_wc_order_stats.`date_paid`, '%Y-%m') AS time_interval FROM wp_wc_order_stats LEFT JOIN ( SELECT order_id, SUM(discount_amount) AS discount_amount, COUNT(DISTINCT coupon_id) AS coupons_count FROM wp_wc_order_coupon_lookup GROUP BY order_id ) order_coupon_lookup ON order_coupon_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_stats.`date_paid` <= '2026-07-01 23:59:59' AND wp_wc_order_stats.`date_paid` >= '2024-01-01 00:00:00' GROUP BY time_interval "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:06:14+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "08-path-analytics-revenue-stats-1782911174387-2",
+      "http_code": 200,
+      "total_ms": 2112.418,
+      "ttfb_ms": 2112.146,
+      "size_download": 4979,
+      "body_bytes": 4979,
+      "profiler": {
+        "run_id": "08-path-analytics-revenue-stats-1782911174387-2",
+        "method": "GET",
+        "uri": "/wp-json/wc-analytics/reports/revenue/stats?after=2024-01-01T00:00:00&before=2026-07-01T23:59:59&interval=month&force_cache_refresh=1",
+        "status": 200,
+        "server_ms": 2110.21,
+        "query_count": 58,
+        "query_time_ms": 2066.23,
+        "memory_peak_mb": 16,
+        "slow_queries": [
+          {
+            "seconds": 0.8772950172424316,
+            "sql": "SELECT COUNT( DISTINCT wp_wc_order_product_lookup.product_id ) FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND wp_wc_order_stats.`date_paid` <= '2026-07-01 23:59:59' AND wp_wc_order_stats.`date_paid` >= '2024-01-01 00:00:00' AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) )"
+          },
+          {
+            "seconds": 0.6516671180725098,
+            "sql": " SELECT DATE_FORMAT(wp_wc_order_stats.`date_paid`, '%Y-%m') AS time_interval , MAX(wp_wc_order_stats.date_paid) AS datetime_anchor , SUM( CASE WHEN wp_wc_order_stats.parent_id = 0 THEN 1 ELSE 0 END ) as orders_count, SUM(wp_wc_order_stats.num_items_sold) as num_items_sold, SUM( CASE WHEN wp_wc_order_stats.parent_id = 0 THEN wp_wc_order_stats.total_sales - wp_wc_order_stats.tax_total - wp_wc_order_stats.shipping_total ELSE 0 END ) + COALESCE( SUM(discount_amount), 0 ) as gross_sales, SUM(wp_wc_order_stats.total_sales) AS total_sales, COALESCE( SUM(discount_amount), 0 ) AS coupons, COALESCE( coupons_count, 0 ) as coupons_count, ABS( SUM( CASE WHEN wp_wc_order_stats.net_total < 0 THEN wp_wc_order_stats.net_total + wp_wc_order_stats.tax_total + wp_wc_order_stats.shipping_total ELSE 0 END ) ) AS refunds, SUM(wp_wc_order_stats.tax_total) AS taxes, SUM(wp_wc_order_stats.shipping_total) A"
+          },
+          {
+            "seconds": 0.37657809257507324,
+            "sql": " SELECT SUM( CASE WHEN wp_wc_order_stats.parent_id = 0 THEN 1 ELSE 0 END ) as orders_count, SUM(wp_wc_order_stats.num_items_sold) as num_items_sold, SUM( CASE WHEN wp_wc_order_stats.parent_id = 0 THEN wp_wc_order_stats.total_sales - wp_wc_order_stats.tax_total - wp_wc_order_stats.shipping_total ELSE 0 END ) + COALESCE( SUM(discount_amount), 0 ) as gross_sales, SUM(wp_wc_order_stats.total_sales) AS total_sales, COALESCE( SUM(discount_amount), 0 ) AS coupons, COALESCE( coupons_count, 0 ) as coupons_count, ABS( SUM( CASE WHEN wp_wc_order_stats.net_total < 0 THEN wp_wc_order_stats.net_total + wp_wc_order_stats.tax_total + wp_wc_order_stats.shipping_total ELSE 0 END ) ) AS refunds, SUM(wp_wc_order_stats.tax_total) AS taxes, SUM(wp_wc_order_stats.shipping_total) AS shipping, SUM(wp_wc_order_stats.net_total) AS net_revenue, SUM( CASE WHEN wp_wc_order_stats.parent_id = 0 THEN wp_wc_order_"
+          },
+          {
+            "seconds": 0.13941383361816406,
+            "sql": " SELECT DATE_FORMAT(wp_wc_order_stats.`date_paid`, '%Y-%m') AS time_interval FROM wp_wc_order_stats LEFT JOIN ( SELECT order_id, SUM(discount_amount) AS discount_amount, COUNT(DISTINCT coupon_id) AS coupons_count FROM wp_wc_order_coupon_lookup GROUP BY order_id ) order_coupon_lookup ON order_coupon_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_stats.`date_paid` <= '2026-07-01 23:59:59' AND wp_wc_order_stats.`date_paid` >= '2024-01-01 00:00:00' GROUP BY time_interval "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:06:16+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "08-path-analytics-revenue-stats-1782911176507-3",
+      "http_code": 200,
+      "total_ms": 2116.557,
+      "ttfb_ms": 2116.4489999999996,
+      "size_download": 4979,
+      "body_bytes": 4979,
+      "profiler": {
+        "run_id": "08-path-analytics-revenue-stats-1782911176507-3",
+        "method": "GET",
+        "uri": "/wp-json/wc-analytics/reports/revenue/stats?after=2024-01-01T00:00:00&before=2026-07-01T23:59:59&interval=month&force_cache_refresh=1",
+        "status": 200,
+        "server_ms": 2114.56,
+        "query_count": 58,
+        "query_time_ms": 2075.61,
+        "memory_peak_mb": 16,
+        "slow_queries": [
+          {
+            "seconds": 0.8967800140380859,
+            "sql": "SELECT COUNT( DISTINCT wp_wc_order_product_lookup.product_id ) FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND wp_wc_order_stats.`date_paid` <= '2026-07-01 23:59:59' AND wp_wc_order_stats.`date_paid` >= '2024-01-01 00:00:00' AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) )"
+          },
+          {
+            "seconds": 0.6471388339996338,
+            "sql": " SELECT DATE_FORMAT(wp_wc_order_stats.`date_paid`, '%Y-%m') AS time_interval , MAX(wp_wc_order_stats.date_paid) AS datetime_anchor , SUM( CASE WHEN wp_wc_order_stats.parent_id = 0 THEN 1 ELSE 0 END ) as orders_count, SUM(wp_wc_order_stats.num_items_sold) as num_items_sold, SUM( CASE WHEN wp_wc_order_stats.parent_id = 0 THEN wp_wc_order_stats.total_sales - wp_wc_order_stats.tax_total - wp_wc_order_stats.shipping_total ELSE 0 END ) + COALESCE( SUM(discount_amount), 0 ) as gross_sales, SUM(wp_wc_order_stats.total_sales) AS total_sales, COALESCE( SUM(discount_amount), 0 ) AS coupons, COALESCE( coupons_count, 0 ) as coupons_count, ABS( SUM( CASE WHEN wp_wc_order_stats.net_total < 0 THEN wp_wc_order_stats.net_total + wp_wc_order_stats.tax_total + wp_wc_order_stats.shipping_total ELSE 0 END ) ) AS refunds, SUM(wp_wc_order_stats.tax_total) AS taxes, SUM(wp_wc_order_stats.shipping_total) A"
+          },
+          {
+            "seconds": 0.3776059150695801,
+            "sql": " SELECT SUM( CASE WHEN wp_wc_order_stats.parent_id = 0 THEN 1 ELSE 0 END ) as orders_count, SUM(wp_wc_order_stats.num_items_sold) as num_items_sold, SUM( CASE WHEN wp_wc_order_stats.parent_id = 0 THEN wp_wc_order_stats.total_sales - wp_wc_order_stats.tax_total - wp_wc_order_stats.shipping_total ELSE 0 END ) + COALESCE( SUM(discount_amount), 0 ) as gross_sales, SUM(wp_wc_order_stats.total_sales) AS total_sales, COALESCE( SUM(discount_amount), 0 ) AS coupons, COALESCE( coupons_count, 0 ) as coupons_count, ABS( SUM( CASE WHEN wp_wc_order_stats.net_total < 0 THEN wp_wc_order_stats.net_total + wp_wc_order_stats.tax_total + wp_wc_order_stats.shipping_total ELSE 0 END ) ) AS refunds, SUM(wp_wc_order_stats.tax_total) AS taxes, SUM(wp_wc_order_stats.shipping_total) AS shipping, SUM(wp_wc_order_stats.net_total) AS net_revenue, SUM( CASE WHEN wp_wc_order_stats.parent_id = 0 THEN wp_wc_order_"
+          },
+          {
+            "seconds": 0.1389760971069336,
+            "sql": " SELECT DATE_FORMAT(wp_wc_order_stats.`date_paid`, '%Y-%m') AS time_interval FROM wp_wc_order_stats LEFT JOIN ( SELECT order_id, SUM(discount_amount) AS discount_amount, COUNT(DISTINCT coupon_id) AS coupons_count FROM wp_wc_order_coupon_lookup GROUP BY order_id ) order_coupon_lookup ON order_coupon_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_stats.`date_paid` <= '2026-07-01 23:59:59' AND wp_wc_order_stats.`date_paid` >= '2024-01-01 00:00:00' GROUP BY time_interval "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:06:18+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "08-path-analytics-revenue-stats-1782911178631-4",
+      "http_code": 200,
+      "total_ms": 2080.594,
+      "ttfb_ms": 2080.509,
+      "size_download": 4979,
+      "body_bytes": 4979,
+      "profiler": {
+        "run_id": "08-path-analytics-revenue-stats-1782911178631-4",
+        "method": "GET",
+        "uri": "/wp-json/wc-analytics/reports/revenue/stats?after=2024-01-01T00:00:00&before=2026-07-01T23:59:59&interval=month&force_cache_refresh=1",
+        "status": 200,
+        "server_ms": 2078.61,
+        "query_count": 58,
+        "query_time_ms": 2036.01,
+        "memory_peak_mb": 16,
+        "slow_queries": [
+          {
+            "seconds": 0.8347439765930176,
+            "sql": "SELECT COUNT( DISTINCT wp_wc_order_product_lookup.product_id ) FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND wp_wc_order_stats.`date_paid` <= '2026-07-01 23:59:59' AND wp_wc_order_stats.`date_paid` >= '2024-01-01 00:00:00' AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) )"
+          },
+          {
+            "seconds": 0.6522412300109863,
+            "sql": " SELECT DATE_FORMAT(wp_wc_order_stats.`date_paid`, '%Y-%m') AS time_interval , MAX(wp_wc_order_stats.date_paid) AS datetime_anchor , SUM( CASE WHEN wp_wc_order_stats.parent_id = 0 THEN 1 ELSE 0 END ) as orders_count, SUM(wp_wc_order_stats.num_items_sold) as num_items_sold, SUM( CASE WHEN wp_wc_order_stats.parent_id = 0 THEN wp_wc_order_stats.total_sales - wp_wc_order_stats.tax_total - wp_wc_order_stats.shipping_total ELSE 0 END ) + COALESCE( SUM(discount_amount), 0 ) as gross_sales, SUM(wp_wc_order_stats.total_sales) AS total_sales, COALESCE( SUM(discount_amount), 0 ) AS coupons, COALESCE( coupons_count, 0 ) as coupons_count, ABS( SUM( CASE WHEN wp_wc_order_stats.net_total < 0 THEN wp_wc_order_stats.net_total + wp_wc_order_stats.tax_total + wp_wc_order_stats.shipping_total ELSE 0 END ) ) AS refunds, SUM(wp_wc_order_stats.tax_total) AS taxes, SUM(wp_wc_order_stats.shipping_total) A"
+          },
+          {
+            "seconds": 0.39166784286499023,
+            "sql": " SELECT SUM( CASE WHEN wp_wc_order_stats.parent_id = 0 THEN 1 ELSE 0 END ) as orders_count, SUM(wp_wc_order_stats.num_items_sold) as num_items_sold, SUM( CASE WHEN wp_wc_order_stats.parent_id = 0 THEN wp_wc_order_stats.total_sales - wp_wc_order_stats.tax_total - wp_wc_order_stats.shipping_total ELSE 0 END ) + COALESCE( SUM(discount_amount), 0 ) as gross_sales, SUM(wp_wc_order_stats.total_sales) AS total_sales, COALESCE( SUM(discount_amount), 0 ) AS coupons, COALESCE( coupons_count, 0 ) as coupons_count, ABS( SUM( CASE WHEN wp_wc_order_stats.net_total < 0 THEN wp_wc_order_stats.net_total + wp_wc_order_stats.tax_total + wp_wc_order_stats.shipping_total ELSE 0 END ) ) AS refunds, SUM(wp_wc_order_stats.tax_total) AS taxes, SUM(wp_wc_order_stats.shipping_total) AS shipping, SUM(wp_wc_order_stats.net_total) AS net_revenue, SUM( CASE WHEN wp_wc_order_stats.parent_id = 0 THEN wp_wc_order_"
+          },
+          {
+            "seconds": 0.1384899616241455,
+            "sql": " SELECT DATE_FORMAT(wp_wc_order_stats.`date_paid`, '%Y-%m') AS time_interval FROM wp_wc_order_stats LEFT JOIN ( SELECT order_id, SUM(discount_amount) AS discount_amount, COUNT(DISTINCT coupon_id) AS coupons_count FROM wp_wc_order_coupon_lookup GROUP BY order_id ) order_coupon_lookup ON order_coupon_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_stats.`date_paid` <= '2026-07-01 23:59:59' AND wp_wc_order_stats.`date_paid` >= '2024-01-01 00:00:00' GROUP BY time_interval "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:06:20+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "08-path-analytics-revenue-stats-1782911180719-5",
+      "http_code": 200,
+      "total_ms": 2093.861,
+      "ttfb_ms": 2093.758,
+      "size_download": 4979,
+      "body_bytes": 4979,
+      "profiler": {
+        "run_id": "08-path-analytics-revenue-stats-1782911180719-5",
+        "method": "GET",
+        "uri": "/wp-json/wc-analytics/reports/revenue/stats?after=2024-01-01T00:00:00&before=2026-07-01T23:59:59&interval=month&force_cache_refresh=1",
+        "status": 200,
+        "server_ms": 2092.02,
+        "query_count": 58,
+        "query_time_ms": 2053.9,
+        "memory_peak_mb": 16,
+        "slow_queries": [
+          {
+            "seconds": 0.8663549423217773,
+            "sql": "SELECT COUNT( DISTINCT wp_wc_order_product_lookup.product_id ) FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND wp_wc_order_stats.`date_paid` <= '2026-07-01 23:59:59' AND wp_wc_order_stats.`date_paid` >= '2024-01-01 00:00:00' AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) )"
+          },
+          {
+            "seconds": 0.6462399959564209,
+            "sql": " SELECT DATE_FORMAT(wp_wc_order_stats.`date_paid`, '%Y-%m') AS time_interval , MAX(wp_wc_order_stats.date_paid) AS datetime_anchor , SUM( CASE WHEN wp_wc_order_stats.parent_id = 0 THEN 1 ELSE 0 END ) as orders_count, SUM(wp_wc_order_stats.num_items_sold) as num_items_sold, SUM( CASE WHEN wp_wc_order_stats.parent_id = 0 THEN wp_wc_order_stats.total_sales - wp_wc_order_stats.tax_total - wp_wc_order_stats.shipping_total ELSE 0 END ) + COALESCE( SUM(discount_amount), 0 ) as gross_sales, SUM(wp_wc_order_stats.total_sales) AS total_sales, COALESCE( SUM(discount_amount), 0 ) AS coupons, COALESCE( coupons_count, 0 ) as coupons_count, ABS( SUM( CASE WHEN wp_wc_order_stats.net_total < 0 THEN wp_wc_order_stats.net_total + wp_wc_order_stats.tax_total + wp_wc_order_stats.shipping_total ELSE 0 END ) ) AS refunds, SUM(wp_wc_order_stats.tax_total) AS taxes, SUM(wp_wc_order_stats.shipping_total) A"
+          },
+          {
+            "seconds": 0.37716197967529297,
+            "sql": " SELECT SUM( CASE WHEN wp_wc_order_stats.parent_id = 0 THEN 1 ELSE 0 END ) as orders_count, SUM(wp_wc_order_stats.num_items_sold) as num_items_sold, SUM( CASE WHEN wp_wc_order_stats.parent_id = 0 THEN wp_wc_order_stats.total_sales - wp_wc_order_stats.tax_total - wp_wc_order_stats.shipping_total ELSE 0 END ) + COALESCE( SUM(discount_amount), 0 ) as gross_sales, SUM(wp_wc_order_stats.total_sales) AS total_sales, COALESCE( SUM(discount_amount), 0 ) AS coupons, COALESCE( coupons_count, 0 ) as coupons_count, ABS( SUM( CASE WHEN wp_wc_order_stats.net_total < 0 THEN wp_wc_order_stats.net_total + wp_wc_order_stats.tax_total + wp_wc_order_stats.shipping_total ELSE 0 END ) ) AS refunds, SUM(wp_wc_order_stats.tax_total) AS taxes, SUM(wp_wc_order_stats.shipping_total) AS shipping, SUM(wp_wc_order_stats.net_total) AS net_revenue, SUM( CASE WHEN wp_wc_order_stats.parent_id = 0 THEN wp_wc_order_"
+          },
+          {
+            "seconds": 0.1455519199371338,
+            "sql": " SELECT DATE_FORMAT(wp_wc_order_stats.`date_paid`, '%Y-%m') AS time_interval FROM wp_wc_order_stats LEFT JOIN ( SELECT order_id, SUM(discount_amount) AS discount_amount, COUNT(DISTINCT coupon_id) AS coupons_count FROM wp_wc_order_coupon_lookup GROUP BY order_id ) order_coupon_lookup ON order_coupon_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_stats.`date_paid` <= '2026-07-01 23:59:59' AND wp_wc_order_stats.`date_paid` >= '2024-01-01 00:00:00' GROUP BY time_interval "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:06:22+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    }
+  ],
+  "fixture": {
+    "orders": 1000000,
+    "products": 200000,
+    "variations": 800,
+    "analytics_rows": 1000000,
+    "heavy_order_id": 9999001,
+    "heavy_order_items": 1000,
+    "first_product_id": 14,
+    "last_product_id": 200877,
+    "created_gmt": "2026-07-01T12:58:15+00:00"
+  },
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "site_url": "http://localhost:8099"
+  },
+  "measured_at_gmt": "2026-07-01T13:06:27.189Z"
+}

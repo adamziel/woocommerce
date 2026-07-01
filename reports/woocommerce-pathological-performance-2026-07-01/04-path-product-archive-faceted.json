@@ -1,0 +1,204 @@
+{
+  "scenario": {
+    "id": "04-path-product-archive-faceted",
+    "rank": 4,
+    "title": "Product Archive: 200,000 Deep Faceted Price Page",
+    "codePath": "shop page with price and attribute filters",
+    "trigger": "Deep catalog page over 200,000 products with price ordering and a global attribute filter.",
+    "iterations": 5
+  },
+  "request": {
+    "path": "/shop/?min_price=10&max_price=120&filter_pa_path_size=path-size-1&query_type_pa_path_size=or&orderby=price",
+    "headers": []
+  },
+  "summary": {
+    "requests": 5,
+    "http_codes": [
+      200
+    ],
+    "total_ms": {
+      "min": 135.471,
+      "median": 140.359,
+      "p95": 356.991,
+      "max": 356.991
+    },
+    "server_ms": {
+      "min": 133.83,
+      "median": 138.61,
+      "p95": 354.98,
+      "max": 354.98
+    },
+    "query_count": {
+      "median": 91,
+      "p95": 91,
+      "max": 91
+    },
+    "query_time_ms": {
+      "median": 35.59,
+      "p95": 168.27,
+      "max": 168.27
+    },
+    "memory_peak_mb": {
+      "median": 16,
+      "p95": 16,
+      "max": 16
+    }
+  },
+  "samples": [
+    {
+      "run_id": "04-path-product-archive-faceted-1782911121873-1",
+      "http_code": 200,
+      "total_ms": 356.991,
+      "ttfb_ms": 349.32800000000003,
+      "size_download": 204738,
+      "body_bytes": 204738,
+      "profiler": {
+        "run_id": "04-path-product-archive-faceted-1782911121873-1",
+        "method": "GET",
+        "uri": "/shop/?min_price=10&max_price=120&filter_pa_path_size=path-size-1&query_type_pa_path_size=or&orderby=price",
+        "status": 200,
+        "server_ms": 354.98,
+        "query_count": 91,
+        "query_time_ms": 168.27,
+        "memory_peak_mb": 16,
+        "slow_queries": [
+          {
+            "seconds": 0.12932205200195312,
+            "sql": "SELECT SQL_CALC_FOUND_ROWS wp_posts.ID FROM wp_posts LEFT JOIN wp_wc_product_meta_lookup wc_product_meta_lookup ON wp_posts.ID = wc_product_meta_lookup.product_id WHERE 1=1 AND ( wp_posts.ID NOT IN ( SELECT object_id FROM wp_term_relationships WHERE term_taxonomy_id IN (7) ) ) AND ((wp_posts.post_type = 'product' AND (wp_posts.post_status = 'publish'))) AND (EXISTS ( SELECT 1 FROM wp_term_relationships tr INNER JOIN wp_term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE tr.object_id = wp_posts.ID AND tt.taxonomy = 'pa_path_size' AND tt.term_id IN (217) )) AND NOT (120.000000<wc_product_meta_lookup.min_price OR 10.000000>wc_product_meta_lookup.max_price ) GROUP BY wp_posts.ID ORDER BY wc_product_meta_lookup.min_price ASC, wc_product_meta_lookup.product_id ASC LIMIT 0, 16"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:05:22+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "04-path-product-archive-faceted-1782911122239-2",
+      "http_code": 200,
+      "total_ms": 140.359,
+      "ttfb_ms": 132.874,
+      "size_download": 204738,
+      "body_bytes": 204738,
+      "profiler": {
+        "run_id": "04-path-product-archive-faceted-1782911122239-2",
+        "method": "GET",
+        "uri": "/shop/?min_price=10&max_price=120&filter_pa_path_size=path-size-1&query_type_pa_path_size=or&orderby=price",
+        "status": 200,
+        "server_ms": 138.61,
+        "query_count": 91,
+        "query_time_ms": 35.59,
+        "memory_peak_mb": 16,
+        "slow_queries": [
+          {
+            "seconds": 0.020813941955566406,
+            "sql": "SELECT SQL_CALC_FOUND_ROWS wp_posts.ID FROM wp_posts LEFT JOIN wp_wc_product_meta_lookup wc_product_meta_lookup ON wp_posts.ID = wc_product_meta_lookup.product_id WHERE 1=1 AND ( wp_posts.ID NOT IN ( SELECT object_id FROM wp_term_relationships WHERE term_taxonomy_id IN (7) ) ) AND ((wp_posts.post_type = 'product' AND (wp_posts.post_status = 'publish'))) AND (EXISTS ( SELECT 1 FROM wp_term_relationships tr INNER JOIN wp_term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE tr.object_id = wp_posts.ID AND tt.taxonomy = 'pa_path_size' AND tt.term_id IN (217) )) AND NOT (120.000000<wc_product_meta_lookup.min_price OR 10.000000>wc_product_meta_lookup.max_price ) GROUP BY wp_posts.ID ORDER BY wc_product_meta_lookup.min_price ASC, wc_product_meta_lookup.product_id ASC LIMIT 0, 16"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:05:22+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "04-path-product-archive-faceted-1782911122386-3",
+      "http_code": 200,
+      "total_ms": 158.058,
+      "ttfb_ms": 151.145,
+      "size_download": 204738,
+      "body_bytes": 204738,
+      "profiler": {
+        "run_id": "04-path-product-archive-faceted-1782911122386-3",
+        "method": "GET",
+        "uri": "/shop/?min_price=10&max_price=120&filter_pa_path_size=path-size-1&query_type_pa_path_size=or&orderby=price",
+        "status": 200,
+        "server_ms": 156.33,
+        "query_count": 91,
+        "query_time_ms": 51.31,
+        "memory_peak_mb": 16,
+        "slow_queries": [
+          {
+            "seconds": 0.03134799003601074,
+            "sql": "SELECT SQL_CALC_FOUND_ROWS wp_posts.ID FROM wp_posts LEFT JOIN wp_wc_product_meta_lookup wc_product_meta_lookup ON wp_posts.ID = wc_product_meta_lookup.product_id WHERE 1=1 AND ( wp_posts.ID NOT IN ( SELECT object_id FROM wp_term_relationships WHERE term_taxonomy_id IN (7) ) ) AND ((wp_posts.post_type = 'product' AND (wp_posts.post_status = 'publish'))) AND (EXISTS ( SELECT 1 FROM wp_term_relationships tr INNER JOIN wp_term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE tr.object_id = wp_posts.ID AND tt.taxonomy = 'pa_path_size' AND tt.term_id IN (217) )) AND NOT (120.000000<wc_product_meta_lookup.min_price OR 10.000000>wc_product_meta_lookup.max_price ) GROUP BY wp_posts.ID ORDER BY wc_product_meta_lookup.min_price ASC, wc_product_meta_lookup.product_id ASC LIMIT 0, 16"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:05:22+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "04-path-product-archive-faceted-1782911122552-4",
+      "http_code": 200,
+      "total_ms": 135.471,
+      "ttfb_ms": 128.452,
+      "size_download": 204738,
+      "body_bytes": 204738,
+      "profiler": {
+        "run_id": "04-path-product-archive-faceted-1782911122552-4",
+        "method": "GET",
+        "uri": "/shop/?min_price=10&max_price=120&filter_pa_path_size=path-size-1&query_type_pa_path_size=or&orderby=price",
+        "status": 200,
+        "server_ms": 133.83,
+        "query_count": 91,
+        "query_time_ms": 32.54,
+        "memory_peak_mb": 16,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T13:05:22+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "04-path-product-archive-faceted-1782911122694-5",
+      "http_code": 200,
+      "total_ms": 137.72,
+      "ttfb_ms": 129.571,
+      "size_download": 204738,
+      "body_bytes": 204738,
+      "profiler": {
+        "run_id": "04-path-product-archive-faceted-1782911122694-5",
+        "method": "GET",
+        "uri": "/shop/?min_price=10&max_price=120&filter_pa_path_size=path-size-1&query_type_pa_path_size=or&orderby=price",
+        "status": 200,
+        "server_ms": 135.65,
+        "query_count": 91,
+        "query_time_ms": 34.92,
+        "memory_peak_mb": 16,
+        "slow_queries": [
+          {
+            "seconds": 0.020040035247802734,
+            "sql": "SELECT SQL_CALC_FOUND_ROWS wp_posts.ID FROM wp_posts LEFT JOIN wp_wc_product_meta_lookup wc_product_meta_lookup ON wp_posts.ID = wc_product_meta_lookup.product_id WHERE 1=1 AND ( wp_posts.ID NOT IN ( SELECT object_id FROM wp_term_relationships WHERE term_taxonomy_id IN (7) ) ) AND ((wp_posts.post_type = 'product' AND (wp_posts.post_status = 'publish'))) AND (EXISTS ( SELECT 1 FROM wp_term_relationships tr INNER JOIN wp_term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE tr.object_id = wp_posts.ID AND tt.taxonomy = 'pa_path_size' AND tt.term_id IN (217) )) AND NOT (120.000000<wc_product_meta_lookup.min_price OR 10.000000>wc_product_meta_lookup.max_price ) GROUP BY wp_posts.ID ORDER BY wc_product_meta_lookup.min_price ASC, wc_product_meta_lookup.product_id ASC LIMIT 0, 16"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:05:22+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    }
+  ],
+  "fixture": {
+    "orders": 1000000,
+    "products": 200000,
+    "variations": 800,
+    "analytics_rows": 1000000,
+    "heavy_order_id": 9999001,
+    "heavy_order_items": 1000,
+    "first_product_id": 14,
+    "last_product_id": 200877,
+    "created_gmt": "2026-07-01T12:58:15+00:00"
+  },
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "site_url": "http://localhost:8099"
+  },
+  "measured_at_gmt": "2026-07-01T13:05:26.998Z"
+}

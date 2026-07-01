@@ -1,0 +1,209 @@
+{
+  "scenario": {
+    "id": "03-path-product-search-common",
+    "rank": 3,
+    "title": "Product Search: 200,000 Common-Term LIKE",
+    "codePath": "?s=CommonSearchNeedle&post_type=product",
+    "trigger": "200,000 products where the same buyer search term appears broadly in title/content/excerpt/meta, stressing LIKE search and result counts.",
+    "iterations": 5
+  },
+  "request": {
+    "path": "/?s=CommonSearchNeedle&post_type=product",
+    "headers": []
+  },
+  "summary": {
+    "requests": 5,
+    "http_codes": [
+      200
+    ],
+    "total_ms": {
+      "min": 577.932,
+      "median": 590.9910000000001,
+      "p95": 995.006,
+      "max": 995.006
+    },
+    "server_ms": {
+      "min": 575.87,
+      "median": 589,
+      "p95": 992.6,
+      "max": 992.6
+    },
+    "query_count": {
+      "median": 89,
+      "p95": 89,
+      "max": 89
+    },
+    "query_time_ms": {
+      "median": 491.46,
+      "p95": 814.73,
+      "max": 814.73
+    },
+    "memory_peak_mb": {
+      "median": 26,
+      "p95": 26,
+      "max": 26
+    }
+  },
+  "samples": [
+    {
+      "run_id": "03-path-product-search-common-1782911113841-1",
+      "http_code": 200,
+      "total_ms": 995.006,
+      "ttfb_ms": 987.968,
+      "size_download": 203032,
+      "body_bytes": 203032,
+      "profiler": {
+        "run_id": "03-path-product-search-common-1782911113841-1",
+        "method": "GET",
+        "uri": "/?s=CommonSearchNeedle&post_type=product",
+        "status": 200,
+        "server_ms": 992.6,
+        "query_count": 89,
+        "query_time_ms": 814.73,
+        "memory_peak_mb": 26,
+        "slow_queries": [
+          {
+            "seconds": 0.7827818393707275,
+            "sql": "SELECT SQL_CALC_FOUND_ROWS wp_posts.ID FROM wp_posts WHERE 1=1 AND ( wp_posts.ID NOT IN ( SELECT object_id FROM wp_term_relationships WHERE term_taxonomy_id IN (6) ) ) AND (((wp_posts.post_title LIKE '%CommonSearchNeedle%') OR (wp_posts.post_excerpt LIKE '%CommonSearchNeedle%') OR (wp_posts.post_content LIKE '%CommonSearchNeedle%'))) AND (wp_posts.post_password = '') AND ((wp_posts.post_type = 'product' AND (wp_posts.post_status = 'publish'))) GROUP BY wp_posts.ID ORDER BY wp_posts.post_title LIKE '%CommonSearchNeedle%' DESC, wp_posts.post_date DESC LIMIT 0, 16"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:05:14+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "03-path-product-search-common-1782911114853-2",
+      "http_code": 200,
+      "total_ms": 661.947,
+      "ttfb_ms": 653.867,
+      "size_download": 203032,
+      "body_bytes": 203032,
+      "profiler": {
+        "run_id": "03-path-product-search-common-1782911114853-2",
+        "method": "GET",
+        "uri": "/?s=CommonSearchNeedle&post_type=product",
+        "status": 200,
+        "server_ms": 659.83,
+        "query_count": 89,
+        "query_time_ms": 563.06,
+        "memory_peak_mb": 26,
+        "slow_queries": [
+          {
+            "seconds": 0.5466427803039551,
+            "sql": "SELECT SQL_CALC_FOUND_ROWS wp_posts.ID FROM wp_posts WHERE 1=1 AND ( wp_posts.ID NOT IN ( SELECT object_id FROM wp_term_relationships WHERE term_taxonomy_id IN (6) ) ) AND (((wp_posts.post_title LIKE '%CommonSearchNeedle%') OR (wp_posts.post_excerpt LIKE '%CommonSearchNeedle%') OR (wp_posts.post_content LIKE '%CommonSearchNeedle%'))) AND (wp_posts.post_password = '') AND ((wp_posts.post_type = 'product' AND (wp_posts.post_status = 'publish'))) GROUP BY wp_posts.ID ORDER BY wp_posts.post_title LIKE '%CommonSearchNeedle%' DESC, wp_posts.post_date DESC LIMIT 0, 16"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:05:15+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "03-path-product-search-common-1782911115526-3",
+      "http_code": 200,
+      "total_ms": 585.148,
+      "ttfb_ms": 577.759,
+      "size_download": 203032,
+      "body_bytes": 203032,
+      "profiler": {
+        "run_id": "03-path-product-search-common-1782911115526-3",
+        "method": "GET",
+        "uri": "/?s=CommonSearchNeedle&post_type=product",
+        "status": 200,
+        "server_ms": 583,
+        "query_count": 89,
+        "query_time_ms": 486.16,
+        "memory_peak_mb": 26,
+        "slow_queries": [
+          {
+            "seconds": 0.47097110748291016,
+            "sql": "SELECT SQL_CALC_FOUND_ROWS wp_posts.ID FROM wp_posts WHERE 1=1 AND ( wp_posts.ID NOT IN ( SELECT object_id FROM wp_term_relationships WHERE term_taxonomy_id IN (6) ) ) AND (((wp_posts.post_title LIKE '%CommonSearchNeedle%') OR (wp_posts.post_excerpt LIKE '%CommonSearchNeedle%') OR (wp_posts.post_content LIKE '%CommonSearchNeedle%'))) AND (wp_posts.post_password = '') AND ((wp_posts.post_type = 'product' AND (wp_posts.post_status = 'publish'))) GROUP BY wp_posts.ID ORDER BY wp_posts.post_title LIKE '%CommonSearchNeedle%' DESC, wp_posts.post_date DESC LIMIT 0, 16"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:05:16+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "03-path-product-search-common-1782911116118-4",
+      "http_code": 200,
+      "total_ms": 577.932,
+      "ttfb_ms": 570.031,
+      "size_download": 203032,
+      "body_bytes": 203032,
+      "profiler": {
+        "run_id": "03-path-product-search-common-1782911116118-4",
+        "method": "GET",
+        "uri": "/?s=CommonSearchNeedle&post_type=product",
+        "status": 200,
+        "server_ms": 575.87,
+        "query_count": 89,
+        "query_time_ms": 475.7,
+        "memory_peak_mb": 26,
+        "slow_queries": [
+          {
+            "seconds": 0.46100497245788574,
+            "sql": "SELECT SQL_CALC_FOUND_ROWS wp_posts.ID FROM wp_posts WHERE 1=1 AND ( wp_posts.ID NOT IN ( SELECT object_id FROM wp_term_relationships WHERE term_taxonomy_id IN (6) ) ) AND (((wp_posts.post_title LIKE '%CommonSearchNeedle%') OR (wp_posts.post_excerpt LIKE '%CommonSearchNeedle%') OR (wp_posts.post_content LIKE '%CommonSearchNeedle%'))) AND (wp_posts.post_password = '') AND ((wp_posts.post_type = 'product' AND (wp_posts.post_status = 'publish'))) GROUP BY wp_posts.ID ORDER BY wp_posts.post_title LIKE '%CommonSearchNeedle%' DESC, wp_posts.post_date DESC LIMIT 0, 16"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:05:16+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "03-path-product-search-common-1782911116703-5",
+      "http_code": 200,
+      "total_ms": 590.9910000000001,
+      "ttfb_ms": 583.624,
+      "size_download": 203032,
+      "body_bytes": 203032,
+      "profiler": {
+        "run_id": "03-path-product-search-common-1782911116703-5",
+        "method": "GET",
+        "uri": "/?s=CommonSearchNeedle&post_type=product",
+        "status": 200,
+        "server_ms": 589,
+        "query_count": 89,
+        "query_time_ms": 491.46,
+        "memory_peak_mb": 26,
+        "slow_queries": [
+          {
+            "seconds": 0.4758799076080322,
+            "sql": "SELECT SQL_CALC_FOUND_ROWS wp_posts.ID FROM wp_posts WHERE 1=1 AND ( wp_posts.ID NOT IN ( SELECT object_id FROM wp_term_relationships WHERE term_taxonomy_id IN (6) ) ) AND (((wp_posts.post_title LIKE '%CommonSearchNeedle%') OR (wp_posts.post_excerpt LIKE '%CommonSearchNeedle%') OR (wp_posts.post_content LIKE '%CommonSearchNeedle%'))) AND (wp_posts.post_password = '') AND ((wp_posts.post_type = 'product' AND (wp_posts.post_status = 'publish'))) GROUP BY wp_posts.ID ORDER BY wp_posts.post_title LIKE '%CommonSearchNeedle%' DESC, wp_posts.post_date DESC LIMIT 0, 16"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:05:17+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    }
+  ],
+  "fixture": {
+    "orders": 1000000,
+    "products": 200000,
+    "variations": 800,
+    "analytics_rows": 1000000,
+    "heavy_order_id": 9999001,
+    "heavy_order_items": 1000,
+    "first_product_id": 14,
+    "last_product_id": 200877,
+    "created_gmt": "2026-07-01T12:58:15+00:00"
+  },
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "site_url": "http://localhost:8099"
+  },
+  "measured_at_gmt": "2026-07-01T13:05:21.688Z"
+}

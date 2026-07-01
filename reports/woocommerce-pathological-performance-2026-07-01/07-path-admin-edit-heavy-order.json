@@ -1,0 +1,237 @@
+{
+  "scenario": {
+    "id": "07-path-admin-edit-heavy-order",
+    "rank": 7,
+    "title": "Admin Edit Order: 1,000 Line Items and Public Meta",
+    "codePath": "wc-orders action=edit heavy order",
+    "trigger": "One HPOS order with 1,000 line items, 120 public order meta rows, and 5,000 line-item meta rows.",
+    "iterations": 5
+  },
+  "request": {
+    "path": "/wp-admin/admin.php?page=wc-orders&action=edit&id=9999001",
+    "headers": []
+  },
+  "summary": {
+    "requests": 5,
+    "http_codes": [
+      200
+    ],
+    "total_ms": {
+      "min": 1254.3880000000001,
+      "median": 1271.513,
+      "p95": 1618.508,
+      "max": 1618.508
+    },
+    "server_ms": {
+      "min": 1251.72,
+      "median": 1269.07,
+      "p95": 1601.26,
+      "max": 1601.26
+    },
+    "query_count": {
+      "median": 3097,
+      "p95": 3097,
+      "max": 3097
+    },
+    "query_time_ms": {
+      "median": 658.33,
+      "p95": 979.95,
+      "max": 979.95
+    },
+    "memory_peak_mb": {
+      "median": 67.98,
+      "p95": 68.45,
+      "max": 68.45
+    }
+  },
+  "samples": [
+    {
+      "run_id": "07-path-admin-edit-heavy-order-1782911160321-1",
+      "http_code": 200,
+      "total_ms": 1618.508,
+      "ttfb_ms": 1600.147,
+      "size_download": 3771630,
+      "body_bytes": 3771630,
+      "profiler": {
+        "run_id": "07-path-admin-edit-heavy-order-1782911160321-1",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&action=edit&id=9999001",
+        "status": 200,
+        "server_ms": 1601.26,
+        "query_count": 3097,
+        "query_time_ms": 979.95,
+        "memory_peak_mb": 67.98,
+        "slow_queries": [
+          {
+            "seconds": 0.31721997261047363,
+            "sql": "SELECT DISTINCT status FROM `wp_wc_order_stats`"
+          },
+          {
+            "seconds": 0.22523093223571777,
+            "sql": "SELECT `status`, COUNT(*) AS `count` FROM wp_wc_orders WHERE `type` = 'shop_order' GROUP BY `status`"
+          },
+          {
+            "seconds": 0.022037982940673828,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,25"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:06:01+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "07-path-admin-edit-heavy-order-1782911161948-2",
+      "http_code": 200,
+      "total_ms": 1269.282,
+      "ttfb_ms": 1266.235,
+      "size_download": 3771630,
+      "body_bytes": 3771630,
+      "profiler": {
+        "run_id": "07-path-admin-edit-heavy-order-1782911161948-2",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&action=edit&id=9999001",
+        "status": 200,
+        "server_ms": 1267,
+        "query_count": 3097,
+        "query_time_ms": 656.64,
+        "memory_peak_mb": 67.89,
+        "slow_queries": [
+          {
+            "seconds": 0.15099692344665527,
+            "sql": "SELECT `status`, COUNT(*) AS `count` FROM wp_wc_orders WHERE `type` = 'shop_order' GROUP BY `status`"
+          },
+          {
+            "seconds": 0.09654903411865234,
+            "sql": "SELECT DISTINCT status FROM `wp_wc_order_stats`"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:06:03+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "07-path-admin-edit-heavy-order-1782911163225-3",
+      "http_code": 200,
+      "total_ms": 1273.3129999999999,
+      "ttfb_ms": 1269.9759999999999,
+      "size_download": 3771630,
+      "body_bytes": 3771630,
+      "profiler": {
+        "run_id": "07-path-admin-edit-heavy-order-1782911163225-3",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&action=edit&id=9999001",
+        "status": 200,
+        "server_ms": 1270.81,
+        "query_count": 3097,
+        "query_time_ms": 661.68,
+        "memory_peak_mb": 68.45,
+        "slow_queries": [
+          {
+            "seconds": 0.15238285064697266,
+            "sql": "SELECT `status`, COUNT(*) AS `count` FROM wp_wc_orders WHERE `type` = 'shop_order' GROUP BY `status`"
+          },
+          {
+            "seconds": 0.09431004524230957,
+            "sql": "SELECT DISTINCT status FROM `wp_wc_order_stats`"
+          },
+          {
+            "seconds": 0.02050495147705078,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,25"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:06:04+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "07-path-admin-edit-heavy-order-1782911164506-4",
+      "http_code": 200,
+      "total_ms": 1271.513,
+      "ttfb_ms": 1268.362,
+      "size_download": 3771630,
+      "body_bytes": 3771630,
+      "profiler": {
+        "run_id": "07-path-admin-edit-heavy-order-1782911164506-4",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&action=edit&id=9999001",
+        "status": 200,
+        "server_ms": 1269.07,
+        "query_count": 3097,
+        "query_time_ms": 658.33,
+        "memory_peak_mb": 66.17,
+        "slow_queries": [
+          {
+            "seconds": 0.14966297149658203,
+            "sql": "SELECT `status`, COUNT(*) AS `count` FROM wp_wc_orders WHERE `type` = 'shop_order' GROUP BY `status`"
+          },
+          {
+            "seconds": 0.09327197074890137,
+            "sql": "SELECT DISTINCT status FROM `wp_wc_order_stats`"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:06:05+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "07-path-admin-edit-heavy-order-1782911165785-5",
+      "http_code": 200,
+      "total_ms": 1254.3880000000001,
+      "ttfb_ms": 1251.095,
+      "size_download": 3771630,
+      "body_bytes": 3771630,
+      "profiler": {
+        "run_id": "07-path-admin-edit-heavy-order-1782911165785-5",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&action=edit&id=9999001",
+        "status": 200,
+        "server_ms": 1251.72,
+        "query_count": 3097,
+        "query_time_ms": 645.97,
+        "memory_peak_mb": 67.98,
+        "slow_queries": [
+          {
+            "seconds": 0.14877009391784668,
+            "sql": "SELECT `status`, COUNT(*) AS `count` FROM wp_wc_orders WHERE `type` = 'shop_order' GROUP BY `status`"
+          },
+          {
+            "seconds": 0.09581518173217773,
+            "sql": "SELECT DISTINCT status FROM `wp_wc_order_stats`"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:06:07+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    }
+  ],
+  "fixture": {
+    "orders": 1000000,
+    "products": 200000,
+    "variations": 800,
+    "analytics_rows": 1000000,
+    "heavy_order_id": 9999001,
+    "heavy_order_items": 1000,
+    "first_product_id": 14,
+    "last_product_id": 200877,
+    "created_gmt": "2026-07-01T12:58:15+00:00"
+  },
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "site_url": "http://localhost:8099"
+  },
+  "measured_at_gmt": "2026-07-01T13:06:11.723Z"
+}

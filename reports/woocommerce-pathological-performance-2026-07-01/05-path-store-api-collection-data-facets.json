@@ -1,0 +1,389 @@
+{
+  "scenario": {
+    "id": "05-path-store-api-collection-data-facets",
+    "rank": 5,
+    "title": "Store API Collection Data: Facet Counts",
+    "codePath": "/wp-json/wc/store/v1/products/collection-data",
+    "trigger": "Facet aggregation over the 200,000-product catalog: price range, stock counts, rating counts, category counts, and two attribute count sets.",
+    "iterations": 5
+  },
+  "request": {
+    "path": "/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_stock_status_counts=true&calculate_rating_counts=true&calculate_taxonomy_counts=product_cat&calculate_attribute_counts[0][taxonomy]=pa_path_size&calculate_attribute_counts[0][query_type]=or&calculate_attribute_counts[1][taxonomy]=pa_path_color&calculate_attribute_counts[1][query_type]=or",
+    "headers": []
+  },
+  "summary": {
+    "requests": 5,
+    "http_codes": [
+      200
+    ],
+    "total_ms": {
+      "min": 3515.103,
+      "median": 3580.534,
+      "p95": 6963.477,
+      "max": 6963.477
+    },
+    "server_ms": {
+      "min": 3511.17,
+      "median": 3577.12,
+      "p95": 6958.36,
+      "max": 6958.36
+    },
+    "query_count": {
+      "median": 57,
+      "p95": 57,
+      "max": 57
+    },
+    "query_time_ms": {
+      "median": 3453.71,
+      "p95": 6840.6,
+      "max": 6840.6
+    },
+    "memory_peak_mb": {
+      "median": 120.12,
+      "p95": 120.12,
+      "max": 120.12
+    }
+  },
+  "samples": [
+    {
+      "run_id": "05-path-store-api-collection-data-facets-1782911127063-1",
+      "http_code": 200,
+      "total_ms": 6963.477,
+      "ttfb_ms": 6963.294,
+      "size_download": 4826,
+      "body_bytes": 4826,
+      "profiler": {
+        "run_id": "05-path-store-api-collection-data-facets-1782911127063-1",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_stock_status_counts=true&calculate_rating_counts=true&calculate_taxonomy_counts=product_cat&calculate_attribute_counts[0][taxonomy]=pa_path_size&calculate_attribute_counts[0][query_type]=or&calculate_attribute_counts[1][taxonomy]=pa_path_color&calculate_attribute_counts[1][query_type]=or",
+        "status": 200,
+        "server_ms": 6958.36,
+        "query_count": 57,
+        "query_time_ms": 6840.6,
+        "memory_peak_mb": 120.12,
+        "slow_queries": [
+          {
+            "seconds": 3.2395811080932617,
+            "sql": " SELECT COUNT( DISTINCT posts.ID ) as status_count FROM wp_posts as posts INNER JOIN wp_postmeta as postmeta ON posts.ID = postmeta.post_id AND postmeta.meta_key = '_stock_status' AND postmeta.meta_value = 'instock' WHERE posts.ID IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) "
+          },
+          {
+            "seconds": 0.7555129528045654,
+            "sql": " SELECT COUNT( DISTINCT posts.ID ) as term_count, terms.term_id as term_count_id FROM wp_posts AS posts INNER JOIN wp_term_relationships AS term_relationships ON posts.ID = term_relationships.object_id INNER JOIN wp_term_taxonomy AS term_taxonomy USING( term_taxonomy_id ) INNER JOIN wp_terms AS terms USING( term_id ) WHERE posts.ID IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) AND term_taxonomy.taxonomy IN ('pa_path_color') GROUP BY terms.term_id "
+          },
+          {
+            "seconds": 0.6294240951538086,
+            "sql": " SELECT COUNT( DISTINCT posts.ID ) as status_count FROM wp_posts as posts INNER JOIN wp_postmeta as postmeta ON posts.ID = postmeta.post_id AND postmeta.meta_key = '_stock_status' AND postmeta.meta_value = 'outofstock' WHERE posts.ID IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) "
+          },
+          {
+            "seconds": 0.6173319816589355,
+            "sql": " SELECT COUNT(DISTINCT CASE WHEN tt.term_id IN (137) THEN tr.object_id END) as count_137, COUNT(DISTINCT CASE WHEN tt.term_id IN (138) THEN tr.object_id END) as count_138, COUNT(DISTINCT CASE WHEN tt.term_id IN (139) THEN tr.object_id END) as count_139, COUNT(DISTINCT CASE WHEN tt.term_id IN (140) THEN tr.object_id END) as count_140, COUNT(DISTINCT CASE WHEN tt.term_id IN (141) THEN tr.object_id END) as count_141, COUNT(DISTINCT CASE WHEN tt.term_id IN (142) THEN tr.object_id END) as count_142, COUNT(DISTINCT CASE WHEN tt.term_id IN (143) THEN tr.object_id END) as count_143, COUNT(DISTINCT CASE WHEN tt.term_id IN (144) THEN tr.object_id END) as count_144, COUNT(DISTINCT CASE WHEN tt.term_id IN (145) THEN tr.object_id END) as count_145, COUNT(DISTINCT CASE WHEN tt.term_id IN (146) THEN tr.object_id END) as count_146, COUNT(DISTINCT CASE WHEN tt.term_id IN (147) THEN tr.object_id END) a"
+          },
+          {
+            "seconds": 0.4965190887451172,
+            "sql": " SELECT COUNT( DISTINCT posts.ID ) as term_count, terms.term_id as term_count_id FROM wp_posts AS posts INNER JOIN wp_term_relationships AS term_relationships ON posts.ID = term_relationships.object_id INNER JOIN wp_term_taxonomy AS term_taxonomy USING( term_taxonomy_id ) INNER JOIN wp_terms AS terms USING( term_id ) WHERE posts.ID IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) AND term_taxonomy.taxonomy IN ('pa_path_size') GROUP BY terms.term_id "
+          },
+          {
+            "seconds": 0.4223020076751709,
+            "sql": " SELECT COUNT( DISTINCT posts.ID ) as status_count FROM wp_posts as posts INNER JOIN wp_postmeta as postmeta ON posts.ID = postmeta.post_id AND postmeta.meta_key = '_stock_status' AND postmeta.meta_value = 'onbackorder' WHERE posts.ID IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) "
+          },
+          {
+            "seconds": 0.28029799461364746,
+            "sql": " SELECT COUNT( DISTINCT product_id ) as product_count, ROUND( average_rating, 0 ) as rounded_average_rating FROM wp_wc_product_meta_lookup WHERE product_id IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) AND average_rating > 0 GROUP BY rounded_average_rating ORDER BY rounded_average_rating ASC "
+          },
+          {
+            "seconds": 0.1655409336090088,
+            "sql": " SELECT min( min_price ) as min_price, MAX( max_price ) as max_price FROM wp_wc_product_meta_lookup WHERE product_id IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) "
+          },
+          {
+            "seconds": 0.1485309600830078,
+            "sql": " SELECT DISTINCT tt.term_id, tt.term_taxonomy_id FROM wp_term_relationships tr INNER JOIN wp_term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE tr.object_id IN ( 200877,200876,200875,200874,200873,200872,200871,200870,200869,200868,200867,200866,200865,200864,200863,200862,200861,200860,200859,200858,200857,200856,200855,200854,200853,200852,200851,200850,200849,200848,200847,200846,200845,200844,200843,200842,200841,200840,200839,200838,200837,200836,200835,200834,200833,200832,200831,200830,200829,200828,200827,200826,200825,200824,200823,200822,200821,200820,200819,200818,200817,200816,200815,200814,200813,200812,200811,200810,200809,200808,200807,200806,200805,200804,200803,200802,200801,200800,200799,200798,200797,200796,200795,200794,200793,200792,200791,200790,200789,200788,200787,200786,200785,200784,200783,200782,200781,200780,200779,200778,200777,20"
+          },
+          {
+            "seconds": 0.0462498664855957,
+            "sql": "SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:05:34+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-path-store-api-collection-data-facets-1782911134034-2",
+      "http_code": 200,
+      "total_ms": 3515.103,
+      "ttfb_ms": 3514.9080000000004,
+      "size_download": 4826,
+      "body_bytes": 4826,
+      "profiler": {
+        "run_id": "05-path-store-api-collection-data-facets-1782911134034-2",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_stock_status_counts=true&calculate_rating_counts=true&calculate_taxonomy_counts=product_cat&calculate_attribute_counts[0][taxonomy]=pa_path_size&calculate_attribute_counts[0][query_type]=or&calculate_attribute_counts[1][taxonomy]=pa_path_color&calculate_attribute_counts[1][query_type]=or",
+        "status": 200,
+        "server_ms": 3511.17,
+        "query_count": 57,
+        "query_time_ms": 3391.91,
+        "memory_peak_mb": 120.12,
+        "slow_queries": [
+          {
+            "seconds": 0.77777099609375,
+            "sql": " SELECT COUNT( DISTINCT posts.ID ) as status_count FROM wp_posts as posts INNER JOIN wp_postmeta as postmeta ON posts.ID = postmeta.post_id AND postmeta.meta_key = '_stock_status' AND postmeta.meta_value = 'instock' WHERE posts.ID IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) "
+          },
+          {
+            "seconds": 0.5564920902252197,
+            "sql": " SELECT COUNT(DISTINCT CASE WHEN tt.term_id IN (137) THEN tr.object_id END) as count_137, COUNT(DISTINCT CASE WHEN tt.term_id IN (138) THEN tr.object_id END) as count_138, COUNT(DISTINCT CASE WHEN tt.term_id IN (139) THEN tr.object_id END) as count_139, COUNT(DISTINCT CASE WHEN tt.term_id IN (140) THEN tr.object_id END) as count_140, COUNT(DISTINCT CASE WHEN tt.term_id IN (141) THEN tr.object_id END) as count_141, COUNT(DISTINCT CASE WHEN tt.term_id IN (142) THEN tr.object_id END) as count_142, COUNT(DISTINCT CASE WHEN tt.term_id IN (143) THEN tr.object_id END) as count_143, COUNT(DISTINCT CASE WHEN tt.term_id IN (144) THEN tr.object_id END) as count_144, COUNT(DISTINCT CASE WHEN tt.term_id IN (145) THEN tr.object_id END) as count_145, COUNT(DISTINCT CASE WHEN tt.term_id IN (146) THEN tr.object_id END) as count_146, COUNT(DISTINCT CASE WHEN tt.term_id IN (147) THEN tr.object_id END) a"
+          },
+          {
+            "seconds": 0.4117121696472168,
+            "sql": " SELECT COUNT( DISTINCT posts.ID ) as status_count FROM wp_posts as posts INNER JOIN wp_postmeta as postmeta ON posts.ID = postmeta.post_id AND postmeta.meta_key = '_stock_status' AND postmeta.meta_value = 'onbackorder' WHERE posts.ID IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) "
+          },
+          {
+            "seconds": 0.3921477794647217,
+            "sql": " SELECT COUNT( DISTINCT posts.ID ) as status_count FROM wp_posts as posts INNER JOIN wp_postmeta as postmeta ON posts.ID = postmeta.post_id AND postmeta.meta_key = '_stock_status' AND postmeta.meta_value = 'outofstock' WHERE posts.ID IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) "
+          },
+          {
+            "seconds": 0.34180498123168945,
+            "sql": " SELECT COUNT( DISTINCT posts.ID ) as term_count, terms.term_id as term_count_id FROM wp_posts AS posts INNER JOIN wp_term_relationships AS term_relationships ON posts.ID = term_relationships.object_id INNER JOIN wp_term_taxonomy AS term_taxonomy USING( term_taxonomy_id ) INNER JOIN wp_terms AS terms USING( term_id ) WHERE posts.ID IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) AND term_taxonomy.taxonomy IN ('pa_path_color') GROUP BY terms.term_id "
+          },
+          {
+            "seconds": 0.33369994163513184,
+            "sql": " SELECT COUNT( DISTINCT posts.ID ) as term_count, terms.term_id as term_count_id FROM wp_posts AS posts INNER JOIN wp_term_relationships AS term_relationships ON posts.ID = term_relationships.object_id INNER JOIN wp_term_taxonomy AS term_taxonomy USING( term_taxonomy_id ) INNER JOIN wp_terms AS terms USING( term_id ) WHERE posts.ID IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) AND term_taxonomy.taxonomy IN ('pa_path_size') GROUP BY terms.term_id "
+          },
+          {
+            "seconds": 0.2622189521789551,
+            "sql": " SELECT COUNT( DISTINCT product_id ) as product_count, ROUND( average_rating, 0 ) as rounded_average_rating FROM wp_wc_product_meta_lookup WHERE product_id IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) AND average_rating > 0 GROUP BY rounded_average_rating ORDER BY rounded_average_rating ASC "
+          },
+          {
+            "seconds": 0.1410830020904541,
+            "sql": " SELECT min( min_price ) as min_price, MAX( max_price ) as max_price FROM wp_wc_product_meta_lookup WHERE product_id IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) "
+          },
+          {
+            "seconds": 0.10016012191772461,
+            "sql": " SELECT DISTINCT tt.term_id, tt.term_taxonomy_id FROM wp_term_relationships tr INNER JOIN wp_term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE tr.object_id IN ( 200877,200876,200875,200874,200873,200872,200871,200870,200869,200868,200867,200866,200865,200864,200863,200862,200861,200860,200859,200858,200857,200856,200855,200854,200853,200852,200851,200850,200849,200848,200847,200846,200845,200844,200843,200842,200841,200840,200839,200838,200837,200836,200835,200834,200833,200832,200831,200830,200829,200828,200827,200826,200825,200824,200823,200822,200821,200820,200819,200818,200817,200816,200815,200814,200813,200812,200811,200810,200809,200808,200807,200806,200805,200804,200803,200802,200801,200800,200799,200798,200797,200796,200795,200794,200793,200792,200791,200790,200789,200788,200787,200786,200785,200784,200783,200782,200781,200780,200779,200778,200777,20"
+          },
+          {
+            "seconds": 0.041929006576538086,
+            "sql": "SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:05:37+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-path-store-api-collection-data-facets-1782911137556-3",
+      "http_code": 200,
+      "total_ms": 3553.284,
+      "ttfb_ms": 3553.186,
+      "size_download": 4826,
+      "body_bytes": 4826,
+      "profiler": {
+        "run_id": "05-path-store-api-collection-data-facets-1782911137556-3",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_stock_status_counts=true&calculate_rating_counts=true&calculate_taxonomy_counts=product_cat&calculate_attribute_counts[0][taxonomy]=pa_path_size&calculate_attribute_counts[0][query_type]=or&calculate_attribute_counts[1][taxonomy]=pa_path_color&calculate_attribute_counts[1][query_type]=or",
+        "status": 200,
+        "server_ms": 3549.07,
+        "query_count": 57,
+        "query_time_ms": 3426.51,
+        "memory_peak_mb": 120.12,
+        "slow_queries": [
+          {
+            "seconds": 0.7668201923370361,
+            "sql": " SELECT COUNT( DISTINCT posts.ID ) as status_count FROM wp_posts as posts INNER JOIN wp_postmeta as postmeta ON posts.ID = postmeta.post_id AND postmeta.meta_key = '_stock_status' AND postmeta.meta_value = 'instock' WHERE posts.ID IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) "
+          },
+          {
+            "seconds": 0.58437180519104,
+            "sql": " SELECT COUNT(DISTINCT CASE WHEN tt.term_id IN (137) THEN tr.object_id END) as count_137, COUNT(DISTINCT CASE WHEN tt.term_id IN (138) THEN tr.object_id END) as count_138, COUNT(DISTINCT CASE WHEN tt.term_id IN (139) THEN tr.object_id END) as count_139, COUNT(DISTINCT CASE WHEN tt.term_id IN (140) THEN tr.object_id END) as count_140, COUNT(DISTINCT CASE WHEN tt.term_id IN (141) THEN tr.object_id END) as count_141, COUNT(DISTINCT CASE WHEN tt.term_id IN (142) THEN tr.object_id END) as count_142, COUNT(DISTINCT CASE WHEN tt.term_id IN (143) THEN tr.object_id END) as count_143, COUNT(DISTINCT CASE WHEN tt.term_id IN (144) THEN tr.object_id END) as count_144, COUNT(DISTINCT CASE WHEN tt.term_id IN (145) THEN tr.object_id END) as count_145, COUNT(DISTINCT CASE WHEN tt.term_id IN (146) THEN tr.object_id END) as count_146, COUNT(DISTINCT CASE WHEN tt.term_id IN (147) THEN tr.object_id END) a"
+          },
+          {
+            "seconds": 0.3959159851074219,
+            "sql": " SELECT COUNT( DISTINCT posts.ID ) as status_count FROM wp_posts as posts INNER JOIN wp_postmeta as postmeta ON posts.ID = postmeta.post_id AND postmeta.meta_key = '_stock_status' AND postmeta.meta_value = 'outofstock' WHERE posts.ID IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) "
+          },
+          {
+            "seconds": 0.3796730041503906,
+            "sql": " SELECT COUNT( DISTINCT posts.ID ) as status_count FROM wp_posts as posts INNER JOIN wp_postmeta as postmeta ON posts.ID = postmeta.post_id AND postmeta.meta_key = '_stock_status' AND postmeta.meta_value = 'onbackorder' WHERE posts.ID IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) "
+          },
+          {
+            "seconds": 0.36466002464294434,
+            "sql": " SELECT COUNT( DISTINCT posts.ID ) as term_count, terms.term_id as term_count_id FROM wp_posts AS posts INNER JOIN wp_term_relationships AS term_relationships ON posts.ID = term_relationships.object_id INNER JOIN wp_term_taxonomy AS term_taxonomy USING( term_taxonomy_id ) INNER JOIN wp_terms AS terms USING( term_id ) WHERE posts.ID IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) AND term_taxonomy.taxonomy IN ('pa_path_color') GROUP BY terms.term_id "
+          },
+          {
+            "seconds": 0.33518099784851074,
+            "sql": " SELECT COUNT( DISTINCT posts.ID ) as term_count, terms.term_id as term_count_id FROM wp_posts AS posts INNER JOIN wp_term_relationships AS term_relationships ON posts.ID = term_relationships.object_id INNER JOIN wp_term_taxonomy AS term_taxonomy USING( term_taxonomy_id ) INNER JOIN wp_terms AS terms USING( term_id ) WHERE posts.ID IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) AND term_taxonomy.taxonomy IN ('pa_path_size') GROUP BY terms.term_id "
+          },
+          {
+            "seconds": 0.2758669853210449,
+            "sql": " SELECT COUNT( DISTINCT product_id ) as product_count, ROUND( average_rating, 0 ) as rounded_average_rating FROM wp_wc_product_meta_lookup WHERE product_id IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) AND average_rating > 0 GROUP BY rounded_average_rating ORDER BY rounded_average_rating ASC "
+          },
+          {
+            "seconds": 0.14145612716674805,
+            "sql": " SELECT min( min_price ) as min_price, MAX( max_price ) as max_price FROM wp_wc_product_meta_lookup WHERE product_id IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) "
+          },
+          {
+            "seconds": 0.10757684707641602,
+            "sql": " SELECT DISTINCT tt.term_id, tt.term_taxonomy_id FROM wp_term_relationships tr INNER JOIN wp_term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE tr.object_id IN ( 200877,200876,200875,200874,200873,200872,200871,200870,200869,200868,200867,200866,200865,200864,200863,200862,200861,200860,200859,200858,200857,200856,200855,200854,200853,200852,200851,200850,200849,200848,200847,200846,200845,200844,200843,200842,200841,200840,200839,200838,200837,200836,200835,200834,200833,200832,200831,200830,200829,200828,200827,200826,200825,200824,200823,200822,200821,200820,200819,200818,200817,200816,200815,200814,200813,200812,200811,200810,200809,200808,200807,200806,200805,200804,200803,200802,200801,200800,200799,200798,200797,200796,200795,200794,200793,200792,200791,200790,200789,200788,200787,200786,200785,200784,200783,200782,200781,200780,200779,200778,200777,20"
+          },
+          {
+            "seconds": 0.0422821044921875,
+            "sql": "SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:05:41+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-path-store-api-collection-data-facets-1782911141117-4",
+      "http_code": 200,
+      "total_ms": 3580.534,
+      "ttfb_ms": 3580.426,
+      "size_download": 4826,
+      "body_bytes": 4826,
+      "profiler": {
+        "run_id": "05-path-store-api-collection-data-facets-1782911141117-4",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_stock_status_counts=true&calculate_rating_counts=true&calculate_taxonomy_counts=product_cat&calculate_attribute_counts[0][taxonomy]=pa_path_size&calculate_attribute_counts[0][query_type]=or&calculate_attribute_counts[1][taxonomy]=pa_path_color&calculate_attribute_counts[1][query_type]=or",
+        "status": 200,
+        "server_ms": 3577.12,
+        "query_count": 57,
+        "query_time_ms": 3453.71,
+        "memory_peak_mb": 120.12,
+        "slow_queries": [
+          {
+            "seconds": 0.7626891136169434,
+            "sql": " SELECT COUNT( DISTINCT posts.ID ) as status_count FROM wp_posts as posts INNER JOIN wp_postmeta as postmeta ON posts.ID = postmeta.post_id AND postmeta.meta_key = '_stock_status' AND postmeta.meta_value = 'instock' WHERE posts.ID IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) "
+          },
+          {
+            "seconds": 0.6139118671417236,
+            "sql": " SELECT COUNT(DISTINCT CASE WHEN tt.term_id IN (137) THEN tr.object_id END) as count_137, COUNT(DISTINCT CASE WHEN tt.term_id IN (138) THEN tr.object_id END) as count_138, COUNT(DISTINCT CASE WHEN tt.term_id IN (139) THEN tr.object_id END) as count_139, COUNT(DISTINCT CASE WHEN tt.term_id IN (140) THEN tr.object_id END) as count_140, COUNT(DISTINCT CASE WHEN tt.term_id IN (141) THEN tr.object_id END) as count_141, COUNT(DISTINCT CASE WHEN tt.term_id IN (142) THEN tr.object_id END) as count_142, COUNT(DISTINCT CASE WHEN tt.term_id IN (143) THEN tr.object_id END) as count_143, COUNT(DISTINCT CASE WHEN tt.term_id IN (144) THEN tr.object_id END) as count_144, COUNT(DISTINCT CASE WHEN tt.term_id IN (145) THEN tr.object_id END) as count_145, COUNT(DISTINCT CASE WHEN tt.term_id IN (146) THEN tr.object_id END) as count_146, COUNT(DISTINCT CASE WHEN tt.term_id IN (147) THEN tr.object_id END) a"
+          },
+          {
+            "seconds": 0.38573694229125977,
+            "sql": " SELECT COUNT( DISTINCT posts.ID ) as status_count FROM wp_posts as posts INNER JOIN wp_postmeta as postmeta ON posts.ID = postmeta.post_id AND postmeta.meta_key = '_stock_status' AND postmeta.meta_value = 'outofstock' WHERE posts.ID IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) "
+          },
+          {
+            "seconds": 0.38225293159484863,
+            "sql": " SELECT COUNT( DISTINCT posts.ID ) as status_count FROM wp_posts as posts INNER JOIN wp_postmeta as postmeta ON posts.ID = postmeta.post_id AND postmeta.meta_key = '_stock_status' AND postmeta.meta_value = 'onbackorder' WHERE posts.ID IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) "
+          },
+          {
+            "seconds": 0.36053919792175293,
+            "sql": " SELECT COUNT( DISTINCT posts.ID ) as term_count, terms.term_id as term_count_id FROM wp_posts AS posts INNER JOIN wp_term_relationships AS term_relationships ON posts.ID = term_relationships.object_id INNER JOIN wp_term_taxonomy AS term_taxonomy USING( term_taxonomy_id ) INNER JOIN wp_terms AS terms USING( term_id ) WHERE posts.ID IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) AND term_taxonomy.taxonomy IN ('pa_path_color') GROUP BY terms.term_id "
+          },
+          {
+            "seconds": 0.33299899101257324,
+            "sql": " SELECT COUNT( DISTINCT posts.ID ) as term_count, terms.term_id as term_count_id FROM wp_posts AS posts INNER JOIN wp_term_relationships AS term_relationships ON posts.ID = term_relationships.object_id INNER JOIN wp_term_taxonomy AS term_taxonomy USING( term_taxonomy_id ) INNER JOIN wp_terms AS terms USING( term_id ) WHERE posts.ID IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) AND term_taxonomy.taxonomy IN ('pa_path_size') GROUP BY terms.term_id "
+          },
+          {
+            "seconds": 0.2952721118927002,
+            "sql": " SELECT COUNT( DISTINCT product_id ) as product_count, ROUND( average_rating, 0 ) as rounded_average_rating FROM wp_wc_product_meta_lookup WHERE product_id IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) AND average_rating > 0 GROUP BY rounded_average_rating ORDER BY rounded_average_rating ASC "
+          },
+          {
+            "seconds": 0.14375519752502441,
+            "sql": " SELECT min( min_price ) as min_price, MAX( max_price ) as max_price FROM wp_wc_product_meta_lookup WHERE product_id IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) "
+          },
+          {
+            "seconds": 0.10353398323059082,
+            "sql": " SELECT DISTINCT tt.term_id, tt.term_taxonomy_id FROM wp_term_relationships tr INNER JOIN wp_term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE tr.object_id IN ( 200877,200876,200875,200874,200873,200872,200871,200870,200869,200868,200867,200866,200865,200864,200863,200862,200861,200860,200859,200858,200857,200856,200855,200854,200853,200852,200851,200850,200849,200848,200847,200846,200845,200844,200843,200842,200841,200840,200839,200838,200837,200836,200835,200834,200833,200832,200831,200830,200829,200828,200827,200826,200825,200824,200823,200822,200821,200820,200819,200818,200817,200816,200815,200814,200813,200812,200811,200810,200809,200808,200807,200806,200805,200804,200803,200802,200801,200800,200799,200798,200797,200796,200795,200794,200793,200792,200791,200790,200789,200788,200787,200786,200785,200784,200783,200782,200781,200780,200779,200778,200777,20"
+          },
+          {
+            "seconds": 0.04424691200256348,
+            "sql": "SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:05:44+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "05-path-store-api-collection-data-facets-1782911144704-5",
+      "http_code": 200,
+      "total_ms": 3589.1380000000004,
+      "ttfb_ms": 3589.022,
+      "size_download": 4826,
+      "body_bytes": 4826,
+      "profiler": {
+        "run_id": "05-path-store-api-collection-data-facets-1782911144704-5",
+        "method": "GET",
+        "uri": "/wp-json/wc/store/v1/products/collection-data?calculate_price_range=true&calculate_stock_status_counts=true&calculate_rating_counts=true&calculate_taxonomy_counts=product_cat&calculate_attribute_counts[0][taxonomy]=pa_path_size&calculate_attribute_counts[0][query_type]=or&calculate_attribute_counts[1][taxonomy]=pa_path_color&calculate_attribute_counts[1][query_type]=or",
+        "status": 200,
+        "server_ms": 3584.51,
+        "query_count": 57,
+        "query_time_ms": 3463.25,
+        "memory_peak_mb": 120.12,
+        "slow_queries": [
+          {
+            "seconds": 0.7827479839324951,
+            "sql": " SELECT COUNT( DISTINCT posts.ID ) as status_count FROM wp_posts as posts INNER JOIN wp_postmeta as postmeta ON posts.ID = postmeta.post_id AND postmeta.meta_key = '_stock_status' AND postmeta.meta_value = 'instock' WHERE posts.ID IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) "
+          },
+          {
+            "seconds": 0.5814251899719238,
+            "sql": " SELECT COUNT(DISTINCT CASE WHEN tt.term_id IN (137) THEN tr.object_id END) as count_137, COUNT(DISTINCT CASE WHEN tt.term_id IN (138) THEN tr.object_id END) as count_138, COUNT(DISTINCT CASE WHEN tt.term_id IN (139) THEN tr.object_id END) as count_139, COUNT(DISTINCT CASE WHEN tt.term_id IN (140) THEN tr.object_id END) as count_140, COUNT(DISTINCT CASE WHEN tt.term_id IN (141) THEN tr.object_id END) as count_141, COUNT(DISTINCT CASE WHEN tt.term_id IN (142) THEN tr.object_id END) as count_142, COUNT(DISTINCT CASE WHEN tt.term_id IN (143) THEN tr.object_id END) as count_143, COUNT(DISTINCT CASE WHEN tt.term_id IN (144) THEN tr.object_id END) as count_144, COUNT(DISTINCT CASE WHEN tt.term_id IN (145) THEN tr.object_id END) as count_145, COUNT(DISTINCT CASE WHEN tt.term_id IN (146) THEN tr.object_id END) as count_146, COUNT(DISTINCT CASE WHEN tt.term_id IN (147) THEN tr.object_id END) a"
+          },
+          {
+            "seconds": 0.38918495178222656,
+            "sql": " SELECT COUNT( DISTINCT posts.ID ) as status_count FROM wp_posts as posts INNER JOIN wp_postmeta as postmeta ON posts.ID = postmeta.post_id AND postmeta.meta_key = '_stock_status' AND postmeta.meta_value = 'outofstock' WHERE posts.ID IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) "
+          },
+          {
+            "seconds": 0.38732194900512695,
+            "sql": " SELECT COUNT( DISTINCT posts.ID ) as status_count FROM wp_posts as posts INNER JOIN wp_postmeta as postmeta ON posts.ID = postmeta.post_id AND postmeta.meta_key = '_stock_status' AND postmeta.meta_value = 'onbackorder' WHERE posts.ID IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) "
+          },
+          {
+            "seconds": 0.3377821445465088,
+            "sql": " SELECT COUNT( DISTINCT posts.ID ) as term_count, terms.term_id as term_count_id FROM wp_posts AS posts INNER JOIN wp_term_relationships AS term_relationships ON posts.ID = term_relationships.object_id INNER JOIN wp_term_taxonomy AS term_taxonomy USING( term_taxonomy_id ) INNER JOIN wp_terms AS terms USING( term_id ) WHERE posts.ID IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) AND term_taxonomy.taxonomy IN ('pa_path_color') GROUP BY terms.term_id "
+          },
+          {
+            "seconds": 0.33152198791503906,
+            "sql": " SELECT COUNT( DISTINCT posts.ID ) as term_count, terms.term_id as term_count_id FROM wp_posts AS posts INNER JOIN wp_term_relationships AS term_relationships ON posts.ID = term_relationships.object_id INNER JOIN wp_term_taxonomy AS term_taxonomy USING( term_taxonomy_id ) INNER JOIN wp_terms AS terms USING( term_id ) WHERE posts.ID IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) AND term_taxonomy.taxonomy IN ('pa_path_size') GROUP BY terms.term_id "
+          },
+          {
+            "seconds": 0.2748069763183594,
+            "sql": " SELECT COUNT( DISTINCT product_id ) as product_count, ROUND( average_rating, 0 ) as rounded_average_rating FROM wp_wc_product_meta_lookup WHERE product_id IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) AND average_rating > 0 GROUP BY rounded_average_rating ORDER BY rounded_average_rating ASC "
+          },
+          {
+            "seconds": 0.16113495826721191,
+            "sql": " SELECT min( min_price ) as min_price, MAX( max_price ) as max_price FROM wp_wc_product_meta_lookup WHERE product_id IN ( SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC ) "
+          },
+          {
+            "seconds": 0.10258913040161133,
+            "sql": " SELECT DISTINCT tt.term_id, tt.term_taxonomy_id FROM wp_term_relationships tr INNER JOIN wp_term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE tr.object_id IN ( 200877,200876,200875,200874,200873,200872,200871,200870,200869,200868,200867,200866,200865,200864,200863,200862,200861,200860,200859,200858,200857,200856,200855,200854,200853,200852,200851,200850,200849,200848,200847,200846,200845,200844,200843,200842,200841,200840,200839,200838,200837,200836,200835,200834,200833,200832,200831,200830,200829,200828,200827,200826,200825,200824,200823,200822,200821,200820,200819,200818,200817,200816,200815,200814,200813,200812,200811,200810,200809,200808,200807,200806,200805,200804,200803,200802,200801,200800,200799,200798,200797,200796,200795,200794,200793,200792,200791,200790,200789,200788,200787,200786,200785,200784,200783,200782,200781,200780,200779,200778,200777,20"
+          },
+          {
+            "seconds": 0.04191088676452637,
+            "sql": "SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_type = 'product' AND ((wp_posts.post_status = 'publish')) ORDER BY wp_posts.post_date DESC, wp_posts.ID DESC "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:05:48+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    }
+  ],
+  "fixture": {
+    "orders": 1000000,
+    "products": 200000,
+    "variations": 800,
+    "analytics_rows": 1000000,
+    "heavy_order_id": 9999001,
+    "heavy_order_items": 1000,
+    "first_product_id": 14,
+    "last_product_id": 200877,
+    "created_gmt": "2026-07-01T12:58:15+00:00"
+  },
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "site_url": "http://localhost:8099"
+  },
+  "measured_at_gmt": "2026-07-01T13:05:54.339Z"
+}

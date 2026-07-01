@@ -1,0 +1,208 @@
+{
+  "scenario": {
+    "id": "10-path-checkout-totals-heavy-cart",
+    "rank": 10,
+    "title": "Store API Checkout: 20-Line Totals-Heavy Cart",
+    "codePath": "/wp-json/wc/store/v1/checkout",
+    "trigger": "Store API checkout with 20 distinct line items and varied quantities, forcing larger cart totals/order line item creation.",
+    "prepareEach": true,
+    "iterations": 5
+  },
+  "request": {
+    "method": "POST",
+    "path": "/wp-json/wc/store/v1/checkout",
+    "headers": [
+      "Content-Type: application/json",
+      "Nonce: 65e7b4f40d"
+    ],
+    "body": "{\"billing_address\":{\"first_name\":\"Path\",\"last_name\":\"Buyer\",\"company\":\"\",\"address_1\":\"1 Path Way\",\"address_2\":\"\",\"city\":\"Perf City\",\"state\":\"CA\",\"postcode\":\"94105\",\"country\":\"US\",\"email\":\"path-buyer@example.test\",\"phone\":\"5551234567\"},\"shipping_address\":{\"first_name\":\"Path\",\"last_name\":\"Buyer\",\"company\":\"\",\"address_1\":\"1 Path Way\",\"address_2\":\"\",\"city\":\"Perf City\",\"state\":\"CA\",\"postcode\":\"94105\",\"country\":\"US\",\"phone\":\"5551234567\"},\"payment_method\":\"cod\",\"create_account\":false,\"customer_note\":\"\"}"
+  },
+  "summary": {
+    "requests": 5,
+    "http_codes": [
+      200
+    ],
+    "total_ms": {
+      "min": 2247.299,
+      "median": 2384.9610000000002,
+      "p95": 2465.0370000000003,
+      "max": 2465.0370000000003
+    },
+    "server_ms": {
+      "min": 2241.11,
+      "median": 2369.59,
+      "p95": 2457.28,
+      "max": 2457.28
+    },
+    "query_count": {
+      "median": 2469,
+      "p95": 2472,
+      "max": 2472
+    },
+    "query_time_ms": {
+      "median": 2076.31,
+      "p95": 2176.92,
+      "max": 2176.92
+    },
+    "memory_peak_mb": {
+      "median": 20,
+      "p95": 20,
+      "max": 20
+    }
+  },
+  "samples": [
+    {
+      "run_id": "10-path-checkout-totals-heavy-cart-1782911200849-1",
+      "http_code": 200,
+      "total_ms": 2465.0370000000003,
+      "ttfb_ms": 2464.957,
+      "size_download": 981,
+      "body_bytes": 981,
+      "profiler": {
+        "run_id": "10-path-checkout-totals-heavy-cart-1782911200849-1",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 2457.28,
+        "query_count": 2472,
+        "query_time_ms": 2176.92,
+        "memory_peak_mb": 20,
+        "slow_queries": [
+          {
+            "seconds": 0.027335166931152344,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001447', '_line_subtotal', '66')"
+          },
+          {
+            "seconds": 0.02046513557434082,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001447', '_line_subtotal_tax', '0')"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:06:43+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "10-path-checkout-totals-heavy-cart-1782911204806-2",
+      "http_code": 200,
+      "total_ms": 2247.299,
+      "ttfb_ms": 2247.1890000000003,
+      "size_download": 981,
+      "body_bytes": 981,
+      "profiler": {
+        "run_id": "10-path-checkout-totals-heavy-cart-1782911204806-2",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 2241.11,
+        "query_count": 2465,
+        "query_time_ms": 1950.08,
+        "memory_peak_mb": 20,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T13:06:47+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "10-path-checkout-totals-heavy-cart-1782911208394-3",
+      "http_code": 200,
+      "total_ms": 2384.9610000000002,
+      "ttfb_ms": 2384.871,
+      "size_download": 981,
+      "body_bytes": 981,
+      "profiler": {
+        "run_id": "10-path-checkout-totals-heavy-cart-1782911208394-3",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 2375.45,
+        "query_count": 2469,
+        "query_time_ms": 2088.3,
+        "memory_peak_mb": 20,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T13:06:50+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "10-path-checkout-totals-heavy-cart-1782911212143-4",
+      "http_code": 200,
+      "total_ms": 2274.4230000000002,
+      "ttfb_ms": 2274.324,
+      "size_download": 981,
+      "body_bytes": 981,
+      "profiler": {
+        "run_id": "10-path-checkout-totals-heavy-cart-1782911212143-4",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 2261.39,
+        "query_count": 2469,
+        "query_time_ms": 1982.39,
+        "memory_peak_mb": 20,
+        "slow_queries": [],
+        "timestamp_gmt": "2026-07-01T13:06:54+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "10-path-checkout-totals-heavy-cart-1782911215756-5",
+      "http_code": 200,
+      "total_ms": 2387,
+      "ttfb_ms": 2386.892,
+      "size_download": 981,
+      "body_bytes": 981,
+      "profiler": {
+        "run_id": "10-path-checkout-totals-heavy-cart-1782911215756-5",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 2369.59,
+        "query_count": 2465,
+        "query_time_ms": 2076.31,
+        "memory_peak_mb": 20,
+        "slow_queries": [
+          {
+            "seconds": 0.06394290924072266,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200928', '_debug_log_source', 'place-order-debug-5a7a6626')"
+          },
+          {
+            "seconds": 0.02829599380493164,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 3.000000 WHERE post_id = 16 AND meta_key='total_sales'"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:06:58+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    }
+  ],
+  "fixture": {
+    "orders": 1000000,
+    "products": 200000,
+    "variations": 800,
+    "analytics_rows": 1000000,
+    "heavy_order_id": 9999001,
+    "heavy_order_items": 1000,
+    "first_product_id": 14,
+    "last_product_id": 200877,
+    "created_gmt": "2026-07-01T12:58:15+00:00"
+  },
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "site_url": "http://localhost:8099"
+  },
+  "measured_at_gmt": "2026-07-01T13:07:02.256Z"
+}

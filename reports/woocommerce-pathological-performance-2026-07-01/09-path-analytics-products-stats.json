@@ -1,0 +1,250 @@
+{
+  "scenario": {
+    "id": "09-path-analytics-products-stats",
+    "rank": 9,
+    "title": "Woo Analytics Products Stats: 1,000,000 Lookup Rows",
+    "codePath": "/wp-json/wc-analytics/reports/products/stats",
+    "trigger": "Product stats REST endpoint over 1,000,000 product lookup rows with cache refresh forced.",
+    "iterations": 5,
+    "admin": true
+  },
+  "request": {
+    "path": "/wp-json/wc-analytics/reports/products/stats?after=2024-01-01T00:00:00&before=2026-07-01T23:59:59&interval=month&force_cache_refresh=1",
+    "headers": []
+  },
+  "summary": {
+    "requests": 5,
+    "http_codes": [
+      200
+    ],
+    "total_ms": {
+      "min": 1361.346,
+      "median": 1430.561,
+      "p95": 2303.817,
+      "max": 2303.817
+    },
+    "server_ms": {
+      "min": 1358.29,
+      "median": 1427.43,
+      "p95": 2300.73,
+      "max": 2300.73
+    },
+    "query_count": {
+      "median": 54,
+      "p95": 54,
+      "max": 54
+    },
+    "query_time_ms": {
+      "median": 1392.28,
+      "p95": 2259.8,
+      "max": 2259.8
+    },
+    "memory_peak_mb": {
+      "median": 54,
+      "p95": 54,
+      "max": 54
+    }
+  },
+  "samples": [
+    {
+      "run_id": "09-path-analytics-products-stats-1782911187250-1",
+      "http_code": 200,
+      "total_ms": 2303.817,
+      "ttfb_ms": 2303.7329999999997,
+      "size_download": 3160,
+      "body_bytes": 3160,
+      "profiler": {
+        "run_id": "09-path-analytics-products-stats-1782911187250-1",
+        "method": "GET",
+        "uri": "/wp-json/wc-analytics/reports/products/stats?after=2024-01-01T00:00:00&before=2026-07-01T23:59:59&interval=month&force_cache_refresh=1",
+        "status": 200,
+        "server_ms": 2300.73,
+        "query_count": 54,
+        "query_time_ms": 2259.8,
+        "memory_peak_mb": 54,
+        "slow_queries": [
+          {
+            "seconds": 0.9969818592071533,
+            "sql": " SELECT SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00' "
+          },
+          {
+            "seconds": 0.7821609973907471,
+            "sql": " SELECT DATE_FORMAT(wp_wc_order_product_lookup.`date_created`, '%Y-%m') AS time_interval FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00' GROUP BY time_interval "
+          },
+          {
+            "seconds": 0.46321821212768555,
+            "sql": " SELECT DATE_FORMAT(wp_wc_order_product_lookup.`date_created`, '%Y-%m') AS time_interval , MAX(wp_wc_order_product_lookup.date_created) AS datetime_anchor , SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00' GROUP BY "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:06:29+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "09-path-analytics-products-stats-1782911189561-2",
+      "http_code": 200,
+      "total_ms": 1430.561,
+      "ttfb_ms": 1430.464,
+      "size_download": 3160,
+      "body_bytes": 3160,
+      "profiler": {
+        "run_id": "09-path-analytics-products-stats-1782911189561-2",
+        "method": "GET",
+        "uri": "/wp-json/wc-analytics/reports/products/stats?after=2024-01-01T00:00:00&before=2026-07-01T23:59:59&interval=month&force_cache_refresh=1",
+        "status": 200,
+        "server_ms": 1427.43,
+        "query_count": 54,
+        "query_time_ms": 1392.28,
+        "memory_peak_mb": 54,
+        "slow_queries": [
+          {
+            "seconds": 0.5652029514312744,
+            "sql": " SELECT SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00' "
+          },
+          {
+            "seconds": 0.45781588554382324,
+            "sql": " SELECT DATE_FORMAT(wp_wc_order_product_lookup.`date_created`, '%Y-%m') AS time_interval , MAX(wp_wc_order_product_lookup.date_created) AS datetime_anchor , SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00' GROUP BY "
+          },
+          {
+            "seconds": 0.35559916496276855,
+            "sql": " SELECT DATE_FORMAT(wp_wc_order_product_lookup.`date_created`, '%Y-%m') AS time_interval FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00' GROUP BY time_interval "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:06:30+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "09-path-analytics-products-stats-1782911190999-3",
+      "http_code": 200,
+      "total_ms": 1441.916,
+      "ttfb_ms": 1441.8390000000002,
+      "size_download": 3160,
+      "body_bytes": 3160,
+      "profiler": {
+        "run_id": "09-path-analytics-products-stats-1782911190999-3",
+        "method": "GET",
+        "uri": "/wp-json/wc-analytics/reports/products/stats?after=2024-01-01T00:00:00&before=2026-07-01T23:59:59&interval=month&force_cache_refresh=1",
+        "status": 200,
+        "server_ms": 1439.09,
+        "query_count": 54,
+        "query_time_ms": 1397.29,
+        "memory_peak_mb": 54,
+        "slow_queries": [
+          {
+            "seconds": 0.545922040939331,
+            "sql": " SELECT SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00' "
+          },
+          {
+            "seconds": 0.4389958381652832,
+            "sql": " SELECT DATE_FORMAT(wp_wc_order_product_lookup.`date_created`, '%Y-%m') AS time_interval , MAX(wp_wc_order_product_lookup.date_created) AS datetime_anchor , SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00' GROUP BY "
+          },
+          {
+            "seconds": 0.3953840732574463,
+            "sql": " SELECT DATE_FORMAT(wp_wc_order_product_lookup.`date_created`, '%Y-%m') AS time_interval FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00' GROUP BY time_interval "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:06:32+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "09-path-analytics-products-stats-1782911192448-4",
+      "http_code": 200,
+      "total_ms": 1361.346,
+      "ttfb_ms": 1361.254,
+      "size_download": 3160,
+      "body_bytes": 3160,
+      "profiler": {
+        "run_id": "09-path-analytics-products-stats-1782911192448-4",
+        "method": "GET",
+        "uri": "/wp-json/wc-analytics/reports/products/stats?after=2024-01-01T00:00:00&before=2026-07-01T23:59:59&interval=month&force_cache_refresh=1",
+        "status": 200,
+        "server_ms": 1358.29,
+        "query_count": 54,
+        "query_time_ms": 1321.3,
+        "memory_peak_mb": 54,
+        "slow_queries": [
+          {
+            "seconds": 0.5170760154724121,
+            "sql": " SELECT SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00' "
+          },
+          {
+            "seconds": 0.43837690353393555,
+            "sql": " SELECT DATE_FORMAT(wp_wc_order_product_lookup.`date_created`, '%Y-%m') AS time_interval , MAX(wp_wc_order_product_lookup.date_created) AS datetime_anchor , SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00' GROUP BY "
+          },
+          {
+            "seconds": 0.34973716735839844,
+            "sql": " SELECT DATE_FORMAT(wp_wc_order_product_lookup.`date_created`, '%Y-%m') AS time_interval FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00' GROUP BY time_interval "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:06:33+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "09-path-analytics-products-stats-1782911193815-5",
+      "http_code": 200,
+      "total_ms": 1382.335,
+      "ttfb_ms": 1382.259,
+      "size_download": 3160,
+      "body_bytes": 3160,
+      "profiler": {
+        "run_id": "09-path-analytics-products-stats-1782911193815-5",
+        "method": "GET",
+        "uri": "/wp-json/wc-analytics/reports/products/stats?after=2024-01-01T00:00:00&before=2026-07-01T23:59:59&interval=month&force_cache_refresh=1",
+        "status": 200,
+        "server_ms": 1379.51,
+        "query_count": 54,
+        "query_time_ms": 1343.76,
+        "memory_peak_mb": 54,
+        "slow_queries": [
+          {
+            "seconds": 0.5124998092651367,
+            "sql": " SELECT SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00' "
+          },
+          {
+            "seconds": 0.44083714485168457,
+            "sql": " SELECT DATE_FORMAT(wp_wc_order_product_lookup.`date_created`, '%Y-%m') AS time_interval , MAX(wp_wc_order_product_lookup.date_created) AS datetime_anchor , SUM(product_qty) as items_sold, SUM(product_net_revenue) AS net_revenue, COUNT( DISTINCT ( CASE WHEN product_gross_revenue >= 0 THEN wp_wc_order_product_lookup.order_id END ) ) as orders_count, COUNT(DISTINCT product_id) as products_count, COUNT(DISTINCT variation_id) as variations_count FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00' GROUP BY "
+          },
+          {
+            "seconds": 0.37430596351623535,
+            "sql": " SELECT DATE_FORMAT(wp_wc_order_product_lookup.`date_created`, '%Y-%m') AS time_interval FROM wp_wc_order_product_lookup JOIN wp_wc_order_stats ON wp_wc_order_product_lookup.order_id = wp_wc_order_stats.order_id WHERE 1=1 AND ( wp_wc_order_stats.status NOT IN ( 'wc-auto-draft','wc-trash','wc-pending','wc-failed','wc-cancelled','wc-checkout-draft' ) ) AND wp_wc_order_product_lookup.`date_created` <= '2026-07-01 23:59:59' AND wp_wc_order_product_lookup.`date_created` >= '2024-01-01 00:00:00' GROUP BY time_interval "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:06:35+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    }
+  ],
+  "fixture": {
+    "orders": 1000000,
+    "products": 200000,
+    "variations": 800,
+    "analytics_rows": 1000000,
+    "heavy_order_id": 9999001,
+    "heavy_order_items": 1000,
+    "first_product_id": 14,
+    "last_product_id": 200877,
+    "created_gmt": "2026-07-01T12:58:15+00:00"
+  },
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "site_url": "http://localhost:8099"
+  },
+  "measured_at_gmt": "2026-07-01T13:06:39.473Z"
+}

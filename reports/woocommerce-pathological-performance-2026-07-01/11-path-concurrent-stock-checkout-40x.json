@@ -1,0 +1,2708 @@
+{
+  "scenario": {
+    "id": "11-path-concurrent-stock-checkout-40x",
+    "rank": 11,
+    "title": "Concurrent Store API Checkout: 40 Buyers, Same SKU",
+    "codePath": "/wp-json/wc/store/v1/checkout concurrent stock reservation",
+    "trigger": "Forty simultaneous Store API checkout submissions, each with the same managed-stock product, to expose stock/session/order-write contention.",
+    "concurrency": 40,
+    "reportRequest": {
+      "method": "POST",
+      "path": "/wp-json/wc/store/v1/checkout",
+      "headers": [
+        "Content-Type: application/json"
+      ]
+    }
+  },
+  "request": {
+    "method": "POST",
+    "path": "/wp-json/wc/store/v1/checkout",
+    "headers": [
+      "Content-Type: application/json"
+    ]
+  },
+  "summary": {
+    "requests": 40,
+    "http_codes": [
+      200
+    ],
+    "total_ms": {
+      "min": 1276.51,
+      "median": 2983.04,
+      "p95": 4660.196,
+      "max": 4681.699
+    },
+    "server_ms": {
+      "min": 1259.18,
+      "median": 1539.6,
+      "p95": 1959.9,
+      "max": 1981.5
+    },
+    "query_count": {
+      "median": 528,
+      "p95": 530,
+      "max": 530
+    },
+    "query_time_ms": {
+      "median": 1412.78,
+      "p95": 1791.81,
+      "max": 1824.89
+    },
+    "memory_peak_mb": {
+      "median": 14,
+      "p95": 14,
+      "max": 14
+    }
+  },
+  "samples": [
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003131-1",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 1308.2830000000001,
+      "ttfb_ms": 1308.1640000000002,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003131-1",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1287.24,
+        "query_count": 480,
+        "query_time_ms": 1171.33,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.0606689453125,
+            "sql": "INSERT INTO `wp_wc_order_addresses` (`address_1`, `address_type`, `city`, `country`, `first_name`, `last_name`, `order_id`, `phone`, `postcode`, `state`) VALUES ('1 Lock Way', 'shipping', 'Perf City', 'US', 'Concurrent', 'Buyer', 200885, '5551234567', '94105', 'CA')"
+          },
+          {
+            "seconds": 0.048979997634887695,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 13:03:23', 200885, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.04706096649169922,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200885', '_shipping_hash', '81bd50e8ac71b032e5ad39b63056c4af')"
+          },
+          {
+            "seconds": 0.03906893730163574,
+            "sql": "REPLACE INTO `wp_wc_product_meta_lookup` (`product_id`, `sku`, `virtual`, `downloadable`, `min_price`, `max_price`, `onsale`, `stock_quantity`, `stock_status`, `rating_count`, `average_rating`, `total_sales`, `tax_status`, `tax_class`, `global_unique_id`) VALUES ('14', 'BENCH-SKU-00001', '0', '0', '11', '11', '0', '935', 'instock', '0', '0', '67', 'taxable', '', '')"
+          },
+          {
+            "seconds": 0.034230947494506836,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 13:03:24', 200885, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.03226494789123535,
+            "sql": "INSERT INTO `wp_commentmeta` (`comment_id`, `meta_key`, `meta_value`) VALUES ('359', 'note_group', 'email_notification')"
+          },
+          {
+            "seconds": 0.030685901641845703,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 2181170 AND `order_id` = 200885"
+          },
+          {
+            "seconds": 0.027096986770629883,
+            "sql": "UPDATE `wp_options` SET `option_value` = '1782911004' WHERE `option_name` = '_transient_product_query-transient-version'"
+          },
+          {
+            "seconds": 0.0265347957611084,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200885', '_coupons_hash', 'd751713988987e9331980363e24189ce')"
+          },
+          {
+            "seconds": 0.02289605140686035,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `download_permission_granted`, `order_id` ) VALUES ( 1, 200885 ) ON DUPLICATE KEY UPDATE `download_permission_granted` = VALUES( `download_permission_granted` ), `order_id` = VALUES( `order_id` ) "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:24+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003134-2",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 1328.546,
+      "ttfb_ms": 1328.4279999999999,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003134-2",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1296.76,
+        "query_count": 530,
+        "query_time_ms": 1180.13,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.060192108154296875,
+            "sql": "INSERT INTO `wp_wc_order_addresses` (`address_1`, `address_type`, `city`, `country`, `email`, `first_name`, `last_name`, `order_id`, `phone`, `postcode`, `state`) VALUES ('1 Lock Way', 'billing', 'Perf City', 'US', 'concurrent-buyer@example.test', 'Concurrent', 'Buyer', 200891, '5551234567', '94105', 'CA')"
+          },
+          {
+            "seconds": 0.05855703353881836,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 200891, 14, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 14 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 14 AND stock_table.`order_id` != 200891 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.0484461784362793,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.04787898063659668,
+            "sql": "INSERT INTO `wp_wc_order_addresses` (`address_1`, `address_type`, `city`, `country`, `first_name`, `last_name`, `order_id`, `phone`, `postcode`, `state`) VALUES ('1 Lock Way', 'shipping', 'Perf City', 'US', 'Concurrent', 'Buyer', 200891, '5551234567', '94105', 'CA')"
+          },
+          {
+            "seconds": 0.045738935470581055,
+            "sql": "INSERT INTO `wp_commentmeta` (`comment_id`, `meta_key`, `meta_value`) VALUES ('339', 'note_group', 'product_stock')"
+          },
+          {
+            "seconds": 0.02965712547302246,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200891', '_shipping_hash', '81bd50e8ac71b032e5ad39b63056c4af')"
+          },
+          {
+            "seconds": 0.02940511703491211,
+            "sql": "UPDATE `wp_posts` SET `comment_count` = 4 WHERE `ID` = 200891"
+          },
+          {
+            "seconds": 0.021954059600830078,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `order_id`, `recorded_sales` ) VALUES ( 200891, 1 ) ON DUPLICATE KEY UPDATE `order_id` = VALUES( `order_id` ), `recorded_sales` = VALUES( `recorded_sales` ) "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:24+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003135-3",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 1371.77,
+      "ttfb_ms": 1371.685,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003135-3",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1361.48,
+        "query_count": 530,
+        "query_time_ms": 1246.1,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.06556296348571777,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 1.000000 WHERE post_id = 14 AND meta_key='total_sales'"
+          },
+          {
+            "seconds": 0.06064009666442871,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 200889, 14, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 14 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 14 AND stock_table.`order_id` != 200889 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.0602419376373291,
+            "sql": "INSERT INTO `wp_wc_order_addresses` (`address_1`, `address_type`, `city`, `country`, `first_name`, `last_name`, `order_id`, `phone`, `postcode`, `state`) VALUES ('1 Lock Way', 'shipping', 'Perf City', 'US', 'Concurrent', 'Buyer', 200889, '5551234567', '94105', 'CA')"
+          },
+          {
+            "seconds": 0.04705405235290527,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200889', '_shipping_hash', '81bd50e8ac71b032e5ad39b63056c4af')"
+          },
+          {
+            "seconds": 0.033659934997558594,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.028687000274658203,
+            "sql": "UPDATE `wp_posts` SET `comment_count` = 3 WHERE `ID` = 200889"
+          },
+          {
+            "seconds": 0.02856302261352539,
+            "sql": "INSERT INTO `wp_commentmeta` (`comment_id`, `meta_key`, `meta_value`) VALUES ('337', 'note_group', 'product_stock')"
+          },
+          {
+            "seconds": 0.028367996215820312,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 13:03:24', 200889, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.02717900276184082,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `coupon_usages_are_counted`, `order_id` ) VALUES ( 1, 200889 ) ON DUPLICATE KEY UPDATE `coupon_usages_are_counted` = VALUES( `coupon_usages_are_counted` ), `order_id` = VALUES( `order_id` ) "
+          },
+          {
+            "seconds": 0.02649998664855957,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200889', '_coupons_hash', 'd751713988987e9331980363e24189ce')"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:24+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003136-4",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 1339.862,
+      "ttfb_ms": 1339.749,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003136-4",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1307.21,
+        "query_count": 530,
+        "query_time_ms": 1191.24,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.05921006202697754,
+            "sql": "INSERT INTO `wp_wc_order_addresses` (`address_1`, `address_type`, `city`, `country`, `first_name`, `last_name`, `order_id`, `phone`, `postcode`, `state`) VALUES ('1 Lock Way', 'shipping', 'Perf City', 'US', 'Concurrent', 'Buyer', 200888, '5551234567', '94105', 'CA')"
+          },
+          {
+            "seconds": 0.05299186706542969,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 13:03:23', 200888, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.04798603057861328,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200888', '_shipping_hash', '81bd50e8ac71b032e5ad39b63056c4af')"
+          },
+          {
+            "seconds": 0.047966957092285156,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 1.000000 WHERE post_id = 14 AND meta_key='total_sales'"
+          },
+          {
+            "seconds": 0.03343486785888672,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 200888, 14, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 14 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 14 AND stock_table.`order_id` != 200888 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.029894113540649414,
+            "sql": "INSERT INTO `wp_comments` (`comment_post_ID`, `comment_author_IP`, `comment_author`, `comment_author_email`, `comment_author_url`, `comment_date`, `comment_date_gmt`, `comment_content`, `comment_karma`, `comment_approved`, `comment_agent`, `comment_type`, `comment_parent`, `user_id`) VALUES (200888, '', 'WooCommerce', '', '', '2026-07-01 13:03:23', '2026-07-01 13:03:23', 'Stock hold of 60 minutes applied to: <br>- Benchmark Product 00001 Alpha SearchToken001 (BENCH-SKU-00001) &times; 1', 0, '1', 'WooCommerce', 'order_note', 0, 0)"
+          },
+          {
+            "seconds": 0.029539823532104492,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200888', '_coupons_hash', 'd751713988987e9331980363e24189ce')"
+          },
+          {
+            "seconds": 0.027451038360595703,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 13:03:24', 200888, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.02686905860900879,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `coupon_usages_are_counted`, `order_id` ) VALUES ( 1, 200888 ) ON DUPLICATE KEY UPDATE `coupon_usages_are_counted` = VALUES( `coupon_usages_are_counted` ), `order_id` = VALUES( `order_id` ) "
+          },
+          {
+            "seconds": 0.026551008224487305,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:24+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003137-5",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 1369.2530000000002,
+      "ttfb_ms": 1369.1819999999998,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003137-5",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1359.03,
+        "query_count": 530,
+        "query_time_ms": 1245.98,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.06685781478881836,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 1.000000 WHERE post_id = 14 AND meta_key='total_sales'"
+          },
+          {
+            "seconds": 0.0609891414642334,
+            "sql": "INSERT INTO `wp_wc_order_addresses` (`address_1`, `address_type`, `city`, `country`, `first_name`, `last_name`, `order_id`, `phone`, `postcode`, `state`) VALUES ('1 Lock Way', 'shipping', 'Perf City', 'US', 'Concurrent', 'Buyer', 200884, '5551234567', '94105', 'CA')"
+          },
+          {
+            "seconds": 0.06071591377258301,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 13:03:23', 200884, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.04778909683227539,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200884', '_shipping_hash', '81bd50e8ac71b032e5ad39b63056c4af')"
+          },
+          {
+            "seconds": 0.029567956924438477,
+            "sql": "INSERT INTO `wp_comments` (`comment_post_ID`, `comment_author_IP`, `comment_author`, `comment_author_email`, `comment_author_url`, `comment_date`, `comment_date_gmt`, `comment_content`, `comment_karma`, `comment_approved`, `comment_agent`, `comment_type`, `comment_parent`, `user_id`) VALUES (200884, '', 'WooCommerce', '', '', '2026-07-01 13:03:24', '2026-07-01 13:03:24', 'Payment to be made upon delivery. Order status changed from Pending payment to Processing.', 0, '1', 'WooCommerce', 'order_note', 0, 0)"
+          },
+          {
+            "seconds": 0.028985023498535156,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200884', '_coupons_hash', 'd751713988987e9331980363e24189ce')"
+          },
+          {
+            "seconds": 0.027743101119995117,
+            "sql": "UPDATE `wp_posts` SET `comment_count` = 1 WHERE `ID` = 200884"
+          },
+          {
+            "seconds": 0.027432918548583984,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 13:03:24', 200884, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.027064800262451172,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `coupon_usages_are_counted`, `order_id` ) VALUES ( 1, 200884 ) ON DUPLICATE KEY UPDATE `coupon_usages_are_counted` = VALUES( `coupon_usages_are_counted` ), `order_id` = VALUES( `order_id` ) "
+          },
+          {
+            "seconds": 0.025929927825927734,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `download_permission_granted`, `order_id` ) VALUES ( 1, 200884 ) ON DUPLICATE KEY UPDATE `download_permission_granted` = VALUES( `download_permission_granted` ), `order_id` = VALUES( `order_id` ) "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:24+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003138-6",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 1276.51,
+      "ttfb_ms": 1276.395,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003138-6",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1259.18,
+        "query_count": 530,
+        "query_time_ms": 1144.44,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.06060194969177246,
+            "sql": "INSERT INTO `wp_wc_order_addresses` (`address_1`, `address_type`, `city`, `country`, `email`, `first_name`, `last_name`, `order_id`, `phone`, `postcode`, `state`) VALUES ('1 Lock Way', 'billing', 'Perf City', 'US', 'concurrent-buyer@example.test', 'Concurrent', 'Buyer', 200890, '5551234567', '94105', 'CA')"
+          },
+          {
+            "seconds": 0.04756903648376465,
+            "sql": "INSERT INTO `wp_wc_order_addresses` (`address_1`, `address_type`, `city`, `country`, `first_name`, `last_name`, `order_id`, `phone`, `postcode`, `state`) VALUES ('1 Lock Way', 'shipping', 'Perf City', 'US', 'Concurrent', 'Buyer', 200890, '5551234567', '94105', 'CA')"
+          },
+          {
+            "seconds": 0.04266095161437988,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 13:03:23', 200890, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.036355018615722656,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `download_permission_granted`, `order_id` ) VALUES ( 1, 200890 ) ON DUPLICATE KEY UPDATE `download_permission_granted` = VALUES( `download_permission_granted` ), `order_id` = VALUES( `order_id` ) "
+          },
+          {
+            "seconds": 0.03195309638977051,
+            "sql": "REPLACE INTO `wp_wc_product_meta_lookup` (`product_id`, `sku`, `virtual`, `downloadable`, `min_price`, `max_price`, `onsale`, `stock_quantity`, `stock_status`, `rating_count`, `average_rating`, `total_sales`, `tax_status`, `tax_class`, `global_unique_id`) VALUES ('14', 'BENCH-SKU-00001', '0', '0', '11', '11', '0', '933', 'instock', '0', '0', '71', 'taxable', '', '')"
+          },
+          {
+            "seconds": 0.03155803680419922,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 1.000000 WHERE post_id = 14 AND meta_key='total_sales'"
+          },
+          {
+            "seconds": 0.029846906661987305,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200890', '_shipping_hash', '81bd50e8ac71b032e5ad39b63056c4af')"
+          },
+          {
+            "seconds": 0.024476051330566406,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 13:03:23', 200890, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.023730993270874023,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `coupon_usages_are_counted`, `order_id` ) VALUES ( 1, 200890 ) ON DUPLICATE KEY UPDATE `coupon_usages_are_counted` = VALUES( `coupon_usages_are_counted` ), `order_id` = VALUES( `order_id` ) "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:24+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003138-7",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 1337.326,
+      "ttfb_ms": 1337.243,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003138-7",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1303.84,
+        "query_count": 508,
+        "query_time_ms": 1192.37,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.06426501274108887,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 200887, 14, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 14 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 14 AND stock_table.`order_id` != 200887 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.05911612510681152,
+            "sql": "INSERT INTO `wp_wc_order_addresses` (`address_1`, `address_type`, `city`, `country`, `first_name`, `last_name`, `order_id`, `phone`, `postcode`, `state`) VALUES ('1 Lock Way', 'shipping', 'Perf City', 'US', 'Concurrent', 'Buyer', 200887, '5551234567', '94105', 'CA')"
+          },
+          {
+            "seconds": 0.04708719253540039,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200887', '_shipping_hash', '81bd50e8ac71b032e5ad39b63056c4af')"
+          },
+          {
+            "seconds": 0.033161163330078125,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `order_id`, `recorded_sales` ) VALUES ( 200887, 1 ) ON DUPLICATE KEY UPDATE `order_id` = VALUES( `order_id` ), `recorded_sales` = VALUES( `recorded_sales` ) "
+          },
+          {
+            "seconds": 0.030295133590698242,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200887', '_coupons_hash', 'd751713988987e9331980363e24189ce')"
+          },
+          {
+            "seconds": 0.028496980667114258,
+            "sql": "INSERT INTO `wp_commentmeta` (`comment_id`, `meta_key`, `meta_value`) VALUES ('338', 'note_group', 'product_stock')"
+          },
+          {
+            "seconds": 0.02834796905517578,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 13:03:24', 200887, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.026933908462524414,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `coupon_usages_are_counted`, `order_id` ) VALUES ( 1, 200887 ) ON DUPLICATE KEY UPDATE `coupon_usages_are_counted` = VALUES( `coupon_usages_are_counted` ), `order_id` = VALUES( `order_id` ) "
+          },
+          {
+            "seconds": 0.02280402183532715,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 13:03:23', 200887, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.021949052810668945,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:24+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003139-8",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 1294.1879999999999,
+      "ttfb_ms": 1294.0739999999998,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003139-8",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1280.58,
+        "query_count": 530,
+        "query_time_ms": 1168.92,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.060678958892822266,
+            "sql": "INSERT INTO `wp_wc_order_addresses` (`address_1`, `address_type`, `city`, `country`, `first_name`, `last_name`, `order_id`, `phone`, `postcode`, `state`) VALUES ('1 Lock Way', 'shipping', 'Perf City', 'US', 'Concurrent', 'Buyer', 200886, '5551234567', '94105', 'CA')"
+          },
+          {
+            "seconds": 0.05852484703063965,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `status`, `type` ) VALUES ( '2026-07-01 13:03:23', 200886, 'wc-pending', 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `status` = VALUES( `status` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.0554349422454834,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.04723501205444336,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200886', '_shipping_hash', '81bd50e8ac71b032e5ad39b63056c4af')"
+          },
+          {
+            "seconds": 0.032293081283569336,
+            "sql": "INSERT INTO `wp_commentmeta` (`comment_id`, `meta_key`, `meta_value`) VALUES ('360', 'note_group', 'email_notification')"
+          },
+          {
+            "seconds": 0.03014206886291504,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200886', '_coupons_hash', 'd751713988987e9331980363e24189ce')"
+          },
+          {
+            "seconds": 0.027926921844482422,
+            "sql": "INSERT INTO `wp_commentmeta` (`comment_id`, `meta_key`, `meta_value`) VALUES ('334', 'note_group', 'product_stock')"
+          },
+          {
+            "seconds": 0.027467012405395508,
+            "sql": "REPLACE INTO `wp_wc_product_meta_lookup` (`product_id`, `sku`, `virtual`, `downloadable`, `min_price`, `max_price`, `onsale`, `stock_quantity`, `stock_status`, `rating_count`, `average_rating`, `total_sales`, `tax_status`, `tax_class`, `global_unique_id`) VALUES ('14', 'BENCH-SKU-00001', '0', '0', '11', '11', '0', '935', 'instock', '0', '0', '68', 'taxable', '', '')"
+          },
+          {
+            "seconds": 0.0263979434967041,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 13:03:24', 200886, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.02535390853881836,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `coupon_usages_are_counted`, `order_id` ) VALUES ( 1, 200886 ) ON DUPLICATE KEY UPDATE `coupon_usages_are_counted` = VALUES( `coupon_usages_are_counted` ), `order_id` = VALUES( `order_id` ) "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:24+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003141-9",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 1369.1390000000001,
+      "ttfb_ms": 1369.021,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003141-9",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1358.31,
+        "query_count": 530,
+        "query_time_ms": 1240.06,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.1063380241394043,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 200892, 14, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 14 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 14 AND stock_table.`order_id` != 200892 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.08096909523010254,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 1.000000 WHERE post_id = 14 AND meta_key='total_sales'"
+          },
+          {
+            "seconds": 0.06060791015625,
+            "sql": "UPDATE `wp_posts` SET `guid` = 'http://localhost:8099/?post_type=shop_order_placehold&p=200892' WHERE `ID` = 200892"
+          },
+          {
+            "seconds": 0.047302961349487305,
+            "sql": " INSERT INTO wp_wc_orders ( `billing_email`, `currency`, `customer_id`, `customer_note`, `date_created_gmt`, `date_updated_gmt`, `id`, `ip_address`, `parent_order_id`, `payment_method`, `payment_method_title`, `status`, `tax_amount`, `total_amount`, `transaction_id`, `type`, `user_agent` ) VALUES ( 'concurrent-buyer@example.test', 'USD', 0, '', '2026-07-01 13:03:23', '2026-07-01 13:03:23', 200892, '172.20.0.1', 0, 'cod', '', 'wc-checkout-draft', 0.000000, 0.000000, '', 'shop_order', 'wc-perf-local-concurrency/1.0' ) ON DUPLICATE KEY UPDATE `billing_email` = VALUES( `billing_email` ), `currency` = VALUES( `currency` ), `customer_id` = VALUES( `customer_id` ), `customer_note` = VALUES( `customer_note` ), `date_created_gmt` = VALUES( `date_created_gmt` ), `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `ip_address` = VALUES( `ip_address` ), `parent_order_id` = VALU"
+          },
+          {
+            "seconds": 0.03045797348022461,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `cart_hash`, `coupon_usages_are_counted`, `created_via`, `date_completed_gmt`, `date_paid_gmt`, `discount_tax_amount`, `discount_total_amount`, `download_permission_granted`, `new_order_email_sent`, `order_id`, `order_key`, `order_stock_reduced`, `prices_include_tax`, `recorded_sales`, `shipping_tax_amount`, `shipping_total_amount`, `woocommerce_version` ) VALUES ( '83aefe3c22b141abd2905c386781e155', 0, 'store-api', NULL, NULL, 0.000000, 0.000000, 0, 0, 200892, 'wc_order_w5StPzj7r6yrU', 0, 0, 0, 0.000000, 0.000000, '10.9.1' ) ON DUPLICATE KEY UPDATE `cart_hash` = VALUES( `cart_hash` ), `coupon_usages_are_counted` = VALUES( `coupon_usages_are_counted` ), `created_via` = VALUES( `created_via` ), `date_completed_gmt` = VALUES( `date_completed_gmt` ), `date_paid_gmt` = VALUES( `date_paid_gmt` ), `discount_tax_amount` = VALUES( `discount_tax_amount`"
+          },
+          {
+            "seconds": 0.02839207649230957,
+            "sql": "DELETE FROM `wp_wc_reserved_stock` WHERE `order_id` = '200892'"
+          },
+          {
+            "seconds": 0.02290511131286621,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `status`, `type` ) VALUES ( '2026-07-01 13:03:23', 200892, 'wc-pending', 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `status` = VALUES( `status` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.02205491065979004,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.021454811096191406,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `download_permission_granted`, `order_id` ) VALUES ( 1, 200892 ) ON DUPLICATE KEY UPDATE `download_permission_granted` = VALUES( `download_permission_granted` ), `order_id` = VALUES( `order_id` ) "
+          },
+          {
+            "seconds": 0.021162033081054688,
+            "sql": "UPDATE `wp_posts` SET `comment_count` = 5 WHERE `ID` = 200892"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:24+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003171-10",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 1378.222,
+      "ttfb_ms": 1378.128,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003171-10",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1363.15,
+        "query_count": 530,
+        "query_time_ms": 1241.85,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.11370992660522461,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 200893, 14, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 14 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 14 AND stock_table.`order_id` != 200893 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.056464195251464844,
+            "sql": "INSERT INTO `wp_posts` (`post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_content_filtered`, `post_title`, `post_excerpt`, `post_status`, `post_type`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_parent`, `menu_order`, `post_mime_type`, `guid`) VALUES (0, '2026-07-01 13:03:23', '2026-07-01 13:03:23', '', '', '', '', 'draft', 'shop_order_placehold', 'closed', 'closed', '', '', '', '', '2026-07-01 13:03:23', '2026-07-01 13:03:23', 0, 0, '', '')"
+          },
+          {
+            "seconds": 0.05491185188293457,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 1.000000 WHERE post_id = 14 AND meta_key='total_sales'"
+          },
+          {
+            "seconds": 0.035835981369018555,
+            "sql": "UPDATE `wp_posts` SET `guid` = 'http://localhost:8099/?post_type=shop_order_placehold&p=200893' WHERE `ID` = 200893"
+          },
+          {
+            "seconds": 0.032327890396118164,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `status`, `type` ) VALUES ( '2026-07-01 13:03:23', 200893, 'wc-pending', 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `status` = VALUES( `status` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.03092503547668457,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `download_permission_granted`, `order_id` ) VALUES ( 1, 200893 ) ON DUPLICATE KEY UPDATE `download_permission_granted` = VALUES( `download_permission_granted` ), `order_id` = VALUES( `order_id` ) "
+          },
+          {
+            "seconds": 0.02872490882873535,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `cart_hash`, `coupon_usages_are_counted`, `created_via`, `date_completed_gmt`, `date_paid_gmt`, `discount_tax_amount`, `discount_total_amount`, `download_permission_granted`, `new_order_email_sent`, `order_id`, `order_key`, `order_stock_reduced`, `prices_include_tax`, `recorded_sales`, `shipping_tax_amount`, `shipping_total_amount`, `woocommerce_version` ) VALUES ( '83aefe3c22b141abd2905c386781e155', 0, 'store-api', NULL, NULL, 0.000000, 0.000000, 0, 0, 200893, 'wc_order_xfQbKg88xNtLW', 0, 0, 0, 0.000000, 0.000000, '10.9.1' ) ON DUPLICATE KEY UPDATE `cart_hash` = VALUES( `cart_hash` ), `coupon_usages_are_counted` = VALUES( `coupon_usages_are_counted` ), `created_via` = VALUES( `created_via` ), `date_completed_gmt` = VALUES( `date_completed_gmt` ), `date_paid_gmt` = VALUES( `date_paid_gmt` ), `discount_tax_amount` = VALUES( `discount_tax_amount`"
+          },
+          {
+            "seconds": 0.02790093421936035,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `order_id`, `order_stock_reduced` ) VALUES ( 200893, 1 ) ON DUPLICATE KEY UPDATE `order_id` = VALUES( `order_id` ), `order_stock_reduced` = VALUES( `order_stock_reduced` ) "
+          },
+          {
+            "seconds": 0.025055885314941406,
+            "sql": " INSERT INTO wp_wc_orders ( `billing_email`, `currency`, `customer_id`, `customer_note`, `date_created_gmt`, `date_updated_gmt`, `id`, `ip_address`, `parent_order_id`, `payment_method`, `payment_method_title`, `status`, `tax_amount`, `total_amount`, `transaction_id`, `type`, `user_agent` ) VALUES ( 'concurrent-buyer@example.test', 'USD', 0, '', '2026-07-01 13:03:23', '2026-07-01 13:03:23', 200893, '172.20.0.1', 0, 'cod', '', 'wc-checkout-draft', 0.000000, 0.000000, '', 'shop_order', 'wc-perf-local-concurrency/1.0' ) ON DUPLICATE KEY UPDATE `billing_email` = VALUES( `billing_email` ), `currency` = VALUES( `currency` ), `customer_id` = VALUES( `customer_id` ), `customer_note` = VALUES( `customer_note` ), `date_created_gmt` = VALUES( `date_created_gmt` ), `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `ip_address` = VALUES( `ip_address` ), `parent_order_id` = VALU"
+          },
+          {
+            "seconds": 0.021578073501586914,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 13:03:24', 200893, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:24+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003181-11",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 1928.307,
+      "ttfb_ms": 1928.1950000000002,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003181-11",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1296.64,
+        "query_count": 530,
+        "query_time_ms": 1168.89,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.06510090827941895,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200894', '_debug_log_source_pending_deletion', 'place-order-debug-6e5af6a6')"
+          },
+          {
+            "seconds": 0.05205678939819336,
+            "sql": "INSERT INTO `wp_comments` (`comment_post_ID`, `comment_author_IP`, `comment_author`, `comment_author_email`, `comment_author_url`, `comment_date`, `comment_date_gmt`, `comment_content`, `comment_karma`, `comment_approved`, `comment_agent`, `comment_type`, `comment_parent`, `user_id`) VALUES (200894, '', 'WooCommerce', '', '', '2026-07-01 13:03:24', '2026-07-01 13:03:24', 'Email \\\"New order\\\" failed to send: Could not instantiate mail function..', 0, '1', 'WooCommerce', 'order_note', 0, 0)"
+          },
+          {
+            "seconds": 0.04883599281311035,
+            "sql": "UPDATE `wp_posts` SET `guid` = 'http://localhost:8099/?post_type=shop_order_placehold&p=200894' WHERE `ID` = 200894"
+          },
+          {
+            "seconds": 0.042530059814453125,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 2181309 AND `order_id` = 200894"
+          },
+          {
+            "seconds": 0.030525922775268555,
+            "sql": "INSERT INTO `wp_commentmeta` (`comment_id`, `meta_key`, `meta_value`) VALUES ('385', 'note_group', 'email_notification')"
+          },
+          {
+            "seconds": 0.03004598617553711,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200894', '_debug_log_source', 'place-order-debug-6e5af6a6')"
+          },
+          {
+            "seconds": 0.029491901397705078,
+            "sql": "INSERT INTO `wp_woocommerce_order_items` (`order_item_name`, `order_item_type`, `order_id`) VALUES ('Benchmark Product 00001 Alpha SearchToken001', 'line_item', '200894')"
+          },
+          {
+            "seconds": 0.02486896514892578,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200894', '_shipping_hash', '81bd50e8ac71b032e5ad39b63056c4af')"
+          },
+          {
+            "seconds": 0.024113893508911133,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `cart_hash`, `coupon_usages_are_counted`, `created_via`, `date_completed_gmt`, `date_paid_gmt`, `discount_tax_amount`, `discount_total_amount`, `download_permission_granted`, `new_order_email_sent`, `order_id`, `order_key`, `order_stock_reduced`, `prices_include_tax`, `recorded_sales`, `shipping_tax_amount`, `shipping_total_amount`, `woocommerce_version` ) VALUES ( '83aefe3c22b141abd2905c386781e155', 0, 'store-api', NULL, NULL, 0.000000, 0.000000, 0, 0, 200894, 'wc_order_OZf54F1WqqL2P', 0, 0, 0, 0.000000, 0.000000, '10.9.1' ) ON DUPLICATE KEY UPDATE `cart_hash` = VALUES( `cart_hash` ), `coupon_usages_are_counted` = VALUES( `coupon_usages_are_counted` ), `created_via` = VALUES( `created_via` ), `date_completed_gmt` = VALUES( `date_completed_gmt` ), `date_paid_gmt` = VALUES( `date_paid_gmt` ), `discount_tax_amount` = VALUES( `discount_tax_amount`"
+          },
+          {
+            "seconds": 0.02251410484313965,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200894', '_coupons_hash', 'd751713988987e9331980363e24189ce')"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003183-12",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 2646.535,
+      "ttfb_ms": 2646.408,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003183-12",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1390.44,
+        "query_count": 512,
+        "query_time_ms": 1264.1,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.06510686874389648,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 2181307 AND `order_id` = 200895"
+          },
+          {
+            "seconds": 0.046015024185180664,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.04424095153808594,
+            "sql": "REPLACE INTO `wp_wc_product_meta_lookup` (`product_id`, `sku`, `virtual`, `downloadable`, `min_price`, `max_price`, `onsale`, `stock_quantity`, `stock_status`, `rating_count`, `average_rating`, `total_sales`, `tax_status`, `tax_class`, `global_unique_id`) VALUES ('14', 'BENCH-SKU-00001', '0', '0', '11', '11', '0', '921', 'instock', '0', '0', '83', 'taxable', '', '')"
+          },
+          {
+            "seconds": 0.0427241325378418,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `payment_method_title`, `type` ) VALUES ( '2026-07-01 13:03:24', 200895, 'Cash on delivery', 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `payment_method_title` = VALUES( `payment_method_title` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.03759503364562988,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `download_permission_granted`, `order_id` ) VALUES ( 1, 200895 ) ON DUPLICATE KEY UPDATE `download_permission_granted` = VALUES( `download_permission_granted` ), `order_id` = VALUES( `order_id` ) "
+          },
+          {
+            "seconds": 0.03349804878234863,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001387', 'total_tax', '0')"
+          },
+          {
+            "seconds": 0.03322196006774902,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001387', 'taxes', 'a:1:{s:5:\\\"total\\\";a:0:{}}')"
+          },
+          {
+            "seconds": 0.03144693374633789,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `order_id`, `order_stock_reduced` ) VALUES ( 200895, 1 ) ON DUPLICATE KEY UPDATE `order_id` = VALUES( `order_id` ), `order_stock_reduced` = VALUES( `order_stock_reduced` ) "
+          },
+          {
+            "seconds": 0.031243085861206055,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `total_amount`, `type` ) VALUES ( '2026-07-01 13:03:24', 200895, 11.000000, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `total_amount` = VALUES( `total_amount` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.03115081787109375,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200895', '_debug_log_source', 'place-order-debug-bacc9aec')"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003185-13",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 2623.907,
+      "ttfb_ms": 2623.783,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003185-13",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1359.82,
+        "query_count": 512,
+        "query_time_ms": 1238.79,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.06556916236877441,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 2181308 AND `order_id` = 200896"
+          },
+          {
+            "seconds": 0.04805302619934082,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 1.000000 WHERE post_id = 14 AND meta_key='total_sales'"
+          },
+          {
+            "seconds": 0.04202103614807129,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `payment_method_title`, `type` ) VALUES ( '2026-07-01 13:03:24', 200896, 'Cash on delivery', 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `payment_method_title` = VALUES( `payment_method_title` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.037444114685058594,
+            "sql": "UPDATE `wp_posts` SET `post_modified` = '2026-07-01 13:03:25', `post_modified_gmt` = '2026-07-01 13:03:25' WHERE `ID` = 14"
+          },
+          {
+            "seconds": 0.034065961837768555,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001386', 'taxes', 'a:1:{s:5:\\\"total\\\";a:0:{}}')"
+          },
+          {
+            "seconds": 0.0329592227935791,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001386', 'total_tax', '0')"
+          },
+          {
+            "seconds": 0.031375885009765625,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `order_id`, `order_stock_reduced` ) VALUES ( 200896, 1 ) ON DUPLICATE KEY UPDATE `order_id` = VALUES( `order_id` ), `order_stock_reduced` = VALUES( `order_stock_reduced` ) "
+          },
+          {
+            "seconds": 0.03125405311584473,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `total_amount`, `type` ) VALUES ( '2026-07-01 13:03:24', 200896, 11.000000, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `total_amount` = VALUES( `total_amount` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.031118154525756836,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200896', '_debug_log_source', 'place-order-debug-5ac4970c')"
+          },
+          {
+            "seconds": 0.029259920120239258,
+            "sql": "UPDATE `wp_options` SET `option_value` = '1782911005' WHERE `option_name` = '_transient_product_query-transient-version'"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003194-14",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 2644.084,
+      "ttfb_ms": 2643.998,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003194-14",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1358.79,
+        "query_count": 520,
+        "query_time_ms": 1239.52,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.07962393760681152,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.06510806083679199,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200898', '_debug_log_source', 'place-order-debug-0ac84a5e')"
+          },
+          {
+            "seconds": 0.03434586524963379,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 2181311 AND `order_id` = 200898"
+          },
+          {
+            "seconds": 0.034158945083618164,
+            "sql": "INSERT INTO `wp_woocommerce_order_items` (`order_item_name`, `order_item_type`, `order_id`) VALUES ('Flat rate', 'shipping', '200898')"
+          },
+          {
+            "seconds": 0.03305315971374512,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001382', '_line_tax_data', 'a:2:{s:5:\\\"total\\\";a:0:{}s:8:\\\"subtotal\\\";a:0:{}}')"
+          },
+          {
+            "seconds": 0.031597137451171875,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `status`, `type` ) VALUES ( '2026-07-01 13:03:25', 200898, 'wc-processing', 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `status` = VALUES( `status` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.030338048934936523,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001393', 'instance_id', '1')"
+          },
+          {
+            "seconds": 0.030258893966674805,
+            "sql": "INSERT INTO `wp_commentmeta` (`comment_id`, `meta_key`, `meta_value`) VALUES ('418', 'note_group', 'email_notification')"
+          },
+          {
+            "seconds": 0.02698493003845215,
+            "sql": "INSERT INTO `wp_commentmeta` (`comment_id`, `meta_key`, `meta_value`) VALUES ('400', 'note_group', 'product_stock')"
+          },
+          {
+            "seconds": 0.026712894439697266,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 13:03:25', 200898, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003197-15",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 2601.1730000000002,
+      "ttfb_ms": 2601.076,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003197-15",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1344.48,
+        "query_count": 514,
+        "query_time_ms": 1221.33,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.06534695625305176,
+            "sql": "REPLACE INTO `wp_wc_product_meta_lookup` (`product_id`, `sku`, `virtual`, `downloadable`, `min_price`, `max_price`, `onsale`, `stock_quantity`, `stock_status`, `rating_count`, `average_rating`, `total_sales`, `tax_status`, `tax_class`, `global_unique_id`) VALUES ('14', 'BENCH-SKU-00001', '0', '0', '11', '11', '0', '922', 'instock', '0', '0', '83', 'taxable', '', '')"
+          },
+          {
+            "seconds": 0.06511306762695312,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200897', '_debug_log_source', 'place-order-debug-ef3d60d6')"
+          },
+          {
+            "seconds": 0.043358802795410156,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 2181306 AND `order_id` = 200897"
+          },
+          {
+            "seconds": 0.0347139835357666,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001389', 'total_tax', '0')"
+          },
+          {
+            "seconds": 0.03289914131164551,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001389', 'cost', '0')"
+          },
+          {
+            "seconds": 0.03182101249694824,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `status`, `type` ) VALUES ( '2026-07-01 13:03:25', 200897, 'wc-processing', 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `status` = VALUES( `status` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.03130602836608887,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `order_id`, `order_stock_reduced` ) VALUES ( 200897, 1 ) ON DUPLICATE KEY UPDATE `order_id` = VALUES( `order_id` ), `order_stock_reduced` = VALUES( `order_stock_reduced` ) "
+          },
+          {
+            "seconds": 0.031016826629638672,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001389', 'Items', 'Benchmark Product 00001 Alpha SearchToken001 &times; 1')"
+          },
+          {
+            "seconds": 0.029109954833984375,
+            "sql": "INSERT INTO `wp_comments` (`comment_post_ID`, `comment_author_IP`, `comment_author`, `comment_author_email`, `comment_author_url`, `comment_date`, `comment_date_gmt`, `comment_content`, `comment_karma`, `comment_approved`, `comment_agent`, `comment_type`, `comment_parent`, `user_id`) VALUES (200897, '', 'WooCommerce', '', '', '2026-07-01 13:03:25', '2026-07-01 13:03:25', 'Email \\\"Processing order\\\" failed to send: Could not instantiate mail function..', 0, '1', 'WooCommerce', 'order_note', 0, 0)"
+          },
+          {
+            "seconds": 0.027950048446655273,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `payment_method_title`, `type` ) VALUES ( '2026-07-01 13:03:25', 200897, 'Cash on delivery', 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `payment_method_title` = VALUES( `payment_method_title` ), `type` = VALUES( `type` ) "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003200-16",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 2702.03,
+      "ttfb_ms": 2701.934,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003200-16",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1387.37,
+        "query_count": 466,
+        "query_time_ms": 1262.6,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.08146500587463379,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 13:03:25', 200899, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.04465603828430176,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200899', '_debug_log_source', 'place-order-debug-aba88833')"
+          },
+          {
+            "seconds": 0.04221916198730469,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `order_id`, `recorded_sales` ) VALUES ( 200899, 1 ) ON DUPLICATE KEY UPDATE `order_id` = VALUES( `order_id` ), `recorded_sales` = VALUES( `recorded_sales` ) "
+          },
+          {
+            "seconds": 0.038535118103027344,
+            "sql": "REPLACE INTO `wp_wc_product_meta_lookup` (`product_id`, `sku`, `virtual`, `downloadable`, `min_price`, `max_price`, `onsale`, `stock_quantity`, `stock_status`, `rating_count`, `average_rating`, `total_sales`, `tax_status`, `tax_class`, `global_unique_id`) VALUES ('14', 'BENCH-SKU-00001', '0', '0', '11', '11', '0', '923', 'instock', '0', '0', '83', 'taxable', '', '')"
+          },
+          {
+            "seconds": 0.034368038177490234,
+            "sql": "INSERT INTO `wp_woocommerce_order_items` (`order_item_name`, `order_item_type`, `order_id`) VALUES ('Flat rate', 'shipping', '200899')"
+          },
+          {
+            "seconds": 0.0329890251159668,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001383', '_line_tax_data', 'a:2:{s:5:\\\"total\\\";a:0:{}s:8:\\\"subtotal\\\";a:0:{}}')"
+          },
+          {
+            "seconds": 0.03148913383483887,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001392', 'instance_id', '1')"
+          },
+          {
+            "seconds": 0.0314180850982666,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.0262298583984375,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001383', '_reduced_stock', '1')"
+          },
+          {
+            "seconds": 0.024631977081298828,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `status`, `type` ) VALUES ( '2026-07-01 13:03:25', 200899, 'wc-pending', 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `status` = VALUES( `status` ), `type` = VALUES( `type` ) "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003201-17",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 2658.006,
+      "ttfb_ms": 2657.9069999999997,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003201-17",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1375.17,
+        "query_count": 520,
+        "query_time_ms": 1251.73,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.08111381530761719,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 13:03:25', 200900, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.06198287010192871,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.040812015533447266,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 2181305 AND `order_id` = 200900"
+          },
+          {
+            "seconds": 0.03826713562011719,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `order_id`, `recorded_sales` ) VALUES ( 200900, 1 ) ON DUPLICATE KEY UPDATE `order_id` = VALUES( `order_id` ), `recorded_sales` = VALUES( `recorded_sales` ) "
+          },
+          {
+            "seconds": 0.034291982650756836,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001391', 'method_id', 'flat_rate')"
+          },
+          {
+            "seconds": 0.03346514701843262,
+            "sql": "INSERT INTO `wp_woocommerce_order_items` (`order_item_name`, `order_item_type`, `order_id`) VALUES ('Flat rate', 'shipping', '200900')"
+          },
+          {
+            "seconds": 0.031157970428466797,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001391', 'cost', '0')"
+          },
+          {
+            "seconds": 0.029301881790161133,
+            "sql": "UPDATE `wp_posts` SET `comment_count` = 4 WHERE `ID` = 200900"
+          },
+          {
+            "seconds": 0.02729010581970215,
+            "sql": "UPDATE `wp_posts` SET `comment_count` = 2 WHERE `ID` = 200900"
+          },
+          {
+            "seconds": 0.027235031127929688,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `coupon_usages_are_counted`, `order_id` ) VALUES ( 1, 200900 ) ON DUPLICATE KEY UPDATE `coupon_usages_are_counted` = VALUES( `coupon_usages_are_counted` ), `order_id` = VALUES( `order_id` ) "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003202-18",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 2929.9469999999997,
+      "ttfb_ms": 2929.833,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003202-18",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1564.34,
+        "query_count": 528,
+        "query_time_ms": 1441.71,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.06374907493591309,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200902', '_debug_log_source', 'place-order-debug-2a1c649a')"
+          },
+          {
+            "seconds": 0.06203007698059082,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `download_permission_granted`, `order_id` ) VALUES ( 1, 200902 ) ON DUPLICATE KEY UPDATE `download_permission_granted` = VALUES( `download_permission_granted` ), `order_id` = VALUES( `order_id` ) "
+          },
+          {
+            "seconds": 0.060339927673339844,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.05832695960998535,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `discount_tax_amount`, `discount_total_amount`, `order_id` ) VALUES ( 0.000000, 0.000000, 200902 ) ON DUPLICATE KEY UPDATE `discount_tax_amount` = VALUES( `discount_tax_amount` ), `discount_total_amount` = VALUES( `discount_total_amount` ), `order_id` = VALUES( `order_id` ) "
+          },
+          {
+            "seconds": 0.04933810234069824,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200902', '_debug_log_source_pending_deletion', 'place-order-debug-2a1c649a')"
+          },
+          {
+            "seconds": 0.043917179107666016,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 200902, 14, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 14 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 14 AND stock_table.`order_id` != 200902 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.04363083839416504,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 2181427 AND `order_id` = 200902"
+          },
+          {
+            "seconds": 0.041226863861083984,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001394', 'Items', 'Benchmark Product 00001 Alpha SearchToken001 &times; 1')"
+          },
+          {
+            "seconds": 0.03534984588623047,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200902', '_debug_log_source', 'place-order-debug-2a1c649a')"
+          },
+          {
+            "seconds": 0.03448820114135742,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 2181392 AND `order_id` = 200902"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:26+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003203-19",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 2813.516,
+      "ttfb_ms": 2813.3979999999997,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003203-19",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1467.29,
+        "query_count": 528,
+        "query_time_ms": 1350.18,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.0840158462524414,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `total_amount`, `type` ) VALUES ( '2026-07-01 13:03:25', 200901, 11.000000, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `total_amount` = VALUES( `total_amount` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.06465888023376465,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200901', '_debug_log_source_pending_deletion', 'place-order-debug-b871c562')"
+          },
+          {
+            "seconds": 0.05575895309448242,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.0435481071472168,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `download_permission_granted`, `order_id` ) VALUES ( 1, 200901 ) ON DUPLICATE KEY UPDATE `download_permission_granted` = VALUES( `download_permission_granted` ), `order_id` = VALUES( `order_id` ) "
+          },
+          {
+            "seconds": 0.04083895683288574,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001395', 'taxes', 'a:1:{s:5:\\\"total\\\";a:0:{}}')"
+          },
+          {
+            "seconds": 0.03570890426635742,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 1.000000 WHERE post_id = 14 AND meta_key='total_sales'"
+          },
+          {
+            "seconds": 0.034240007400512695,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001385', '_line_subtotal_tax', '0')"
+          },
+          {
+            "seconds": 0.03296184539794922,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001385', '_line_subtotal', '11')"
+          },
+          {
+            "seconds": 0.03121805191040039,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 2181425 AND `order_id` = 200901"
+          },
+          {
+            "seconds": 0.03082895278930664,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001385', '_line_tax', '0')"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:25+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003204-20",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 3023.246,
+      "ttfb_ms": 3023.147,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003204-20",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1653.39,
+        "query_count": 528,
+        "query_time_ms": 1532.51,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.06858396530151367,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 2181394 AND `order_id` = 200903"
+          },
+          {
+            "seconds": 0.06331205368041992,
+            "sql": "UPDATE `wp_posts` SET `comment_count` = 5 WHERE `ID` = 200903"
+          },
+          {
+            "seconds": 0.06234097480773926,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.061218976974487305,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001397', 'Items', 'Benchmark Product 00001 Alpha SearchToken001 &times; 1')"
+          },
+          {
+            "seconds": 0.054937124252319336,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 200903, 14, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 14 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 14 AND stock_table.`order_id` != 200903 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.04794907569885254,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 13:03:26', 200903, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.046486854553222656,
+            "sql": "INSERT INTO `wp_commentmeta` (`comment_id`, `meta_key`, `meta_value`) VALUES ('441', 'note_group', 'email_notification')"
+          },
+          {
+            "seconds": 0.04298877716064453,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `coupon_usages_are_counted`, `order_id` ) VALUES ( 1, 200903 ) ON DUPLICATE KEY UPDATE `coupon_usages_are_counted` = VALUES( `coupon_usages_are_counted` ), `order_id` = VALUES( `order_id` ) "
+          },
+          {
+            "seconds": 0.04035687446594238,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001397', 'total_tax', '0')"
+          },
+          {
+            "seconds": 0.03690600395202637,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `order_id`, `order_stock_reduced` ) VALUES ( 200903, 1 ) ON DUPLICATE KEY UPDATE `order_id` = VALUES( `order_id` ), `order_stock_reduced` = VALUES( `order_stock_reduced` ) "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:26+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003206-21",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 3148.586,
+      "ttfb_ms": 3148.456,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003206-21",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1544.38,
+        "query_count": 530,
+        "query_time_ms": 1421.21,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.08409595489501953,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200906', 'is_vat_exempt', 'no')"
+          },
+          {
+            "seconds": 0.06384801864624023,
+            "sql": "UPDATE `wp_posts` SET `comment_count` = 4 WHERE `ID` = 200906"
+          },
+          {
+            "seconds": 0.06317901611328125,
+            "sql": "UPDATE `wp_posts` SET `comment_count` = 3 WHERE `ID` = 200906"
+          },
+          {
+            "seconds": 0.046102046966552734,
+            "sql": "INSERT INTO `wp_commentmeta` (`comment_id`, `meta_key`, `meta_value`) VALUES ('442', 'note_group', 'order_update')"
+          },
+          {
+            "seconds": 0.04102802276611328,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200906', '_fees_hash', 'd751713988987e9331980363e24189ce')"
+          },
+          {
+            "seconds": 0.03565788269042969,
+            "sql": "INSERT INTO `wp_comments` (`comment_post_ID`, `comment_author_IP`, `comment_author`, `comment_author_email`, `comment_author_url`, `comment_date`, `comment_date_gmt`, `comment_content`, `comment_karma`, `comment_approved`, `comment_agent`, `comment_type`, `comment_parent`, `user_id`) VALUES (200906, '', 'WooCommerce', '', '', '2026-07-01 13:03:25', '2026-07-01 13:03:25', 'Payment to be made upon delivery. Order status changed from Pending payment to Processing.', 0, '1', 'WooCommerce', 'order_note', 0, 0)"
+          },
+          {
+            "seconds": 0.03562307357788086,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 200906, 14, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 14 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 14 AND stock_table.`order_id` != 200906 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.03413081169128418,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 2181397 AND `order_id` = 200906"
+          },
+          {
+            "seconds": 0.03383302688598633,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200906', '_debug_log_source', 'place-order-debug-27f5655e')"
+          },
+          {
+            "seconds": 0.03049302101135254,
+            "sql": "INSERT INTO `wp_comments` (`comment_post_ID`, `comment_author_IP`, `comment_author`, `comment_author_email`, `comment_author_url`, `comment_date`, `comment_date_gmt`, `comment_content`, `comment_karma`, `comment_approved`, `comment_agent`, `comment_type`, `comment_parent`, `user_id`) VALUES (200906, '', 'WooCommerce', '', '', '2026-07-01 13:03:25', '2026-07-01 13:03:25', 'Stock hold of 60 minutes applied to: <br>- Benchmark Product 00001 Alpha SearchToken001 (BENCH-SKU-00001) &times; 1', 0, '1', 'WooCommerce', 'order_note', 0, 0)"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:26+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003207-22",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 2983.04,
+      "ttfb_ms": 2982.9500000000003,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003207-22",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1604.34,
+        "query_count": 528,
+        "query_time_ms": 1478.45,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.09240412712097168,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 200904, 14, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 14 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 14 AND stock_table.`order_id` != 200904 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.08389687538146973,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001396', 'Items', 'Benchmark Product 00001 Alpha SearchToken001 &times; 1')"
+          },
+          {
+            "seconds": 0.0609431266784668,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 13:03:26', 200904, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.05949997901916504,
+            "sql": "INSERT INTO `wp_commentmeta` (`comment_id`, `meta_key`, `meta_value`) VALUES ('440', 'note_group', 'email_notification')"
+          },
+          {
+            "seconds": 0.054164886474609375,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `coupon_usages_are_counted`, `order_id` ) VALUES ( 1, 200904 ) ON DUPLICATE KEY UPDATE `coupon_usages_are_counted` = VALUES( `coupon_usages_are_counted` ), `order_id` = VALUES( `order_id` ) "
+          },
+          {
+            "seconds": 0.05069994926452637,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001390', '_tax_class', '')"
+          },
+          {
+            "seconds": 0.0487978458404541,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200904', '_debug_log_source', 'place-order-debug-7b3071fa')"
+          },
+          {
+            "seconds": 0.0453190803527832,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 2181396 AND `order_id` = 200904"
+          },
+          {
+            "seconds": 0.04055213928222656,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001396', 'total_tax', '0')"
+          },
+          {
+            "seconds": 0.03770804405212402,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `order_id`, `order_stock_reduced` ) VALUES ( 200904, 1 ) ON DUPLICATE KEY UPDATE `order_id` = VALUES( `order_id` ), `order_stock_reduced` = VALUES( `order_stock_reduced` ) "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:26+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003208-23",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 3269.3219999999997,
+      "ttfb_ms": 3269.211,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003208-23",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1653.46,
+        "query_count": 520,
+        "query_time_ms": 1529.9,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.08453798294067383,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200905', '_fees_hash', 'd751713988987e9331980363e24189ce')"
+          },
+          {
+            "seconds": 0.06191515922546387,
+            "sql": "INSERT INTO `wp_commentmeta` (`comment_id`, `meta_key`, `meta_value`) VALUES ('439', 'note_group', 'product_stock')"
+          },
+          {
+            "seconds": 0.05982398986816406,
+            "sql": "DELETE FROM `wp_wc_reserved_stock` WHERE `order_id` = '200905'"
+          },
+          {
+            "seconds": 0.05339312553405762,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 200905, 14, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 14 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 14 AND stock_table.`order_id` != 200905 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.04778885841369629,
+            "sql": "UPDATE `wp_options` SET `option_value` = '1782911006' WHERE `option_name` = '_transient_orders-transient-version'"
+          },
+          {
+            "seconds": 0.04580211639404297,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `order_id`, `order_stock_reduced` ) VALUES ( 200905, 1 ) ON DUPLICATE KEY UPDATE `order_id` = VALUES( `order_id` ), `order_stock_reduced` = VALUES( `order_stock_reduced` ) "
+          },
+          {
+            "seconds": 0.040199995040893555,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200905', '_shipping_hash', '81bd50e8ac71b032e5ad39b63056c4af')"
+          },
+          {
+            "seconds": 0.03399515151977539,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200905', '_debug_log_source', 'place-order-debug-3e1a6270')"
+          },
+          {
+            "seconds": 0.03258800506591797,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200905', '_debug_log_source_pending_deletion', 'place-order-debug-3e1a6270')"
+          },
+          {
+            "seconds": 0.03130197525024414,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `payment_method_title`, `type` ) VALUES ( '2026-07-01 13:03:25', 200905, 'Cash on delivery', 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `payment_method_title` = VALUES( `payment_method_title` ), `type` = VALUES( `type` ) "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:26+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003208-24",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 3560.799,
+      "ttfb_ms": 3560.608,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003208-24",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1648.43,
+        "query_count": 474,
+        "query_time_ms": 1527.07,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.10691714286804199,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 2181535 AND `order_id` = 200907"
+          },
+          {
+            "seconds": 0.05946183204650879,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.05685901641845703,
+            "sql": "UPDATE `wp_options` SET `option_value` = '1782911006' WHERE `option_name` = '_transient_product_query-transient-version'"
+          },
+          {
+            "seconds": 0.05024385452270508,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200907', '_debug_log_source_pending_deletion', 'place-order-debug-05d1656f')"
+          },
+          {
+            "seconds": 0.0497288703918457,
+            "sql": "UPDATE `wp_posts` SET `post_modified` = '2026-07-01 13:03:26', `post_modified_gmt` = '2026-07-01 13:03:26' WHERE `ID` = 14"
+          },
+          {
+            "seconds": 0.045900821685791016,
+            "sql": "REPLACE INTO `wp_wc_product_meta_lookup` (`product_id`, `sku`, `virtual`, `downloadable`, `min_price`, `max_price`, `onsale`, `stock_quantity`, `stock_status`, `rating_count`, `average_rating`, `total_sales`, `tax_status`, `tax_class`, `global_unique_id`) VALUES ('14', 'BENCH-SKU-00001', '0', '0', '11', '11', '0', '911', 'instock', '0', '0', '90', 'taxable', '', '')"
+          },
+          {
+            "seconds": 0.0369420051574707,
+            "sql": "UPDATE `wp_posts` SET `comment_count` = 5 WHERE `ID` = 200907"
+          },
+          {
+            "seconds": 0.03636980056762695,
+            "sql": "INSERT INTO `wp_commentmeta` (`comment_id`, `meta_key`, `meta_value`) VALUES ('451', 'note_group', 'email_notification')"
+          },
+          {
+            "seconds": 0.034919023513793945,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001403', 'cost', '0')"
+          },
+          {
+            "seconds": 0.03384900093078613,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `order_id`, `recorded_sales` ) VALUES ( 200907, 1 ) ON DUPLICATE KEY UPDATE `order_id` = VALUES( `order_id` ), `recorded_sales` = VALUES( `recorded_sales` ) "
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:26+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003212-25",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 4498.553,
+      "ttfb_ms": 4498.4710000000005,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003212-25",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1891.43,
+        "query_count": 530,
+        "query_time_ms": 1738.35,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.10860490798950195,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001419', 'taxes', 'a:1:{s:5:\\\"total\\\";a:0:{}}')"
+          },
+          {
+            "seconds": 0.06387805938720703,
+            "sql": " INSERT INTO wp_wc_orders ( `billing_email`, `currency`, `customer_id`, `customer_note`, `date_created_gmt`, `date_updated_gmt`, `id`, `ip_address`, `parent_order_id`, `payment_method`, `payment_method_title`, `status`, `tax_amount`, `total_amount`, `transaction_id`, `type`, `user_agent` ) VALUES ( 'concurrent-buyer@example.test', 'USD', 0, '', '2026-07-01 13:03:25', '2026-07-01 13:03:25', 200911, '172.20.0.1', 0, 'cod', '', 'wc-checkout-draft', 0.000000, 0.000000, '', 'shop_order', 'wc-perf-local-concurrency/1.0' ) ON DUPLICATE KEY UPDATE `billing_email` = VALUES( `billing_email` ), `currency` = VALUES( `currency` ), `customer_id` = VALUES( `customer_id` ), `customer_note` = VALUES( `customer_note` ), `date_created_gmt` = VALUES( `date_created_gmt` ), `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `ip_address` = VALUES( `ip_address` ), `parent_order_id` = VALU"
+          },
+          {
+            "seconds": 0.0626370906829834,
+            "sql": "INSERT INTO `wp_wc_order_addresses` (`address_1`, `address_type`, `city`, `country`, `first_name`, `last_name`, `order_id`, `phone`, `postcode`, `state`) VALUES ('1 Lock Way', 'shipping', 'Perf City', 'US', 'Concurrent', 'Buyer', 200911, '5551234567', '94105', 'CA')"
+          },
+          {
+            "seconds": 0.05466008186340332,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 13:03:27', 200911, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.054022789001464844,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.05131411552429199,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 2181597 AND `order_id` = 200911"
+          },
+          {
+            "seconds": 0.050186872482299805,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001419', 'Items', 'Benchmark Product 00001 Alpha SearchToken001 &times; 1')"
+          },
+          {
+            "seconds": 0.04847002029418945,
+            "sql": "INSERT INTO `wp_wc_order_addresses` (`address_1`, `address_type`, `city`, `country`, `email`, `first_name`, `last_name`, `order_id`, `phone`, `postcode`, `state`) VALUES ('1 Lock Way', 'billing', 'Perf City', 'US', 'concurrent-buyer@example.test', 'Concurrent', 'Buyer', 200911, '5551234567', '94105', 'CA')"
+          },
+          {
+            "seconds": 0.04759812355041504,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `cart_hash`, `coupon_usages_are_counted`, `created_via`, `date_completed_gmt`, `date_paid_gmt`, `discount_tax_amount`, `discount_total_amount`, `download_permission_granted`, `new_order_email_sent`, `order_id`, `order_key`, `order_stock_reduced`, `prices_include_tax`, `recorded_sales`, `shipping_tax_amount`, `shipping_total_amount`, `woocommerce_version` ) VALUES ( '83aefe3c22b141abd2905c386781e155', 0, 'store-api', NULL, NULL, 0.000000, 0.000000, 0, 0, 200911, 'wc_order_ahJ6dLxmtGT2k', 0, 0, 0, 0.000000, 0.000000, '10.9.1' ) ON DUPLICATE KEY UPDATE `cart_hash` = VALUES( `cart_hash` ), `coupon_usages_are_counted` = VALUES( `coupon_usages_are_counted` ), `created_via` = VALUES( `created_via` ), `date_completed_gmt` = VALUES( `date_completed_gmt` ), `date_paid_gmt` = VALUES( `date_paid_gmt` ), `discount_tax_amount` = VALUES( `discount_tax_amount`"
+          },
+          {
+            "seconds": 0.043775081634521484,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 1.000000 WHERE post_id = 14 AND meta_key='total_sales'"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:27+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003213-26",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 4427.380999999999,
+      "ttfb_ms": 4427.281,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003213-26",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1832.19,
+        "query_count": 530,
+        "query_time_ms": 1682.21,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.10859990119934082,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001417', 'taxes', 'a:1:{s:5:\\\"total\\\";a:0:{}}')"
+          },
+          {
+            "seconds": 0.06464910507202148,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `cart_hash`, `coupon_usages_are_counted`, `created_via`, `date_completed_gmt`, `date_paid_gmt`, `discount_tax_amount`, `discount_total_amount`, `download_permission_granted`, `new_order_email_sent`, `order_id`, `order_key`, `order_stock_reduced`, `prices_include_tax`, `recorded_sales`, `shipping_tax_amount`, `shipping_total_amount`, `woocommerce_version` ) VALUES ( '83aefe3c22b141abd2905c386781e155', 0, 'store-api', NULL, NULL, 0.000000, 0.000000, 0, 0, 200909, 'wc_order_PH67btK5flofR', 0, 0, 0, 0.000000, 0.000000, '10.9.1' ) ON DUPLICATE KEY UPDATE `cart_hash` = VALUES( `cart_hash` ), `coupon_usages_are_counted` = VALUES( `coupon_usages_are_counted` ), `created_via` = VALUES( `created_via` ), `date_completed_gmt` = VALUES( `date_completed_gmt` ), `date_paid_gmt` = VALUES( `date_paid_gmt` ), `discount_tax_amount` = VALUES( `discount_tax_amount`"
+          },
+          {
+            "seconds": 0.06296515464782715,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200909', '_shipping_hash', '81bd50e8ac71b032e5ad39b63056c4af')"
+          },
+          {
+            "seconds": 0.05021786689758301,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001417', 'Items', 'Benchmark Product 00001 Alpha SearchToken001 &times; 1')"
+          },
+          {
+            "seconds": 0.04872393608093262,
+            "sql": "INSERT INTO `wp_wc_order_addresses` (`address_1`, `address_type`, `city`, `country`, `first_name`, `last_name`, `order_id`, `phone`, `postcode`, `state`) VALUES ('1 Lock Way', 'shipping', 'Perf City', 'US', 'Concurrent', 'Buyer', 200909, '5551234567', '94105', 'CA')"
+          },
+          {
+            "seconds": 0.04639792442321777,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 200909, 14, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 14 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 14 AND stock_table.`order_id` != 200909 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.04634404182434082,
+            "sql": "INSERT INTO `wp_wc_order_addresses` (`address_1`, `address_type`, `city`, `country`, `email`, `first_name`, `last_name`, `order_id`, `phone`, `postcode`, `state`) VALUES ('1 Lock Way', 'billing', 'Perf City', 'US', 'concurrent-buyer@example.test', 'Concurrent', 'Buyer', 200909, '5551234567', '94105', 'CA')"
+          },
+          {
+            "seconds": 0.04239702224731445,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.03764700889587402,
+            "sql": "INSERT INTO `wp_woocommerce_order_items` (`order_item_name`, `order_item_type`, `order_id`) VALUES ('Flat rate', 'shipping', '200909')"
+          },
+          {
+            "seconds": 0.036863088607788086,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001417', 'method_id', 'flat_rate')"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:27+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003214-27",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 4450.53,
+      "ttfb_ms": 4450.425,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003214-27",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1853.56,
+        "query_count": 530,
+        "query_time_ms": 1723.12,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.08380603790283203,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001420', 'total_tax', '0')"
+          },
+          {
+            "seconds": 0.07161998748779297,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001420', 'taxes', 'a:1:{s:5:\\\"total\\\";a:0:{}}')"
+          },
+          {
+            "seconds": 0.06344223022460938,
+            "sql": " INSERT INTO wp_wc_orders ( `billing_email`, `currency`, `customer_id`, `customer_note`, `date_created_gmt`, `date_updated_gmt`, `id`, `ip_address`, `parent_order_id`, `payment_method`, `payment_method_title`, `status`, `tax_amount`, `total_amount`, `transaction_id`, `type`, `user_agent` ) VALUES ( 'concurrent-buyer@example.test', 'USD', 0, '', '2026-07-01 13:03:25', '2026-07-01 13:03:25', 200910, '172.20.0.1', 0, 'cod', '', 'wc-checkout-draft', 0.000000, 0.000000, '', 'shop_order', 'wc-perf-local-concurrency/1.0' ) ON DUPLICATE KEY UPDATE `billing_email` = VALUES( `billing_email` ), `currency` = VALUES( `currency` ), `customer_id` = VALUES( `customer_id` ), `customer_note` = VALUES( `customer_note` ), `date_created_gmt` = VALUES( `date_created_gmt` ), `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `ip_address` = VALUES( `ip_address` ), `parent_order_id` = VALU"
+          },
+          {
+            "seconds": 0.06268596649169922,
+            "sql": "INSERT INTO `wp_wc_order_addresses` (`address_1`, `address_type`, `city`, `country`, `first_name`, `last_name`, `order_id`, `phone`, `postcode`, `state`) VALUES ('1 Lock Way', 'shipping', 'Perf City', 'US', 'Concurrent', 'Buyer', 200910, '5551234567', '94105', 'CA')"
+          },
+          {
+            "seconds": 0.05430793762207031,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 13:03:27', 200910, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.05389809608459473,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200910', '_debug_log_source', 'place-order-debug-2ebbdb02')"
+          },
+          {
+            "seconds": 0.04876089096069336,
+            "sql": "INSERT INTO `wp_wc_order_addresses` (`address_1`, `address_type`, `city`, `country`, `email`, `first_name`, `last_name`, `order_id`, `phone`, `postcode`, `state`) VALUES ('1 Lock Way', 'billing', 'Perf City', 'US', 'concurrent-buyer@example.test', 'Concurrent', 'Buyer', 200910, '5551234567', '94105', 'CA')"
+          },
+          {
+            "seconds": 0.04775595664978027,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `cart_hash`, `coupon_usages_are_counted`, `created_via`, `date_completed_gmt`, `date_paid_gmt`, `discount_tax_amount`, `discount_total_amount`, `download_permission_granted`, `new_order_email_sent`, `order_id`, `order_key`, `order_stock_reduced`, `prices_include_tax`, `recorded_sales`, `shipping_tax_amount`, `shipping_total_amount`, `woocommerce_version` ) VALUES ( '83aefe3c22b141abd2905c386781e155', 0, 'store-api', NULL, NULL, 0.000000, 0.000000, 0, 0, 200910, 'wc_order_3IPa0fULncLMW', 0, 0, 0, 0.000000, 0.000000, '10.9.1' ) ON DUPLICATE KEY UPDATE `cart_hash` = VALUES( `cart_hash` ), `coupon_usages_are_counted` = VALUES( `coupon_usages_are_counted` ), `created_via` = VALUES( `created_via` ), `date_completed_gmt` = VALUES( `date_completed_gmt` ), `date_paid_gmt` = VALUES( `date_paid_gmt` ), `discount_tax_amount` = VALUES( `discount_tax_amount`"
+          },
+          {
+            "seconds": 0.04221487045288086,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.03735494613647461,
+            "sql": "INSERT INTO `wp_woocommerce_order_items` (`order_item_name`, `order_item_type`, `order_id`) VALUES ('Flat rate', 'shipping', '200910')"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:27+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003215-28",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 4400.777,
+      "ttfb_ms": 4400.677,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003215-28",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1808.28,
+        "query_count": 528,
+        "query_time_ms": 1658.12,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.08433318138122559,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001415', 'Items', 'Benchmark Product 00001 Alpha SearchToken001 &times; 1')"
+          },
+          {
+            "seconds": 0.07208418846130371,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `total_amount`, `type` ) VALUES ( '2026-07-01 13:03:26', 200912, 11.000000, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `total_amount` = VALUES( `total_amount` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.06281304359436035,
+            "sql": " INSERT INTO wp_wc_orders ( `billing_email`, `currency`, `customer_id`, `customer_note`, `date_created_gmt`, `date_updated_gmt`, `id`, `ip_address`, `parent_order_id`, `payment_method`, `payment_method_title`, `status`, `tax_amount`, `total_amount`, `transaction_id`, `type`, `user_agent` ) VALUES ( 'concurrent-buyer@example.test', 'USD', 0, '', '2026-07-01 13:03:25', '2026-07-01 13:03:25', 200912, '172.20.0.1', 0, 'cod', '', 'wc-checkout-draft', 0.000000, 0.000000, '', 'shop_order', 'wc-perf-local-concurrency/1.0' ) ON DUPLICATE KEY UPDATE `billing_email` = VALUES( `billing_email` ), `currency` = VALUES( `currency` ), `customer_id` = VALUES( `customer_id` ), `customer_note` = VALUES( `customer_note` ), `date_created_gmt` = VALUES( `date_created_gmt` ), `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `ip_address` = VALUES( `ip_address` ), `parent_order_id` = VALU"
+          },
+          {
+            "seconds": 0.06091880798339844,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200912', '_shipping_hash', '81bd50e8ac71b032e5ad39b63056c4af')"
+          },
+          {
+            "seconds": 0.0516209602355957,
+            "sql": "INSERT INTO `wp_wc_order_addresses` (`address_1`, `address_type`, `city`, `country`, `email`, `first_name`, `last_name`, `order_id`, `phone`, `postcode`, `state`) VALUES ('1 Lock Way', 'billing', 'Perf City', 'US', 'concurrent-buyer@example.test', 'Concurrent', 'Buyer', 200912, '5551234567', '94105', 'CA')"
+          },
+          {
+            "seconds": 0.05129194259643555,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 200912, 14, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 14 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 14 AND stock_table.`order_id` != 200912 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.04561614990234375,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `status`, `type` ) VALUES ( '2026-07-01 13:03:27', 200912, 'wc-pending', 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `status` = VALUES( `status` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.0375208854675293,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.0372469425201416,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001415', 'instance_id', '1')"
+          },
+          {
+            "seconds": 0.03713703155517578,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001415', 'method_id', 'flat_rate')"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:27+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003215-29",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 4489.991,
+      "ttfb_ms": 4489.885,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003215-29",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1881.96,
+        "query_count": 530,
+        "query_time_ms": 1740.39,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.10843181610107422,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001418', 'taxes', 'a:1:{s:5:\\\"total\\\";a:0:{}}')"
+          },
+          {
+            "seconds": 0.06498193740844727,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `cart_hash`, `coupon_usages_are_counted`, `created_via`, `date_completed_gmt`, `date_paid_gmt`, `discount_tax_amount`, `discount_total_amount`, `download_permission_granted`, `new_order_email_sent`, `order_id`, `order_key`, `order_stock_reduced`, `prices_include_tax`, `recorded_sales`, `shipping_tax_amount`, `shipping_total_amount`, `woocommerce_version` ) VALUES ( '83aefe3c22b141abd2905c386781e155', 0, 'store-api', NULL, NULL, 0.000000, 0.000000, 0, 0, 200908, 'wc_order_Vua4CHUaTZRVi', 0, 0, 0, 0.000000, 0.000000, '10.9.1' ) ON DUPLICATE KEY UPDATE `cart_hash` = VALUES( `cart_hash` ), `coupon_usages_are_counted` = VALUES( `coupon_usages_are_counted` ), `created_via` = VALUES( `created_via` ), `date_completed_gmt` = VALUES( `date_completed_gmt` ), `date_paid_gmt` = VALUES( `date_paid_gmt` ), `discount_tax_amount` = VALUES( `discount_tax_amount`"
+          },
+          {
+            "seconds": 0.06251883506774902,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200908', '_shipping_hash', '81bd50e8ac71b032e5ad39b63056c4af')"
+          },
+          {
+            "seconds": 0.057602882385253906,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.05130600929260254,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 2181596 AND `order_id` = 200908"
+          },
+          {
+            "seconds": 0.05023503303527832,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001418', 'Items', 'Benchmark Product 00001 Alpha SearchToken001 &times; 1')"
+          },
+          {
+            "seconds": 0.04805898666381836,
+            "sql": "INSERT INTO `wp_wc_order_addresses` (`address_1`, `address_type`, `city`, `country`, `first_name`, `last_name`, `order_id`, `phone`, `postcode`, `state`) VALUES ('1 Lock Way', 'shipping', 'Perf City', 'US', 'Concurrent', 'Buyer', 200908, '5551234567', '94105', 'CA')"
+          },
+          {
+            "seconds": 0.048007965087890625,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `type` ) VALUES ( '2026-07-01 13:03:27', 200908, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.047106027603149414,
+            "sql": "INSERT INTO `wp_wc_order_addresses` (`address_1`, `address_type`, `city`, `country`, `email`, `first_name`, `last_name`, `order_id`, `phone`, `postcode`, `state`) VALUES ('1 Lock Way', 'billing', 'Perf City', 'US', 'concurrent-buyer@example.test', 'Concurrent', 'Buyer', 200908, '5551234567', '94105', 'CA')"
+          },
+          {
+            "seconds": 0.04007911682128906,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 1.000000 WHERE post_id = 14 AND meta_key='total_sales'"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:27+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003216-30",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 4598.004000000001,
+      "ttfb_ms": 4597.846,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003216-30",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1975.57,
+        "query_count": 530,
+        "query_time_ms": 1803.09,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.08427715301513672,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001426', 'instance_id', '1')"
+          },
+          {
+            "seconds": 0.08101511001586914,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.07641220092773438,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 200913, 14, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 14 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 14 AND stock_table.`order_id` != 200913 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.07199811935424805,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001426', 'cost', '0')"
+          },
+          {
+            "seconds": 0.06619691848754883,
+            "sql": "INSERT INTO `wp_posts` (`post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_content_filtered`, `post_title`, `post_excerpt`, `post_status`, `post_type`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_parent`, `menu_order`, `post_mime_type`, `guid`) VALUES (0, '2026-07-01 13:03:25', '2026-07-01 13:03:25', '', '', '', '', 'draft', 'shop_order_placehold', 'closed', 'closed', '', '', '', '', '2026-07-01 13:03:25', '2026-07-01 13:03:25', 0, 0, '', '')"
+          },
+          {
+            "seconds": 0.06481790542602539,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `cart_hash`, `coupon_usages_are_counted`, `created_via`, `date_completed_gmt`, `date_paid_gmt`, `discount_tax_amount`, `discount_total_amount`, `download_permission_granted`, `new_order_email_sent`, `order_id`, `order_key`, `order_stock_reduced`, `prices_include_tax`, `recorded_sales`, `shipping_tax_amount`, `shipping_total_amount`, `woocommerce_version` ) VALUES ( '83aefe3c22b141abd2905c386781e155', 0, 'store-api', NULL, NULL, 0.000000, 0.000000, 0, 0, 200913, 'wc_order_pC0wQg2QKpNNh', 0, 0, 0, 0.000000, 0.000000, '10.9.1' ) ON DUPLICATE KEY UPDATE `cart_hash` = VALUES( `cart_hash` ), `coupon_usages_are_counted` = VALUES( `coupon_usages_are_counted` ), `created_via` = VALUES( `created_via` ), `date_completed_gmt` = VALUES( `date_completed_gmt` ), `date_paid_gmt` = VALUES( `date_paid_gmt` ), `discount_tax_amount` = VALUES( `discount_tax_amount`"
+          },
+          {
+            "seconds": 0.053880929946899414,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 1.000000 WHERE post_id = 14 AND meta_key='total_sales'"
+          },
+          {
+            "seconds": 0.051943063735961914,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 2181598 AND `order_id` = 200913"
+          },
+          {
+            "seconds": 0.04768514633178711,
+            "sql": " INSERT INTO wp_wc_orders ( `billing_email`, `currency`, `customer_id`, `customer_note`, `date_created_gmt`, `date_updated_gmt`, `id`, `ip_address`, `parent_order_id`, `payment_method`, `payment_method_title`, `status`, `tax_amount`, `total_amount`, `transaction_id`, `type`, `user_agent` ) VALUES ( 'concurrent-buyer@example.test', 'USD', 0, '', '2026-07-01 13:03:25', '2026-07-01 13:03:25', 200913, '172.20.0.1', 0, 'cod', '', 'wc-checkout-draft', 0.000000, 0.000000, '', 'shop_order', 'wc-perf-local-concurrency/1.0' ) ON DUPLICATE KEY UPDATE `billing_email` = VALUES( `billing_email` ), `currency` = VALUES( `currency` ), `customer_id` = VALUES( `customer_id` ), `customer_note` = VALUES( `customer_note` ), `date_created_gmt` = VALUES( `date_created_gmt` ), `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `ip_address` = VALUES( `ip_address` ), `parent_order_id` = VALU"
+          },
+          {
+            "seconds": 0.0470271110534668,
+            "sql": "UPDATE `wp_posts` SET `guid` = 'http://localhost:8099/?post_type=shop_order_placehold&p=200913' WHERE `ID` = 200913"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:27+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003219-31",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 4528.085,
+      "ttfb_ms": 4527.968000000001,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003219-31",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1832.73,
+        "query_count": 530,
+        "query_time_ms": 1688.13,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.1086580753326416,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001427', 'method_id', 'flat_rate')"
+          },
+          {
+            "seconds": 0.0639657974243164,
+            "sql": " INSERT INTO wp_wc_orders ( `billing_email`, `currency`, `customer_id`, `customer_note`, `date_created_gmt`, `date_updated_gmt`, `id`, `ip_address`, `parent_order_id`, `payment_method`, `payment_method_title`, `status`, `tax_amount`, `total_amount`, `transaction_id`, `type`, `user_agent` ) VALUES ( 'concurrent-buyer@example.test', 'USD', 0, '', '2026-07-01 13:03:25', '2026-07-01 13:03:25', 200917, '172.20.0.1', 0, 'cod', '', 'wc-checkout-draft', 0.000000, 0.000000, '', 'shop_order', 'wc-perf-local-concurrency/1.0' ) ON DUPLICATE KEY UPDATE `billing_email` = VALUES( `billing_email` ), `currency` = VALUES( `currency` ), `customer_id` = VALUES( `customer_id` ), `customer_note` = VALUES( `customer_note` ), `date_created_gmt` = VALUES( `date_created_gmt` ), `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `ip_address` = VALUES( `ip_address` ), `parent_order_id` = VALU"
+          },
+          {
+            "seconds": 0.057476043701171875,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 1.000000 WHERE post_id = 14 AND meta_key='total_sales'"
+          },
+          {
+            "seconds": 0.0557248592376709,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.049490928649902344,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001427', 'instance_id', '1')"
+          },
+          {
+            "seconds": 0.04820108413696289,
+            "sql": "UPDATE `wp_posts` SET `guid` = 'http://localhost:8099/?post_type=shop_order_placehold&p=200917' WHERE `ID` = 200917"
+          },
+          {
+            "seconds": 0.04777812957763672,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200917', '_debug_log_source', 'place-order-debug-bf2316d2')"
+          },
+          {
+            "seconds": 0.044801950454711914,
+            "sql": "INSERT INTO `wp_posts` (`post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_content_filtered`, `post_title`, `post_excerpt`, `post_status`, `post_type`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_parent`, `menu_order`, `post_mime_type`, `guid`) VALUES (0, '2026-07-01 13:03:25', '2026-07-01 13:03:25', '', '', '', '', 'draft', 'shop_order_placehold', 'closed', 'closed', '', '', '', '', '2026-07-01 13:03:25', '2026-07-01 13:03:25', 0, 0, '', '')"
+          },
+          {
+            "seconds": 0.04048895835876465,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 200917, 14, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 14 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 14 AND stock_table.`order_id` != 200917 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.037036895751953125,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001413', '_line_total', '11')"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:27+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003219-32",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 4569.092000000001,
+      "ttfb_ms": 4569.009999999999,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003219-32",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1912.99,
+        "query_count": 530,
+        "query_time_ms": 1791.81,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.10320711135864258,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001423', 'cost', '0')"
+          },
+          {
+            "seconds": 0.06873011589050293,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.06337094306945801,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `cart_hash`, `coupon_usages_are_counted`, `created_via`, `date_completed_gmt`, `date_paid_gmt`, `discount_tax_amount`, `discount_total_amount`, `download_permission_granted`, `new_order_email_sent`, `order_id`, `order_key`, `order_stock_reduced`, `prices_include_tax`, `recorded_sales`, `shipping_tax_amount`, `shipping_total_amount`, `woocommerce_version` ) VALUES ( '83aefe3c22b141abd2905c386781e155', 0, 'store-api', NULL, NULL, 0.000000, 0.000000, 0, 0, 200915, 'wc_order_nslWUevGckbgE', 0, 0, 0, 0.000000, 0.000000, '10.9.1' ) ON DUPLICATE KEY UPDATE `cart_hash` = VALUES( `cart_hash` ), `coupon_usages_are_counted` = VALUES( `coupon_usages_are_counted` ), `created_via` = VALUES( `created_via` ), `date_completed_gmt` = VALUES( `date_completed_gmt` ), `date_paid_gmt` = VALUES( `date_paid_gmt` ), `discount_tax_amount` = VALUES( `discount_tax_amount`"
+          },
+          {
+            "seconds": 0.0629720687866211,
+            "sql": "INSERT INTO `wp_posts` (`post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_content_filtered`, `post_title`, `post_excerpt`, `post_status`, `post_type`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_parent`, `menu_order`, `post_mime_type`, `guid`) VALUES (0, '2026-07-01 13:03:25', '2026-07-01 13:03:25', '', '', '', '', 'draft', 'shop_order_placehold', 'closed', 'closed', '', '', '', '', '2026-07-01 13:03:25', '2026-07-01 13:03:25', 0, 0, '', '')"
+          },
+          {
+            "seconds": 0.0601041316986084,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 1.000000 WHERE post_id = 14 AND meta_key='total_sales'"
+          },
+          {
+            "seconds": 0.05374789237976074,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 200915, 14, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 14 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 14 AND stock_table.`order_id` != 200915 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.04950404167175293,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001423', 'total_tax', '0')"
+          },
+          {
+            "seconds": 0.04824995994567871,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200915', '_debug_log_source', 'place-order-debug-cff70a0b')"
+          },
+          {
+            "seconds": 0.04818105697631836,
+            "sql": "UPDATE `wp_posts` SET `comment_count` = 1 WHERE `ID` = 200915"
+          },
+          {
+            "seconds": 0.047457218170166016,
+            "sql": "UPDATE `wp_posts` SET `guid` = 'http://localhost:8099/?post_type=shop_order_placehold&p=200915' WHERE `ID` = 200915"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:27+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003220-33",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 4582.584,
+      "ttfb_ms": 4582.453,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003220-33",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1959.9,
+        "query_count": 530,
+        "query_time_ms": 1791.38,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.0916130542755127,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 200914, 14, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 14 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 14 AND stock_table.`order_id` != 200914 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.08412599563598633,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001424', 'instance_id', '1')"
+          },
+          {
+            "seconds": 0.07986903190612793,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.07164502143859863,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001424', 'cost', '0')"
+          },
+          {
+            "seconds": 0.06366491317749023,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `cart_hash`, `coupon_usages_are_counted`, `created_via`, `date_completed_gmt`, `date_paid_gmt`, `discount_tax_amount`, `discount_total_amount`, `download_permission_granted`, `new_order_email_sent`, `order_id`, `order_key`, `order_stock_reduced`, `prices_include_tax`, `recorded_sales`, `shipping_tax_amount`, `shipping_total_amount`, `woocommerce_version` ) VALUES ( '83aefe3c22b141abd2905c386781e155', 0, 'store-api', NULL, NULL, 0.000000, 0.000000, 0, 0, 200914, 'wc_order_T7CMkpaQIkrdX', 0, 0, 0, 0.000000, 0.000000, '10.9.1' ) ON DUPLICATE KEY UPDATE `cart_hash` = VALUES( `cart_hash` ), `coupon_usages_are_counted` = VALUES( `coupon_usages_are_counted` ), `created_via` = VALUES( `created_via` ), `date_completed_gmt` = VALUES( `date_completed_gmt` ), `date_paid_gmt` = VALUES( `date_paid_gmt` ), `discount_tax_amount` = VALUES( `discount_tax_amount`"
+          },
+          {
+            "seconds": 0.06310701370239258,
+            "sql": "INSERT INTO `wp_posts` (`post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_content_filtered`, `post_title`, `post_excerpt`, `post_status`, `post_type`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_parent`, `menu_order`, `post_mime_type`, `guid`) VALUES (0, '2026-07-01 13:03:25', '2026-07-01 13:03:25', '', '', '', '', 'draft', 'shop_order_placehold', 'closed', 'closed', '', '', '', '', '2026-07-01 13:03:25', '2026-07-01 13:03:25', 0, 0, '', '')"
+          },
+          {
+            "seconds": 0.05542111396789551,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 1.000000 WHERE post_id = 14 AND meta_key='total_sales'"
+          },
+          {
+            "seconds": 0.051651954650878906,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 2181599 AND `order_id` = 200914"
+          },
+          {
+            "seconds": 0.04806995391845703,
+            "sql": "UPDATE `wp_posts` SET `guid` = 'http://localhost:8099/?post_type=shop_order_placehold&p=200914' WHERE `ID` = 200914"
+          },
+          {
+            "seconds": 0.04715609550476074,
+            "sql": " INSERT INTO wp_wc_orders ( `billing_email`, `currency`, `customer_id`, `customer_note`, `date_created_gmt`, `date_updated_gmt`, `id`, `ip_address`, `parent_order_id`, `payment_method`, `payment_method_title`, `status`, `tax_amount`, `total_amount`, `transaction_id`, `type`, `user_agent` ) VALUES ( 'concurrent-buyer@example.test', 'USD', 0, '', '2026-07-01 13:03:25', '2026-07-01 13:03:25', 200914, '172.20.0.1', 0, 'cod', '', 'wc-checkout-draft', 0.000000, 0.000000, '', 'shop_order', 'wc-perf-local-concurrency/1.0' ) ON DUPLICATE KEY UPDATE `billing_email` = VALUES( `billing_email` ), `currency` = VALUES( `currency` ), `customer_id` = VALUES( `customer_id` ), `customer_note` = VALUES( `customer_note` ), `date_created_gmt` = VALUES( `date_created_gmt` ), `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `ip_address` = VALUES( `ip_address` ), `parent_order_id` = VALU"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:27+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003222-34",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 4619.139999999999,
+      "ttfb_ms": 4619.036999999999,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003222-34",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1981.5,
+        "query_count": 530,
+        "query_time_ms": 1824.89,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.1164090633392334,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 200916, 14, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 14 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 14 AND stock_table.`order_id` != 200916 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.08507513999938965,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001425', 'instance_id', '1')"
+          },
+          {
+            "seconds": 0.07788896560668945,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 1.000000 WHERE post_id = 14 AND meta_key='total_sales'"
+          },
+          {
+            "seconds": 0.07188916206359863,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001425', 'cost', '0')"
+          },
+          {
+            "seconds": 0.06367993354797363,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.06358814239501953,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `cart_hash`, `coupon_usages_are_counted`, `created_via`, `date_completed_gmt`, `date_paid_gmt`, `discount_tax_amount`, `discount_total_amount`, `download_permission_granted`, `new_order_email_sent`, `order_id`, `order_key`, `order_stock_reduced`, `prices_include_tax`, `recorded_sales`, `shipping_tax_amount`, `shipping_total_amount`, `woocommerce_version` ) VALUES ( '83aefe3c22b141abd2905c386781e155', 0, 'store-api', NULL, NULL, 0.000000, 0.000000, 0, 0, 200916, 'wc_order_t1mosxmPrfipC', 0, 0, 0, 0.000000, 0.000000, '10.9.1' ) ON DUPLICATE KEY UPDATE `cart_hash` = VALUES( `cart_hash` ), `coupon_usages_are_counted` = VALUES( `coupon_usages_are_counted` ), `created_via` = VALUES( `created_via` ), `date_completed_gmt` = VALUES( `date_completed_gmt` ), `date_paid_gmt` = VALUES( `date_paid_gmt` ), `discount_tax_amount` = VALUES( `discount_tax_amount`"
+          },
+          {
+            "seconds": 0.06299400329589844,
+            "sql": "INSERT INTO `wp_posts` (`post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_content_filtered`, `post_title`, `post_excerpt`, `post_status`, `post_type`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_parent`, `menu_order`, `post_mime_type`, `guid`) VALUES (0, '2026-07-01 13:03:25', '2026-07-01 13:03:25', '', '', '', '', 'draft', 'shop_order_placehold', 'closed', 'closed', '', '', '', '', '2026-07-01 13:03:25', '2026-07-01 13:03:25', 0, 0, '', '')"
+          },
+          {
+            "seconds": 0.05146312713623047,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 2181594 AND `order_id` = 200916"
+          },
+          {
+            "seconds": 0.04780912399291992,
+            "sql": " INSERT INTO wp_wc_orders ( `billing_email`, `currency`, `customer_id`, `customer_note`, `date_created_gmt`, `date_updated_gmt`, `id`, `ip_address`, `parent_order_id`, `payment_method`, `payment_method_title`, `status`, `tax_amount`, `total_amount`, `transaction_id`, `type`, `user_agent` ) VALUES ( 'concurrent-buyer@example.test', 'USD', 0, '', '2026-07-01 13:03:25', '2026-07-01 13:03:25', 200916, '172.20.0.1', 0, 'cod', '', 'wc-checkout-draft', 0.000000, 0.000000, '', 'shop_order', 'wc-perf-local-concurrency/1.0' ) ON DUPLICATE KEY UPDATE `billing_email` = VALUES( `billing_email` ), `currency` = VALUES( `currency` ), `customer_id` = VALUES( `customer_id` ), `customer_note` = VALUES( `customer_note` ), `date_created_gmt` = VALUES( `date_created_gmt` ), `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `ip_address` = VALUES( `ip_address` ), `parent_order_id` = VALU"
+          },
+          {
+            "seconds": 0.046911001205444336,
+            "sql": "UPDATE `wp_posts` SET `guid` = 'http://localhost:8099/?post_type=shop_order_placehold&p=200916' WHERE `ID` = 200916"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:27+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003223-35",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 4630.619000000001,
+      "ttfb_ms": 4630.514,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003223-35",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1721.32,
+        "query_count": 466,
+        "query_time_ms": 1599.4,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.10889101028442383,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001416', '_line_subtotal_tax', '0')"
+          },
+          {
+            "seconds": 0.0791468620300293,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 1.000000 WHERE post_id = 14 AND meta_key='total_sales'"
+          },
+          {
+            "seconds": 0.06669306755065918,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.0661628246307373,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 200919, 14, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 14 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 14 AND stock_table.`order_id` != 200919 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.053906917572021484,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200919', '_debug_log_source', 'place-order-debug-4c233cd8')"
+          },
+          {
+            "seconds": 0.05238199234008789,
+            "sql": "INSERT INTO `wp_woocommerce_order_items` (`order_item_name`, `order_item_type`, `order_id`) VALUES ('Benchmark Product 00001 Alpha SearchToken001', 'line_item', '200919')"
+          },
+          {
+            "seconds": 0.0496518611907959,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001416', '_line_total', '11')"
+          },
+          {
+            "seconds": 0.03668212890625,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001416', '_qty', '1')"
+          },
+          {
+            "seconds": 0.035588979721069336,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001416', '_product_id', '14')"
+          },
+          {
+            "seconds": 0.03426313400268555,
+            "sql": "UPDATE `wp_posts` SET `guid` = 'http://localhost:8099/?post_type=shop_order_placehold&p=200919' WHERE `ID` = 200919"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:27+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003234-36",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 4614.966,
+      "ttfb_ms": 4614.869,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003234-36",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1824.96,
+        "query_count": 530,
+        "query_time_ms": 1696.36,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.1239619255065918,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 200918, 14, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 14 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 14 AND stock_table.`order_id` != 200918 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.08529996871948242,
+            "sql": "INSERT INTO `wp_woocommerce_order_items` (`order_item_name`, `order_item_type`, `order_id`) VALUES ('Flat rate', 'shipping', '200918')"
+          },
+          {
+            "seconds": 0.08218216896057129,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 1.000000 WHERE post_id = 14 AND meta_key='total_sales'"
+          },
+          {
+            "seconds": 0.07491087913513184,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.0715780258178711,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001428', 'method_id', 'flat_rate')"
+          },
+          {
+            "seconds": 0.04782414436340332,
+            "sql": "DELETE FROM `wp_wc_orders_meta` WHERE `id` = 2181591 AND `order_id` = 200918"
+          },
+          {
+            "seconds": 0.03927898406982422,
+            "sql": "INSERT INTO `wp_posts` (`post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_content_filtered`, `post_title`, `post_excerpt`, `post_status`, `post_type`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_parent`, `menu_order`, `post_mime_type`, `guid`) VALUES (0, '2026-07-01 13:03:26', '2026-07-01 13:03:26', '', '', '', '', 'draft', 'shop_order_placehold', 'closed', 'closed', '', '', '', '', '2026-07-01 13:03:26', '2026-07-01 13:03:26', 0, 0, '', '')"
+          },
+          {
+            "seconds": 0.0370640754699707,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001414', '_line_subtotal_tax', '0')"
+          },
+          {
+            "seconds": 0.036448001861572266,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001414', '_line_subtotal', '11')"
+          },
+          {
+            "seconds": 0.035989999771118164,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001414', '_line_total', '11')"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:27+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003235-37",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 4653.121999999999,
+      "ttfb_ms": 4653.041,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003235-37",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1687.74,
+        "query_count": 522,
+        "query_time_ms": 1570.47,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.08513498306274414,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001421', '_tax_class', '')"
+          },
+          {
+            "seconds": 0.07177305221557617,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001421', '_line_subtotal', '11')"
+          },
+          {
+            "seconds": 0.06999707221984863,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 200920, 14, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 14 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 14 AND stock_table.`order_id` != 200920 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.06715703010559082,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 1.000000 WHERE post_id = 14 AND meta_key='total_sales'"
+          },
+          {
+            "seconds": 0.05112791061401367,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200920', '_debug_log_source', 'place-order-debug-8f369e36')"
+          },
+          {
+            "seconds": 0.04966092109680176,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200920', '_billing_address_index', 'Concurrent Buyer 1 Lock Way Perf City CA 94105 US concurrent-buyer@example.test 5551234567')"
+          },
+          {
+            "seconds": 0.04610395431518555,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.03476381301879883,
+            "sql": "INSERT INTO `wp_woocommerce_order_items` (`order_item_name`, `order_item_type`, `order_id`) VALUES ('Benchmark Product 00001 Alpha SearchToken001', 'line_item', '200920')"
+          },
+          {
+            "seconds": 0.03350019454956055,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200920', '_shipping_address_index', 'Concurrent Buyer 1 Lock Way Perf City CA 94105 US 5551234567')"
+          },
+          {
+            "seconds": 0.03329801559448242,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001421', '_variation_id', '0')"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:27+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003236-38",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 4681.699,
+      "ttfb_ms": 4681.628,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003236-38",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1539.6,
+        "query_count": 528,
+        "query_time_ms": 1412.78,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.08375406265258789,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200922', '_coupons_hash', 'd751713988987e9331980363e24189ce')"
+          },
+          {
+            "seconds": 0.05596590042114258,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 200922, 14, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 14 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 14 AND stock_table.`order_id` != 200922 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.04817914962768555,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `total_amount`, `type` ) VALUES ( '2026-07-01 13:03:27', 200922, 11.000000, 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `total_amount` = VALUES( `total_amount` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.04784417152404785,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001430', '_line_tax_data', 'a:2:{s:5:\\\"total\\\";a:0:{}s:8:\\\"subtotal\\\";a:0:{}}')"
+          },
+          {
+            "seconds": 0.04668688774108887,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200922', '_taxes_hash', 'd751713988987e9331980363e24189ce')"
+          },
+          {
+            "seconds": 0.0388338565826416,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 1.000000 WHERE post_id = 14 AND meta_key='total_sales'"
+          },
+          {
+            "seconds": 0.037142038345336914,
+            "sql": "UPDATE `wp_posts` SET `guid` = 'http://localhost:8099/?post_type=shop_order_placehold&p=200922' WHERE `ID` = 200922"
+          },
+          {
+            "seconds": 0.036375999450683594,
+            "sql": " INSERT INTO wp_wc_orders ( `billing_email`, `currency`, `customer_id`, `customer_note`, `date_created_gmt`, `date_updated_gmt`, `id`, `ip_address`, `parent_order_id`, `payment_method`, `payment_method_title`, `status`, `tax_amount`, `total_amount`, `transaction_id`, `type`, `user_agent` ) VALUES ( 'concurrent-buyer@example.test', 'USD', 0, '', '2026-07-01 13:03:26', '2026-07-01 13:03:26', 200922, '172.20.0.1', 0, 'cod', '', 'wc-checkout-draft', 0.000000, 0.000000, '', 'shop_order', 'wc-perf-local-concurrency/1.0' ) ON DUPLICATE KEY UPDATE `billing_email` = VALUES( `billing_email` ), `currency` = VALUES( `currency` ), `customer_id` = VALUES( `customer_id` ), `customer_note` = VALUES( `customer_note` ), `date_created_gmt` = VALUES( `date_created_gmt` ), `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `ip_address` = VALUES( `ip_address` ), `parent_order_id` = VALU"
+          },
+          {
+            "seconds": 0.036032915115356445,
+            "sql": "INSERT INTO `wp_posts` (`post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_content_filtered`, `post_title`, `post_excerpt`, `post_status`, `post_type`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_parent`, `menu_order`, `post_mime_type`, `guid`) VALUES (0, '2026-07-01 13:03:26', '2026-07-01 13:03:26', '', '', '', '', 'draft', 'shop_order_placehold', 'closed', 'closed', '', '', '', '', '2026-07-01 13:03:26', '2026-07-01 13:03:26', 0, 0, '', '')"
+          },
+          {
+            "seconds": 0.03421306610107422,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:27+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003237-39",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 4660.196,
+      "ttfb_ms": 4660.1359999999995,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003237-39",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1654.73,
+        "query_count": 524,
+        "query_time_ms": 1537.41,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.08521294593811035,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001422', '_qty', '1')"
+          },
+          {
+            "seconds": 0.07561612129211426,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 200921, 14, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 14 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 14 AND stock_table.`order_id` != 200921 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.07274913787841797,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 1.000000 WHERE post_id = 14 AND meta_key='total_sales'"
+          },
+          {
+            "seconds": 0.07142901420593262,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001422', '_tax_class', '')"
+          },
+          {
+            "seconds": 0.04686784744262695,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.04623603820800781,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `discount_tax_amount`, `discount_total_amount`, `order_id` ) VALUES ( 0.000000, 0.000000, 200921 ) ON DUPLICATE KEY UPDATE `discount_tax_amount` = VALUES( `discount_tax_amount` ), `discount_total_amount` = VALUES( `discount_total_amount` ), `order_id` = VALUES( `order_id` ) "
+          },
+          {
+            "seconds": 0.04412221908569336,
+            "sql": " INSERT INTO wp_wc_orders ( `date_updated_gmt`, `id`, `payment_method_title`, `type` ) VALUES ( '2026-07-01 13:03:27', 200921, 'Cash on delivery', 'shop_order' ) ON DUPLICATE KEY UPDATE `date_updated_gmt` = VALUES( `date_updated_gmt` ), `id` = VALUES( `id` ), `payment_method_title` = VALUES( `payment_method_title` ), `type` = VALUES( `type` ) "
+          },
+          {
+            "seconds": 0.03741312026977539,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200921', '_billing_address_index', 'Concurrent Buyer 1 Lock Way Perf City CA 94105 US concurrent-buyer@example.test 5551234567')"
+          },
+          {
+            "seconds": 0.0372920036315918,
+            "sql": "INSERT INTO `wp_wc_orders_meta` (`order_id`, `meta_key`, `meta_value`) VALUES ('200921', '_shipping_address_index', 'Concurrent Buyer 1 Lock Way Perf City CA 94105 US 5551234567')"
+          },
+          {
+            "seconds": 0.03484487533569336,
+            "sql": "INSERT INTO `wp_woocommerce_order_items` (`order_item_name`, `order_item_type`, `order_id`) VALUES ('Benchmark Product 00001 Alpha SearchToken001', 'line_item', '200921')"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:27+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "11-path-concurrent-stock-checkout-40x-1782911003238-40",
+      "exit_code": 0,
+      "stderr": "",
+      "http_code": 200,
+      "total_ms": 4670.967,
+      "ttfb_ms": 4670.898,
+      "size_download": 999,
+      "body_bytes": 999,
+      "profiler": {
+        "run_id": "11-path-concurrent-stock-checkout-40x-1782911003238-40",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/checkout",
+        "status": 200,
+        "server_ms": 1418.86,
+        "query_count": 528,
+        "query_time_ms": 1299.63,
+        "memory_peak_mb": 14,
+        "slow_queries": [
+          {
+            "seconds": 0.08439803123474121,
+            "sql": " INSERT INTO wp_wc_order_operational_data ( `cart_hash`, `coupon_usages_are_counted`, `created_via`, `date_completed_gmt`, `date_paid_gmt`, `discount_tax_amount`, `discount_total_amount`, `download_permission_granted`, `new_order_email_sent`, `order_id`, `order_key`, `order_stock_reduced`, `prices_include_tax`, `recorded_sales`, `shipping_tax_amount`, `shipping_total_amount`, `woocommerce_version` ) VALUES ( '83aefe3c22b141abd2905c386781e155', 0, 'store-api', NULL, NULL, 0.000000, 0.000000, 0, 0, 200923, 'wc_order_Jhaarfxb1oGGz', 0, 0, 0, 0.000000, 0.000000, '10.9.1' ) ON DUPLICATE KEY UPDATE `cart_hash` = VALUES( `cart_hash` ), `coupon_usages_are_counted` = VALUES( `coupon_usages_are_counted` ), `created_via` = VALUES( `created_via` ), `date_completed_gmt` = VALUES( `date_completed_gmt` ), `date_paid_gmt` = VALUES( `date_paid_gmt` ), `discount_tax_amount` = VALUES( `discount_tax_amount`"
+          },
+          {
+            "seconds": 0.07113909721374512,
+            "sql": "INSERT INTO `wp_wc_order_addresses` (`address_1`, `address_type`, `city`, `country`, `email`, `first_name`, `last_name`, `order_id`, `phone`, `postcode`, `state`) VALUES ('1 Lock Way', 'billing', 'Perf City', 'US', 'concurrent-buyer@example.test', 'Concurrent', 'Buyer', 200923, '5551234567', '94105', 'CA')"
+          },
+          {
+            "seconds": 0.04815101623535156,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001433', '_line_subtotal', '11')"
+          },
+          {
+            "seconds": 0.04764604568481445,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001435', 'cost', '0')"
+          },
+          {
+            "seconds": 0.04073500633239746,
+            "sql": " INSERT INTO wp_wc_reserved_stock ( `order_id`, `product_id`, `stock_quantity`, `timestamp`, `expires` ) SELECT 200923, 14, 1, NOW(), ( NOW() + INTERVAL 60 MINUTE ) FROM DUAL WHERE ( SELECT COALESCE( MAX( meta_value ), 0 ) FROM wp_postmeta as meta_table WHERE meta_table.meta_key = '_stock' AND meta_table.post_id = 14 FOR UPDATE ) - ( SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 14 AND stock_table.`order_id` != 200923 FOR UPDATE ) >= 1 ON DUPLICATE KEY UPDATE `expires` = VALUES( `expires` ), `stock_quantity` = VALUES( `stock_quantity` ) "
+          },
+          {
+            "seconds": 0.03377795219421387,
+            "sql": "INSERT INTO `wp_posts` (`post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_content_filtered`, `post_title`, `post_excerpt`, `post_status`, `post_type`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_parent`, `menu_order`, `post_mime_type`, `guid`) VALUES (0, '2026-07-01 13:03:26', '2026-07-01 13:03:26', '', '', '', '', 'draft', 'shop_order_placehold', 'closed', 'closed', '', '', '', '', '2026-07-01 13:03:26', '2026-07-01 13:03:26', 0, 0, '', '')"
+          },
+          {
+            "seconds": 0.03333592414855957,
+            "sql": "UPDATE `wp_posts` SET `guid` = 'http://localhost:8099/?post_type=shop_order_placehold&p=200923' WHERE `ID` = 200923"
+          },
+          {
+            "seconds": 0.02919602394104004,
+            "sql": "INSERT INTO `wp_woocommerce_order_itemmeta` (`order_item_id`, `meta_key`, `meta_value`) VALUES ('1001433', '_line_subtotal_tax', '0')"
+          },
+          {
+            "seconds": 0.028304100036621094,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value -1.000000 WHERE post_id = 14 AND meta_key='_stock'"
+          },
+          {
+            "seconds": 0.0247800350189209,
+            "sql": "UPDATE wp_postmeta SET meta_value = meta_value + 1.000000 WHERE post_id = 14 AND meta_key='total_sales'"
+          }
+        ],
+        "timestamp_gmt": "2026-07-01T13:03:27+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    }
+  ],
+  "fixture": {
+    "orders": 1000000,
+    "products": 200000,
+    "variations": 800,
+    "analytics_rows": 1000000,
+    "heavy_order_id": 9999001,
+    "heavy_order_items": 1000,
+    "first_product_id": 14,
+    "last_product_id": 200877,
+    "created_gmt": "2026-07-01T12:58:15+00:00"
+  },
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "site_url": "http://localhost:8099"
+  },
+  "measured_at_gmt": "2026-07-01T13:03:32.268Z",
+  "batch_ms": 9137
+}

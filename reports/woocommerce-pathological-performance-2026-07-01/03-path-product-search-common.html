@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product Search: 200,000 Common-Term LIKE</title>
+<style>
+:root{--ink:#15202b;--muted:#5d6976;--line:#d7dde3;--bg:#f6f8fa;--panel:#fff;--accent:#1f7a6d;--warn:#a84800;--bad:#a12a2a;--blue:#2764b5}
+*{box-sizing:border-box} body{margin:0;font:14px/1.45 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:var(--bg)}
+header{background:#fff;border-bottom:1px solid var(--line);padding:22px 28px 16px} main{max-width:1180px;margin:0 auto;padding:22px 24px 40px}
+h1{font-size:26px;line-height:1.15;margin:0 0 8px} h2{font-size:17px;margin:26px 0 10px} h3{font-size:14px;margin:18px 0 8px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.sub{color:var(--muted);max-width:900px}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px}
+.metric{font-size:26px;font-weight:720}.label{color:var(--muted);font-size:12px}.two{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+table{width:100%;border-collapse:collapse} th,td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left} th{font-size:12px;color:var(--muted);background:#f1f4f7} tr:last-child td{border-bottom:0}
+.barrow{display:grid;grid-template-columns:140px 1fr 70px;gap:10px;align-items:center;margin:8px 0}.bartrack{height:12px;background:#e5eaef;border-radius:4px;overflow:hidden}.bar{height:100%;background:var(--accent)}.barlabel,.barvalue{font-size:12px;color:var(--muted)}svg{width:100%;height:95px;color:var(--blue)}
+.pill{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;padding:2px 8px;background:#fff;color:var(--muted);font-size:12px}.risk{color:var(--warn);font-weight:650}.bad{color:var(--bad);font-weight:650} code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;background:#eef2f5;padding:1px 4px;border-radius:4px}
+pre{white-space:pre-wrap;word-break:break-word;background:#101820;color:#eef7ff;padding:12px;border-radius:8px;max-height:320px;overflow:auto;font-size:12px}
+.scenario-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.scenario-list a{display:block;background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px;text-decoration:none;color:var(--ink)}
+.scenario-list strong{display:block}.scenario-list span{color:var(--muted);font-size:12px}
+@media(max-width:800px){main{padding:16px}.grid,.two,.scenario-list{grid-template-columns:1fr}.barrow{grid-template-columns:100px 1fr 62px}header{padding:18px 16px}}
+</style>
+</head>
+<body>
+<header><h1>Product Search: 200,000 Common-Term LIKE</h1><div class="sub">Pathological local WooCommerce benchmarks against 1M HPOS orders, 200k products, a 1,000-line-item order, 1M analytics rows, and concurrent buyer-write pressure.</div></header>
+<main>
+<section class="grid">
+  <div class="card"><div class="label">HTTP median</div><div class="metric">591ms</div></div>
+  <div class="card"><div class="label">HTTP p95</div><div class="metric">995ms</div></div>
+  <div class="card"><div class="label">Queries p95</div><div class="metric">89.0</div></div>
+  <div class="card"><div class="label">DB time p95</div><div class="metric">815ms</div></div>
+</section>
+<h2>What Was Triggered</h2>
+<div class="card">
+  <p><strong>Rank 3:</strong> Product Search: 200,000 Common-Term LIKE</p>
+  <p>200,000 products where the same buyer search term appears broadly in title/content/excerpt/meta, stressing LIKE search and result counts.</p>
+  <p><span class="pill">?s=CommonSearchNeedle&amp;post_type=product</span> <span class="pill">HTTP 200</span> <span class="pill">5 samples</span></p>
+</div>
+<h2>Latency Shape</h2>
+<div class="two">
+  <div class="card">
+    <div class="barrow"><div class="barlabel">HTTP median</div><div class="bartrack"><div class="bar" style="width:59%"></div></div><div class="barvalue">591ms</div></div>
+    <div class="barrow"><div class="barlabel">HTTP p95</div><div class="bartrack"><div class="bar" style="width:100%"></div></div><div class="barvalue">995ms</div></div>
+    <div class="barrow"><div class="barlabel">PHP p95</div><div class="bartrack"><div class="bar" style="width:100%"></div></div><div class="barvalue">993ms</div></div>
+    <div class="barrow"><div class="barlabel">DB p95</div><div class="bartrack"><div class="bar" style="width:82%"></div></div><div class="barvalue">815ms</div></div>
+  </div>
+  <div class="card"><svg viewBox="0 0 100 52" role="img" aria-label="Latency samples"><polyline points="0.0,6.0 25.0,20.1 50.0,23.3 75.0,23.6 100.0,23.1" fill="none" stroke="currentColor" stroke-width="2.5"/><line x1="0" x2="100" y1="48" y2="48" stroke="currentColor" opacity=".25"/></svg><div class="label">Each point is one measured request in run order.</div></div>
+</div>
+<h2>Fixture Context</h2>
+<table class="table"><tbody>
+  <tr><th>Orders</th><td>1000000</td><th>Products</th><td>200000</td></tr>
+  <tr><th>Variations</th><td>800</td><th>Variable product</th><td>n/a</td></tr>
+  <tr><th>WordPress</th><td>7.0</td><th>WooCommerce</th><td>10.9.1</td></tr>
+  <tr><th>PHP</th><td>8.3.31</td><th>MySQL</th><td>8.0.46</td></tr>
+</tbody></table>
+<h2>Samples</h2>
+<table class="table"><thead><tr><th>#</th><th>HTTP ms</th><th>PHP ms</th><th>Queries</th><th>DB ms</th><th>Peak MB</th><th>Status</th></tr></thead><tbody>
+<tr><td>1</td><td>995ms</td><td>993ms</td><td>89.0</td><td>815ms</td><td>26.0MB</td><td>200</td></tr><tr><td>2</td><td>662ms</td><td>660ms</td><td>89.0</td><td>563ms</td><td>26.0MB</td><td>200</td></tr><tr><td>3</td><td>585ms</td><td>583ms</td><td>89.0</td><td>486ms</td><td>26.0MB</td><td>200</td></tr><tr><td>4</td><td>578ms</td><td>576ms</td><td>89.0</td><td>476ms</td><td>26.0MB</td><td>200</td></tr><tr><td>5</td><td>591ms</td><td>589ms</td><td>89.0</td><td>491ms</td><td>26.0MB</td><td>200</td></tr>
+</tbody></table>
+<h2>Slow SQL Signatures</h2>
+<table class="table"><thead><tr><th>Seconds</th><th>SQL excerpt</th></tr></thead><tbody><tr><td>783ms</td><td><code>SELECT SQL_CALC_FOUND_ROWS wp_posts.ID FROM wp_posts WHERE 1=1 AND ( wp_posts.ID NOT IN ( SELECT object_id FROM wp_term_relationships WHERE term_taxonomy_id IN (6) ) ) AND (((wp_posts.post_title LIKE '%CommonSearchNeedle%') OR (wp_posts.post_excerpt LIKE '%CommonSearchNeedle%') OR (wp_posts.post_content LIKE '%CommonSearchNeedle%'))) AND (wp_posts.post_password = '') AND ((wp_posts.post_type = 'product' AND (wp_posts.post_status = 'publish'))) GROUP BY wp_posts.ID ORDER BY wp_posts.post_title LIKE '%CommonSearchNeedle%' DESC, wp_posts.post_date DESC LIMIT 0, 16</code></td></tr><tr><td>547ms</td><td><code>SELECT SQL_CALC_FOUND_ROWS wp_posts.ID FROM wp_posts WHERE 1=1 AND ( wp_posts.ID NOT IN ( SELECT object_id FROM wp_term_relationships WHERE term_taxonomy_id IN (6) ) ) AND (((wp_posts.post_title LIKE '%CommonSearchNeedle%') OR (wp_posts.post_excerpt LIKE '%CommonSearchNeedle%') OR (wp_posts.post_content LIKE '%CommonSearchNeedle%'))) AND (wp_posts.post_password = '') AND ((wp_posts.post_type = 'product' AND (wp_posts.post_status = 'publish'))) GROUP BY wp_posts.ID ORDER BY wp_posts.post_title LIKE '%CommonSearchNeedle%' DESC, wp_posts.post_date DESC LIMIT 0, 16</code></td></tr><tr><td>476ms</td><td><code>SELECT SQL_CALC_FOUND_ROWS wp_posts.ID FROM wp_posts WHERE 1=1 AND ( wp_posts.ID NOT IN ( SELECT object_id FROM wp_term_relationships WHERE term_taxonomy_id IN (6) ) ) AND (((wp_posts.post_title LIKE '%CommonSearchNeedle%') OR (wp_posts.post_excerpt LIKE '%CommonSearchNeedle%') OR (wp_posts.post_content LIKE '%CommonSearchNeedle%'))) AND (wp_posts.post_password = '') AND ((wp_posts.post_type = 'product' AND (wp_posts.post_status = 'publish'))) GROUP BY wp_posts.ID ORDER BY wp_posts.post_title LIKE '%CommonSearchNeedle%' DESC, wp_posts.post_date DESC LIMIT 0, 16</code></td></tr><tr><td>471ms</td><td><code>SELECT SQL_CALC_FOUND_ROWS wp_posts.ID FROM wp_posts WHERE 1=1 AND ( wp_posts.ID NOT IN ( SELECT object_id FROM wp_term_relationships WHERE term_taxonomy_id IN (6) ) ) AND (((wp_posts.post_title LIKE '%CommonSearchNeedle%') OR (wp_posts.post_excerpt LIKE '%CommonSearchNeedle%') OR (wp_posts.post_content LIKE '%CommonSearchNeedle%'))) AND (wp_posts.post_password = '') AND ((wp_posts.post_type = 'product' AND (wp_posts.post_status = 'publish'))) GROUP BY wp_posts.ID ORDER BY wp_posts.post_title LIKE '%CommonSearchNeedle%' DESC, wp_posts.post_date DESC LIMIT 0, 16</code></td></tr><tr><td>461ms</td><td><code>SELECT SQL_CALC_FOUND_ROWS wp_posts.ID FROM wp_posts WHERE 1=1 AND ( wp_posts.ID NOT IN ( SELECT object_id FROM wp_term_relationships WHERE term_taxonomy_id IN (6) ) ) AND (((wp_posts.post_title LIKE '%CommonSearchNeedle%') OR (wp_posts.post_excerpt LIKE '%CommonSearchNeedle%') OR (wp_posts.post_content LIKE '%CommonSearchNeedle%'))) AND (wp_posts.post_password = '') AND ((wp_posts.post_type = 'product' AND (wp_posts.post_status = 'publish'))) GROUP BY wp_posts.ID ORDER BY wp_posts.post_title LIKE '%CommonSearchNeedle%' DESC, wp_posts.post_date DESC LIMIT 0, 16</code></td></tr></tbody></table>
+</main>
+</body>
+</html>
