@@ -99,16 +99,20 @@ function wc_update_product_stock_status( $product_id, $status ) {
  * When a payment is complete, we can reduce stock levels for items within an order.
  *
  * @since 3.0.0
- * @param int $order_id Order ID.
+ * @param int           $order_id Order ID.
+ * @param WC_Order|null $order    Order object.
  */
-function wc_maybe_reduce_stock_levels( $order_id ) {
-	$order = wc_get_order( $order_id );
+function wc_maybe_reduce_stock_levels( $order_id, $order = null ) {
+	if ( ! $order instanceof WC_Order ) {
+		$order = wc_get_order( $order_id );
+	}
 
-	if ( ! $order ) {
+	if ( ! $order instanceof WC_Order ) {
 		return;
 	}
 
-	$stock_reduced  = $order->get_data_store()->get_stock_reduced( $order_id );
+	$order_id       = $order->get_id();
+	$stock_reduced  = $order->get_order_stock_reduced();
 	$trigger_reduce = apply_filters( 'woocommerce_payment_complete_reduce_order_stock', ! $stock_reduced, $order_id );
 
 	// Only continue if we're reducing stock.
@@ -119,27 +123,30 @@ function wc_maybe_reduce_stock_levels( $order_id ) {
 	wc_reduce_stock_levels( $order );
 
 	// Ensure stock is marked as "reduced" in case payment complete or other stock actions are called.
-	$order->get_data_store()->set_stock_reduced( $order_id, true );
+	$order->get_data_store()->set_stock_reduced( $order, true );
 }
 add_action( 'woocommerce_payment_complete', 'wc_maybe_reduce_stock_levels' );
-add_action( 'woocommerce_order_status_completed', 'wc_maybe_reduce_stock_levels' );
-add_action( 'woocommerce_order_status_processing', 'wc_maybe_reduce_stock_levels' );
-add_action( 'woocommerce_order_status_on-hold', 'wc_maybe_reduce_stock_levels' );
+add_action( 'woocommerce_order_status_completed', 'wc_maybe_reduce_stock_levels', 10, 2 );
+add_action( 'woocommerce_order_status_processing', 'wc_maybe_reduce_stock_levels', 10, 2 );
+add_action( 'woocommerce_order_status_on-hold', 'wc_maybe_reduce_stock_levels', 10, 2 );
 
 /**
  * When a payment is cancelled, restore stock.
  *
  * @since 3.0.0
- * @param int $order_id Order ID.
+ * @param int           $order_id Order ID.
+ * @param WC_Order|null $order    Order object.
  */
-function wc_maybe_increase_stock_levels( $order_id ) {
-	$order = wc_get_order( $order_id );
+function wc_maybe_increase_stock_levels( $order_id, $order = null ) {
+	if ( ! $order instanceof WC_Order ) {
+		$order = wc_get_order( $order_id );
+	}
 
-	if ( ! $order ) {
+	if ( ! $order instanceof WC_Order ) {
 		return;
 	}
 
-	$stock_reduced    = $order->get_data_store()->get_stock_reduced( $order_id );
+	$stock_reduced    = $order->get_order_stock_reduced();
 	$trigger_increase = (bool) $stock_reduced;
 
 	// Only continue if we're increasing stock.
@@ -150,10 +157,10 @@ function wc_maybe_increase_stock_levels( $order_id ) {
 	wc_increase_stock_levels( $order );
 
 	// Ensure stock is not marked as "reduced" anymore.
-	$order->get_data_store()->set_stock_reduced( $order_id, false );
+	$order->get_data_store()->set_stock_reduced( $order, false );
 }
-add_action( 'woocommerce_order_status_cancelled', 'wc_maybe_increase_stock_levels' );
-add_action( 'woocommerce_order_status_pending', 'wc_maybe_increase_stock_levels' );
+add_action( 'woocommerce_order_status_cancelled', 'wc_maybe_increase_stock_levels', 10, 2 );
+add_action( 'woocommerce_order_status_pending', 'wc_maybe_increase_stock_levels', 10, 2 );
 
 /**
  * Reduce stock levels for items within an order, if stock has not already been reduced for the items.
@@ -462,9 +469,10 @@ add_action( 'woocommerce_checkout_order_created', 'wc_reserve_stock_for_order' )
  * Release held stock for an order.
  *
  * @since 4.3.0
- * @param \WC_Order|int $order Order ID or instance.
+ * @param \WC_Order|int  $order             Order ID or instance.
+ * @param \WC_Order|null $status_hook_order Order object when invoked by an order status hook.
  */
-function wc_release_stock_for_order( $order ) {
+function wc_release_stock_for_order( $order, $status_hook_order = null ) {
 	/**
 	 * Filter: woocommerce_hold_stock_for_checkout
 	 * Allows enable/disable hold stock functionality on checkout.
@@ -476,6 +484,7 @@ function wc_release_stock_for_order( $order ) {
 		return;
 	}
 
+	$order = $status_hook_order instanceof WC_Order ? $status_hook_order : $order;
 	$order = $order instanceof WC_Order ? $order : wc_get_order( $order );
 
 	if ( $order ) {
@@ -485,10 +494,10 @@ function wc_release_stock_for_order( $order ) {
 }
 add_action( 'woocommerce_checkout_order_exception', 'wc_release_stock_for_order' );
 add_action( 'woocommerce_payment_complete', 'wc_release_stock_for_order', 11 );
-add_action( 'woocommerce_order_status_cancelled', 'wc_release_stock_for_order', 11 );
-add_action( 'woocommerce_order_status_completed', 'wc_release_stock_for_order', 11 );
-add_action( 'woocommerce_order_status_processing', 'wc_release_stock_for_order', 11 );
-add_action( 'woocommerce_order_status_on-hold', 'wc_release_stock_for_order', 11 );
+add_action( 'woocommerce_order_status_cancelled', 'wc_release_stock_for_order', 11, 2 );
+add_action( 'woocommerce_order_status_completed', 'wc_release_stock_for_order', 11, 2 );
+add_action( 'woocommerce_order_status_processing', 'wc_release_stock_for_order', 11, 2 );
+add_action( 'woocommerce_order_status_on-hold', 'wc_release_stock_for_order', 11, 2 );
 
 /**
  * Release coupons used for another order.

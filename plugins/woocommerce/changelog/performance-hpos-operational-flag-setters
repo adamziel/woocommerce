@@ -1,0 +1,4 @@
+Significance: patch
+Type: performance
+
+Avoid full HPOS order saves when recording checkout stock and sales operational flags.

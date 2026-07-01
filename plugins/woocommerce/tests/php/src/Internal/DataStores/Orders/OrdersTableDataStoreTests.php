@@ -3112,6 +3112,71 @@ class OrdersTableDataStoreTests extends \HposTestCase {
 	}
 
 	/**
+	 * @testDox Operational flag setters update only wc_order_operational_data.
+	 */
+	public function test_operational_flag_setters_update_only_operational_data_table() {
+		global $wpdb;
+
+		$this->toggle_cot_feature_and_usage( true );
+		$this->disable_cot_sync();
+
+		$order = new WC_Order();
+		$order->save();
+
+		$queries       = array();
+		$query_capture = function ( $query ) use ( &$queries ) {
+			$queries[] = $query;
+			return $query;
+		};
+
+		add_filter( 'query', $query_capture );
+		$this->sut->set_recorded_sales( $order, true );
+		$this->sut->set_stock_reduced( $order, true );
+		remove_filter( 'query', $query_capture );
+
+		// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
+		$row = $wpdb->get_row(
+			$wpdb->prepare(
+				'SELECT recorded_sales, order_stock_reduced FROM ' . OrdersTableDataStore::get_operational_data_table_name() . ' WHERE order_id = %d',
+				$order->get_id()
+			),
+			ARRAY_A
+		);
+		// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared
+
+		$this->assertSame( 1, (int) $row['recorded_sales'] );
+		$this->assertSame( 1, (int) $row['order_stock_reduced'] );
+
+		$reloaded_order = wc_get_order( $order->get_id() );
+		$this->assertTrue( $reloaded_order->get_recorded_sales() );
+		$this->assertTrue( $reloaded_order->get_order_stock_reduced() );
+
+		$orders_table = strtolower( OrdersTableDataStore::get_orders_table_name() );
+		foreach ( $queries as $query ) {
+			$normalized_query = strtolower( str_replace( '`', '', $query ) );
+			$this->assertStringNotContainsString( 'update ' . $orders_table, $normalized_query );
+			$this->assertStringNotContainsString( 'insert into ' . $orders_table, $normalized_query );
+		}
+	}
+
+	/**
+	 * @testDox Operational flag setters backfill matching post meta when sync is enabled.
+	 */
+	public function test_operational_flag_setters_backfill_post_meta_when_sync_is_enabled() {
+		$this->toggle_cot_feature_and_usage( true );
+		$this->enable_cot_sync();
+
+		$order = new WC_Order();
+		$order->save();
+
+		$this->sut->set_recorded_sales( $order, true );
+		$this->sut->set_stock_reduced( $order, true );
+
+		$this->assertSame( 'yes', get_post_meta( $order->get_id(), '_recorded_sales', true ) );
+		$this->assertSame( 'yes', get_post_meta( $order->get_id(), '_order_stock_reduced', true ) );
+	}
+
+	/**
 	 * @testDox Checks that order new/updated hooks are fired at appropriate times in HPOS (vs CPT).
 	 * @testWith [true]
 	 *           [false]
