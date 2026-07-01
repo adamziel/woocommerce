@@ -39,6 +39,7 @@ class OrdersSchedulerTest extends WC_Unit_Test_Case {
 		delete_option( OrdersScheduler::FAILED_ORDER_IMPORTS_OPTION );
 
 		// Clean up any scheduled actions.
+		OrdersScheduler::clear_queued_actions();
 		$this->clear_scheduled_batch_processor();
 
 		Features::disable( 'analytics-scheduled-import' );
@@ -374,6 +375,57 @@ class OrdersSchedulerTest extends WC_Unit_Test_Case {
 		$result = OrdersStatsDataStore::update( $order );
 
 		$this->assertSame( -1, $result );
+	}
+
+	/**
+	 * @testdox possibly_schedule_import uses the provided order object when scheduling immediate order imports.
+	 */
+	public function test_possibly_schedule_import_accepts_order_object(): void {
+		update_option( OrdersScheduler::SCHEDULED_IMPORT_OPTION, 'no' );
+		OrdersScheduler::clear_queued_actions();
+
+		$order = \WC_Helper_Order::create_order();
+
+		$this->assertSame(
+			$order->get_id(),
+			OrdersScheduler::possibly_schedule_import( $order->get_id(), $order )
+		);
+
+		$this->assertTrue( $this->has_scheduled_order_import( $order->get_id() ) );
+	}
+
+	/**
+	 * @testdox possibly_schedule_import keeps its order ID fallback when no order object is provided.
+	 */
+	public function test_possibly_schedule_import_keeps_order_id_fallback(): void {
+		update_option( OrdersScheduler::SCHEDULED_IMPORT_OPTION, 'no' );
+		OrdersScheduler::clear_queued_actions();
+
+		$order = \WC_Helper_Order::create_order();
+
+		$this->assertSame(
+			$order->get_id(),
+			OrdersScheduler::possibly_schedule_import( $order->get_id() )
+		);
+
+		$this->assertTrue( $this->has_scheduled_order_import( $order->get_id() ) );
+	}
+
+	/**
+	 * @testdox possibly_schedule_import does not schedule non-order IDs in immediate mode.
+	 */
+	public function test_possibly_schedule_import_ignores_non_order_ids(): void {
+		update_option( OrdersScheduler::SCHEDULED_IMPORT_OPTION, 'no' );
+		OrdersScheduler::clear_queued_actions();
+
+		$post_id = self::factory()->post->create();
+
+		$this->assertSame(
+			$post_id,
+			OrdersScheduler::possibly_schedule_import( $post_id )
+		);
+
+		$this->assertFalse( $this->has_scheduled_order_import( $post_id ) );
 	}
 
 	/**
@@ -726,6 +778,17 @@ class OrdersSchedulerTest extends WC_Unit_Test_Case {
 		if ( function_exists( 'as_unschedule_all_actions' ) ) {
 			as_unschedule_all_actions( $action_hook, array(), OrdersScheduler::$group );
 		}
+	}
+
+	/**
+	 * Check if an order import action is scheduled.
+	 *
+	 * @param int $order_id Order ID.
+	 * @return bool
+	 */
+	private function has_scheduled_order_import( int $order_id ): bool {
+		$action_hook = OrdersScheduler::get_action( 'import' );
+		return function_exists( 'as_has_scheduled_action' ) ? as_has_scheduled_action( $action_hook, array( $order_id ), OrdersScheduler::$group ) : (bool) as_next_scheduled_action( $action_hook, array( $order_id ), OrdersScheduler::$group );
 	}
 
 	/**
