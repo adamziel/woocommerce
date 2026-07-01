@@ -1,0 +1,4 @@
+Significance: patch
+Type: performance
+
+Skip variation title repair while building available variation payloads.

@@ -100,14 +100,28 @@ class WC_Product_Variation_Data_Store_CPT extends WC_Product_Data_Store_CPT impl
 		$product->set_attributes( wc_get_product_variation_attributes( $product->get_id() ) );
 
 		$updates = array();
-		/**
-		 * If a variation title is not in sync with the parent e.g. saved prior to 3.0, or if the parent title has changed, detect here and update.
-		 */
-		$new_title = $this->generate_product_title( $product );
 
-		if ( $post_object->post_title !== $new_title ) {
-			$product->set_name( $new_title );
-			$updates = array_merge( $updates, array( 'post_title' => $new_title ) );
+		/**
+		 * Controls whether reading a variation should repair its generated title if it is stale.
+		 *
+		 * @since 11.0.0
+		 *
+		 * @param bool                 $sync_title_on_read Whether to sync the variation title during this read.
+		 * @param WC_Product_Variation $product            Variation product being read.
+		 * @param WP_Post              $post_object        Variation post object.
+		 */
+		$sync_title_on_read = apply_filters( 'woocommerce_product_variation_sync_title_on_read', true, $product, $post_object );
+
+		if ( $sync_title_on_read ) {
+			/**
+			 * If a variation title is not in sync with the parent e.g. saved prior to 3.0, or if the parent title has changed, detect here and update.
+			 */
+			$new_title = $this->generate_product_title( $product );
+
+			if ( $post_object->post_title !== $new_title ) {
+				$product->set_name( $new_title );
+				$updates = array_merge( $updates, array( 'post_title' => $new_title ) );
+			}
 		}
 
 		if ( ! empty( $updates ) ) {

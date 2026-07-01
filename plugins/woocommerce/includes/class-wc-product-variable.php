@@ -335,33 +335,40 @@ class WC_Product_Variable extends WC_Product {
 			_prime_post_caches( $variation_ids );
 		}
 
-		foreach ( $variation_ids as $variation_id ) {
+		$skip_variation_title_sync = '__return_false';
+		add_filter( 'woocommerce_product_variation_sync_title_on_read', $skip_variation_title_sync );
 
-			$variation = wc_get_product( $variation_id );
+		try {
+			foreach ( $variation_ids as $variation_id ) {
 
-			// Hide out of stock variations if 'Hide out of stock items from the catalog' is checked.
-			if ( ! $variation || ! $variation->exists() || ( $hide_out_of_stock_items && ! $variation->is_in_stock() ) ) {
-				continue;
+				$variation = wc_get_product( $variation_id );
+
+				// Hide out of stock variations if 'Hide out of stock items from the catalog' is checked.
+				if ( ! $variation || ! $variation->exists() || ( $hide_out_of_stock_items && ! $variation->is_in_stock() ) ) {
+					continue;
+				}
+
+				/**
+				 * Filter 'woocommerce_hide_invisible_variations' to optionally hide invisible variations (disabled variations and variations with empty price).
+				 *
+				 * @since 2.6.8
+				 *
+				 * @param  bool                  $hide        Whether to hide invisible variations. Default true.
+				 * @param  int                   $product_id  The ID of the variation.
+				 * @param  WC_Product_Variation  $variation   The variation object.
+				 */
+				if ( apply_filters( 'woocommerce_hide_invisible_variations', true, $this->get_id(), $variation ) && ! $variation->variation_is_visible() ) {
+					continue;
+				}
+
+				if ( 'array' === $return ) {
+					$available_variations[] = $this->get_available_variation( $variation );
+				} else {
+					$available_variations[] = $variation;
+				}
 			}
-
-			/**
-			 * Filter 'woocommerce_hide_invisible_variations' to optionally hide invisible variations (disabled variations and variations with empty price).
-			 *
-			 * @since 2.6.8
-			 *
-			 * @param  bool                  $hide        Whether to hide invisible variations. Default true.
-			 * @param  int                   $product_id  The ID of the variation.
-			 * @param  WC_Product_Variation  $variation   The variation object.
-			 */
-			if ( apply_filters( 'woocommerce_hide_invisible_variations', true, $this->get_id(), $variation ) && ! $variation->variation_is_visible() ) {
-				continue;
-			}
-
-			if ( 'array' === $return ) {
-				$available_variations[] = $this->get_available_variation( $variation );
-			} else {
-				$available_variations[] = $variation;
-			}
+		} finally {
+			remove_filter( 'woocommerce_product_variation_sync_title_on_read', $skip_variation_title_sync );
 		}
 
 		if ( 'array' === $return ) {

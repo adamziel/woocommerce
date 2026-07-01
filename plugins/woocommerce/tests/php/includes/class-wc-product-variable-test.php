@@ -49,6 +49,27 @@ class WC_Product_Variable_Test extends \WC_Unit_Test_Case {
 	}
 
 	/**
+	 * @testdox 'get_available_variations' does not repair stale variation titles while building variation payloads.
+	 */
+	public function test_get_available_variations_does_not_repair_stale_variation_titles() {
+		$product      = WC_Helper_Product::create_variation_product();
+		$variation_id = $product->get_children()[0];
+
+		wp_update_post(
+			array(
+				'ID'         => $variation_id,
+				'post_title' => 'Stale variation title',
+			)
+		);
+		clean_post_cache( $variation_id );
+
+		$variations = $product->get_available_variations( 'objects' );
+
+		$this->assertNotEmpty( $variations );
+		$this->assertSame( 'Stale variation title', get_post_field( 'post_title', $variation_id ) );
+	}
+
+	/**
 	 * @testdox 'has_purchasable_variations' should return true when all variations are purchasable.
 	 */
 	public function test_has_purchasable_variations_returns_true_when_all_variations_are_purchasable() {

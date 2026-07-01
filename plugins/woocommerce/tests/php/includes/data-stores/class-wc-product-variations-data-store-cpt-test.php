@@ -183,6 +183,29 @@ class WC_Product_Variation_Data_Store_CPT_Test extends WC_Unit_Test_Case {
 	}
 
 	/**
+	 * @testdox read repairs stale variation titles by default.
+	 */
+	public function test_read_repairs_stale_variation_title_by_default() {
+		$parent       = WC_Helper_Product::create_variation_product();
+		$variation_id = $parent->get_children()[0];
+
+		wp_update_post(
+			array(
+				'ID'         => $variation_id,
+				'post_title' => 'Stale variation title',
+			)
+		);
+		clean_post_cache( $variation_id );
+
+		$product = new WC_Product_Variation();
+		$product->set_id( $variation_id );
+		$this->data_store->read( $product );
+
+		$this->assertNotSame( 'Stale variation title', $product->get_name() );
+		$this->assertSame( $product->get_name(), get_post_field( 'post_title', $variation_id ) );
+	}
+
+	/**
 	 * @testdox Cost of Goods Sold "value is additive" flag is not persisted when the feature is disabled.
 	 */
 	public function test_cogs_additive_flag_is_not_persisted_when_feature_is_disabled() {
