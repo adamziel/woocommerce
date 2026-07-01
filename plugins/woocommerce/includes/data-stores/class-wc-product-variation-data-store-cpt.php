@@ -106,9 +106,9 @@ class WC_Product_Variation_Data_Store_CPT extends WC_Product_Data_Store_CPT impl
 		 *
 		 * @since 11.0.0
 		 *
-		 * @param bool                 $sync_title_on_read Whether to sync the variation title during this read.
-		 * @param WC_Product_Variation $product            Variation product being read.
-		 * @param WP_Post              $post_object        Variation post object.
+		 * @param bool       $sync_title_on_read Whether to sync the variation title during this read.
+		 * @param WC_Product $product            Variation product being read.
+		 * @param WP_Post    $post_object        Variation post object.
 		 */
 		$sync_title_on_read = apply_filters( 'woocommerce_product_variation_sync_title_on_read', true, $product, $post_object );
 
