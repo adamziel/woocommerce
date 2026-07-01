@@ -488,7 +488,15 @@ function wc_placeholder_img( $size = 'woocommerce_thumbnail', $attr = '' ) {
  * @return string
  */
 function wc_get_formatted_variation( $variation, $flat = false, $include_names = true, $skip_attributes_in_name = false ) {
-	$return = '';
+	static $term_names_by_taxonomy = array();
+	static $terms_last_changed     = null;
+
+	$return                     = '';
+	$current_terms_last_changed = wp_cache_get_last_changed( 'terms' );
+	if ( $terms_last_changed !== $current_terms_last_changed ) {
+		$term_names_by_taxonomy = array();
+		$terms_last_changed     = $current_terms_last_changed;
+	}
 
 	if ( is_a( $variation, 'WC_Product_Variation' ) ) {
 		$variation_attributes = $variation->get_attributes();
@@ -519,9 +527,34 @@ function wc_get_formatted_variation( $variation, $flat = false, $include_names =
 		foreach ( $variation_attributes as $name => $value ) {
 			// If this is a term slug, get the term's nice name.
 			if ( taxonomy_exists( $name ) ) {
-				$term = get_term_by( 'slug', $value, $name );
-				if ( ! is_wp_error( $term ) && $term && null !== $term->name && '' !== $term->name ) {
-					$value = $term->name;
+				if ( ! array_key_exists( $name, $term_names_by_taxonomy ) ) {
+					$terms = get_terms(
+						array(
+							'taxonomy'   => $name,
+							'hide_empty' => false,
+						)
+					);
+
+					$term_names_by_taxonomy[ $name ] = array();
+
+					if ( ! is_wp_error( $terms ) ) {
+						foreach ( $terms as $term ) {
+							if ( null !== $term->name && '' !== $term->name ) {
+								$term_names_by_taxonomy[ $name ][ $term->slug ] = $term->name;
+							}
+						}
+					}
+				}
+
+				if ( ! isset( $term_names_by_taxonomy[ $name ][ $value ] ) ) {
+					$term = get_term_by( 'slug', $value, $name );
+					if ( ! is_wp_error( $term ) && $term && null !== $term->name && '' !== $term->name ) {
+						$term_names_by_taxonomy[ $name ][ $value ] = $term->name;
+					}
+				}
+
+				if ( isset( $term_names_by_taxonomy[ $name ][ $value ] ) ) {
+					$value = $term_names_by_taxonomy[ $name ][ $value ];
 				}
 			}
 

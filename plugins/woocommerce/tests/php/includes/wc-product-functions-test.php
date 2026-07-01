@@ -1165,6 +1165,84 @@ class WC_Product_Functions_Tests extends \WC_Unit_Test_Case {
 	}
 
 	/**
+	 * @testdox Formatted variations reuse taxonomy term maps within a request.
+	 */
+	public function test_wc_get_formatted_variation_reuses_taxonomy_term_map() {
+		$attribute = WC_Helper_Product::create_attribute(
+			'Perf Size ' . wp_rand(),
+			array(
+				'perf-size-1',
+				'perf-size-2',
+				'perf-size-3',
+				'perf-size-4',
+				'perf-size-5',
+			)
+		);
+		$taxonomy  = $attribute['attribute_taxonomy'];
+		$queries   = array();
+		$capture   = static function ( $query ) use ( &$queries ) {
+			$queries[] = $query;
+			return $query;
+		};
+
+		wp_cache_flush();
+		add_filter( 'query', $capture );
+		try {
+			foreach ( array( 'perf-size-1', 'perf-size-2', 'perf-size-3', 'perf-size-4', 'perf-size-5' ) as $slug ) {
+				$formatted = wc_get_formatted_variation( array( 'attribute_' . $taxonomy => $slug ), true, false );
+				$this->assertSame( $slug, sanitize_title( $formatted ) );
+			}
+		} finally {
+			remove_filter( 'query', $capture );
+			WC_Helper_Product::delete_attribute( $attribute['attribute_id'] );
+			unregister_taxonomy( $taxonomy );
+		}
+
+		$term_queries = array_filter(
+			$queries,
+			static function ( $query ) use ( $taxonomy ) {
+				$normalized_query = preg_replace( '/\s+/', ' ', trim( (string) $query ) );
+				return 0 === stripos( $normalized_query, 'SELECT' )
+					&& str_contains( $normalized_query, 'wp_terms AS t' )
+					&& str_contains( $normalized_query, $taxonomy );
+			}
+		);
+
+		$this->assertLessThanOrEqual( 2, count( $term_queries ), implode( "\n", $term_queries ) );
+	}
+
+	/**
+	 * @testdox Formatted variation term maps are refreshed when terms change.
+	 */
+	public function test_wc_get_formatted_variation_refreshes_term_map_after_term_change() {
+		$attribute = WC_Helper_Product::create_attribute(
+			'Perf Material ' . wp_rand(),
+			array(
+				'cotton',
+			)
+		);
+		$taxonomy  = $attribute['attribute_taxonomy'];
+		$term_id   = (int) $attribute['term_ids'][0];
+
+		try {
+			$this->assertSame( 'cotton', wc_get_formatted_variation( array( 'attribute_' . $taxonomy => 'cotton' ), true, false ) );
+
+			wp_update_term(
+				$term_id,
+				$taxonomy,
+				array(
+					'name' => 'Cotton Updated',
+				)
+			);
+
+			$this->assertSame( 'Cotton Updated', wc_get_formatted_variation( array( 'attribute_' . $taxonomy => 'cotton' ), true, false ) );
+		} finally {
+			WC_Helper_Product::delete_attribute( $attribute['attribute_id'] );
+			unregister_taxonomy( $taxonomy );
+		}
+	}
+
+	/**
 	 * Render the variable add-to-cart template and return the inline JS
 	 * attached to the variation script.
 	 */
