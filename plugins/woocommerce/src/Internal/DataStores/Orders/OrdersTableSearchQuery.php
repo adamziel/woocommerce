@@ -72,6 +72,11 @@ class OrdersTableSearchQuery {
 		);
 
 		if ( 'all' === $search_filter || '' === $search_filter ) {
+			// A complete email address can use the indexed billing_email search and avoid the slower default fanout.
+			if ( is_email( $this->search_term ) ) {
+				return array( 'customer_email' );
+			}
+
 			return $core_filters;
 		} else {
 			return array( $search_filter );
