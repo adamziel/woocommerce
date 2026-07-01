@@ -37,6 +37,18 @@ class WC_Product_Variable_Test extends \WC_Unit_Test_Case {
 	}
 
 	/**
+	 * @testdox 'get_available_variations' matches the direct payload for normal variations.
+	 */
+	public function test_get_available_variations_array_matches_single_variation_payload_shape() {
+		$product   = WC_Helper_Product::create_variation_product();
+		$variation = wc_get_product( $product->get_children()[0] );
+
+		$available_variation = $this->get_available_variation_from_array( $product, $variation );
+
+		$this->assertSame( $product->get_available_variation( $variation ), $available_variation );
+	}
+
+	/**
 	 * @testdox 'get_available_variations' returns the variations as objects if the parameter passed is 'objects'.
 	 */
 	public function test_get_available_variations_returns_object_when_objects_parameter_is_passed() {
@@ -216,6 +228,7 @@ class WC_Product_Variable_Test extends \WC_Unit_Test_Case {
 
 		$this->assertSame( $image_ids, $available_variation['gallery_image_ids'] );
 		$this->assertNotEmpty( $available_variation['gallery_images_html'] );
+		$this->assertSame( $available_variation, $this->get_available_variation_from_array( $product, $variation ) );
 	}
 
 	/**
@@ -261,6 +274,7 @@ class WC_Product_Variable_Test extends \WC_Unit_Test_Case {
 		$this->assertSame( array(), $available_variation['gallery_image_ids'] );
 		$this->assertSame( '', $available_variation['gallery_images_html'] );
 		$this->assertSame( $image_id, $available_variation['image_id'] );
+		$this->assertSame( $available_variation, $this->get_available_variation_from_array( $product, $variation ) );
 	}
 
 	/**
@@ -294,6 +308,7 @@ class WC_Product_Variable_Test extends \WC_Unit_Test_Case {
 		$this->assertSame( $variation_gallery_id, $available_variation['image_id'] );
 		$this->assertStringContainsString( 'variation-gallery.jpg', $available_variation['gallery_images_html'] );
 		$this->assertStringNotContainsString( 'parent-featured.jpg', $available_variation['gallery_images_html'] );
+		$this->assertSame( $available_variation, $this->get_available_variation_from_array( $product, $variation ) );
 	}
 
 	/**
@@ -320,6 +335,28 @@ class WC_Product_Variable_Test extends \WC_Unit_Test_Case {
 
 		$this->assertSame( $parent_featured_id, $available_variation['image_id'] );
 		$this->assertSame( '', $available_variation['gallery_images_html'] );
+		$this->assertSame( $available_variation, $this->get_available_variation_from_array( $product, $variation ) );
+	}
+
+	/**
+	 * Get a specific variation payload from the batched available variations output.
+	 *
+	 * @param WC_Product_Variable  $product   Variable product.
+	 * @param WC_Product_Variation $variation Variation product.
+	 * @return array
+	 */
+	private function get_available_variation_from_array(
+		WC_Product_Variable $product,
+		WC_Product_Variation $variation
+	): array {
+		foreach ( $product->get_available_variations( 'array' ) as $available_variation ) {
+			if ( $variation->get_id() === $available_variation['variation_id'] ) {
+				return $available_variation;
+			}
+		}
+
+		$this->fail( 'Variation was not present in available variations output.' );
+		return array();
 	}
 
 	/**
