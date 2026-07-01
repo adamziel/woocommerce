@@ -1,0 +1,4 @@
+Significance: patch
+Type: performance
+
+Cache taxonomy term names while formatting product variation attributes.
