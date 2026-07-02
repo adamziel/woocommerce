@@ -1,0 +1,71 @@
+{
+  "measured_at_utc": "2026-07-02T13:45:26Z",
+  "problem": "WooPayments incentives API cold call during WooCommerce admin menu construction",
+  "conclusion": "Do not open a simple retry/cache PR for this path. Current WooCommerce core already caches the 204 empty incentives response after the first cold request. The remaining issue is a product/architecture tradeoff: the first uncached admin request can block on the remote incentives API while building the Payments menu badge.",
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "active_plugins": [
+      "woocommerce-gateway-stripe/woocommerce-gateway-stripe.php",
+      "woocommerce-payments/woocommerce-payments.php",
+      "woocommerce-paypal-payments/woocommerce-paypal-payments.php",
+      "woocommerce/woocommerce.php"
+    ]
+  },
+  "fixture": {
+    "orders": 60000,
+    "products": 6000,
+    "variations": 800,
+    "pathological_orders": 1000000,
+    "heavy_order_id": 9999001,
+    "heavy_order_items": 1000,
+    "shipping_zones": 8000,
+    "tax_rates": 12000
+  },
+  "setup": "Deleted woocommerce_admin_pes_incentive_woopayments_cache and woocommerce_admin_pes_incentive_woopayments_store_has_orders before running three authenticated HPOS heavy-order admin requests.",
+  "scenario": {
+    "id": "05-xhprof-admin-heavy-order-edit",
+    "request": "/wp-admin/admin.php?page=wc-orders&action=edit&id=9999001",
+    "artifact": "/home/claude/woocommerce/results/woopayments-incentives-cold-cache-check-1/05-xhprof-admin-heavy-order-edit.json"
+  },
+  "samples": [
+    {
+      "sample": 1,
+      "total_ms": 4544.503,
+      "server_ms": 4452.36,
+      "query_count": 3273,
+      "incentives_http_calls": 1,
+      "incentives_status_code": 204,
+      "incentives_elapsed_ms": 630.234,
+      "caller": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsController->add_menu -> store_has_providers_with_incentive -> Payments->get_payment_providers -> PaymentsExtensionSuggestions->get_extension_incentive -> Incentives\\WooPayments->get_incentives"
+    },
+    {
+      "sample": 2,
+      "total_ms": 3483.325,
+      "server_ms": 3405.51,
+      "query_count": 3242,
+      "incentives_http_calls": 0,
+      "incentives_elapsed_ms": 0
+    },
+    {
+      "sample": 3,
+      "total_ms": 3423.627,
+      "server_ms": 3345.99,
+      "query_count": 3242,
+      "incentives_http_calls": 0,
+      "incentives_elapsed_ms": 0
+    }
+  ],
+  "post_run_cache": {
+    "transient": "woocommerce_admin_pes_incentive_woopayments_cache",
+    "value_shape": {
+      "incentives": [],
+      "context_hash": "bf8dce6f4e3f0cabe3630ef0e68e1b89",
+      "timestamp": 1782999915
+    }
+  },
+  "handoff": "If this becomes a product priority, the safer fix is not another cache layer. Consider cached-only menu badge rendering on unrelated admin pages, async/stale-while-revalidate incentive refresh, or only fetching remote incentives on Payments settings surfaces. That requires a UX decision because the current synchronous call is what lets the Payments menu badge appear on a completely cold store."
+}
