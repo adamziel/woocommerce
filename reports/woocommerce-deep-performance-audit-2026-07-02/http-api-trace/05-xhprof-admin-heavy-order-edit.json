@@ -1,0 +1,1895 @@
+{
+  "scenario": {
+    "id": "05-xhprof-admin-heavy-order-edit",
+    "title": "Admin edit heavy order",
+    "trigger": "Authenticated HPOS order edit screen for the pathological heavy order."
+  },
+  "request": {
+    "path": "/wp-admin/admin.php?page=wc-orders&action=edit&id=9999001",
+    "admin": true,
+    "headers": []
+  },
+  "summary": {
+    "requests": 1,
+    "http_code_counts": {
+      "200": 1
+    },
+    "total_ms": {
+      "median": 3488.4559999999997,
+      "p95": 3488.4559999999997,
+      "max": 3488.4559999999997
+    },
+    "server_ms": {
+      "median": 3410.8,
+      "p95": 3410.8,
+      "max": 3410.8
+    },
+    "query_count": {
+      "median": 3244,
+      "p95": 3244,
+      "max": 3244
+    },
+    "query_time_ms": {
+      "median": 689.58,
+      "p95": 689.58,
+      "max": 689.58
+    },
+    "xhprof_edge_count": {
+      "median": 20750,
+      "max": 20750
+    }
+  },
+  "samples": [
+    {
+      "run_id": "05-xhprof-admin-heavy-order-edit-1782989245886-1",
+      "http_code": 200,
+      "total_ms": 3488.4559999999997,
+      "ttfb_ms": 3402.7039999999997,
+      "size_download": 3806330,
+      "body_bytes": 3806330,
+      "redirect_url": "",
+      "url_effective": "http://localhost:8099/wp-admin/admin.php?page=wc-orders&action=edit&id=9999001",
+      "profiler": {
+        "run_id": "05-xhprof-admin-heavy-order-edit-1782989245886-1",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-orders&action=edit&id=9999001",
+        "status": 200,
+        "server_ms": 3410.8,
+        "query_count": 3244,
+        "query_time_ms": 689.58,
+        "memory_peak_mb": 71.64,
+        "slow_queries": [
+          {
+            "seconds": 0.14649605751037598,
+            "sql": "SELECT `status`, COUNT(*) AS `count` FROM wp_wc_orders WHERE `type` = 'shop_order' GROUP BY `status`"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 1000,
+            "seconds": 0.13171172142028809,
+            "sql": "SELECT meta_id as meta_id, meta_key, meta_value FROM wp_woocommerce_order_itemmeta WHERE order_item_id = 500012 ORDER BY meta_id",
+            "caller": "do_action('woocommerce_page_wc-orders'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Orders\\PageController->output, Automattic\\WooCommerce\\Internal\\Admin\\Orders\\Edit->display, Automattic\\WooCommerce\\Internal\\Admin\\Orders\\Edit->render_meta_boxes, do_meta_boxes, WC_Meta_Box_Order_Items::output, include('/plugins/woocommerce/includes/admin/meta-boxes/views/html-order-items.php'), WC_Abstract_Order->get_items, WC_Data_Store->__call, Abstract_WC_Order_Data_Store_CPT->read_items, array_map, WC_Order_Factory::get_order_item, WC_Order_Item->__construct, WC_Data_Store->read, WC_Order_Item_Product_Data_Store->read, Abstract_WC_Order_Item_Type_Data_Store->read, WC_Data->read_meta_data, WC_Data_Store->__call, WC_Data_Store_WP->read_meta"
+          },
+          {
+            "count": 1000,
+            "seconds": 0.12643194198608398,
+            "sql": "SELECT order_item_id, meta_key, meta_value FROM wp_woocommerce_order_itemmeta WHERE order_item_id IN (500012) ORDER BY meta_id ASC",
+            "caller": "do_action('woocommerce_page_wc-orders'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Orders\\PageController->output, Automattic\\WooCommerce\\Internal\\Admin\\Orders\\Edit->display, Automattic\\WooCommerce\\Internal\\Admin\\Orders\\Edit->render_meta_boxes, do_meta_boxes, WC_Meta_Box_Order_Items::output, include('/plugins/woocommerce/includes/admin/meta-boxes/views/html-order-items.php'), WC_Abstract_Order->get_items, WC_Data_Store->__call, Abstract_WC_Order_Data_Store_CPT->read_items, array_map, WC_Order_Factory::get_order_item, WC_Order_Item->__construct, WC_Data_Store->read, WC_Order_Item_Product_Data_Store->read, get_metadata, get_metadata_raw, update_meta_cache"
+          },
+          {
+            "count": 957,
+            "seconds": 0.11475157737731934,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 5 LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          },
+          {
+            "count": 147,
+            "seconds": 0.021086931228637695,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 22,
+            "seconds": 0.003920078277587891,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_woocommerce_activated_plugin','_transient_timeout_woocommerce_activated_plugin')",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Packages::on_init, Automattic\\WooCommerce\\Packages::initialize_packages, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 10,
+            "seconds": 0.0011603832244873047,
+            "sql": "SELECT autoload FROM wp_options WHERE option_name = 'jetpack_connection_xmlrpc_errors'",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Connection\\Manager->register, Automattic\\Jetpack\\Connection\\Manager->delete_all_connection_"
+          },
+          {
+            "count": 9,
+            "seconds": 0.04428219795227051,
+            "sql": "UPDATE `wp_options` SET `option_value` = '1' WHERE `option_name` = 'jetpack_tos_agreed'",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Terms_Of_Service->agree, Automattic\\Jetpack\\Terms_Of_Service->set_agree, Jetpack_Options::u"
+          },
+          {
+            "count": 9,
+            "seconds": 0.002285003662109375,
+            "sql": "SELECT autoload FROM wp_options WHERE option_name = 'jetpack_tos_agreed' LIMIT 1",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Terms_Of_Service->agree, Automattic\\Jetpack\\Terms_Of_Service->set_agree, Jetpack_Options::u"
+          },
+          {
+            "count": 8,
+            "seconds": 0.0010516643524169922,
+            "sql": "SELECT note_id FROM wp_wc_admin_notes WHERE name = 'ppcp-working-capital-inbox-note' ORDER BY note_id ASC",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->get_notes_with_name"
+          },
+          {
+            "count": 5,
+            "seconds": 0.0010187625885009766,
+            "sql": "SELECT COUNT(*) FROM wp_comments LEFT JOIN wp_posts AS wp_posts_to_exclude_reviews ON comment_post_ID = wp_posts_to_exclude_reviews.ID WHERE ( comment_approved = '1' ) AND comment_type NOT IN ('note') AND comment_type != 'order_note' AND comment_type != 'webhook_delivery' AND comment_type != 'action_log' AND wp_posts_to_exclude_reviews.post_type NOT IN ('product')",
+            "caller": "require('wp-admin/menu.php'), wp_count_comments, apply_filters('wp_count_comments'), WP_Hook->apply_filters, WC_Comments::wp_count_comments, get_comments, WP_Comment_Query->query, WP_Comment_Query->get_comments, WP_Comment_Query->get_comment_ids"
+          },
+          {
+            "count": 4,
+            "seconds": 0.011956453323364258,
+            "sql": "UPDATE wp_options SET option_value = 'a:1:{s:18:\\\"jetpack_register_1\\\";a:3:{s:8:\\\"secret_1\\\";s:32:\\\"9Bvm4qVIWS6v3Ch1XBAuDsy8z5njZqdW\\\";s:8:\\\"secret_2\\\";s:32:\\\"bWuJ5gDlRZVCizt4VlZKuq3lc5Xav2yM\\\";s:3:\\\"exp\\\";i:1782989846;}}' WHERE option_name = 'jetpack_secrets'",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Connection\\Manager->register, Automattic\\Jetpack\\Connection\\Secrets->generate, Jetpack_Opti"
+          },
+          {
+            "count": 4,
+            "seconds": 0.00078582763671875,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler/migration_hook' AND p.post_status IN ('in-progress') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 4,
+            "seconds": 0.0007207393646240234,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler/migration_hook' AND a.status IN ('in-progress') ORDER BY a.scheduled_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 4,
+            "seconds": 0.0005390644073486328,
+            "sql": "SELECT a.*, g.slug AS `group` FROM wp_actionscheduler_actions a LEFT JOIN wp_actionscheduler_groups g ON a.group_id=g.group_id WHERE a.action_id=5",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_HybridStore->fetch_action, ActionScheduler_HybridStore->get_store_from_action_id, ActionScheduler_DBStore->fetch_action"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0005247592926025391,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler_run_recurring_actions_schedule_hook' AND p.post_status IN ('in-progress', 'pending') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler::{closure}, do_action('action_scheduler_init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler_RecurringActionScheduler->schedule_recurring_scheduler_hook, as_has_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 3,
+            "seconds": 0.00047659873962402344,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler_run_recurring_actions_schedule_hook' AND a.status IN ('in-progress', 'pending') LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler::{closure}, do_action('action_scheduler_init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler_RecurringActionScheduler->schedule_recurring_scheduler_hook, as_has_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 3,
+            "seconds": 0.000438690185546875,
+            "sql": "SELECT * FROM wp_users WHERE ID = '1' LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, wp_set_current_user, WP_User->__construct, WP_User::get_data_by"
+          },
+          {
+            "count": 2,
+            "seconds": 0.013466119766235352,
+            "sql": "DELETE FROM wp_options WHERE option_name = 'jetpack_secrets'",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Connection\\Manager->register, Automattic\\Jetpack\\Connection\\Manager->delete_all_connection_"
+          },
+          {
+            "count": 2,
+            "seconds": 0.010016202926635742,
+            "sql": "INSERT IGNORE INTO wp_options ( option_name, option_value, autoload ) VALUES ( 'jetpack_secrets', 'a:1:{s:18:\\\"jetpack_register_1\\\";a:3:{s:8:\\\"secret_1\\\";s:32:\\\"9Bvm4qVIWS6v3Ch1XBAuDsy8z5njZqdW\\\";s:8:\\\"secret_2\\\";s:32:\\\"bWuJ5gDlRZVCizt4VlZKuq3lc5Xav2yM\\\";s:3:\\\"exp\\\";i:1782989846;}}', 'no' )",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Connection\\Manager->register, Automattic\\Jetpack\\Connection\\Secrets->generate, Jetpack_Opti"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0007839202880859375,
+            "sql": "SELECT o.id as o_id, p.id as p_id, o.*, b.id as b_id, b.order_id as b_order_id, b.address_type as b_address_type, b.first_name as billing_first_name, b.last_name as billing_last_name, b.company as billing_company, b.address_1 as billing_address_1, b.address_2 as billing_address_2, b.city as billing_city, b.state as billing_state, b.postcode as billing_postcode, b.country as billing_country, b.email as billing_email, b.phone as billing_phone, s.id as s_id, s.order_id as s_order_id, s.address_type",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\Compat\\CompatModule->WooCommerce\\PayPalCommerce\\Compat\\{closure}, WooCommerce\\PayPalCommerce\\Compat\\Assets\\CompatAssets->register, WooCommerce\\PayPalCommerce\\Compat\\Assets\\CompatAssets->is_tracking_enabled, wc_get_order, WC_Order_Factory::get_order, WC_Abstract_Order->__construct, WC_Data_Store->read, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\OrdersTableDataStore->read, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\OrdersTableDataStore->read_multiple, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\OrdersTableDataStore->get_order_data_for_ids, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\OrdersTableDataStore->get_order_data_for_ids_from_db"
+          }
+        ],
+        "timestamp_gmt": "2026-07-02T10:47:29+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31",
+        "xhprof": {
+          "profiled": true,
+          "edge_count": 20750,
+          "top_inclusive": [
+            {
+              "function": "do_action",
+              "ct": 92,
+              "wt_ms": 3381.108,
+              "cpu_ms": 2159.849,
+              "self_wt_ms": 0.067,
+              "self_cpu_ms": 0,
+              "memory_kb": 58551.4,
+              "peak_kb": 62974.7
+            },
+            {
+              "function": "WP_Hook::do_action",
+              "ct": 24,
+              "wt_ms": 3381.034,
+              "cpu_ms": 2159.849,
+              "self_wt_ms": 1.505,
+              "self_cpu_ms": 1.172,
+              "memory_kb": 58525.2,
+              "peak_kb": 62972
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Internal\\Admin\\Orders\\PageController::output",
+              "ct": 1,
+              "wt_ms": 2142.125,
+              "cpu_ms": 1772.066,
+              "self_wt_ms": 0.006,
+              "self_cpu_ms": 0,
+              "memory_kb": 30921.1,
+              "peak_kb": 32337.4
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Internal\\Admin\\Orders\\Edit::display",
+              "ct": 1,
+              "wt_ms": 2142.119,
+              "cpu_ms": 1772.066,
+              "self_wt_ms": 0.025,
+              "self_cpu_ms": 0.418,
+              "memory_kb": 30921.5,
+              "peak_kb": 32337.4
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Internal\\Admin\\Orders\\Edit::render_meta_boxes",
+              "ct": 1,
+              "wt_ms": 2141.626,
+              "cpu_ms": 1771.648,
+              "self_wt_ms": 0.018,
+              "self_cpu_ms": 0,
+              "memory_kb": 30870.4,
+              "peak_kb": 32337.4
+            },
+            {
+              "function": "do_meta_boxes",
+              "ct": 3,
+              "wt_ms": 2141.608,
+              "cpu_ms": 1771.648,
+              "self_wt_ms": 0.154,
+              "self_cpu_ms": 0.817,
+              "memory_kb": 30869.7,
+              "peak_kb": 32337.4
+            },
+            {
+              "function": "WC_Meta_Box_Order_Items::output",
+              "ct": 1,
+              "wt_ms": 2128.88,
+              "cpu_ms": 1761.395,
+              "self_wt_ms": 48.418,
+              "self_cpu_ms": 40.222,
+              "memory_kb": 30018.4,
+              "peak_kb": 31151.3
+            },
+            {
+              "function": "WC_Data_Store::read",
+              "ct": 2904,
+              "wt_ms": 1167.882,
+              "cpu_ms": 889.582,
+              "self_wt_ms": 1.623,
+              "self_cpu_ms": 1.988,
+              "memory_kb": 18992.8,
+              "peak_kb": 16021.6
+            },
+            {
+              "function": "WC_Abstract_Order::get_items",
+              "ct": 11,
+              "wt_ms": 824.816,
+              "cpu_ms": 483.943,
+              "self_wt_ms": 0.125,
+              "self_cpu_ms": 0,
+              "memory_kb": 24859,
+              "peak_kb": 31151.3
+            },
+            {
+              "function": "WC_Data_Store::__call",
+              "ct": 1955,
+              "wt_ms": 820.302,
+              "cpu_ms": 490.924,
+              "self_wt_ms": 4.085,
+              "self_cpu_ms": 1.986,
+              "memory_kb": 18067.4,
+              "peak_kb": 16098.2
+            },
+            {
+              "function": "array_map",
+              "ct": 27950,
+              "wt_ms": 790.914,
+              "cpu_ms": 484.041,
+              "self_wt_ms": 11.583,
+              "self_cpu_ms": 17.206,
+              "memory_kb": 20422.6,
+              "peak_kb": 15933.5
+            },
+            {
+              "function": "set_current_screen",
+              "ct": 1,
+              "wt_ms": 760.643,
+              "cpu_ms": 95.998,
+              "self_wt_ms": 0.009,
+              "self_cpu_ms": 0,
+              "memory_kb": 1753.3,
+              "peak_kb": 2135.7
+            },
+            {
+              "function": "WP_Screen::set_current_screen",
+              "ct": 1,
+              "wt_ms": 760.619,
+              "cpu_ms": 95.998,
+              "self_wt_ms": 0.002,
+              "self_cpu_ms": 0,
+              "memory_kb": 1750.2,
+              "peak_kb": 2135.7
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper::add_help_tab",
+              "ct": 1,
+              "wt_ms": 760.217,
+              "cpu_ms": 95.687,
+              "self_wt_ms": 0.033,
+              "self_cpu_ms": 0,
+              "memory_kb": 1711.5,
+              "peak_kb": 2099.1
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList::is_complete",
+              "ct": 1,
+              "wt_ms": 759.915,
+              "cpu_ms": 95.687,
+              "self_wt_ms": 0.004,
+              "self_cpu_ms": 0,
+              "memory_kb": 1700.4,
+              "peak_kb": 2085.6
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments::is_complete",
+              "ct": 1,
+              "wt_ms": 759.824,
+              "cpu_ms": 95.687,
+              "self_wt_ms": 0.013,
+              "self_cpu_ms": 0,
+              "memory_kb": 1684.1,
+              "peak_kb": 2072
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments::is_woopayments_onboarded",
+              "ct": 1,
+              "wt_ms": 759.809,
+              "cpu_ms": 95.687,
+              "self_wt_ms": 0.019,
+              "self_cpu_ms": 0,
+              "memory_kb": 1729.5,
+              "peak_kb": 2072
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments::get_woopayments_provider",
+              "ct": 1,
+              "wt_ms": 759.789,
+              "cpu_ms": 95.687,
+              "self_wt_ms": 0.004,
+              "self_cpu_ms": 0,
+              "memory_kb": 2022.7,
+              "peak_kb": 2072
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments::get_payments_providers",
+              "ct": 1,
+              "wt_ms": 759.785,
+              "cpu_ms": 95.687,
+              "self_wt_ms": 0.008,
+              "self_cpu_ms": 0,
+              "memory_kb": 2021.9,
+              "peak_kb": 2072
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments::get_payment_providers",
+              "ct": 1,
+              "wt_ms": 759.749,
+              "cpu_ms": 95.687,
+              "self_wt_ms": 0.076,
+              "self_cpu_ms": 0,
+              "memory_kb": 2026.2,
+              "peak_kb": 2072
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders::get_payment_gateway_details",
+              "ct": 92,
+              "wt_ms": 742.227,
+              "cpu_ms": 85.34,
+              "self_wt_ms": 0.159,
+              "self_cpu_ms": 0,
+              "memory_kb": 2380.8,
+              "peak_kb": 1826.2
+            },
+            {
+              "function": "Abstract_WC_Order_Data_Store_CPT::read_items",
+              "ct": 5,
+              "wt_ms": 737.794,
+              "cpu_ms": 422.562,
+              "self_wt_ms": 0.666,
+              "self_cpu_ms": 0,
+              "memory_kb": 17050.5,
+              "peak_kb": 16017
+            },
+            {
+              "function": "WC_Order_Factory::get_order_item",
+              "ct": 1000,
+              "wt_ms": 734.12,
+              "cpu_ms": 421.434,
+              "self_wt_ms": 2.326,
+              "self_cpu_ms": 0.304,
+              "memory_kb": 16198.5,
+              "peak_kb": 15493.6
+            },
+            {
+              "function": "WC_Order_Item::__construct",
+              "ct": 1000,
+              "wt_ms": 731.286,
+              "cpu_ms": 421.13,
+              "self_wt_ms": 3.853,
+              "self_cpu_ms": 0.63,
+              "memory_kb": 15753.9,
+              "peak_kb": 15488.2
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders::get_payment_gateway_base_details",
+              "ct": 92,
+              "wt_ms": 726.08,
+              "cpu_ms": 70.614,
+              "self_wt_ms": 0.147,
+              "self_cpu_ms": 0,
+              "memory_kb": 2292.1,
+              "peak_kb": 1596.4
+            },
+            {
+              "function": "WC_Order_Item_Product::get_product",
+              "ct": 1900,
+              "wt_ms": 712.244,
+              "cpu_ms": 706.203,
+              "self_wt_ms": 2.958,
+              "self_cpu_ms": 2.976,
+              "memory_kb": 13466.2,
+              "peak_kb": 0
+            },
+            {
+              "function": "wc_get_product",
+              "ct": 1900,
+              "wt_ms": 704.339,
+              "cpu_ms": 695.333,
+              "self_wt_ms": 2.94,
+              "self_cpu_ms": 0,
+              "memory_kb": 13463.8,
+              "peak_kb": 0
+            },
+            {
+              "function": "WC_Product_Factory::get_product",
+              "ct": 1900,
+              "wt_ms": 699.199,
+              "cpu_ms": 691.383,
+              "self_wt_ms": 5.675,
+              "self_cpu_ms": 2.981,
+              "memory_kb": 13551,
+              "peak_kb": 0
+            },
+            {
+              "function": "call_user_func_array",
+              "ct": 595,
+              "wt_ms": 694.544,
+              "cpu_ms": 37.523,
+              "self_wt_ms": 0.61,
+              "self_cpu_ms": 0.995,
+              "memory_kb": 936.7,
+              "peak_kb": 936.8
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments::get_details",
+              "ct": 2,
+              "wt_ms": 692.765,
+              "cpu_ms": 35.003,
+              "self_wt_ms": 0.051,
+              "self_cpu_ms": 0,
+              "memory_kb": 1180,
+              "peak_kb": 1168.6
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Proxies\\LegacyProxy::call_static",
+              "ct": 435,
+              "wt_ms": 691.277,
+              "cpu_ms": 34.503,
+              "self_wt_ms": 0.217,
+              "self_cpu_ms": 0,
+              "memory_kb": 932.3,
+              "peak_kb": 877
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService::get_onboarding_details",
+              "ct": 2,
+              "wt_ms": 689.453,
+              "cpu_ms": 32.336,
+              "self_wt_ms": 0.035,
+              "self_cpu_ms": 0,
+              "memory_kb": 944.6,
+              "peak_kb": 948.5
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService::get_onboarding_steps",
+              "ct": 2,
+              "wt_ms": 688.727,
+              "cpu_ms": 31.524,
+              "self_wt_ms": 0.09,
+              "self_cpu_ms": 0,
+              "memory_kb": 908.8,
+              "peak_kb": 899.3
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService::get_wpcom_connection_authorization",
+              "ct": 2,
+              "wt_ms": 686.219,
+              "cpu_ms": 30.53,
+              "self_wt_ms": 0.003,
+              "self_cpu_ms": 0,
+              "memory_kb": 787.7,
+              "peak_kb": 814.9
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization",
+              "ct": 2,
+              "wt_ms": 686.208,
+              "cpu_ms": 30.53,
+              "self_wt_ms": 0.015,
+              "self_cpu_ms": 0,
+              "memory_kb": 786.1,
+              "peak_kb": 814.9
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url",
+              "ct": 2,
+              "wt_ms": 686.013,
+              "cpu_ms": 29.157,
+              "self_wt_ms": 0.059,
+              "self_cpu_ms": 0,
+              "memory_kb": 788.2,
+              "peak_kb": 813.9
+            },
+            {
+              "function": "mysqli_query",
+              "ct": 3243,
+              "wt_ms": 680.322,
+              "cpu_ms": 462.102,
+              "self_wt_ms": 680.322,
+              "self_cpu_ms": 462.102,
+              "memory_kb": 54628,
+              "peak_kb": 1912.5
+            },
+            {
+              "function": "Automattic\\Jetpack\\Connection\\Manager::try_registration",
+              "ct": 2,
+              "wt_ms": 669.562,
+              "cpu_ms": 26.388,
+              "self_wt_ms": 0.05,
+              "self_cpu_ms": 0,
+              "memory_kb": 672.4,
+              "peak_kb": 755.3
+            },
+            {
+              "function": "WC_Order_Item_Product_Data_Store::read",
+              "ct": 950,
+              "wt_ms": 668.255,
+              "cpu_ms": 399.066,
+              "self_wt_ms": 3.713,
+              "self_cpu_ms": 0.657,
+              "memory_kb": 11645.8,
+              "peak_kb": 15473.1
+            },
+            {
+              "function": "Automattic\\Jetpack\\Connection\\Manager::register",
+              "ct": 2,
+              "wt_ms": 667.104,
+              "cpu_ms": 24.885,
+              "self_wt_ms": 0.217,
+              "self_cpu_ms": 0,
+              "memory_kb": 529.6,
+              "peak_kb": 561.8
+            }
+          ],
+          "top_self": [
+            {
+              "function": "mysqli_query",
+              "ct": 3243,
+              "wt_ms": 680.322,
+              "cpu_ms": 462.102,
+              "self_wt_ms": 680.322,
+              "self_cpu_ms": 462.102,
+              "memory_kb": 54628,
+              "peak_kb": 1912.5
+            },
+            {
+              "function": "curl_exec",
+              "ct": 2,
+              "wt_ms": 593.189,
+              "cpu_ms": 15.336,
+              "self_wt_ms": 593.041,
+              "self_cpu_ms": 15.336,
+              "memory_kb": 5.5,
+              "peak_kb": 4.6
+            },
+            {
+              "function": "WC_Meta_Box_Order_Items::output",
+              "ct": 1,
+              "wt_ms": 2128.88,
+              "cpu_ms": 1761.395,
+              "self_wt_ms": 48.418,
+              "self_cpu_ms": 40.222,
+              "memory_kb": 30018.4,
+              "peak_kb": 31151.3
+            },
+            {
+              "function": "WC_Data::set_props",
+              "ct": 7700,
+              "wt_ms": 525.725,
+              "cpu_ms": 355.202,
+              "self_wt_ms": 46.338,
+              "self_cpu_ms": 37.124,
+              "memory_kb": 8514.6,
+              "peak_kb": 3974.6
+            },
+            {
+              "function": "wc_get_price_decimal_separator",
+              "ct": 18387,
+              "wt_ms": 52.997,
+              "cpu_ms": 41.734,
+              "self_wt_ms": 44.986,
+              "self_cpu_ms": 25.182,
+              "memory_kb": 600.4,
+              "peak_kb": 40.9
+            },
+            {
+              "function": "update_meta_cache",
+              "ct": 2904,
+              "wt_ms": 230.358,
+              "cpu_ms": 127.99,
+              "self_wt_ms": 42.902,
+              "self_cpu_ms": 11.915,
+              "memory_kb": 21473.3,
+              "peak_kb": 17508.3
+            },
+            {
+              "function": "WC_Data::get_prop",
+              "ct": 44427,
+              "wt_ms": 57.577,
+              "cpu_ms": 69.655,
+              "self_wt_ms": 39.359,
+              "self_cpu_ms": 40.838,
+              "memory_kb": 34.4,
+              "peak_kb": 1
+            },
+            {
+              "function": "translate",
+              "ct": 39791,
+              "wt_ms": 41.62,
+              "cpu_ms": 35.64,
+              "self_wt_ms": 31.358,
+              "self_cpu_ms": 18.806,
+              "memory_kb": 29.1,
+              "peak_kb": 1391.3
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Internal\\Features\\FeaturesController::feature_is_enabled",
+              "ct": 7005,
+              "wt_ms": 49.589,
+              "cpu_ms": 33.111,
+              "self_wt_ms": 30.727,
+              "self_cpu_ms": 14.701,
+              "memory_kb": 30.4,
+              "peak_kb": 50.2
+            },
+            {
+              "function": "WC_Data_Store_WP::read_meta",
+              "ct": 1000,
+              "wt_ms": 195.386,
+              "cpu_ms": 220.368,
+              "self_wt_ms": 30.079,
+              "self_cpu_ms": 1.192,
+              "memory_kb": 5727,
+              "peak_kb": 8400.8
+            },
+            {
+              "function": "trim",
+              "ct": 296543,
+              "wt_ms": 30.014,
+              "cpu_ms": 41.03,
+              "self_wt_ms": 30.014,
+              "self_cpu_ms": 41.03,
+              "memory_kb": 1013.2,
+              "peak_kb": 102.5
+            },
+            {
+              "function": "wpdb::get_row",
+              "ct": 1108,
+              "wt_ms": 172.918,
+              "cpu_ms": 126.944,
+              "self_wt_ms": 24.91,
+              "self_cpu_ms": 1.512,
+              "memory_kb": -209.9,
+              "peak_kb": 4849
+            },
+            {
+              "function": "WP_Post::get_instance",
+              "ct": 17145,
+              "wt_ms": 211.451,
+              "cpu_ms": 123.863,
+              "self_wt_ms": 24.542,
+              "self_cpu_ms": 15.03,
+              "memory_kb": 9436.1,
+              "peak_kb": 3974.9
+            },
+            {
+              "function": "WC_Product_Data_Store_CPT::read_product_data",
+              "ct": 1900,
+              "wt_ms": 244.599,
+              "cpu_ms": 251.304,
+              "self_wt_ms": 23.651,
+              "self_cpu_ms": 28.7,
+              "memory_kb": 5015.1,
+              "peak_kb": 0
+            },
+            {
+              "function": "WC_Data_Store::__construct",
+              "ct": 4830,
+              "wt_ms": 58.696,
+              "cpu_ms": 41.703,
+              "self_wt_ms": 22.802,
+              "self_cpu_ms": 13.148,
+              "memory_kb": 13779.4,
+              "peak_kb": 57.3
+            },
+            {
+              "function": "get_metadata_raw",
+              "ct": 12851,
+              "wt_ms": 200.305,
+              "cpu_ms": 102.566,
+              "self_wt_ms": 21.211,
+              "self_cpu_ms": 7.838,
+              "memory_kb": 3411.9,
+              "peak_kb": 3143.1
+            },
+            {
+              "function": "mysqli_fetch_object",
+              "ct": 33863,
+              "wt_ms": 21.209,
+              "cpu_ms": 13.747,
+              "self_wt_ms": 21.209,
+              "self_cpu_ms": 13.747,
+              "memory_kb": 18270.7,
+              "peak_kb": 9410.3
+            },
+            {
+              "function": "in_array",
+              "ct": 173655,
+              "wt_ms": 21.111,
+              "cpu_ms": 19.904,
+              "self_wt_ms": 21.111,
+              "self_cpu_ms": 19.904,
+              "memory_kb": 187.3,
+              "peak_kb": 50.9
+            },
+            {
+              "function": "preg_replace",
+              "ct": 77009,
+              "wt_ms": 20.703,
+              "cpu_ms": 17.154,
+              "self_wt_ms": 20.703,
+              "self_cpu_ms": 17.154,
+              "memory_kb": 1709.9,
+              "peak_kb": 44
+            },
+            {
+              "function": "preg_match",
+              "ct": 77972,
+              "wt_ms": 20.465,
+              "cpu_ms": 24.532,
+              "self_wt_ms": 20.465,
+              "self_cpu_ms": 24.532,
+              "memory_kb": 1509.3,
+              "peak_kb": 26.6
+            },
+            {
+              "function": "wc_timezone_offset",
+              "ct": 3808,
+              "wt_ms": 31.87,
+              "cpu_ms": 35.639,
+              "self_wt_ms": 20.12,
+              "self_cpu_ms": 20.728,
+              "memory_kb": 4,
+              "peak_kb": 4.7
+            },
+            {
+              "function": "esc_attr",
+              "ct": 30853,
+              "wt_ms": 56.894,
+              "cpu_ms": 65.583,
+              "self_wt_ms": 19.46,
+              "self_cpu_ms": 19.063,
+              "memory_kb": 268.5,
+              "peak_kb": 3.1
+            },
+            {
+              "function": "sanitize_term_field",
+              "ct": 38005,
+              "wt_ms": 27.782,
+              "cpu_ms": 22.658,
+              "self_wt_ms": 19.37,
+              "self_cpu_ms": 14.81,
+              "memory_kb": 8.8,
+              "peak_kb": 0
+            },
+            {
+              "function": "wc_get_price_decimals",
+              "ct": 8735,
+              "wt_ms": 21.85,
+              "cpu_ms": 10.717,
+              "self_wt_ms": 18.474,
+              "self_cpu_ms": 5.432,
+              "memory_kb": 9.6,
+              "peak_kb": 0
+            },
+            {
+              "function": "WC_Data::set_date_prop",
+              "ct": 3810,
+              "wt_ms": 56.967,
+              "cpu_ms": 63.498,
+              "self_wt_ms": 17.933,
+              "self_cpu_ms": 15.845,
+              "memory_kb": 1231.9,
+              "peak_kb": 11.3
+            },
+            {
+              "function": "_wp_specialchars",
+              "ct": 37156,
+              "wt_ms": 30.833,
+              "cpu_ms": 41.522,
+              "self_wt_ms": 17.786,
+              "self_cpu_ms": 19.755,
+              "memory_kb": 182.8,
+              "peak_kb": 13.3
+            },
+            {
+              "function": "wc_format_decimal",
+              "ct": 10616,
+              "wt_ms": 98.454,
+              "cpu_ms": 60.827,
+              "self_wt_ms": 16.992,
+              "self_cpu_ms": 5.645,
+              "memory_kb": 25319.7,
+              "peak_kb": 12.7
+            },
+            {
+              "function": "array_filter",
+              "ct": 26280,
+              "wt_ms": 38.29,
+              "cpu_ms": 26.878,
+              "self_wt_ms": 16.792,
+              "self_cpu_ms": 8.352,
+              "memory_kb": 3283.3,
+              "peak_kb": 417.6
+            },
+            {
+              "function": "wp_check_invalid_utf8",
+              "ct": 45546,
+              "wt_ms": 37.01,
+              "cpu_ms": 27.998,
+              "self_wt_ms": 16.757,
+              "self_cpu_ms": 10.004,
+              "memory_kb": 250.2,
+              "peak_kb": 7.9
+            },
+            {
+              "function": "is_callable",
+              "ct": 74238,
+              "wt_ms": 15.412,
+              "cpu_ms": 19.3,
+              "self_wt_ms": 15.412,
+              "self_cpu_ms": 19.3,
+              "memory_kb": 29,
+              "peak_kb": 10.9
+            },
+            {
+              "function": "str_replace",
+              "ct": 77204,
+              "wt_ms": 15.387,
+              "cpu_ms": 13.053,
+              "self_wt_ms": 15.387,
+              "self_cpu_ms": 13.053,
+              "memory_kb": 1177.8,
+              "peak_kb": 358.1
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Admin\\Features\\Fulfillments\\FulfillmentsController::register_data_stores",
+              "ct": 4828,
+              "wt_ms": 17.165,
+              "cpu_ms": 19.251,
+              "self_wt_ms": 14.998,
+              "self_cpu_ms": 13.591,
+              "memory_kb": 10.6,
+              "peak_kb": 21.7
+            },
+            {
+              "function": "wp_kses_hook",
+              "ct": 5749,
+              "wt_ms": 86.382,
+              "cpu_ms": 80.959,
+              "self_wt_ms": 14.694,
+              "self_cpu_ms": 10.938,
+              "memory_kb": 197.4,
+              "peak_kb": 24.2
+            },
+            {
+              "function": "wp_is_valid_utf8",
+              "ct": 44812,
+              "wt_ms": 20.936,
+              "cpu_ms": 17.994,
+              "self_wt_ms": 14.637,
+              "self_cpu_ms": 8.887,
+              "memory_kb": 1.7,
+              "peak_kb": 1.7
+            },
+            {
+              "function": "WP_Object_Cache::get_multiple",
+              "ct": 26701,
+              "wt_ms": 13.936,
+              "cpu_ms": 13.113,
+              "self_wt_ms": 13.924,
+              "self_cpu_ms": 13.113,
+              "memory_kb": 10356.4,
+              "peak_kb": 1.7
+            },
+            {
+              "function": "wc_stock_amount",
+              "ct": 3817,
+              "wt_ms": 23.16,
+              "cpu_ms": 17.673,
+              "self_wt_ms": 13.251,
+              "self_cpu_ms": 7.346,
+              "memory_kb": 6.1,
+              "peak_kb": 2.1
+            },
+            {
+              "function": "get_post",
+              "ct": 17272,
+              "wt_ms": 227.047,
+              "cpu_ms": 133.772,
+              "self_wt_ms": 13.231,
+              "self_cpu_ms": 7.925,
+              "memory_kb": 8815.3,
+              "peak_kb": 3976.3
+            },
+            {
+              "function": "WP_Post::__construct",
+              "ct": 17134,
+              "wt_ms": 15.604,
+              "cpu_ms": 20.872,
+              "self_wt_ms": 12.901,
+              "self_cpu_ms": 11.888,
+              "memory_kb": 1.1,
+              "peak_kb": 0
+            },
+            {
+              "function": "WC_Product_Data_Store_CPT::read",
+              "ct": 1900,
+              "wt_ms": 467.761,
+              "cpu_ms": 469.786,
+              "self_wt_ms": 12.424,
+              "self_cpu_ms": 6.942,
+              "memory_kb": 6994.3,
+              "peak_kb": 0
+            },
+            {
+              "function": "_get_non_cached_ids",
+              "ct": 12355,
+              "wt_ms": 29.976,
+              "cpu_ms": 28.752,
+              "self_wt_ms": 12.422,
+              "self_cpu_ms": 7.952,
+              "memory_kb": 2942.6,
+              "peak_kb": 5.3
+            }
+          ],
+          "top_calls": [
+            {
+              "function": "trim",
+              "ct": 296543,
+              "wt_ms": 30.014,
+              "cpu_ms": 41.03,
+              "self_wt_ms": 30.014,
+              "self_cpu_ms": 41.03,
+              "memory_kb": 1013.2,
+              "peak_kb": 102.5
+            },
+            {
+              "function": "in_array",
+              "ct": 173655,
+              "wt_ms": 21.111,
+              "cpu_ms": 19.904,
+              "self_wt_ms": 21.111,
+              "self_cpu_ms": 19.904,
+              "memory_kb": 187.3,
+              "peak_kb": 50.9
+            },
+            {
+              "function": "preg_match",
+              "ct": 77972,
+              "wt_ms": 20.465,
+              "cpu_ms": 24.532,
+              "self_wt_ms": 20.465,
+              "self_cpu_ms": 24.532,
+              "memory_kb": 1509.3,
+              "peak_kb": 26.6
+            },
+            {
+              "function": "str_replace",
+              "ct": 77204,
+              "wt_ms": 15.387,
+              "cpu_ms": 13.053,
+              "self_wt_ms": 15.387,
+              "self_cpu_ms": 13.053,
+              "memory_kb": 1177.8,
+              "peak_kb": 358.1
+            },
+            {
+              "function": "preg_replace",
+              "ct": 77009,
+              "wt_ms": 20.703,
+              "cpu_ms": 17.154,
+              "self_wt_ms": 20.703,
+              "self_cpu_ms": 17.154,
+              "memory_kb": 1709.9,
+              "peak_kb": 44
+            },
+            {
+              "function": "is_callable",
+              "ct": 74238,
+              "wt_ms": 15.412,
+              "cpu_ms": 19.3,
+              "self_wt_ms": 15.412,
+              "self_cpu_ms": 19.3,
+              "memory_kb": 29,
+              "peak_kb": 10.9
+            },
+            {
+              "function": "WC_Data::set_prop",
+              "ct": 70151,
+              "wt_ms": 11.399,
+              "cpu_ms": 14.598,
+              "self_wt_ms": 11.399,
+              "self_cpu_ms": 14.598,
+              "memory_kb": 5576.2,
+              "peak_kb": 13.7
+            },
+            {
+              "function": "strtolower",
+              "ct": 69116,
+              "wt_ms": 7.185,
+              "cpu_ms": 6.994,
+              "self_wt_ms": 7.185,
+              "self_cpu_ms": 6.994,
+              "memory_kb": 97.7,
+              "peak_kb": 12
+            },
+            {
+              "function": "current",
+              "ct": 51832,
+              "wt_ms": 6.357,
+              "cpu_ms": 7.231,
+              "self_wt_ms": 6.357,
+              "self_cpu_ms": 7.231,
+              "memory_kb": 88.7,
+              "peak_kb": 28.4
+            },
+            {
+              "function": "abs",
+              "ct": 49768,
+              "wt_ms": 4.922,
+              "cpu_ms": 2.51,
+              "self_wt_ms": 4.922,
+              "self_cpu_ms": 2.51,
+              "memory_kb": 27.5,
+              "peak_kb": 3.3
+            },
+            {
+              "function": "is_numeric",
+              "ct": 49545,
+              "wt_ms": 5.009,
+              "cpu_ms": 5.021,
+              "self_wt_ms": 5.009,
+              "self_cpu_ms": 5.021,
+              "memory_kb": 21.4,
+              "peak_kb": 3.8
+            },
+            {
+              "function": "mb_check_encoding",
+              "ct": 48061,
+              "wt_ms": 7.929,
+              "cpu_ms": 9.182,
+              "self_wt_ms": 7.929,
+              "self_cpu_ms": 9.182,
+              "memory_kb": 12.1,
+              "peak_kb": 5.5
+            },
+            {
+              "function": "wp_check_invalid_utf8",
+              "ct": 45546,
+              "wt_ms": 37.01,
+              "cpu_ms": 27.998,
+              "self_wt_ms": 16.757,
+              "self_cpu_ms": 10.004,
+              "memory_kb": 250.2,
+              "peak_kb": 7.9
+            },
+            {
+              "function": "wp_is_valid_utf8",
+              "ct": 44812,
+              "wt_ms": 20.936,
+              "cpu_ms": 17.994,
+              "self_wt_ms": 14.637,
+              "self_cpu_ms": 8.887,
+              "memory_kb": 1.7,
+              "peak_kb": 1.7
+            },
+            {
+              "function": "WC_Data::get_hook_prefix",
+              "ct": 44449,
+              "wt_ms": 6.823,
+              "cpu_ms": 13.916,
+              "self_wt_ms": 6.823,
+              "self_cpu_ms": 13.916,
+              "memory_kb": 2408.8,
+              "peak_kb": 0.3
+            },
+            {
+              "function": "WC_Data::get_prop",
+              "ct": 44427,
+              "wt_ms": 57.577,
+              "cpu_ms": 69.655,
+              "self_wt_ms": 39.359,
+              "self_cpu_ms": 40.838,
+              "memory_kb": 34.4,
+              "peak_kb": 1
+            },
+            {
+              "function": "get_object_vars",
+              "ct": 44215,
+              "wt_ms": 5.737,
+              "cpu_ms": 13.039,
+              "self_wt_ms": 5.737,
+              "self_cpu_ms": 13.039,
+              "memory_kb": 7,
+              "peak_kb": 1.8
+            },
+            {
+              "function": "get_translations_for_domain",
+              "ct": 42166,
+              "wt_ms": 6.494,
+              "cpu_ms": 12.162,
+              "self_wt_ms": 5.705,
+              "self_cpu_ms": 11.195,
+              "memory_kb": 26.6,
+              "peak_kb": 26
+            },
+            {
+              "function": "NOOP_Translations::translate",
+              "ct": 42159,
+              "wt_ms": 4.412,
+              "cpu_ms": 5.957,
+              "self_wt_ms": 4.412,
+              "self_cpu_ms": 5.957,
+              "memory_kb": 1.1,
+              "peak_kb": 0.6
+            },
+            {
+              "function": "array_intersect",
+              "ct": 39807,
+              "wt_ms": 9.192,
+              "cpu_ms": 7.497,
+              "self_wt_ms": 9.192,
+              "self_cpu_ms": 7.497,
+              "memory_kb": 8132.9,
+              "peak_kb": 34.6
+            },
+            {
+              "function": "translate",
+              "ct": 39791,
+              "wt_ms": 41.62,
+              "cpu_ms": 35.64,
+              "self_wt_ms": 31.358,
+              "self_cpu_ms": 18.806,
+              "memory_kb": 29.1,
+              "peak_kb": 1391.3
+            },
+            {
+              "function": "preg_replace_callback",
+              "ct": 39576,
+              "wt_ms": 43.459,
+              "cpu_ms": 49.147,
+              "self_wt_ms": 12.2,
+              "self_cpu_ms": 17.537,
+              "memory_kb": 458.5,
+              "peak_kb": 54.4
+            },
+            {
+              "function": "substr",
+              "ct": 38273,
+              "wt_ms": 4.341,
+              "cpu_ms": 2.717,
+              "self_wt_ms": 4.341,
+              "self_cpu_ms": 2.717,
+              "memory_kb": 994,
+              "peak_kb": 47.5
+            },
+            {
+              "function": "sanitize_term_field",
+              "ct": 38005,
+              "wt_ms": 27.782,
+              "cpu_ms": 22.658,
+              "self_wt_ms": 19.37,
+              "self_cpu_ms": 14.81,
+              "memory_kb": 8.8,
+              "peak_kb": 0
+            },
+            {
+              "function": "array_pop",
+              "ct": 37655,
+              "wt_ms": 5.29,
+              "cpu_ms": 6.33,
+              "self_wt_ms": 5.29,
+              "self_cpu_ms": 6.33,
+              "memory_kb": 87.5,
+              "peak_kb": 5.2
+            },
+            {
+              "function": "_wp_specialchars",
+              "ct": 37156,
+              "wt_ms": 30.833,
+              "cpu_ms": 41.522,
+              "self_wt_ms": 17.786,
+              "self_cpu_ms": 19.755,
+              "memory_kb": 182.8,
+              "peak_kb": 13.3
+            },
+            {
+              "function": "next",
+              "ct": 36067,
+              "wt_ms": 5.44,
+              "cpu_ms": 1.987,
+              "self_wt_ms": 5.44,
+              "self_cpu_ms": 1.987,
+              "memory_kb": 7462.2,
+              "peak_kb": 239.6
+            },
+            {
+              "function": "array_unshift",
+              "ct": 34887,
+              "wt_ms": 6.634,
+              "cpu_ms": 10.374,
+              "self_wt_ms": 6.634,
+              "self_cpu_ms": 10.374,
+              "memory_kb": 2776.3,
+              "peak_kb": 134
+            },
+            {
+              "function": "WC_Data::get_id",
+              "ct": 34793,
+              "wt_ms": 4.077,
+              "cpu_ms": 3.943,
+              "self_wt_ms": 4.077,
+              "self_cpu_ms": 3.943,
+              "memory_kb": 24.6,
+              "peak_kb": 2.3
+            },
+            {
+              "function": "is_string",
+              "ct": 34187,
+              "wt_ms": 3.182,
+              "cpu_ms": 2.18,
+              "self_wt_ms": 3.182,
+              "self_cpu_ms": 2.18,
+              "memory_kb": 36.2,
+              "peak_kb": 9.2
+            },
+            {
+              "function": "mysqli_fetch_object",
+              "ct": 33863,
+              "wt_ms": 21.209,
+              "cpu_ms": 13.747,
+              "self_wt_ms": 21.209,
+              "self_cpu_ms": 13.747,
+              "memory_kb": 18270.7,
+              "peak_kb": 9410.3
+            },
+            {
+              "function": "str_contains",
+              "ct": 33845,
+              "wt_ms": 4.065,
+              "cpu_ms": 6.659,
+              "self_wt_ms": 4.065,
+              "self_cpu_ms": 6.659,
+              "memory_kb": 16.7,
+              "peak_kb": 4.5
+            },
+            {
+              "function": "__",
+              "ct": 32814,
+              "wt_ms": 42.437,
+              "cpu_ms": 37.274,
+              "self_wt_ms": 9.641,
+              "self_cpu_ms": 8.087,
+              "memory_kb": 374.6,
+              "peak_kb": 1423.4
+            },
+            {
+              "function": "esc_attr",
+              "ct": 30853,
+              "wt_ms": 56.894,
+              "cpu_ms": 65.583,
+              "self_wt_ms": 19.46,
+              "self_cpu_ms": 19.063,
+              "memory_kb": 268.5,
+              "peak_kb": 3.1
+            },
+            {
+              "function": "array_map",
+              "ct": 27950,
+              "wt_ms": 790.914,
+              "cpu_ms": 484.041,
+              "self_wt_ms": 11.583,
+              "self_cpu_ms": 17.206,
+              "memory_kb": 20422.6,
+              "peak_kb": 15933.5
+            },
+            {
+              "function": "WP_Object_Cache::get_multiple",
+              "ct": 26701,
+              "wt_ms": 13.936,
+              "cpu_ms": 13.113,
+              "self_wt_ms": 13.924,
+              "self_cpu_ms": 13.113,
+              "memory_kb": 10356.4,
+              "peak_kb": 1.7
+            },
+            {
+              "function": "wp_cache_get_multiple",
+              "ct": 26701,
+              "wt_ms": 24.86,
+              "cpu_ms": 27.209,
+              "self_wt_ms": 10.924,
+              "self_cpu_ms": 14.096,
+              "memory_kb": 10359.8,
+              "peak_kb": 2.8
+            },
+            {
+              "function": "array_filter",
+              "ct": 26280,
+              "wt_ms": 38.29,
+              "cpu_ms": 26.878,
+              "self_wt_ms": 16.792,
+              "self_cpu_ms": 8.352,
+              "memory_kb": 3283.3,
+              "peak_kb": 417.6
+            },
+            {
+              "function": "array_keys",
+              "ct": 25829,
+              "wt_ms": 3.959,
+              "cpu_ms": 2.987,
+              "self_wt_ms": 3.959,
+              "self_cpu_ms": 2.987,
+              "memory_kb": 8825,
+              "peak_kb": 602
+            },
+            {
+              "function": "array_merge",
+              "ct": 25300,
+              "wt_ms": 6.924,
+              "cpu_ms": 7.286,
+              "self_wt_ms": 6.924,
+              "self_cpu_ms": 7.286,
+              "memory_kb": 21648.3,
+              "peak_kb": 1988
+            }
+          ],
+          "top_edges": [
+            {
+              "edge": "do_action==>WP_Hook::do_action",
+              "parent": "do_action",
+              "child": "WP_Hook::do_action",
+              "ct": 24,
+              "wt_ms": 3381.034,
+              "cpu_ms": 2159.849,
+              "memory_kb": 58525.2,
+              "peak_kb": 62972
+            },
+            {
+              "edge": "main()==>do_action",
+              "parent": "main()",
+              "child": "do_action",
+              "ct": 33,
+              "wt_ms": 2611.408,
+              "cpu_ms": 2055.283,
+              "memory_kb": 60438.1,
+              "peak_kb": 60838.2
+            },
+            {
+              "edge": "WP_Hook::do_action==>Automattic\\WooCommerce\\Internal\\Admin\\Orders\\PageController::output",
+              "parent": "WP_Hook::do_action",
+              "child": "Automattic\\WooCommerce\\Internal\\Admin\\Orders\\PageController::output",
+              "ct": 1,
+              "wt_ms": 2142.125,
+              "cpu_ms": 1772.066,
+              "memory_kb": 30921.1,
+              "peak_kb": 32337.4
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\Internal\\Admin\\Orders\\PageController::output==>Automattic\\WooCommerce\\Internal\\Admin\\Orders\\Edit::display",
+              "parent": "Automattic\\WooCommerce\\Internal\\Admin\\Orders\\PageController::output",
+              "child": "Automattic\\WooCommerce\\Internal\\Admin\\Orders\\Edit::display",
+              "ct": 1,
+              "wt_ms": 2142.119,
+              "cpu_ms": 1772.066,
+              "memory_kb": 30921.5,
+              "peak_kb": 32337.4
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\Internal\\Admin\\Orders\\Edit::display==>Automattic\\WooCommerce\\Internal\\Admin\\Orders\\Edit::render_meta_boxes",
+              "parent": "Automattic\\WooCommerce\\Internal\\Admin\\Orders\\Edit::display",
+              "child": "Automattic\\WooCommerce\\Internal\\Admin\\Orders\\Edit::render_meta_boxes",
+              "ct": 1,
+              "wt_ms": 2141.626,
+              "cpu_ms": 1771.648,
+              "memory_kb": 30870.4,
+              "peak_kb": 32337.4
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\Internal\\Admin\\Orders\\Edit::render_meta_boxes==>do_meta_boxes",
+              "parent": "Automattic\\WooCommerce\\Internal\\Admin\\Orders\\Edit::render_meta_boxes",
+              "child": "do_meta_boxes",
+              "ct": 3,
+              "wt_ms": 2141.608,
+              "cpu_ms": 1771.648,
+              "memory_kb": 30869.7,
+              "peak_kb": 32337.4
+            },
+            {
+              "edge": "do_meta_boxes==>WC_Meta_Box_Order_Items::output",
+              "parent": "do_meta_boxes",
+              "child": "WC_Meta_Box_Order_Items::output",
+              "ct": 1,
+              "wt_ms": 2128.88,
+              "cpu_ms": 1761.395,
+              "memory_kb": 30018.4,
+              "peak_kb": 31151.3
+            },
+            {
+              "edge": "WC_Meta_Box_Order_Items::output==>WC_Abstract_Order::get_items",
+              "parent": "WC_Meta_Box_Order_Items::output",
+              "child": "WC_Abstract_Order::get_items",
+              "ct": 5,
+              "wt_ms": 824.709,
+              "cpu_ms": 483.943,
+              "memory_kb": 24809.6,
+              "peak_kb": 31151.3
+            },
+            {
+              "edge": "main()==>set_current_screen",
+              "parent": "main()",
+              "child": "set_current_screen",
+              "ct": 1,
+              "wt_ms": 760.643,
+              "cpu_ms": 95.998,
+              "memory_kb": 1753.3,
+              "peak_kb": 2135.7
+            },
+            {
+              "edge": "set_current_screen==>WP_Screen::set_current_screen",
+              "parent": "set_current_screen",
+              "child": "WP_Screen::set_current_screen",
+              "ct": 1,
+              "wt_ms": 760.619,
+              "cpu_ms": 95.998,
+              "memory_kb": 1750.2,
+              "peak_kb": 2135.7
+            },
+            {
+              "edge": "WP_Screen::set_current_screen==>do_action",
+              "parent": "WP_Screen::set_current_screen",
+              "child": "do_action",
+              "ct": 1,
+              "wt_ms": 760.617,
+              "cpu_ms": 95.998,
+              "memory_kb": 1749.8,
+              "peak_kb": 2135.7
+            },
+            {
+              "edge": "WP_Hook::do_action==>Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper::add_help_tab",
+              "parent": "WP_Hook::do_action",
+              "child": "Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper::add_help_tab",
+              "ct": 1,
+              "wt_ms": 760.217,
+              "cpu_ms": 95.687,
+              "memory_kb": 1711.5,
+              "peak_kb": 2099.1
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper::add_help_tab==>Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList::is_complete",
+              "parent": "Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper::add_help_tab",
+              "child": "Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList::is_complete",
+              "ct": 1,
+              "wt_ms": 759.915,
+              "cpu_ms": 95.687,
+              "memory_kb": 1700.4,
+              "peak_kb": 2085.6
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList::is_complete==>Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments::is_complete",
+              "parent": "Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList::is_complete",
+              "child": "Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments::is_complete",
+              "ct": 1,
+              "wt_ms": 759.824,
+              "cpu_ms": 95.687,
+              "memory_kb": 1684.1,
+              "peak_kb": 2072
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments::is_complete==>Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments::is_woopayments_onboarded",
+              "parent": "Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments::is_complete",
+              "child": "Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments::is_woopayments_onboarded",
+              "ct": 1,
+              "wt_ms": 759.809,
+              "cpu_ms": 95.687,
+              "memory_kb": 1729.5,
+              "peak_kb": 2072
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments::is_woopayments_onboarded==>Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments::get_woopayments_provider",
+              "parent": "Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments::is_woopayments_onboarded",
+              "child": "Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments::get_woopayments_provider",
+              "ct": 1,
+              "wt_ms": 759.789,
+              "cpu_ms": 95.687,
+              "memory_kb": 2022.7,
+              "peak_kb": 2072
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments::get_woopayments_provider==>Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments::get_payments_providers",
+              "parent": "Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments::get_woopayments_provider",
+              "child": "Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments::get_payments_providers",
+              "ct": 1,
+              "wt_ms": 759.785,
+              "cpu_ms": 95.687,
+              "memory_kb": 2021.9,
+              "peak_kb": 2072
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments::get_payments_providers==>Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments::get_payment_providers",
+              "parent": "Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments::get_payments_providers",
+              "child": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments::get_payment_providers",
+              "ct": 1,
+              "wt_ms": 759.749,
+              "cpu_ms": 95.687,
+              "memory_kb": 2026.2,
+              "peak_kb": 2072
+            },
+            {
+              "edge": "WC_Abstract_Order::get_items==>WC_Data_Store::__call",
+              "parent": "WC_Abstract_Order::get_items",
+              "child": "WC_Data_Store::__call",
+              "ct": 5,
+              "wt_ms": 737.822,
+              "cpu_ms": 422.562,
+              "memory_kb": 17051.4,
+              "peak_kb": 16017
+            },
+            {
+              "edge": "WC_Data_Store::__call==>Abstract_WC_Order_Data_Store_CPT::read_items",
+              "parent": "WC_Data_Store::__call",
+              "child": "Abstract_WC_Order_Data_Store_CPT::read_items",
+              "ct": 5,
+              "wt_ms": 737.794,
+              "cpu_ms": 422.562,
+              "memory_kb": 17050.5,
+              "peak_kb": 16017
+            },
+            {
+              "edge": "Abstract_WC_Order_Data_Store_CPT::read_items==>array_map",
+              "parent": "Abstract_WC_Order_Data_Store_CPT::read_items",
+              "child": "array_map",
+              "ct": 2,
+              "wt_ms": 734.856,
+              "cpu_ms": 421.723,
+              "memory_kb": 16241.7,
+              "peak_kb": 15513.9
+            },
+            {
+              "edge": "array_map==>WC_Order_Factory::get_order_item",
+              "parent": "array_map",
+              "child": "WC_Order_Factory::get_order_item",
+              "ct": 1000,
+              "wt_ms": 734.12,
+              "cpu_ms": 421.434,
+              "memory_kb": 16198.5,
+              "peak_kb": 15493.6
+            },
+            {
+              "edge": "WC_Order_Factory::get_order_item==>WC_Order_Item::__construct",
+              "parent": "WC_Order_Factory::get_order_item",
+              "child": "WC_Order_Item::__construct",
+              "ct": 1000,
+              "wt_ms": 731.286,
+              "cpu_ms": 421.13,
+              "memory_kb": 15753.9,
+              "peak_kb": 15488.2
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders::get_payment_gateway_details==>Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders::get_payment_gateway_base_details",
+              "parent": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders::get_payment_gateway_details",
+              "child": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders::get_payment_gateway_base_details",
+              "ct": 92,
+              "wt_ms": 726.08,
+              "cpu_ms": 70.614,
+              "memory_kb": 2292.1,
+              "peak_kb": 1596.4
+            },
+            {
+              "edge": "WC_Order_Item_Product::get_product==>wc_get_product",
+              "parent": "WC_Order_Item_Product::get_product",
+              "child": "wc_get_product",
+              "ct": 1900,
+              "wt_ms": 704.339,
+              "cpu_ms": 695.333,
+              "memory_kb": 13463.8,
+              "peak_kb": 0
+            },
+            {
+              "edge": "wc_get_product==>WC_Product_Factory::get_product",
+              "parent": "wc_get_product",
+              "child": "WC_Product_Factory::get_product",
+              "ct": 1900,
+              "wt_ms": 699.199,
+              "cpu_ms": 691.383,
+              "memory_kb": 13551,
+              "peak_kb": 0
+            },
+            {
+              "edge": "WC_Order_Item::__construct==>WC_Data_Store::read",
+              "parent": "WC_Order_Item::__construct",
+              "child": "WC_Data_Store::read",
+              "ct": 1000,
+              "wt_ms": 693.405,
+              "cpu_ms": 414.084,
+              "memory_kb": 12179.7,
+              "peak_kb": 15473.1
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders::get_payment_gateway_base_details==>Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments::get_details",
+              "parent": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders::get_payment_gateway_base_details",
+              "child": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments::get_details",
+              "ct": 2,
+              "wt_ms": 692.765,
+              "cpu_ms": 35.003,
+              "memory_kb": 1180,
+              "peak_kb": 1168.6
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\Proxies\\LegacyProxy::call_static==>call_user_func_array",
+              "parent": "Automattic\\WooCommerce\\Proxies\\LegacyProxy::call_static",
+              "child": "call_user_func_array",
+              "ct": 435,
+              "wt_ms": 691.06,
+              "cpu_ms": 34.503,
+              "memory_kb": 838.2,
+              "peak_kb": 874.9
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments::get_details==>Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService::get_onboarding_details",
+              "parent": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments::get_details",
+              "child": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService::get_onboarding_details",
+              "ct": 2,
+              "wt_ms": 689.453,
+              "cpu_ms": 32.336,
+              "memory_kb": 944.6,
+              "peak_kb": 948.5
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService::get_onboarding_details==>Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService::get_onboarding_steps",
+              "parent": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService::get_onboarding_details",
+              "child": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService::get_onboarding_steps",
+              "ct": 2,
+              "wt_ms": 688.727,
+              "cpu_ms": 31.524,
+              "memory_kb": 908.8,
+              "peak_kb": 899.3
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService::get_onboarding_steps==>Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService::get_wpcom_connection_authorization",
+              "parent": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService::get_onboarding_steps",
+              "child": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService::get_wpcom_connection_authorization",
+              "ct": 2,
+              "wt_ms": 686.219,
+              "cpu_ms": 30.53,
+              "memory_kb": 787.7,
+              "peak_kb": 814.9
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService::get_wpcom_connection_authorization==>Automattic\\WooCommerce\\Proxies\\LegacyProxy::call_static",
+              "parent": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService::get_wpcom_connection_authorization",
+              "child": "Automattic\\WooCommerce\\Proxies\\LegacyProxy::call_static",
+              "ct": 2,
+              "wt_ms": 686.216,
+              "cpu_ms": 30.53,
+              "memory_kb": 787.3,
+              "peak_kb": 814.9
+            },
+            {
+              "edge": "call_user_func_array==>Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization",
+              "parent": "call_user_func_array",
+              "child": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization",
+              "ct": 2,
+              "wt_ms": 686.208,
+              "cpu_ms": 30.53,
+              "memory_kb": 786.1,
+              "peak_kb": 814.9
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization==>Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url",
+              "parent": "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization",
+              "child": "Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url",
+              "ct": 2,
+              "wt_ms": 686.013,
+              "cpu_ms": 29.157,
+              "memory_kb": 788.2,
+              "peak_kb": 813.9
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url==>Automattic\\Jetpack\\Connection\\Manager::try_registration",
+              "parent": "Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url",
+              "child": "Automattic\\Jetpack\\Connection\\Manager::try_registration",
+              "ct": 2,
+              "wt_ms": 669.562,
+              "cpu_ms": 26.388,
+              "memory_kb": 672.4,
+              "peak_kb": 755.3
+            },
+            {
+              "edge": "WC_Data_Store::read==>WC_Order_Item_Product_Data_Store::read",
+              "parent": "WC_Data_Store::read",
+              "child": "WC_Order_Item_Product_Data_Store::read",
+              "ct": 950,
+              "wt_ms": 668.255,
+              "cpu_ms": 399.066,
+              "memory_kb": 11645.8,
+              "peak_kb": 15473.1
+            },
+            {
+              "edge": "Automattic\\Jetpack\\Connection\\Manager::try_registration==>Automattic\\Jetpack\\Connection\\Manager::register",
+              "parent": "Automattic\\Jetpack\\Connection\\Manager::try_registration",
+              "child": "Automattic\\Jetpack\\Connection\\Manager::register",
+              "ct": 2,
+              "wt_ms": 667.104,
+              "cpu_ms": 24.885,
+              "memory_kb": 529.6,
+              "peak_kb": 561.8
+            },
+            {
+              "edge": "Automattic\\Jetpack\\Connection\\Manager::register==>Automattic\\Jetpack\\Connection\\Client::_wp_remote_request",
+              "parent": "Automattic\\Jetpack\\Connection\\Manager::register",
+              "child": "Automattic\\Jetpack\\Connection\\Client::_wp_remote_request",
+              "ct": 2,
+              "wt_ms": 626.217,
+              "cpu_ms": 20.23,
+              "memory_kb": 190.4,
+              "peak_kb": 226
+            },
+            {
+              "edge": "Automattic\\Jetpack\\Connection\\Client::_wp_remote_request==>wp_remote_request",
+              "parent": "Automattic\\Jetpack\\Connection\\Client::_wp_remote_request",
+              "child": "wp_remote_request",
+              "ct": 2,
+              "wt_ms": 595.939,
+              "cpu_ms": 17.844,
+              "memory_kb": 188.2,
+              "peak_kb": 148.3
+            }
+          ]
+        },
+        "http_api_calls": [
+          {
+            "url": "https://jetpack.wordpress.com/jetpack.register/1/",
+            "host": "jetpack.wordpress.com",
+            "path": "/jetpack.register/1/",
+            "method": "POST",
+            "status_code": 400,
+            "error": null,
+            "elapsed_ms": 300.872,
+            "timeout": 30,
+            "blocking": true,
+            "body_bytes": 148,
+            "transport": "WpOrg\\Requests\\Requests",
+            "caller": "WP_Hook->apply_filters, apply_filters, WP_Http->request, wp_remote_request, Automattic\\Jetpack\\Connection\\Client::_wp_remote_request, Automattic\\Jetpack\\Connection\\Manager->register, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, call_user_func_array, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension"
+          },
+          {
+            "url": "https://jetpack.wordpress.com/jetpack.register/1/",
+            "host": "jetpack.wordpress.com",
+            "path": "/jetpack.register/1/",
+            "method": "POST",
+            "status_code": 400,
+            "error": null,
+            "elapsed_ms": 294.909,
+            "timeout": 30,
+            "blocking": true,
+            "body_bytes": 148,
+            "transport": "WpOrg\\Requests\\Requests",
+            "caller": "WP_Hook->apply_filters, apply_filters, WP_Http->request, wp_remote_request, Automattic\\Jetpack\\Connection\\Client::_wp_remote_request, Automattic\\Jetpack\\Connection\\Manager->register, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, call_user_func_array, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers"
+          }
+        ]
+      }
+    }
+  ],
+  "fixture": {
+    "fixture": {
+      "orders": 60000,
+      "products": 6000,
+      "variations": 800,
+      "variable_parent_id": 6014,
+      "first_product_id": 14,
+      "first_order_id": 9000001,
+      "last_order_id": 9060000,
+      "created_gmt": "2026-07-01T11:27:24+00:00"
+    },
+    "pathological": {
+      "orders": 1000000,
+      "products": 200000,
+      "variations": 800,
+      "analytics_rows": 1000000,
+      "heavy_order_id": 9999001,
+      "heavy_order_items": 1000,
+      "first_product_id": 14,
+      "last_product_id": 200877,
+      "created_gmt": "2026-07-01T12:58:15+00:00"
+    },
+    "shipping_tax": {
+      "fixture": "core-shipping-tax-postcode-ranges",
+      "product_id": 200929,
+      "shipping_zones": 8000,
+      "shipping_methods": 8000,
+      "tax_rates": 12000,
+      "tax_locations": 12000,
+      "target_country": "US",
+      "target_state": "CA",
+      "target_postcode": "94105",
+      "target_city": "Perf City",
+      "generated_at_gmt": "2026-07-02T10:24:40+00:00"
+    },
+    "active_plugins": [
+      "woocommerce-gateway-stripe/woocommerce-gateway-stripe.php",
+      "woocommerce-payments/woocommerce-payments.php",
+      "woocommerce-paypal-payments/woocommerce-paypal-payments.php",
+      "woocommerce/woocommerce.php"
+    ]
+  },
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "active_plugins": [
+      "woocommerce-gateway-stripe/woocommerce-gateway-stripe.php",
+      "woocommerce-payments/woocommerce-payments.php",
+      "woocommerce-paypal-payments/woocommerce-paypal-payments.php",
+      "woocommerce/woocommerce.php"
+    ],
+    "xhprof_loaded": false
+  },
+  "measured_at_gmt": "2026-07-02T10:47:29.389Z",
+  "note": "XHProf adds significant overhead. Use these samples for relative function ranking, call counts, and callgraph edges, not as latency replacement for non-XHProf benchmarks."
+}

@@ -88,6 +88,21 @@ a{color:#285f9f}.pill{display:inline-flex;border:1px solid var(--line);border-ra
 </tbody>
 </table>
 
+<h2>Outbound HTTP Trace</h2>
+<p>The profiler was extended to capture WordPress HTTP API calls on benchmark requests. The gateway-stack rerun below identifies the remote calls behind the <code>curl_exec</code> self-time in XHProf.</p>
+<table>
+<thead><tr><th>Scenario</th><th>Remote call</th><th>Elapsed</th><th>Status</th><th>Caller path</th></tr></thead>
+<tbody>
+<tr><td>PayPal settings</td><td><code>GET https://public-api.wordpress.com/wpcom/v2/wcpay/incentives?country=US&amp;locale=en_US&amp;active_for=84412&amp;has_orders=1&amp;has_payments=1</code></td><td>443.5ms</td><td>204</td><td><code>WC_Payments_Incentives_Service->get_incentives</code> -> <code>get_connect_incentive</code> -> <code>add_payments_menu_badge</code></td></tr>
+<tr><td>PayPal settings</td><td><code>POST https://jetpack.wordpress.com/jetpack.register/1/</code></td><td>312.0ms</td><td>400</td><td><code>WooPaymentsService->get_wpcom_connection_authorization</code> -> <code>get_onboarding_steps</code> -> payment gateway details grouping</td></tr>
+<tr><td>PayPal settings</td><td><code>POST https://jetpack.wordpress.com/jetpack.register/1/</code></td><td>289.4ms</td><td>400</td><td><code>WooPaymentsService->get_wpcom_connection_authorization</code> -> payment providers list</td></tr>
+<tr><td>PayPal settings</td><td><code>GET https://api.woocommerce.com/integrations/ppc/v1/customer/partners/K8SKZ36LQBWXJ/merchant-integrations/</code></td><td>365.3ms</td><td>404</td><td><code>ReferenceTransactionStatus->reference_transaction_enabled</code> -> PayPal settings assets registration</td></tr>
+<tr><td>Heavy order edit with gateways</td><td><code>POST https://jetpack.wordpress.com/jetpack.register/1/</code></td><td>300.9ms</td><td>400</td><td><code>WooPaymentsService->get_wpcom_connection_authorization</code> -> gateway details grouping</td></tr>
+<tr><td>Heavy order edit with gateways</td><td><code>POST https://jetpack.wordpress.com/jetpack.register/1/</code></td><td>294.9ms</td><td>400</td><td><code>WooPaymentsService->get_wpcom_connection_authorization</code> -> payment providers list</td></tr>
+</tbody>
+</table>
+<p>Raw traced profiles: <a href="../http-api-trace/04-xhprof-admin-paypal-settings.json">PayPal settings JSON</a>, <a href="../http-api-trace/05-xhprof-admin-heavy-order-edit.json">heavy order edit JSON</a>.</p>
+
 <h2>Highest Call Counts</h2>
 <table>
 <thead><tr><th>Scenario</th><th>High-volume functions</th></tr></thead>

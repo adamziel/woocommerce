@@ -201,6 +201,16 @@ city/postcode absence checks appear as dependent subqueries</pre>
 </div>
 </div>
 
+<h3>Exact Outbound Calls Behind Gateway Admin Cost</h3>
+<table>
+<thead><tr><th>Page</th><th>Calls</th><th>Handoff</th></tr></thead>
+<tbody>
+<tr><td>PayPal settings</td><td>4 WordPress HTTP API calls: WooPayments incentives API 443.5ms, two Jetpack registration attempts at 312.0ms and 289.4ms, and PayPal partner merchant integration status 365.3ms.</td><td>Defer/cache provider onboarding checks and PayPal reference-transaction status lookups during settings render.</td></tr>
+<tr><td>Heavy order edit with gateways</td><td>2 Jetpack registration attempts from WooPayments provider details: 300.9ms and 294.9ms, even though the request is an order edit page.</td><td>Gate payment-provider onboarding detail generation so unrelated admin pages do not perform remote registration calls.</td></tr>
+</tbody>
+</table>
+<p>Raw traces are in <a href="http-api-trace/04-xhprof-admin-paypal-settings.json">PayPal settings JSON</a> and <a href="http-api-trace/05-xhprof-admin-heavy-order-edit.json">heavy order edit JSON</a>.</p>
+
 <h2>Static Audit Notes</h2>
 <table>
 <thead><tr><th>Area</th><th>Code path</th><th>Concern</th></tr></thead>
