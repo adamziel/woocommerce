@@ -111,19 +111,28 @@
       "woocommerce-payments/includes/subscriptions",
       "woocommerce-payments/includes/compat/subscriptions",
       "woocommerce-payments/vendor/woocommerce/subscriptions-core",
-      "woocommerce-payments/includes/multi-currency/Compatibility/WooCommerceBookings.php"
+      "woocommerce-payments/includes/multi-currency/Compatibility/WooCommerceBookings.php",
+      "woocommerce-payments/includes/express-checkout/class-wc-payments-express-checkout-ajax-handler.php",
+      "woocommerce-payments/includes/express-checkout/class-wc-payments-express-checkout-button-helper.php"
     ],
     "paypal_payments": [
       "woocommerce-paypal-payments/modules/ppcp-wc-subscriptions",
       "woocommerce-paypal-payments/modules/ppcp-paypal-subscriptions",
       "woocommerce-paypal-payments/modules/ppcp-compat",
-      "woocommerce-paypal-payments/modules/ppcp-button/src/Helper/CartProductsHelper.php"
+      "woocommerce-paypal-payments/modules/ppcp-button/src/Helper/CartProductsHelper.php",
+      "woocommerce-paypal-payments/modules/ppcp-button/src/Helper/IsolatedCartSimulator.php",
+      "woocommerce-paypal-payments/modules/ppcp-button/src/Endpoint/SimulateCartEndpoint.php"
     ],
     "stripe_gateway": [
       "woocommerce-gateway-stripe/includes/compat/class-wc-stripe-subscriptions-helper.php",
       "woocommerce-gateway-stripe/includes/compat/trait-wc-stripe-subscriptions.php",
+      "woocommerce-gateway-stripe/includes/payment-methods/class-wc-stripe-express-checkout-ajax-handler.php",
       "woocommerce-gateway-stripe/includes/payment-methods/class-wc-stripe-express-checkout-helper.php",
       "woocommerce-gateway-stripe/includes/admin/class-wc-stripe-subscription-detached-bulk-action.php"
+    ],
+    "source_handoff_artifacts": [
+      "subscriptions-engine-source-audit.json",
+      "bookings-gateway-source-audit.json"
     ],
     "standalone_extensions_absent": [
       "woocommerce-subscriptions",
@@ -299,6 +308,55 @@
         "WC_Cart::add_to_cart with booking cart item data"
       ],
       "why_it_is_interesting": "This is the gateway button path for booking products and should be profiled against bookable products with resources, persons, availability rules, and blocked ranges."
+    },
+    {
+      "area": "PayPal Payments isolated-cart simulation for bookings",
+      "entrypoints": [
+        "ppc-simulate-cart",
+        "WooCommerce\\PayPalCommerce\\Button\\Endpoint\\SimulateCartEndpoint::handle_data",
+        "WooCommerce\\PayPalCommerce\\Button\\Helper\\IsolatedCartSimulator::simulate"
+      ],
+      "static_path": [
+        "create throwaway WC_Cart with session hooks disabled",
+        "CartProductsHelper::add_products",
+        "CartProductsHelper::add_booking_product",
+        "WC_Cart::calculate_totals",
+        "restore WooCommerce notices",
+        "remove simulated cart items"
+      ],
+      "why_it_is_interesting": "Booking products can pay full posted-data, add-to-cart, and totals cost during PayPal simulation before the final checkout/order path runs."
+    },
+    {
+      "area": "Stripe Gateway booking express-checkout cart cleanup",
+      "entrypoints": [
+        "WC_Stripe_Express_Checkout_Ajax_Handler::ajax_add_to_cart",
+        "WC_Stripe_Express_Checkout_Ajax_Handler::ajax_clear_cart",
+        "WC_Stripe_Express_Checkout_Helper::get_booking_ids_from_cart",
+        "wc-booking-remove-inactive-cart"
+      ],
+      "static_path": [
+        "read current cart booking ids",
+        "empty cart for express checkout",
+        "call wc-booking-remove-inactive-cart for each previous booking id",
+        "add product and calculate totals"
+      ],
+      "why_it_is_interesting": "Bookings creates in-cart reservations. Stripe express checkout cleanup can add booking status/update work before the normal cart total request."
+    },
+    {
+      "area": "PayPal Payments order-created booking generation",
+      "entrypoints": [
+        "woocommerce_paypal_payments_woocommerce_order_created_from_cart",
+        "WooCommerce\\PayPalCommerce\\Compat\\CompatModule::initialize_wc_bookings_compat_layer",
+        "create_wc_booking"
+      ],
+      "static_path": [
+        "loop cart items with booking data",
+        "loop WC order items inside each booking cart item",
+        "wc_get_product",
+        "is_wc_booking_product",
+        "create_wc_booking with unpaid status"
+      ],
+      "why_it_is_interesting": "The nested cart-item x order-item scan and create_wc_booking persistence run after PayPal order creation and can scale with booking and non-booking line-item counts."
     },
     {
       "area": "PayPal Payments Bookings compatibility module",
