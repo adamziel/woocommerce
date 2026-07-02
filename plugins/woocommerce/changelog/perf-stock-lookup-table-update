@@ -1,0 +1,4 @@
+Significance: patch
+Type: performance
+
+Narrow product lookup table writes during stock updates.

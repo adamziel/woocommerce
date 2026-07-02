@@ -1851,7 +1851,7 @@ class WC_Product_Data_Store_CPT extends WC_Data_Store_WP implements WC_Object_Da
 		// Sometimes I wonder if it shouldn't be part of update_lookup_table.
 		wp_cache_delete( $product_id_with_stock, 'post_meta' );
 
-		$this->update_lookup_table( $product_id_with_stock, 'wc_product_meta_lookup' );
+		$this->update_lookup_table_stock_quantity( $product_id_with_stock, $new_stock );
 
 		/**
 		 * Fire an action for this direct update so it can be detected by other code.
@@ -1862,6 +1862,59 @@ class WC_Product_Data_Store_CPT extends WC_Data_Store_WP implements WC_Object_Da
 		do_action( 'woocommerce_updated_product_stock', $product_id_with_stock );
 
 		return $new_stock;
+	}
+
+	/**
+	 * Update the stock quantity in the product lookup table.
+	 *
+	 * @param int            $product_id_with_stock Product ID.
+	 * @param int|float|null $new_stock New stock level.
+	 */
+	protected function update_lookup_table_stock_quantity( $product_id_with_stock, $new_stock ): void {
+		global $wpdb;
+
+		$product_id_with_stock = absint( $product_id_with_stock );
+		$stock_amount          = wc_stock_amount( null === $new_stock ? 0 : $new_stock );
+
+		if ( ! $product_id_with_stock ) {
+			return;
+		}
+
+		$result = $wpdb->query(
+			$wpdb->prepare(
+				"
+				UPDATE {$wpdb->wc_product_meta_lookup}
+				SET stock_quantity = CASE
+					WHEN (
+						SELECT meta_value
+						FROM {$wpdb->postmeta}
+						WHERE post_id = %d AND meta_key = '_manage_stock'
+						LIMIT 1
+					) = 'yes' THEN %f
+					ELSE NULL
+				END
+				WHERE product_id = %d
+				",
+				$product_id_with_stock,
+				(float) $stock_amount,
+				$product_id_with_stock
+			)
+		); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.NotPrepared
+
+		wp_cache_delete( 'lookup_table', 'object_' . $product_id_with_stock );
+
+		if ( 0 === $result ) {
+			$row_exists = $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT product_id FROM {$wpdb->wc_product_meta_lookup} WHERE product_id = %d LIMIT 1",
+					$product_id_with_stock
+				)
+			); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.NotPrepared
+
+			if ( ! $row_exists ) {
+				$this->update_lookup_table( $product_id_with_stock, 'wc_product_meta_lookup' );
+			}
+		}
 	}
 
 	/**
