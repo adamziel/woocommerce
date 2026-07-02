@@ -6,7 +6,9 @@
     "url": "https://github.com/Automattic/woocommerce-payments/pull/11914",
     "title": "Cache selected currency during requests",
     "branch": "perf/cache-selected-currency-lookup",
-    "commit": "5442883"
+    "commit": "5442883",
+    "state": "CLOSED",
+    "review_policy": "Closed upstream-facing PR; retain as benchmark evidence only."
   },
   "problem": "WooPayments multicurrency frontend price filters repeatedly resolve the selected currency while rendering large variable product pages.",
   "environment": {

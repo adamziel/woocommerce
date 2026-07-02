@@ -162,5 +162,5 @@
     ]
   },
   "finding": "Blocks resource-hint generation is not a current bottleneck in the measured stack. The default benchmark cart/checkout pages are shortcode pages, so the path is normally inactive. Under a forced block-cart/block-checkout setup with a non-empty cart, cold cart+checkout hint generation costs about 16.215ms and 4 queries total, then warm cache hits cost about 0.053ms and 0 queries. The frontend product-page hot path remains AddToCartForm -> get_available_variations(), variation price generation, and WooPayments multicurrency hooks.",
-  "developer_handoff": "Do not prioritize another resource-hint cache fix for this workload. If continuing the Blocks frontend lane, focus on block-template single-product rendering that forces full variation payload generation, and keep it tied to PRs #23-#25 plus WooPayments PR #11914 rather than the already-cached resource-hint path."
+  "developer_handoff": "Do not prioritize another resource-hint cache fix for this workload. If continuing the Blocks frontend lane, focus on block-template single-product rendering that forces full variation payload generation, and keep it tied to PRs #23-#25 plus closed WooPayments evidence candidate #11914 rather than the already-cached resource-hint path."
 }

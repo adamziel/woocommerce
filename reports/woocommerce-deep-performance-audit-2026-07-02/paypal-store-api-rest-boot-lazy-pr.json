@@ -55,7 +55,9 @@
     "url": "https://github.com/woocommerce/woocommerce-paypal-payments/pull/4495",
     "title": "Defer settings REST endpoint data loading",
     "branch": "perf/lazy-settings-rest-endpoint-data",
-    "commit": "c4b7301"
+    "commit": "c4b7301",
+    "state": "CLOSED",
+    "review_policy": "Closed upstream-facing PR; retain as benchmark evidence only."
   },
   "source_paths": [
     "modules/ppcp-settings/src/SettingsModule.php:286",
@@ -195,8 +197,8 @@
       }
     }
   },
-  "finding": "PayPal Payments settings REST route registration was doing admin data construction during unrelated Store API requests. The path went through login_link/partner-referrals/features/payment details and initialized WooCommerce gateways, which in turn triggered WooPayments multicurrency and the Store API session SELECT. PR #4495 defers login_link, todos, and features endpoint data dependencies until their endpoint callbacks run; the measured Store API session SELECT caller moves back to Woo Store API route schema registration.",
-  "remaining_gap": "The broader PayPal-active query delta is not resolved by PR #4495. In the tokenized empty cart sample, PayPal active candidate still had 95 queries vs 66 with PayPal inactive. Most of that remaining delta is repeated HPOS background-sync option reads: 75 reads with PayPal active candidate vs 49 with PayPal inactive. Treat this as a separate PayPal/core initialization interaction, not the settings REST eager data bug.",
+  "finding": "PayPal Payments settings REST route registration was doing admin data construction during unrelated Store API requests. The path went through login_link/partner-referrals/features/payment details and initialized WooCommerce gateways, which in turn triggered WooPayments multicurrency and the Store API session SELECT. Closed evidence candidate #4495 defers login_link, todos, and features endpoint data dependencies until their endpoint callbacks run; the measured Store API session SELECT caller moves back to Woo Store API route schema registration.",
+  "remaining_gap": "The broader PayPal-active query delta is not resolved by closed evidence candidate #4495. In the tokenized empty cart sample, PayPal active candidate still had 95 queries vs 66 with PayPal inactive. Most of that remaining delta is repeated HPOS background-sync option reads: 75 reads with PayPal active candidate vs 49 with PayPal inactive. Treat this as a separate PayPal/core initialization interaction, not the settings REST eager data bug.",
   "tests": [
     "php -l on changed PayPal endpoint/service files",
     "vendor/bin/phpcs modules/ppcp-settings/services.php modules/ppcp-settings/src/Endpoint/FeaturesRestEndpoint.php modules/ppcp-settings/src/Endpoint/LoginLinkRestEndpoint.php modules/ppcp-settings/src/Endpoint/TodosRestEndpoint.php",
