@@ -1,0 +1,166 @@
+{
+  "measured_at_utc": "2026-07-02T14:48:56Z",
+  "purpose": "Targeted follow-up for prettyboymp Blocks commits b5640b450b and d2a600204d: determine whether Blocks resource-hint and classic-theme asset enqueue work is a current hot path in the benchmark stack.",
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "base_url": "http://localhost:8099",
+    "active_plugins": [
+      "woocommerce-gateway-stripe/woocommerce-gateway-stripe.php",
+      "woocommerce-payments/woocommerce-payments.php",
+      "woocommerce-paypal-payments/woocommerce-paypal-payments.php",
+      "woocommerce/woocommerce.php"
+    ],
+    "default_cart_page_id": 6,
+    "default_checkout_page_id": 7,
+    "default_cart_has_woocommerce_cart_block": false,
+    "default_checkout_has_woocommerce_checkout_block": false
+  },
+  "source_paths": [
+    {
+      "path": "plugins/woocommerce/src/Blocks/AssetsController.php",
+      "lines": "133-183",
+      "note": "Resource hints only run on frontend prefetch/prerender requests when wc()->cart has contents, then check whether cart/checkout pages contain the WooCommerce cart/checkout blocks."
+    },
+    {
+      "path": "plugins/woocommerce/src/Blocks/AssetsController.php",
+      "lines": "216-294",
+      "note": "Resource-hint data is cached in the woocommerce_block_asset_resource_hints transient, versioned by WooCommerce version, WordPress version, and site URL."
+    },
+    {
+      "path": "plugins/woocommerce/src/Blocks/Domain/Bootstrap.php",
+      "lines": "123-152",
+      "note": "Store API initializes on non-admin requests; Blocks assets and block types initialize unless the request is specifically a Store API request."
+    }
+  ],
+  "request_profile": {
+    "setup": {
+      "fixture": "800-variation variable product at /product/benchmark-variable-product-many-variations/",
+      "cart_state": "A frontend cart cookie was populated with product 14 before requesting the variable product page.",
+      "temporary_page_options": "The benchmark's default cart/checkout pages are shortcodes, so temporary block cart/checkout pages were installed only for this profile, then the original options were restored.",
+      "temporary_cart_page_id": 200932,
+      "temporary_checkout_page_id": 200933,
+      "temporary_cart_has_block": true,
+      "temporary_checkout_has_block": true
+    },
+    "cold_resource_hint_transient_request": {
+      "server_ms": 3229.18,
+      "query_count": 263,
+      "query_time_ms": 118.49,
+      "xhprof_edge_count": 18150,
+      "resource_hint_functions_in_top_inclusive": false,
+      "dominant_functions": [
+        {
+          "function": "Automattic\\WooCommerce\\Blocks\\BlockTypes\\AddToCartForm::render",
+          "calls": 1,
+          "inclusive_ms": 2299.424
+        },
+        {
+          "function": "WC_Product_Variable::get_available_variations",
+          "calls": 1,
+          "inclusive_ms": 2274.289
+        },
+        {
+          "function": "WC_Product_Variable::get_available_variation",
+          "calls": 800,
+          "inclusive_ms": 1659.031
+        },
+        {
+          "function": "WC_Product_Variable::get_variation_prices",
+          "calls": 1615,
+          "inclusive_ms": 1597.341
+        },
+        {
+          "function": "WCPay\\MultiCurrency\\FrontendPrices::get_product_price",
+          "calls": 40851,
+          "inclusive_ms": 697.358
+        },
+        {
+          "function": "WCPay\\MultiCurrency\\MultiCurrency::get_selected_currency",
+          "calls": 40052,
+          "inclusive_ms": 615.548
+        }
+      ]
+    },
+    "warm_resource_hint_transient_request": {
+      "server_ms": 3246.56,
+      "query_count": 263,
+      "query_time_ms": 116.91,
+      "xhprof_edge_count": 18105,
+      "resource_hint_functions_in_top_inclusive": false,
+      "dominant_functions": [
+        {
+          "function": "Automattic\\WooCommerce\\Blocks\\BlockTypes\\AddToCartForm::render",
+          "calls": 1,
+          "inclusive_ms": 2325.399
+        },
+        {
+          "function": "WC_Product_Variable::get_available_variations",
+          "calls": 1,
+          "inclusive_ms": 2305.965
+        },
+        {
+          "function": "WC_Product_Variable::get_available_variation",
+          "calls": 800,
+          "inclusive_ms": 1681.634
+        },
+        {
+          "function": "WC_Product_Variable::get_variation_prices",
+          "calls": 1615,
+          "inclusive_ms": 1611.299
+        },
+        {
+          "function": "WCPay\\MultiCurrency\\FrontendPrices::get_product_price",
+          "calls": 40851,
+          "inclusive_ms": 702.069
+        },
+        {
+          "function": "WCPay\\MultiCurrency\\MultiCurrency::get_selected_currency",
+          "calls": 40052,
+          "inclusive_ms": 619.949
+        }
+      ]
+    }
+  },
+  "direct_resource_hint_probe": {
+    "method": "WP-CLI reflection probe invoking AssetsController::get_block_asset_resource_hints() after clearing woocommerce_block_asset_resource_hints, then invoking the same filenames again warm.",
+    "results": [
+      {
+        "label": "cold_cart",
+        "filename": "cart-frontend",
+        "elapsed_ms": 11.21,
+        "queries": 2,
+        "hint_count": 50
+      },
+      {
+        "label": "cold_checkout",
+        "filename": "checkout-frontend",
+        "elapsed_ms": 5.005,
+        "queries": 2,
+        "hint_count": 49
+      },
+      {
+        "label": "warm_cart",
+        "filename": "cart-frontend",
+        "elapsed_ms": 0.034,
+        "queries": 0,
+        "hint_count": 50
+      },
+      {
+        "label": "warm_checkout",
+        "filename": "checkout-frontend",
+        "elapsed_ms": 0.019,
+        "queries": 0,
+        "hint_count": 49
+      }
+    ],
+    "transient_keys_after_probe": [
+      "files",
+      "version"
+    ]
+  },
+  "finding": "Blocks resource-hint generation is not a current bottleneck in the measured stack. The default benchmark cart/checkout pages are shortcode pages, so the path is normally inactive. Under a forced block-cart/block-checkout setup with a non-empty cart, cold cart+checkout hint generation costs about 16.215ms and 4 queries total, then warm cache hits cost about 0.053ms and 0 queries. The frontend product-page hot path remains AddToCartForm -> get_available_variations(), variation price generation, and WooPayments multicurrency hooks.",
+  "developer_handoff": "Do not prioritize another resource-hint cache fix for this workload. If continuing the Blocks frontend lane, focus on block-template single-product rendering that forces full variation payload generation, and keep it tied to PRs #23-#25 plus WooPayments PR #11914 rather than the already-cached resource-hint path."
+}
