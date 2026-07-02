@@ -13,6 +13,20 @@ use WP_Error;
  */
 class JetpackConnection {
 	/**
+	 * Transient key used to throttle repeated Jetpack registration failures.
+	 *
+	 * @var string
+	 */
+	private const REGISTRATION_FAILURE_TRANSIENT = 'woocommerce_jetpack_registration_failure';
+
+	/**
+	 * How long to wait before retrying a failed registration attempt.
+	 *
+	 * @var int
+	 */
+	private const REGISTRATION_FAILURE_RETRY_TIMEOUT = MINUTE_IN_SECONDS;
+
+	/**
 	 * Jetpack connection manager.
 	 *
 	 * @var Manager
@@ -49,15 +63,7 @@ class JetpackConnection {
 	 */
 	public static function get_authorization_url( $redirect_url, $from = '' ) {
 		$manager = self::get_manager();
-		$errors  = new WP_Error();
-
-		// Register the site to wp.com.
-		if ( ! $manager->is_connected() ) {
-			$result = $manager->try_registration();
-			if ( is_wp_error( $result ) ) {
-				$errors->add( $result->get_error_code(), $result->get_error_message() );
-			}
-		}
+		$errors  = self::maybe_register_site( $manager );
 
 		$calypso_env = defined( 'WOOCOMMERCE_CALYPSO_ENVIRONMENT' ) && in_array( WOOCOMMERCE_CALYPSO_ENVIRONMENT, array( 'development', 'wpcalypso', 'horizon', 'stage' ), true ) ? WOOCOMMERCE_CALYPSO_ENVIRONMENT : 'production';
 
@@ -81,6 +87,76 @@ class JetpackConnection {
 				),
 				$authorization_url,
 			),
+		);
+	}
+
+	/**
+	 * Register the site to wp.com when needed.
+	 *
+	 * @param Manager $manager Jetpack connection manager.
+	 * @return WP_Error Registration errors.
+	 */
+	private static function maybe_register_site( Manager $manager ) {
+		$errors = new WP_Error();
+
+		if ( $manager->is_connected() ) {
+			delete_transient( self::REGISTRATION_FAILURE_TRANSIENT );
+			return $errors;
+		}
+
+		$recent_failure = self::get_recent_registration_failure();
+		if ( $recent_failure instanceof WP_Error ) {
+			$errors->add( $recent_failure->get_error_code(), $recent_failure->get_error_message() );
+			return $errors;
+		}
+
+		$result = $manager->try_registration();
+		if ( is_wp_error( $result ) ) {
+			self::cache_registration_failure( $result );
+			$errors->add( $result->get_error_code(), $result->get_error_message() );
+		} else {
+			delete_transient( self::REGISTRATION_FAILURE_TRANSIENT );
+		}
+
+		return $errors;
+	}
+
+	/**
+	 * Get the recent Jetpack registration failure, if any.
+	 *
+	 * @return WP_Error|null
+	 */
+	private static function get_recent_registration_failure() {
+		$failure = get_transient( self::REGISTRATION_FAILURE_TRANSIENT );
+
+		if ( ! is_array( $failure ) ) {
+			return null;
+		}
+
+		$code    = $failure['code'] ?? '';
+		$message = $failure['message'] ?? '';
+
+		if ( ! is_string( $code ) || '' === $code || ! is_string( $message ) || '' === $message ) {
+			return null;
+		}
+
+		return new WP_Error( $code, $message );
+	}
+
+	/**
+	 * Cache a Jetpack registration failure for a short retry window.
+	 *
+	 * @param WP_Error $error Registration error.
+	 * @return void
+	 */
+	private static function cache_registration_failure( WP_Error $error ) {
+		set_transient(
+			self::REGISTRATION_FAILURE_TRANSIENT,
+			array(
+				'code'    => $error->get_error_code(),
+				'message' => $error->get_error_message(),
+			),
+			self::REGISTRATION_FAILURE_RETRY_TIMEOUT
 		);
 	}
 

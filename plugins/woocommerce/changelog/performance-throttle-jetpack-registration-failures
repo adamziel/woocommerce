@@ -1,0 +1,4 @@
+Significance: patch
+Type: performance
+
+Throttle repeated Jetpack registration attempts after failures.
