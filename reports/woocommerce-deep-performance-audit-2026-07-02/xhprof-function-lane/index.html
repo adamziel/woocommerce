@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WooCommerce XHProf Function Lane - July 2, 2026</title>
+<style>
+:root{--ink:#16202a;--muted:#5d6875;--line:#d8dee4;--bg:#f6f8fa;--panel:#fff;--accent:#176c62;--bad:#9b2424;--warn:#9a5b00;--blue:#285f9f}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+header{background:#fff;border-bottom:1px solid var(--line);padding:26px 28px 18px} main{max-width:1200px;margin:0 auto;padding:24px 22px 46px}
+h1{font-size:28px;line-height:1.15;margin:0 0 8px} h2{font-size:19px;margin:30px 0 10px} h3{font-size:15px;margin:20px 0 8px}
+p{margin:0 0 12px}.sub{color:var(--muted);max-width:940px}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px}.metric{font-size:24px;font-weight:720}.label{color:var(--muted);font-size:12px}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line)} th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top} th{background:#eef2f6;color:var(--muted);font-size:12px} tr:last-child td{border-bottom:0}
+code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;background:#eef2f5;border-radius:4px;padding:1px 4px} .bad{color:var(--bad);font-weight:700}.warn{color:var(--warn);font-weight:700}.ok{color:var(--accent);font-weight:700}
+a{color:#285f9f}.pill{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:2px 8px;background:#fff;color:var(--muted);font-size:12px;margin:0 4px 4px 0}
+@media(max-width:820px){main{padding:16px}.grid,.two{grid-template-columns:1fr}header{padding:20px 16px}}
+</style>
+</head>
+<body>
+<header>
+<h1>WooCommerce XHProf Function Lane</h1>
+<div class="sub">One XHProf sample per hot path, used for relative function ranking, call counts, and callgraph direction. XHProf adds substantial overhead, so these timings should not replace the non-XHProf latency benchmarks in the parent report.</div>
+</header>
+<main>
+
+<section class="grid">
+  <div class="card"><div class="label">Core-only scenarios</div><div class="metric">4</div><div class="label">Cart, checkout, variation, heavy order</div></div>
+  <div class="card"><div class="label">Gateway-stack scenarios</div><div class="metric">5</div><div class="label">Adds PayPal settings profile</div></div>
+  <div class="card"><div class="label">Largest callgraph</div><div class="metric">20,757</div><div class="label">Heavy order edit with gateways</div></div>
+  <div class="card"><div class="label">Profiler</div><div class="metric">XHProf</div><div class="label">PECL xhprof 2.3.10 in Apache</div></div>
+</section>
+
+<h2>Conditions</h2>
+<table>
+<tbody>
+<tr><th>Core-only stack</th><td>WordPress 7.0, WooCommerce 10.9.1, PHP 8.3.31, MySQL 8.0.46, HPOS enabled, active plugin <code>woocommerce/woocommerce.php</code>.</td></tr>
+<tr><th>Gateway stack</th><td>Same site with <code>woocommerce-gateway-stripe</code> 10.8.3, <code>woocommerce-paypal-payments</code> 4.1.0, and <code>woocommerce-payments</code> 10.9.0 active. Full Subscriptions and Bookings were not locally available.</td></tr>
+<tr><th>Fixture</th><td>1M HPOS orders, 200k products, 800 variations, a 1,000-line-item heavy order, 8,000 generated shipping zones/methods, and 12,000 generated tax postcode ranges.</td></tr>
+</tbody>
+</table>
+
+<h2>Scenario Summary</h2>
+<table>
+<thead><tr><th>Scenario</th><th>Stack</th><th>Wall / server</th><th>Queries / DB</th><th>Edges</th><th>Raw profile</th></tr></thead>
+<tbody>
+<tr><td>Store API cart update, shipping/tax</td><td>Core only</td><td>240ms / 205ms</td><td>66 / 58ms</td><td>9,315</td><td><a href="core-only/01-xhprof-cart-shipping-tax-gateways.json">JSON</a></td></tr>
+<tr><td>Store API cart update, shipping/tax</td><td>Gateways</td><td>309ms / 262ms</td><td>123 / 62ms</td><td>13,831</td><td><a href="gateway-stack/01-xhprof-cart-shipping-tax-gateways.json">JSON</a></td></tr>
+<tr><td>Store API checkout, 20-line cart</td><td>Core only</td><td>3,361ms / 3,310ms</td><td>2,524 / 2,360ms</td><td>14,575</td><td><a href="core-only/02-xhprof-checkout-20-line-gateways.json">JSON</a></td></tr>
+<tr><td>Store API checkout, 20-line cart</td><td>Gateways</td><td>3,681ms / 3,609ms</td><td>2,585 / 2,508ms</td><td>19,457</td><td><a href="gateway-stack/02-xhprof-checkout-20-line-gateways.json">JSON</a></td></tr>
+<tr><td>Variable product page, 800 variations</td><td>Core only</td><td>3,233ms / 3,200ms</td><td>213 / 115ms</td><td>13,265</td><td><a href="core-only/03-xhprof-variable-product-page.json">JSON</a></td></tr>
+<tr><td>Variable product page, 800 variations</td><td>Gateways</td><td>3,929ms / 3,873ms</td><td>256 / 163ms</td><td>17,769</td><td><a href="gateway-stack/03-xhprof-variable-product-page.json">JSON</a></td></tr>
+<tr><td>Admin PayPal Payments settings</td><td>Gateways</td><td>1,953ms / 1,879ms</td><td>268 / 265ms</td><td>19,186</td><td><a href="gateway-stack/04-xhprof-admin-paypal-settings.json">JSON</a></td></tr>
+<tr><td>Admin heavy order edit</td><td>Core only</td><td>2,722ms / 2,670ms</td><td>3,096 / 585ms</td><td>14,288</td><td><a href="core-only/05-xhprof-admin-heavy-order-edit.json">JSON</a></td></tr>
+<tr><td>Admin heavy order edit</td><td>Gateways</td><td>3,564ms / 3,485ms</td><td>3,244 / 751ms</td><td>20,757</td><td><a href="gateway-stack/05-xhprof-admin-heavy-order-edit.json">JSON</a></td></tr>
+</tbody>
+</table>
+
+<h2>Developer Handoff</h2>
+<table>
+<thead><tr><th>Path</th><th>Top function evidence</th><th>What to inspect</th></tr></thead>
+<tbody>
+<tr>
+<td><span class="warn">Core shipping/tax cart totals</span></td>
+<td>Core-only top self time: <code>mysqli_query</code> 57ms, <code>wc_postcode_location_matcher</code> 26.9ms, <code>array_map</code> 12.8ms over 20k calls, plus 42k <code>is_numeric</code> and 45k <code>trim</code> calls. Gateway stack nearly doubles queries and adds 4.5k callgraph edges.</td>
+<td>Tax and shipping range matching does real PHP work after broad SQL reads. For shipping, reduce the number of postcode rows fed into <code>wc_postcode_location_matcher</code>. For taxes, reduce broad range prequery and grouped rate query before PHP matching.</td>
+</tr>
+<tr>
+<td><span class="bad">Checkout write path</span></td>
+<td>Core-only checkout self time is overwhelmingly <code>mysqli_query</code>: 2,351ms across 2,523 calls. Gateway stack adds about 61 queries and more bootstrap edges, but the bottleneck is still database writes. Repeated secondary costs include <code>update_meta_cache</code>, CSS parser calls from block/style work, <code>DOMXPath::query</code>, and 143k+ <code>trim</code> calls.</td>
+<td>Fix order/item/meta persistence and lookup refresh first. Gateway overhead is second-order on this path unless payment authorization adds external calls in a configured gateway flow.</td>
+</tr>
+<tr>
+<td><span class="bad">Variable product page</span></td>
+<td>Core-only top self time: <code>asort</code> 1,003ms across 4,845 calls, <code>mysqli_query</code> 113ms, <code>sanitize_title_with_dashes</code> 70.6ms, <code>WC_Data::get_prop</code> 53.7ms, <code>WC_Product_Variation_Data_Store_CPT::read_product_data</code> 40.2ms. Gateway stack adds 40k calls each to <code>WCPay\MultiCurrency\MultiCurrency::get_selected_currency</code> and <code>get_stored_currency_code</code>.</td>
+<td>Core: inspect variation sorting/price formatting and repeated sanitization/property access. Gateway stack: WooPayments multicurrency hooks run once per variation/price touch and should cache selected/stored currency per request.</td>
+</tr>
+<tr>
+<td><span class="warn">PayPal settings page</span></td>
+<td>Gateway-stack settings page spends 1,069ms self in <code>curl_exec</code> across 3 outbound HTTP calls, plus 264ms in <code>mysqli_query</code>. Inclusive path includes <code>WP_Http::request</code>, Requests curl transport, and Woo onboarding/task-list code.</td>
+<td>Identify and cache/defer remote calls made while rendering payment settings. This is not a SQL-only problem; a developer should trace HTTP calls from WooPayments/Jetpack provider onboarding and PayPal settings asset/reference-transaction checks.</td>
+</tr>
+<tr>
+<td><span class="bad">Admin heavy order edit</span></td>
+<td>Core-only top inclusive path: <code>Orders\PageController::output</code> -> <code>Edit::display</code> -> <code>Edit::render_meta_boxes</code> -> <code>do_meta_boxes</code> -> <code>WC_Meta_Box_Order_Items::output</code> at 2,209ms inclusive. Core self time: <code>mysqli_query</code> 576ms across 3,095 calls, <code>update_meta_cache</code> 52.5ms, <code>WC_Data_Store_WP::read_meta</code> 30.7ms across 1,000 calls. Gateway stack adds 570ms in two outbound <code>curl_exec</code> calls.</td>
+<td>Core: keep pushing bulk order-item/meta priming and reduce per-item data-store reads in the order-items metabox. Gateway: prevent remote settings/onboarding calls from running on unrelated admin order edit pages.</td>
+</tr>
+</tbody>
+</table>
+
+<h2>Highest Call Counts</h2>
+<table>
+<thead><tr><th>Scenario</th><th>High-volume functions</th></tr></thead>
+<tbody>
+<tr><td>Variable product, core only</td><td><code>trim</code> 380,918; <code>current</code> 177,582; <code>preg_replace</code> 175,030; <code>next</code> 165,538; <code>str_replace</code> 161,367; <code>in_array</code> 155,795.</td></tr>
+<tr><td>Variable product, gateways</td><td><code>WC</code>/<code>WooCommerce::instance</code> 144,806 each; <code>WCPay\MultiCurrency\MultiCurrency::get_selected_currency</code> 40,041; <code>get_stored_currency_code</code> 40,041.</td></tr>
+<tr><td>Heavy order edit, core only</td><td><code>trim</code> 291,940; <code>in_array</code> 170,695; <code>preg_match</code> 72,359; <code>str_replace</code> 71,951; <code>is_callable</code> 71,342; <code>WC_Data::set_prop</code> 70,151.</td></tr>
+<tr><td>Checkout, core only</td><td><code>trim</code> 143,675; <code>is_numeric</code> 80,409; CSS parser <code>substr</code> 56,462; CSS parser <code>peek</code> 41,924; <code>array_map</code> 39,590.</td></tr>
+</tbody>
+</table>
+
+</main>
+</body>
+</html>

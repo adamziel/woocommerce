@@ -1,0 +1,25 @@
+{
+  "measured_at_gmt": "2026-07-02T10:40:25.595Z",
+  "scenarios": [
+    "01-xhprof-cart-shipping-tax-gateways",
+    "02-xhprof-checkout-20-line-gateways",
+    "03-xhprof-variable-product-page",
+    "04-xhprof-admin-paypal-settings",
+    "05-xhprof-admin-heavy-order-edit"
+  ],
+  "iterations": 1,
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "active_plugins": [
+      "woocommerce-gateway-stripe/woocommerce-gateway-stripe.php",
+      "woocommerce-payments/woocommerce-payments.php",
+      "woocommerce-paypal-payments/woocommerce-paypal-payments.php",
+      "woocommerce/woocommerce.php"
+    ],
+    "xhprof_loaded": false
+  },
+  "note": "XHProf profiling lane; function timings include profiler overhead."
+}

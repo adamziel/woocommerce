@@ -41,6 +41,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#101820;color:#edf7ff;
 <tr><td><a href="../woocommerce-crud-invariant-nginx-fpm-48-rebenchmark-2026-07-01-2130z/">CRUD-invariant nginx/php-fpm rebenchmark</a></td><td>Cleaner HTTP/profiler data with WooCommerce CRUD-created fixtures, PHP-FPM max children 48, and per-request SQL digests.</td></tr>
 <tr><td><a href="shipping-tax-core/index.html">New shipping/tax core lane</a></td><td>Fresh Store API cart-total run over 8,000 generated shipping zones/methods and 12,000 generated tax postcode ranges.</td></tr>
 <tr><td><a href="gateway-stack/01-core-shipping-tax-cart-update.html">Gateway stack cart lane</a></td><td>Same cart-total request after activating WooCommerce Stripe Payment Gateway 10.8.3, WooCommerce PayPal Payments 4.1.0, and WooPayments 10.9.0.</td></tr>
+<tr><td><a href="xhprof-function-lane/index.html">XHProf function profiling lane</a></td><td>One function-level profile per hot path, with core-only and gateway-stack comparisons for cart totals, checkout, variable product rendering, PayPal settings, and heavy order edit.</td></tr>
 </tbody>
 </table>
 
@@ -187,6 +188,19 @@ city/postcode absence checks appear as dependent subqueries</pre>
 </tbody>
 </table>
 
+<h2>Function-Level Profiling</h2>
+<div class="two">
+<div class="card">
+<h3>What Changed</h3>
+<p>Installed PECL <code>xhprof</code> 2.3.10 in the running Apache benchmark container and added opt-in function summaries to the local profiler via <code>X-WC-Perf-XHProf: 1</code>. XHProf adds overhead, so the report uses these samples for relative function ranking and call counts, not replacement latency numbers.</p>
+<p><a href="xhprof-function-lane/index.html">Open XHProf function lane</a></p>
+</div>
+<div class="card">
+<h3>Most Actionable New Function Findings</h3>
+<p>Variable product core rendering spent the largest self-time in repeated <code>asort</code>, sanitization, property access, and variation data reads. With WooPayments active, the same page made about 40k calls each to multicurrency selected/stored currency functions. PayPal settings and gateway-active heavy order edit both showed outbound <code>curl_exec</code> time on admin pages.</p>
+</div>
+</div>
+
 <h2>Static Audit Notes</h2>
 <table>
 <thead><tr><th>Area</th><th>Code path</th><th>Concern</th></tr></thead>
@@ -203,7 +217,7 @@ city/postcode absence checks appear as dependent subqueries</pre>
 <tbody>
 <tr><td>Bookings</td><td>Not measured yet</td><td>Requires plugin availability and a booking-heavy fixture: bookable products, resources, availability rules, calendar/admin requests, and checkout with booking line items.</td></tr>
 <tr><td>Subscriptions + PayPal/Stripe/WooPayments</td><td>Partially measured</td><td>Stripe, PayPal Payments, and WooPayments bootstrap/admin overhead is measured. Full Subscriptions renewal/payment-method flows are still pending because the full WooCommerce Subscriptions extension is not available locally.</td></tr>
-<tr><td>Function-level CPU profiling</td><td>Not measured yet</td><td>Current mu-plugin profiler captures SQL/query digests and caller stacks, not inclusive/exclusive PHP function timings. A Tideways/XHProf or sampled profiler lane is still needed for non-SQL CPU hotspots.</td></tr>
+<tr><td>Function-level CPU profiling</td><td>Initial XHProf lane measured</td><td>Core-only and gateway-stack XHProf samples now cover cart totals, checkout, variable product rendering, PayPal settings, and heavy order edit. Broader repeated samples could reduce noise, but the main function hotspots are now identified.</td></tr>
 </tbody>
 </table>
 

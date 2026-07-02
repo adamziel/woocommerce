@@ -1,0 +1,1858 @@
+{
+  "scenario": {
+    "id": "03-xhprof-variable-product-page",
+    "title": "Variable product page",
+    "trigger": "Variable product with 800 variations, gateway plugins active."
+  },
+  "request": {
+    "path": "/product/benchmark-variable-product-many-variations/",
+    "headers": []
+  },
+  "summary": {
+    "requests": 1,
+    "http_code_counts": {
+      "200": 1
+    },
+    "total_ms": {
+      "median": 3232.6389999999997,
+      "p95": 3232.6389999999997,
+      "max": 3232.6389999999997
+    },
+    "server_ms": {
+      "median": 3199.76,
+      "p95": 3199.76,
+      "max": 3199.76
+    },
+    "query_count": {
+      "median": 213,
+      "p95": 213,
+      "max": 213
+    },
+    "query_time_ms": {
+      "median": 114.55,
+      "p95": 114.55,
+      "max": 114.55
+    },
+    "xhprof_edge_count": {
+      "median": 13265,
+      "max": 13265
+    }
+  },
+  "samples": [
+    {
+      "run_id": "03-xhprof-variable-product-page-1782988884730-1",
+      "http_code": 200,
+      "total_ms": 3232.6389999999997,
+      "ttfb_ms": 3159.831,
+      "size_download": 1428783,
+      "body_bytes": 1428783,
+      "redirect_url": "",
+      "url_effective": "http://localhost:8099/product/benchmark-variable-product-many-variations/",
+      "profiler": {
+        "run_id": "03-xhprof-variable-product-page-1782988884730-1",
+        "method": "GET",
+        "uri": "/product/benchmark-variable-product-many-variations/",
+        "status": 200,
+        "server_ms": 3199.76,
+        "query_count": 213,
+        "query_time_ms": 114.55,
+        "memory_peak_mb": 40,
+        "slow_queries": [
+          {
+            "seconds": 0.024276018142700195,
+            "sql": "SELECT tax_rates.*, COUNT( locations.location_id ) as postcode_count, COUNT( locations2.location_id ) as city_count FROM wp_woocommerce_tax_rates as tax_rates LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations ON tax_rates.tax_rate_id = locations.tax_rate_id LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations2 ON tax_rates.tax_rate_id = locations2.tax_rate_id WHERE 1=1 AND tax_rate_country IN ( 'US', '' ) AND tax_rate_state IN ( 'CA', '' ) AND tax_rate_class = '' AND ( ( locations.location_type IS NULL ) OR ( locations.location_type = 'postcode' AND locations.location_code IN ('','*') AND ( ( locations2.location_type = 'city' AND locations2.location_code = '' ) OR NOT EXISTS ( SELECT sub.tax_rate_id FROM wp_woocommerce_tax_rate_locations as sub WHERE sub.location_type = 'city' AND sub.tax_rate_id = tax_rates.tax_rate_id ) ) ) OR ( locations.location_type = 'city' A"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 120,
+            "seconds": 0.02049565315246582,
+            "sql": "SELECT t.term_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('pa_size') AND t.slug IN ('size-1') LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), do_action('template_redirect'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Templates\\SingleProductTemplate->render_block_template, Automattic\\WooCommerce\\Blocks\\SharedStores\\ProductsStore::load_product, Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Hydration->get_rest_api_response_data, Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Hydration->get_response_from_controller, call_user_func_array, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\ProductsById->get_route_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->prepare_item_for_response, Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\ProductSchema->get_item_response, Automattic\\WooCommerce\\Blocks\\Utils\\ProductAvailabilityUtils::get_product_availability, WC_Product_Variable->has_purchasable_variations, wc_get_product, WC_Product_Factory->get_product, WC_Product_Variation->__construct, WC_Product_Simple->__construct, WC_Product->__construct, WC_Data_Store->read, WC_Product_Variation_Data_Store_CPT->read, WC_Product_Variation_Data_Store_CPT->generate_product_title, wc_get_formatted_variation, get_term_by, get_terms, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 26,
+            "seconds": 0.0041675567626953125,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 11,
+            "seconds": 0.001882314682006836,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_jetpack_connection_active_plugins_refresh','_transient_timeout_jetpack_connection_active_plugins_refresh')",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\Jetpack\\Connection\\Plugin_Storage::configure, Automattic\\Jetpack\\Connection\\Plugin_Storage::maybe_update_active_connected_plugins, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0009911060333251953,
+            "sql": "SELECT autoload FROM wp_options WHERE option_name = '_transient_timeout_wc_var_prices_6014' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), do_action('template_redirect'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Templates\\SingleProductTemplate->render_block_template, Automattic\\WooCommerce\\Blocks\\SharedStores\\ProductsStore::load_product, Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Hydration->get_rest_api_response_data, Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Hydration->get_response_from_controller, call_user_func_array, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\ProductsById->get_route_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->prepare_item_for_response, Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\ProductSchema->get_item_response, WC_Product_Variable->is_on_sale, WC_Product_Variable->get_variation_prices, WC_Data_Store->__call, WC_Product_Variable_Data_Store_CPT->read_price_data, set_transient, update_option"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0005240440368652344,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (6014) ORDER BY meta_id ASC",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->query_posts, WP_Query->query, WP_Query->get_posts, update_post_caches, update_postmeta_cache, update_meta_cache"
+          },
+          {
+            "count": 2,
+            "seconds": 0.017856836318969727,
+            "sql": "UPDATE `wp_options` SET `option_value` = '1785580885' WHERE `option_name` = '_transient_timeout_wc_var_prices_6014'",
+            "caller": "require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), do_action('template_redirect'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Templates\\SingleProductTemplate->render_block_template, Automattic\\WooCommerce\\Blocks\\SharedStores\\ProductsStore::load_product, Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Hydration->get_rest_api_response_data, Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Hydration->get_response_from_controller, call_user_func_array, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\ProductsById->get_route_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->prepare_item_for_response, Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\ProductSchema->get_item_response, WC_Product_Variable->is_on_sale, WC_Product_Variable->get_variation_prices, WC_Data_Store->__call, WC_Product_Variable_Data_Store_CPT->read_price_data, set_transient, update_option"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0005731582641601562,
+            "sql": "SELECT t.term_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('wp_theme') AND t.name IN ('twentytwentyfive') LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\BlockPatterns->register_block_patterns, Automattic\\WooCommerce\\Blocks\\BlockPatterns->load_pattern_content, include('/plugins/woocommerce/patterns/coming-soon-entire-site.php'), Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonTemplate::get_font_families, wp_get_global_settings, WP_Theme_JSON_Resolver::get_merged_data, WP_Theme_JSON_Resolver::get_user_data, WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles, WP_Query->query, WP_Query->get_posts, WP_Tax_Query->get_sql, WP_Tax_Query->get_sql_clauses, WP_Tax_Query->get_sql_for_query, WP_Tax_Query->get_sql_for_clause, WP_Tax_Query->clean_query, WP_Tax_Query->transform_query, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0005190372467041016,
+            "sql": "SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_name IN ('mini-cart') AND ( 0 = 1 ) AND wp_posts.post_type = 'wp_template_part' AND ((wp_posts.post_status = 'publish' OR wp_posts.post_status = 'draft' OR wp_posts.post_status = 'trash' OR wp_posts.post_status = 'auto-draft')) GROUP BY wp_posts.ID ORDER BY wp_posts.post_date DESC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, Automattic\\WooCommerce\\Blocks\\BlockTemplatesController->render_woocommerce_template_part, render_block_core_template_part, do_blocks, render_block, WP_Block->render, render_block_core_pattern, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, WP_Block->render, WP_Block->render, Automattic\\WooCommerce\\Blocks\\BlockTypes\\AbstractBlock->render_callback, Automattic\\WooCommerce\\Blocks\\BlockTypes\\MiniCart->render, Automattic\\WooCommerce\\Blocks\\BlockTypes\\MiniCart->render_experimental_iapi_mini_cart, Automattic\\WooCommerce\\Blocks\\BlockTypes\\MiniCart->get_template_part_contents, get_block_template, WP_Query->__construct, WP_Query->query, WP_Query->get_posts"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00038170814514160156,
+            "sql": "SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.post_name IN ('header') AND ( 0 = 1 ) AND wp_posts.post_type = 'wp_template_part' AND ((wp_posts.post_status = 'publish')) GROUP BY wp_posts.ID ORDER BY wp_posts.post_date DESC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, Automattic\\WooCommerce\\Blocks\\BlockTemplatesController->render_woocommerce_template_part, render_block_core_template_part, WP_Query->__construct, WP_Query->query, WP_Query->get_posts"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0003590583801269531,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 5 LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00034809112548828125,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler/migration_hook' AND p.post_status IN ('in-progress') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00031304359436035156,
+            "sql": "SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.ID NOT IN (0) AND ( 0 = 1 ) AND ((wp_posts.post_type = 'wp_template' AND (wp_posts.post_status = 'publish'))) GROUP BY wp_posts.ID ORDER BY wp_posts.post_date DESC",
+            "caller": "require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), do_action('template_redirect'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Templates\\SingleProductTemplate->render_block_template, get_block_templates, apply_filters('get_block_templates'), WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\BlockTemplatesController->add_db_templates_with_woo_slug, Automattic\\WooCommerce\\Blocks\\Utils\\BlockTemplateUtils::get_block_templates_from_db, WP_Query->__construct, WP_Query->query, WP_Query->get_posts"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0003082752227783203,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler/migration_hook' AND a.status IN ('in-progress') ORDER BY a.scheduled_date_gmt ASC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002818107604980469,
+            "sql": "SELECT a.*, g.slug AS `group` FROM wp_actionscheduler_actions a LEFT JOIN wp_actionscheduler_groups g ON a.group_id=g.group_id WHERE a.action_id=5",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_HybridStore->fetch_action, ActionScheduler_HybridStore->get_store_from_action_id, ActionScheduler_DBStore->fetch_action"
+          },
+          {
+            "count": 1,
+            "seconds": 0.024276018142700195,
+            "sql": "SELECT tax_rates.*, COUNT( locations.location_id ) as postcode_count, COUNT( locations2.location_id ) as city_count FROM wp_woocommerce_tax_rates as tax_rates LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations ON tax_rates.tax_rate_id = locations.tax_rate_id LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations2 ON tax_rates.tax_rate_id = locations2.tax_rate_id WHERE 1=1 AND tax_rate_country IN ( 'US', '' ) AND tax_rate_state IN ( 'CA', '' ) AND tax_rate_class = '' AND ( ( l",
+            "caller": "require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), do_action('template_redirect'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Templates\\SingleProductTemplate->render_block_template, Automattic\\WooCommerce\\Blocks\\SharedStores\\ProductsStore::load_product, Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Hydration->get_rest_api_response_data, Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Hydration->get_response_from_controller, call_user_func_array, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\ProductsById->get_route_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->prepare_item_for_response, Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\ProductSchema->get_item_response, WC_Product_Variable->is_on_sale, WC_Product_Variable->get_variation_prices, WC_Data_Store->__call, WC_Product_Variable_Data_Store_CPT->read_price_data, WC_Product_Variable_Data_Store_CPT->taxes_influence_price, WC_Tax::get_rates, WC_Tax::get_rates_from_location, WC_Tax::find_rates, WC_Tax::get_matched_tax_rates"
+          },
+          {
+            "count": 1,
+            "seconds": 0.01044321060180664,
+            "sql": "SELECT tax_rate_id, location_code FROM wp_woocommerce_tax_rate_locations WHERE location_type = 'postcode' AND location_code LIKE '%...%';",
+            "caller": "require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), do_action('template_redirect'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Templates\\SingleProductTemplate->render_block_template, Automattic\\WooCommerce\\Blocks\\SharedStores\\ProductsStore::load_product, Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Hydration->get_rest_api_response_data, Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Hydration->get_response_from_controller, call_user_func_array, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\ProductsById->get_route_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->prepare_item_for_response, Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\ProductSchema->get_item_response, WC_Product_Variable->is_on_sale, WC_Product_Variable->get_variation_prices, WC_Data_Store->__call, WC_Product_Variable_Data_Store_CPT->read_price_data, WC_Product_Variable_Data_Store_CPT->taxes_influence_price, WC_Tax::get_rates, WC_Tax::get_rates_from_location, WC_Tax::find_rates, WC_Tax::get_matched_tax_rates"
+          },
+          {
+            "count": 1,
+            "seconds": 0.009101152420043945,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (6015,6016,6017,6018,6019,6020,6021,6022,6023,6024,6025,6026,6027,6028,6029,6030,6031,6032,6033,6034,6035,6036,6037,6038,6039,6040,6041,6042,6043,6044,6045,6046,6047,6048,6049,6050,6051,6052,6053,6054,6055,6056,6057,6058,6059,6060,6061,6062,6063,6064,6065,6066,6067,6068,6069,6070,6071,6072,6073,6074,6075,6076,6077,6078,6079,6080,6081,6082,6083,6084,6085,6086,6087,6088,6089,6090,6091,6092,6093,6094,6095,6096,6097,6098,6099,610",
+            "caller": "require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), do_action('template_redirect'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Templates\\SingleProductTemplate->render_block_template, Automattic\\WooCommerce\\Blocks\\SharedStores\\ProductsStore::load_product, Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Hydration->get_rest_api_response_data, Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Hydration->get_response_from_controller, call_user_func_array, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\ProductsById->get_route_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->prepare_item_for_response, Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\ProductSchema->get_item_response, Automattic\\WooCommerce\\Blocks\\Utils\\ProductAvailabilityUtils::get_product_availability, WC_Product_Variable->has_purchasable_variations, _prime_post_caches, update_postmeta_cache, update_meta_cache"
+          },
+          {
+            "count": 1,
+            "seconds": 0.005957126617431641,
+            "sql": "UPDATE `wp_options` SET `option_value` = '{\\\"f9e544f77b7eac7add281ef28ca5559f\\\":{\\\"price\\\":{\\\"6015\\\":\\\"20.00\\\",\\\"6016\\\":\\\"21.00\\\",\\\"6017\\\":\\\"22.00\\\",\\\"6018\\\":\\\"23.00\\\",\\\"6019\\\":\\\"24.00\\\",\\\"6020\\\":\\\"25.00\\\",\\\"6021\\\":\\\"26.00\\\",\\\"6022\\\":\\\"27.00\\\",\\\"6023\\\":\\\"28.00\\\",\\\"6024\\\":\\\"29.00\\\",\\\"6025\\\":\\\"30.00\\\",\\\"6026\\\":\\\"31.00\\\",\\\"6027\\\":\\\"32.00\\\",\\\"6028\\\":\\\"33.00\\\",\\\"6029\\\":\\\"34.00\\\",\\\"6030\\\":\\\"35.00\\\",\\\"6031\\\":\\\"36.00\\\",\\\"6032\\\":\\\"37.00\\\",\\\"6033\\\":\\\"38.00\\\",\\\"6034\\\":\\\"39.00\\\",\\\"6035\\\":\\\"40.00\\\",\\\"6036\\\":",
+            "caller": "require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), do_action('template_redirect'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Templates\\SingleProductTemplate->render_block_template, Automattic\\WooCommerce\\Blocks\\SharedStores\\ProductsStore::load_product, Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Hydration->get_rest_api_response_data, Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Hydration->get_response_from_controller, call_user_func_array, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\ProductsById->get_route_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->prepare_item_for_response, Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\ProductSchema->get_item_response, WC_Product_Variable->is_on_sale, WC_Product_Variable->get_variation_prices, WC_Data_Store->__call, WC_Product_Variable_Data_Store_CPT->read_price_data, set_transient, update_option"
+          },
+          {
+            "count": 1,
+            "seconds": 0.002452850341796875,
+            "sql": "SELECT wp_posts.* FROM wp_posts WHERE ID IN (6015,6016,6017,6018,6019,6020,6021,6022,6023,6024,6025,6026,6027,6028,6029,6030,6031,6032,6033,6034,6035,6036,6037,6038,6039,6040,6041,6042,6043,6044,6045,6046,6047,6048,6049,6050,6051,6052,6053,6054,6055,6056,6057,6058,6059,6060,6061,6062,6063,6064,6065,6066,6067,6068,6069,6070,6071,6072,6073,6074,6075,6076,6077,6078,6079,6080,6081,6082,6083,6084,6085,6086,6087,6088,6089,6090,6091,6092,6093,6094,6095,6096,6097,6098,6099,6100,6101,6102,6103,6104,6105,",
+            "caller": "require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), do_action('template_redirect'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Templates\\SingleProductTemplate->render_block_template, Automattic\\WooCommerce\\Blocks\\SharedStores\\ProductsStore::load_product, Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Hydration->get_rest_api_response_data, Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Hydration->get_response_from_controller, call_user_func_array, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\ProductsById->get_route_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->prepare_item_for_response, Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\ProductSchema->get_item_response, Automattic\\WooCommerce\\Blocks\\Utils\\ProductAvailabilityUtils::get_product_availability, WC_Product_Variable->has_purchasable_variations, _prime_post_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.002086162567138672,
+            "sql": "SELECT meta_value FROM wp_postmeta WHERE meta_key = 'attribute_pa_size' AND post_id IN (6015,6016,6017,6018,6019,6020,6021,6022,6023,6024,6025,6026,6027,6028,6029,6030,6031,6032,6033,6034,6035,6036,6037,6038,6039,6040,6041,6042,6043,6044,6045,6046,6047,6048,6049,6050,6051,6052,6053,6054,6055,6056,6057,6058,6059,6060,6061,6062,6063,6064,6065,6066,6067,6068,6069,6070,6071,6072,6073,6074,6075,6076,6077,6078,6079,6080,6081,6082,6083,6084,6085,6086,6087,6088,6089,6090,6091,6092,6093,6094,6095,6096,60",
+            "caller": "require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, WP_Block->render, WP_Block->render, Automattic\\WooCommerce\\Blocks\\BlockTypes\\AbstractBlock->render_callback, Automattic\\WooCommerce\\Blocks\\BlockTypes\\AddToCartForm->render, do_action('woocommerce_variable_add_to_cart'), WP_Hook->do_action, WP_Hook->apply_filters, woocommerce_variable_add_to_cart, WC_Product_Variable->get_variation_attributes, WC_Data_Store->__call, WC_Product_Variable_Data_Store_CPT->read_variation_attributes"
+          }
+        ],
+        "timestamp_gmt": "2026-07-02T10:41:27+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31",
+        "xhprof": {
+          "profiled": true,
+          "edge_count": 13265,
+          "top_inclusive": [
+            {
+              "function": "WP_Hook::do_action",
+              "ct": 52,
+              "wt_ms": 3036.771,
+              "cpu_ms": 2920.322,
+              "self_wt_ms": 0.801,
+              "self_cpu_ms": 0,
+              "memory_kb": 20331.8,
+              "peak_kb": 26617.1
+            },
+            {
+              "function": "do_action",
+              "ct": 194,
+              "wt_ms": 3031.068,
+              "cpu_ms": 2916.605,
+              "self_wt_ms": 0.09,
+              "self_cpu_ms": 0.992,
+              "memory_kb": 20742.9,
+              "peak_kb": 26611.9
+            },
+            {
+              "function": "get_the_block_template_html",
+              "ct": 1,
+              "wt_ms": 2326.987,
+              "cpu_ms": 2292.625,
+              "self_wt_ms": 0.33,
+              "self_cpu_ms": 0,
+              "memory_kb": 6889.6,
+              "peak_kb": 6516.2
+            },
+            {
+              "function": "do_blocks",
+              "ct": 5,
+              "wt_ms": 2326.523,
+              "cpu_ms": 2291.952,
+              "self_wt_ms": 0.239,
+              "self_cpu_ms": 0,
+              "memory_kb": 6317.9,
+              "peak_kb": 6516.2
+            },
+            {
+              "function": "render_block",
+              "ct": 10,
+              "wt_ms": 2326.018,
+              "cpu_ms": 2290.96,
+              "self_wt_ms": 0.308,
+              "self_cpu_ms": 0,
+              "memory_kb": 7070.7,
+              "peak_kb": 6516.2
+            },
+            {
+              "function": "WP_Block::render",
+              "ct": 10,
+              "wt_ms": 2325.296,
+              "cpu_ms": 2290.515,
+              "self_wt_ms": 0.56,
+              "self_cpu_ms": 0,
+              "memory_kb": 7034.1,
+              "peak_kb": 6516.2
+            },
+            {
+              "function": "WP_Block::render@1",
+              "ct": 7,
+              "wt_ms": 2318.062,
+              "cpu_ms": 2284.388,
+              "self_wt_ms": 0.634,
+              "self_cpu_ms": 0,
+              "memory_kb": 4966.3,
+              "peak_kb": 6516.2
+            },
+            {
+              "function": "WP_Block::render@2",
+              "ct": 14,
+              "wt_ms": 2301.549,
+              "cpu_ms": 2269.536,
+              "self_wt_ms": 0.724,
+              "self_cpu_ms": 0,
+              "memory_kb": 4821.4,
+              "peak_kb": 6516.2
+            },
+            {
+              "function": "WP_Block::render@3",
+              "ct": 14,
+              "wt_ms": 2285.746,
+              "cpu_ms": 2254.913,
+              "self_wt_ms": 0.915,
+              "self_cpu_ms": 0.988,
+              "memory_kb": 4805.7,
+              "peak_kb": 6516.2
+            },
+            {
+              "function": "WP_Block::render@4",
+              "ct": 14,
+              "wt_ms": 2279.879,
+              "cpu_ms": 2248.133,
+              "self_wt_ms": 0.654,
+              "self_cpu_ms": 1.99,
+              "memory_kb": 4698.3,
+              "peak_kb": 6516.2
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Blocks\\BlockTypes\\AbstractBlock::render_callback",
+              "ct": 25,
+              "wt_ms": 2259.088,
+              "cpu_ms": 2227.504,
+              "self_wt_ms": 0.219,
+              "self_cpu_ms": 0,
+              "memory_kb": 3534.2,
+              "peak_kb": 6470.4
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Blocks\\BlockTypes\\AddToCartForm::render",
+              "ct": 1,
+              "wt_ms": 2195.696,
+              "cpu_ms": 2175.358,
+              "self_wt_ms": 0.07,
+              "self_cpu_ms": 0,
+              "memory_kb": 3435.5,
+              "peak_kb": 5855.8
+            },
+            {
+              "function": "woocommerce_variable_add_to_cart",
+              "ct": 1,
+              "wt_ms": 2193.177,
+              "cpu_ms": 2173.378,
+              "self_wt_ms": 0.255,
+              "self_cpu_ms": 0.995,
+              "memory_kb": 1922.6,
+              "peak_kb": 5855.8
+            },
+            {
+              "function": "WC_Product_Variable::get_available_variations",
+              "ct": 1,
+              "wt_ms": 2176.913,
+              "cpu_ms": 2160.496,
+              "self_wt_ms": 2.888,
+              "self_cpu_ms": 2.982,
+              "memory_kb": 2390.4,
+              "peak_kb": 2164.4
+            },
+            {
+              "function": "WC_Product_Variable::get_variation_prices",
+              "ct": 1615,
+              "wt_ms": 1950.053,
+              "cpu_ms": 1875.088,
+              "self_wt_ms": 5.62,
+              "self_cpu_ms": 2.98,
+              "memory_kb": 198334.7,
+              "peak_kb": 5757.8
+            },
+            {
+              "function": "WC_Product_Variable::get_available_variation",
+              "ct": 800,
+              "wt_ms": 1637.129,
+              "cpu_ms": 1625.058,
+              "self_wt_ms": 15.277,
+              "self_cpu_ms": 7.946,
+              "memory_kb": 2351.6,
+              "peak_kb": 2164.4
+            },
+            {
+              "function": "WC_Product_Variable::get_variation_sale_price",
+              "ct": 1603,
+              "wt_ms": 1289.338,
+              "cpu_ms": 1285.946,
+              "self_wt_ms": 3.683,
+              "self_cpu_ms": 1.988,
+              "memory_kb": 194023.9,
+              "peak_kb": 2205.9
+            },
+            {
+              "function": "wc_get_product",
+              "ct": 1613,
+              "wt_ms": 1067.627,
+              "cpu_ms": 1045.136,
+              "self_wt_ms": 2.689,
+              "self_cpu_ms": 2.11,
+              "memory_kb": 21328.8,
+              "peak_kb": 489.5
+            },
+            {
+              "function": "WC_Product_Factory::get_product",
+              "ct": 1613,
+              "wt_ms": 1063.107,
+              "cpu_ms": 1040.042,
+              "self_wt_ms": 5.08,
+              "self_cpu_ms": 4.144,
+              "memory_kb": 21397,
+              "peak_kb": 489
+            },
+            {
+              "function": "WC_Product_Variable::sort_variation_prices",
+              "ct": 4845,
+              "wt_ms": 1009.07,
+              "cpu_ms": 1011.153,
+              "self_wt_ms": 5.655,
+              "self_cpu_ms": 6.464,
+              "memory_kb": 194217.5,
+              "peak_kb": 1623.9
+            },
+            {
+              "function": "asort",
+              "ct": 4845,
+              "wt_ms": 1003.415,
+              "cpu_ms": 1004.689,
+              "self_wt_ms": 1003.415,
+              "self_cpu_ms": 1004.689,
+              "memory_kb": 194065.5,
+              "peak_kb": 1623.9
+            },
+            {
+              "function": "WC_Data_Store::__call",
+              "ct": 2433,
+              "wt_ms": 950.163,
+              "cpu_ms": 868.904,
+              "self_wt_ms": 5.674,
+              "self_cpu_ms": 0,
+              "memory_kb": 4388.6,
+              "peak_kb": 4753
+            },
+            {
+              "function": "WC_Product::__construct",
+              "ct": 1613,
+              "wt_ms": 941.381,
+              "cpu_ms": 922.398,
+              "self_wt_ms": 4.484,
+              "self_cpu_ms": 0.99,
+              "memory_kb": 15671.5,
+              "peak_kb": 488.5
+            },
+            {
+              "function": "WC_Product_Variable_Data_Store_CPT::read_price_data",
+              "ct": 1615,
+              "wt_ms": 930.02,
+              "cpu_ms": 860.955,
+              "self_wt_ms": 8.305,
+              "self_cpu_ms": 6.152,
+              "memory_kb": 6311.6,
+              "peak_kb": 4133.9
+            },
+            {
+              "function": "WC_Product_Variation::__construct",
+              "ct": 1601,
+              "wt_ms": 923.036,
+              "cpu_ms": 907.778,
+              "self_wt_ms": 1.55,
+              "self_cpu_ms": 1.988,
+              "memory_kb": 19486.3,
+              "peak_kb": 0
+            },
+            {
+              "function": "WC_Product_Simple::__construct",
+              "ct": 1601,
+              "wt_ms": 921.486,
+              "cpu_ms": 905.79,
+              "self_wt_ms": 0.915,
+              "self_cpu_ms": 0.993,
+              "memory_kb": 15395.6,
+              "peak_kb": 0
+            },
+            {
+              "function": "WC_Data_Store::read",
+              "ct": 1614,
+              "wt_ms": 921.09,
+              "cpu_ms": 902.93,
+              "self_wt_ms": 1.161,
+              "self_cpu_ms": 0.843,
+              "memory_kb": 11048.1,
+              "peak_kb": 538.9
+            },
+            {
+              "function": "WC_Product_Variation_Data_Store_CPT::read",
+              "ct": 1601,
+              "wt_ms": 898.8,
+              "cpu_ms": 884.486,
+              "self_wt_ms": 13.929,
+              "self_cpu_ms": 7.522,
+              "memory_kb": 11266.1,
+              "peak_kb": 0
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Blocks\\Templates\\SingleProductTemplate::render_block_template",
+              "ct": 1,
+              "wt_ms": 712.666,
+              "cpu_ms": 623.987,
+              "self_wt_ms": 0.02,
+              "self_cpu_ms": 0,
+              "memory_kb": 8287.3,
+              "peak_kb": 11903.8
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Hydration::get_rest_api_response_data",
+              "ct": 2,
+              "wt_ms": 708.798,
+              "cpu_ms": 620.522,
+              "self_wt_ms": 0.032,
+              "self_cpu_ms": 0,
+              "memory_kb": 7945.2,
+              "peak_kb": 11144.5
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Hydration::get_response_from_controller",
+              "ct": 2,
+              "wt_ms": 708.277,
+              "cpu_ms": 620.522,
+              "self_wt_ms": 0.028,
+              "self_cpu_ms": 0,
+              "memory_kb": 7890,
+              "peak_kb": 11144.5
+            },
+            {
+              "function": "call_user_func_array",
+              "ct": 7,
+              "wt_ms": 707.335,
+              "cpu_ms": 619.529,
+              "self_wt_ms": 0.006,
+              "self_cpu_ms": 0,
+              "memory_kb": 7825.6,
+              "peak_kb": 11065.8
+            },
+            {
+              "function": "Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute::get_response_by_request_method",
+              "ct": 2,
+              "wt_ms": 707.068,
+              "cpu_ms": 619.529,
+              "self_wt_ms": 0.018,
+              "self_cpu_ms": 0,
+              "memory_kb": 7762.4,
+              "peak_kb": 11065.8
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Blocks\\SharedStores\\ProductsStore::load_product",
+              "ct": 1,
+              "wt_ms": 702.26,
+              "cpu_ms": 613.959,
+              "self_wt_ms": 0.014,
+              "self_cpu_ms": 0,
+              "memory_kb": 7554.5,
+              "peak_kb": 11144.5
+            },
+            {
+              "function": "Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute::get_response",
+              "ct": 1,
+              "wt_ms": 701.559,
+              "cpu_ms": 613.959,
+              "self_wt_ms": 0.002,
+              "self_cpu_ms": 0,
+              "memory_kb": 7462.2,
+              "peak_kb": 11065.8
+            },
+            {
+              "function": "Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\ProductsById::get_route_response",
+              "ct": 1,
+              "wt_ms": 701.542,
+              "cpu_ms": 613.959,
+              "self_wt_ms": 0.01,
+              "self_cpu_ms": 0,
+              "memory_kb": 7706.7,
+              "peak_kb": 11065.8
+            },
+            {
+              "function": "Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute::prepare_item_for_response",
+              "ct": 1,
+              "wt_ms": 699.81,
+              "cpu_ms": 611.972,
+              "self_wt_ms": 0.007,
+              "self_cpu_ms": 0,
+              "memory_kb": 7684.1,
+              "peak_kb": 11065.8
+            },
+            {
+              "function": "Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\ProductSchema::get_item_response",
+              "ct": 1,
+              "wt_ms": 699.693,
+              "cpu_ms": 611.972,
+              "self_wt_ms": 0.083,
+              "self_cpu_ms": 0,
+              "memory_kb": 7666.7,
+              "peak_kb": 11065.8
+            },
+            {
+              "function": "WC_Product_Variable::is_on_sale",
+              "ct": 5,
+              "wt_ms": 654.876,
+              "cpu_ms": 581.227,
+              "self_wt_ms": 0.042,
+              "self_cpu_ms": 0,
+              "memory_kb": 3102.9,
+              "peak_kb": 3543.8
+            },
+            {
+              "function": "WC_Product_Variation_Data_Store_CPT::read_product_data",
+              "ct": 1601,
+              "wt_ms": 397.206,
+              "cpu_ms": 372.658,
+              "self_wt_ms": 40.244,
+              "self_cpu_ms": 31.073,
+              "memory_kb": 10287.7,
+              "peak_kb": 0
+            }
+          ],
+          "top_self": [
+            {
+              "function": "asort",
+              "ct": 4845,
+              "wt_ms": 1003.415,
+              "cpu_ms": 1004.689,
+              "self_wt_ms": 1003.415,
+              "self_cpu_ms": 1004.689,
+              "memory_kb": 194065.5,
+              "peak_kb": 1623.9
+            },
+            {
+              "function": "mysqli_query",
+              "ct": 212,
+              "wt_ms": 113.173,
+              "cpu_ms": 90.753,
+              "self_wt_ms": 113.173,
+              "self_cpu_ms": 90.753,
+              "memory_kb": 4807.4,
+              "peak_kb": 375.9
+            },
+            {
+              "function": "sanitize_title_with_dashes",
+              "ct": 16309,
+              "wt_ms": 173.768,
+              "cpu_ms": 184.037,
+              "self_wt_ms": 70.598,
+              "self_cpu_ms": 70.378,
+              "memory_kb": 292,
+              "peak_kb": 12
+            },
+            {
+              "function": "WC_Data::get_prop",
+              "ct": 85787,
+              "wt_ms": 67.855,
+              "cpu_ms": 81.362,
+              "self_wt_ms": 53.715,
+              "self_cpu_ms": 63.493,
+              "memory_kb": 39.2,
+              "peak_kb": 0.1
+            },
+            {
+              "function": "WC_Product_Variation_Data_Store_CPT::read_product_data",
+              "ct": 1601,
+              "wt_ms": 397.206,
+              "cpu_ms": 372.658,
+              "self_wt_ms": 40.244,
+              "self_cpu_ms": 31.073,
+              "memory_kb": 10287.7,
+              "peak_kb": 0
+            },
+            {
+              "function": "trim",
+              "ct": 380918,
+              "wt_ms": 38.093,
+              "cpu_ms": 60.813,
+              "self_wt_ms": 38.093,
+              "self_cpu_ms": 60.813,
+              "memory_kb": 5226.1,
+              "peak_kb": 25.3
+            },
+            {
+              "function": "sanitize_title",
+              "ct": 16303,
+              "wt_ms": 226.883,
+              "cpu_ms": 245.126,
+              "self_wt_ms": 35.907,
+              "self_cpu_ms": 37.877,
+              "memory_kb": 295.5,
+              "peak_kb": 6.5
+            },
+            {
+              "function": "WC_Data::set_props",
+              "ct": 3238,
+              "wt_ms": 214.917,
+              "cpu_ms": 203.226,
+              "self_wt_ms": 35.513,
+              "self_cpu_ms": 25.21,
+              "memory_kb": 5442.6,
+              "peak_kb": 43.2
+            },
+            {
+              "function": "utf8_uri_encode",
+              "ct": 16309,
+              "wt_ms": 52.041,
+              "cpu_ms": 45.936,
+              "self_wt_ms": 32.408,
+              "self_cpu_ms": 21.353,
+              "memory_kb": 263.8,
+              "peak_kb": 5.1
+            },
+            {
+              "function": "WP_Term_Query::get_terms",
+              "ct": 1617,
+              "wt_ms": 210.383,
+              "cpu_ms": 232.203,
+              "self_wt_ms": 31.29,
+              "self_cpu_ms": 20.566,
+              "memory_kb": 8379.4,
+              "peak_kb": 608.2
+            },
+            {
+              "function": "wc_get_price_decimal_separator",
+              "ct": 12852,
+              "wt_ms": 35.12,
+              "cpu_ms": 28.998,
+              "self_wt_ms": 29.722,
+              "self_cpu_ms": 25.02,
+              "memory_kb": 406.3,
+              "peak_kb": 2.5
+            },
+            {
+              "function": "array_map",
+              "ct": 38059,
+              "wt_ms": 106.631,
+              "cpu_ms": 113.891,
+              "self_wt_ms": 29.575,
+              "self_cpu_ms": 30.891,
+              "memory_kb": 8928.4,
+              "peak_kb": 806.1
+            },
+            {
+              "function": "WC_Customer::get_taxable_address",
+              "ct": 3230,
+              "wt_ms": 77.994,
+              "cpu_ms": 86.666,
+              "self_wt_ms": 28.153,
+              "self_cpu_ms": 24.219,
+              "memory_kb": 697.3,
+              "peak_kb": 0
+            },
+            {
+              "function": "preg_replace",
+              "ct": 134555,
+              "wt_ms": 25.547,
+              "cpu_ms": 40.151,
+              "self_wt_ms": 25.547,
+              "self_cpu_ms": 40.151,
+              "memory_kb": 751.9,
+              "peak_kb": 18.8
+            },
+            {
+              "function": "WP_Post::get_instance",
+              "ct": 23402,
+              "wt_ms": 48.006,
+              "cpu_ms": 47.13,
+              "self_wt_ms": 22.599,
+              "self_cpu_ms": 24.589,
+              "memory_kb": 27763.7,
+              "peak_kb": 20.2
+            },
+            {
+              "function": "Automattic\\WooCommerce\\Internal\\Features\\FeaturesController::feature_is_enabled",
+              "ct": 4838,
+              "wt_ms": 34.728,
+              "cpu_ms": 40.947,
+              "self_wt_ms": 22.057,
+              "self_cpu_ms": 17.653,
+              "memory_kb": 19.5,
+              "peak_kb": 39.4
+            },
+            {
+              "function": "str_replace",
+              "ct": 160412,
+              "wt_ms": 21.06,
+              "cpu_ms": 26.779,
+              "self_wt_ms": 21.06,
+              "self_cpu_ms": 26.779,
+              "memory_kb": 491.6,
+              "peak_kb": 24.4
+            },
+            {
+              "function": "get_metadata_raw",
+              "ct": 14468,
+              "wt_ms": 28.702,
+              "cpu_ms": 37.147,
+              "self_wt_ms": 20.845,
+              "self_cpu_ms": 21.944,
+              "memory_kb": 1314.7,
+              "peak_kb": 15.9
+            },
+            {
+              "function": "get_post",
+              "ct": 25337,
+              "wt_ms": 70.89,
+              "cpu_ms": 68.506,
+              "self_wt_ms": 19.447,
+              "self_cpu_ms": 17.399,
+              "memory_kb": 10285.4,
+              "peak_kb": 24.2
+            },
+            {
+              "function": "sanitize_term_field",
+              "ct": 40231,
+              "wt_ms": 28.658,
+              "cpu_ms": 30.213,
+              "self_wt_ms": 19.374,
+              "self_cpu_ms": 17.302,
+              "memory_kb": 28.3,
+              "peak_kb": 0
+            },
+            {
+              "function": "WC_Product::managing_stock",
+              "ct": 7213,
+              "wt_ms": 27.773,
+              "cpu_ms": 29.416,
+              "self_wt_ms": 18.008,
+              "self_cpu_ms": 15.855,
+              "memory_kb": 6.7,
+              "peak_kb": 0
+            },
+            {
+              "function": "WP_Post::__construct",
+              "ct": 23408,
+              "wt_ms": 24.921,
+              "cpu_ms": 21.306,
+              "self_wt_ms": 17.769,
+              "self_cpu_ms": 13.367,
+              "memory_kb": 12714.5,
+              "peak_kb": 8.3
+            },
+            {
+              "function": "wc_timezone_offset",
+              "ct": 3226,
+              "wt_ms": 27.199,
+              "cpu_ms": 25.18,
+              "self_wt_ms": 17.006,
+              "self_cpu_ms": 10.786,
+              "memory_kb": 4,
+              "peak_kb": 4.1
+            },
+            {
+              "function": "WC_Product_Variable_Data_Store_CPT::validate_prices_data",
+              "ct": 7,
+              "wt_ms": 24.607,
+              "cpu_ms": 24.768,
+              "self_wt_ms": 16.921,
+              "self_cpu_ms": 14.91,
+              "memory_kb": 142.2,
+              "peak_kb": 116.6
+            },
+            {
+              "function": "wc_tax_enabled",
+              "ct": 8042,
+              "wt_ms": 18.895,
+              "cpu_ms": 12.916,
+              "self_wt_ms": 16.498,
+              "self_cpu_ms": 9.938,
+              "memory_kb": 2.9,
+              "peak_kb": 0
+            },
+            {
+              "function": "WC_Data::set_date_prop",
+              "ct": 6428,
+              "wt_ms": 50.272,
+              "cpu_ms": 41.089,
+              "self_wt_ms": 16.457,
+              "self_cpu_ms": 10.939,
+              "memory_kb": 1043.8,
+              "peak_kb": 9.7
+            },
+            {
+              "function": "WC_Cache_Helper::get_cache_prefix",
+              "ct": 11292,
+              "wt_ms": 28.072,
+              "cpu_ms": 19.009,
+              "self_wt_ms": 15.598,
+              "self_cpu_ms": 4.972,
+              "memory_kb": 2271.1,
+              "peak_kb": 0.8
+            },
+            {
+              "function": "WC_Product_Variable::get_available_variation",
+              "ct": 800,
+              "wt_ms": 1637.129,
+              "cpu_ms": 1625.058,
+              "self_wt_ms": 15.277,
+              "self_cpu_ms": 7.946,
+              "memory_kb": 2351.6,
+              "peak_kb": 2164.4
+            },
+            {
+              "function": "wc_stock_amount",
+              "ct": 5621,
+              "wt_ms": 27.917,
+              "cpu_ms": 36.601,
+              "self_wt_ms": 14.887,
+              "self_cpu_ms": 11.918,
+              "memory_kb": 7.8,
+              "peak_kb": 0
+            },
+            {
+              "function": "WC_Product_Variation_Data_Store_CPT::read",
+              "ct": 1601,
+              "wt_ms": 898.8,
+              "cpu_ms": 884.486,
+              "self_wt_ms": 13.929,
+              "self_cpu_ms": 7.522,
+              "memory_kb": 11266.1,
+              "peak_kb": 0
+            },
+            {
+              "function": "WC_Data_Store::__construct",
+              "ct": 3231,
+              "wt_ms": 30.029,
+              "cpu_ms": 31.049,
+              "self_wt_ms": 13.903,
+              "self_cpu_ms": 8.941,
+              "memory_kb": 8870.9,
+              "peak_kb": 29.1
+            },
+            {
+              "function": "is_numeric",
+              "ct": 151680,
+              "wt_ms": 13.667,
+              "cpu_ms": 23.754,
+              "self_wt_ms": 13.667,
+              "self_cpu_ms": 23.754,
+              "memory_kb": 18.4,
+              "peak_kb": 2.6
+            },
+            {
+              "function": "_sanitize_text_fields",
+              "ct": 8875,
+              "wt_ms": 25.026,
+              "cpu_ms": 21.096,
+              "self_wt_ms": 13.555,
+              "self_cpu_ms": 6.937,
+              "memory_kb": 766.4,
+              "peak_kb": 3.8
+            },
+            {
+              "function": "in_array",
+              "ct": 113053,
+              "wt_ms": 13.159,
+              "cpu_ms": 18.784,
+              "self_wt_ms": 13.159,
+              "self_cpu_ms": 18.784,
+              "memory_kb": 104.4,
+              "peak_kb": 20.6
+            },
+            {
+              "function": "is_callable",
+              "ct": 63343,
+              "wt_ms": 12.424,
+              "cpu_ms": 19.257,
+              "self_wt_ms": 12.424,
+              "self_cpu_ms": 19.257,
+              "memory_kb": 17,
+              "peak_kb": 3.2
+            },
+            {
+              "function": "translate",
+              "ct": 13568,
+              "wt_ms": 15.134,
+              "cpu_ms": 16.224,
+              "self_wt_ms": 11.551,
+              "self_cpu_ms": 11.257,
+              "memory_kb": 30.2,
+              "peak_kb": 130.2
+            },
+            {
+              "function": "sanitize_term",
+              "ct": 5027,
+              "wt_ms": 39.461,
+              "cpu_ms": 37.906,
+              "self_wt_ms": 11.535,
+              "self_cpu_ms": 7.693,
+              "memory_kb": 1.1,
+              "peak_kb": 0
+            },
+            {
+              "function": "array_filter",
+              "ct": 26826,
+              "wt_ms": 17.009,
+              "cpu_ms": 14.174,
+              "self_wt_ms": 11.495,
+              "self_cpu_ms": 8.75,
+              "memory_kb": 3591.4,
+              "peak_kb": 199
+            },
+            {
+              "function": "wc_postcode_location_matcher",
+              "ct": 1,
+              "wt_ms": 23.647,
+              "cpu_ms": 22.848,
+              "self_wt_ms": 11.377,
+              "self_cpu_ms": 4.976,
+              "memory_kb": 5.2,
+              "peak_kb": 5.2
+            },
+            {
+              "function": "wc_get_product_variation_attributes",
+              "ct": 1601,
+              "wt_ms": 132.911,
+              "cpu_ms": 133.193,
+              "self_wt_ms": 11.136,
+              "self_cpu_ms": 6.551,
+              "memory_kb": 2377.6,
+              "peak_kb": 0
+            }
+          ],
+          "top_calls": [
+            {
+              "function": "trim",
+              "ct": 380918,
+              "wt_ms": 38.093,
+              "cpu_ms": 60.813,
+              "self_wt_ms": 38.093,
+              "self_cpu_ms": 60.813,
+              "memory_kb": 5226.1,
+              "peak_kb": 25.3
+            },
+            {
+              "function": "str_replace",
+              "ct": 160412,
+              "wt_ms": 21.06,
+              "cpu_ms": 26.779,
+              "self_wt_ms": 21.06,
+              "self_cpu_ms": 26.779,
+              "memory_kb": 491.6,
+              "peak_kb": 24.4
+            },
+            {
+              "function": "is_numeric",
+              "ct": 151680,
+              "wt_ms": 13.667,
+              "cpu_ms": 23.754,
+              "self_wt_ms": 13.667,
+              "self_cpu_ms": 23.754,
+              "memory_kb": 18.4,
+              "peak_kb": 2.6
+            },
+            {
+              "function": "preg_replace",
+              "ct": 134555,
+              "wt_ms": 25.547,
+              "cpu_ms": 40.151,
+              "self_wt_ms": 25.547,
+              "self_cpu_ms": 40.151,
+              "memory_kb": 751.9,
+              "peak_kb": 18.8
+            },
+            {
+              "function": "in_array",
+              "ct": 113053,
+              "wt_ms": 13.159,
+              "cpu_ms": 18.784,
+              "self_wt_ms": 13.159,
+              "self_cpu_ms": 18.784,
+              "memory_kb": 104.4,
+              "peak_kb": 20.6
+            },
+            {
+              "function": "strtolower",
+              "ct": 86314,
+              "wt_ms": 9.07,
+              "cpu_ms": 14.904,
+              "self_wt_ms": 9.07,
+              "self_cpu_ms": 14.904,
+              "memory_kb": 66.5,
+              "peak_kb": 2.9
+            },
+            {
+              "function": "WC_Data::get_prop",
+              "ct": 85787,
+              "wt_ms": 67.855,
+              "cpu_ms": 81.362,
+              "self_wt_ms": 53.715,
+              "self_cpu_ms": 63.493,
+              "memory_kb": 39.2,
+              "peak_kb": 0.1
+            },
+            {
+              "function": "WC_Product_Variation::get_hook_prefix",
+              "ct": 80011,
+              "wt_ms": 8.007,
+              "cpu_ms": 12.911,
+              "self_wt_ms": 8.007,
+              "self_cpu_ms": 12.911,
+              "memory_kb": 3.4,
+              "peak_kb": 0
+            },
+            {
+              "function": "current",
+              "ct": 67341,
+              "wt_ms": 7.781,
+              "cpu_ms": 9.938,
+              "self_wt_ms": 7.781,
+              "self_cpu_ms": 9.938,
+              "memory_kb": 76.7,
+              "peak_kb": 17.5
+            },
+            {
+              "function": "is_callable",
+              "ct": 63343,
+              "wt_ms": 12.424,
+              "cpu_ms": 19.257,
+              "self_wt_ms": 12.424,
+              "self_cpu_ms": 19.257,
+              "memory_kb": 17,
+              "peak_kb": 3.2
+            },
+            {
+              "function": "WC_Data::set_prop",
+              "ct": 62727,
+              "wt_ms": 9.328,
+              "cpu_ms": 14.358,
+              "self_wt_ms": 9.328,
+              "self_cpu_ms": 14.358,
+              "memory_kb": 4144.5,
+              "peak_kb": 4.6
+            },
+            {
+              "function": "chr",
+              "ct": 55973,
+              "wt_ms": 5.041,
+              "cpu_ms": 4.335,
+              "self_wt_ms": 5.041,
+              "self_cpu_ms": 4.335,
+              "memory_kb": 1,
+              "peak_kb": 0.5
+            },
+            {
+              "function": "ord",
+              "ct": 55970,
+              "wt_ms": 5.169,
+              "cpu_ms": 8.773,
+              "self_wt_ms": 5.169,
+              "self_cpu_ms": 8.773,
+              "memory_kb": 0.5,
+              "peak_kb": 0.5
+            },
+            {
+              "function": "next",
+              "ct": 55327,
+              "wt_ms": 7.576,
+              "cpu_ms": 13.442,
+              "self_wt_ms": 7.576,
+              "self_cpu_ms": 13.442,
+              "memory_kb": 10615.5,
+              "peak_kb": 161.2
+            },
+            {
+              "function": "array_pop",
+              "ct": 50475,
+              "wt_ms": 6.095,
+              "cpu_ms": 9.151,
+              "self_wt_ms": 6.095,
+              "self_cpu_ms": 9.151,
+              "memory_kb": 156.1,
+              "peak_kb": 160.1
+            },
+            {
+              "function": "array_unshift",
+              "ct": 48288,
+              "wt_ms": 8.258,
+              "cpu_ms": 16.901,
+              "self_wt_ms": 8.258,
+              "self_cpu_ms": 16.901,
+              "memory_kb": 2974,
+              "peak_kb": 114.9
+            },
+            {
+              "function": "sanitize_term_field",
+              "ct": 40231,
+              "wt_ms": 28.658,
+              "cpu_ms": 30.213,
+              "self_wt_ms": 19.374,
+              "self_cpu_ms": 17.302,
+              "memory_kb": 28.3,
+              "peak_kb": 0
+            },
+            {
+              "function": "preg_match",
+              "ct": 39496,
+              "wt_ms": 9.544,
+              "cpu_ms": 10.697,
+              "self_wt_ms": 9.544,
+              "self_cpu_ms": 10.697,
+              "memory_kb": 1801.8,
+              "peak_kb": 77.7
+            },
+            {
+              "function": "array_map",
+              "ct": 38059,
+              "wt_ms": 106.631,
+              "cpu_ms": 113.891,
+              "self_wt_ms": 29.575,
+              "self_cpu_ms": 30.891,
+              "memory_kb": 8928.4,
+              "peak_kb": 806.1
+            },
+            {
+              "function": "get_object_vars",
+              "ct": 37298,
+              "wt_ms": 8.767,
+              "cpu_ms": 11.865,
+              "self_wt_ms": 8.767,
+              "self_cpu_ms": 11.865,
+              "memory_kb": 25428.4,
+              "peak_kb": 8.3
+            },
+            {
+              "function": "abs",
+              "ct": 36551,
+              "wt_ms": 3.41,
+              "cpu_ms": 8.947,
+              "self_wt_ms": 3.41,
+              "self_cpu_ms": 8.947,
+              "memory_kb": 21.5,
+              "peak_kb": 2.8
+            },
+            {
+              "function": "array_intersect",
+              "ct": 34662,
+              "wt_ms": 8.361,
+              "cpu_ms": 6.85,
+              "self_wt_ms": 8.361,
+              "self_cpu_ms": 6.85,
+              "memory_kb": 6820.9,
+              "peak_kb": 13.4
+            },
+            {
+              "function": "mbstring_binary_safe_encoding",
+              "ct": 32626,
+              "wt_ms": 4.068,
+              "cpu_ms": 5.509,
+              "self_wt_ms": 4.067,
+              "self_cpu_ms": 5.509,
+              "memory_kb": 3.3,
+              "peak_kb": 2.7
+            },
+            {
+              "function": "explode",
+              "ct": 28630,
+              "wt_ms": 4.476,
+              "cpu_ms": 14.914,
+              "self_wt_ms": 4.476,
+              "self_cpu_ms": 14.914,
+              "memory_kb": 7250.3,
+              "peak_kb": 43.5
+            },
+            {
+              "function": "array_merge",
+              "ct": 28275,
+              "wt_ms": 6.633,
+              "cpu_ms": 3.97,
+              "self_wt_ms": 6.633,
+              "self_cpu_ms": 3.97,
+              "memory_kb": 23068,
+              "peak_kb": 605
+            },
+            {
+              "function": "strpos",
+              "ct": 28257,
+              "wt_ms": 3.251,
+              "cpu_ms": 4.973,
+              "self_wt_ms": 3.251,
+              "self_cpu_ms": 4.973,
+              "memory_kb": 69.5,
+              "peak_kb": 17.2
+            },
+            {
+              "function": "array_filter",
+              "ct": 26826,
+              "wt_ms": 17.009,
+              "cpu_ms": 14.174,
+              "self_wt_ms": 11.495,
+              "self_cpu_ms": 8.75,
+              "memory_kb": 3591.4,
+              "peak_kb": 199
+            },
+            {
+              "function": "is_string",
+              "ct": 26690,
+              "wt_ms": 2.641,
+              "cpu_ms": 7.95,
+              "self_wt_ms": 2.641,
+              "self_cpu_ms": 7.95,
+              "memory_kb": 8,
+              "peak_kb": 1.4
+            },
+            {
+              "function": "preg_quote",
+              "ct": 26475,
+              "wt_ms": 2.94,
+              "cpu_ms": 4.965,
+              "self_wt_ms": 2.94,
+              "self_cpu_ms": 4.965,
+              "memory_kb": 44.4,
+              "peak_kb": 0.2
+            },
+            {
+              "function": "intval",
+              "ct": 25868,
+              "wt_ms": 2.707,
+              "cpu_ms": 4.969,
+              "self_wt_ms": 2.707,
+              "self_cpu_ms": 4.969,
+              "memory_kb": 3.8,
+              "peak_kb": 0.2
+            },
+            {
+              "function": "get_post",
+              "ct": 25337,
+              "wt_ms": 70.89,
+              "cpu_ms": 68.506,
+              "self_wt_ms": 19.447,
+              "self_cpu_ms": 17.399,
+              "memory_kb": 10285.4,
+              "peak_kb": 24.2
+            },
+            {
+              "function": "WP_Post::filter",
+              "ct": 25337,
+              "wt_ms": 3.315,
+              "cpu_ms": 3.977,
+              "self_wt_ms": 3.315,
+              "self_cpu_ms": 3.977,
+              "memory_kb": 0.5,
+              "peak_kb": 0
+            },
+            {
+              "function": "WooCommerce::instance",
+              "ct": 24588,
+              "wt_ms": 8.814,
+              "cpu_ms": 11.548,
+              "self_wt_ms": 3.525,
+              "self_cpu_ms": 6.951,
+              "memory_kb": 1330.1,
+              "peak_kb": 235.9
+            },
+            {
+              "function": "WC",
+              "ct": 24588,
+              "wt_ms": 17.406,
+              "cpu_ms": 18.496,
+              "self_wt_ms": 8.592,
+              "self_cpu_ms": 6.948,
+              "memory_kb": 1363.4,
+              "peak_kb": 240.2
+            },
+            {
+              "function": "mb_check_encoding",
+              "ct": 23922,
+              "wt_ms": 3.824,
+              "cpu_ms": 4.964,
+              "self_wt_ms": 3.824,
+              "self_cpu_ms": 4.964,
+              "memory_kb": 8,
+              "peak_kb": 1.1
+            },
+            {
+              "function": "wp_is_valid_utf8",
+              "ct": 23710,
+              "wt_ms": 11.404,
+              "cpu_ms": 13.994,
+              "self_wt_ms": 8.051,
+              "self_cpu_ms": 9.03,
+              "memory_kb": 1.7,
+              "peak_kb": 1.7
+            },
+            {
+              "function": "WP_Post::__construct",
+              "ct": 23408,
+              "wt_ms": 24.921,
+              "cpu_ms": 21.306,
+              "self_wt_ms": 17.769,
+              "self_cpu_ms": 13.367,
+              "memory_kb": 12714.5,
+              "peak_kb": 8.3
+            },
+            {
+              "function": "WP_Post::get_instance",
+              "ct": 23402,
+              "wt_ms": 48.006,
+              "cpu_ms": 47.13,
+              "self_wt_ms": 22.599,
+              "self_cpu_ms": 24.589,
+              "memory_kb": 27763.7,
+              "peak_kb": 20.2
+            },
+            {
+              "function": "WC_Data::get_id",
+              "ct": 22620,
+              "wt_ms": 2.78,
+              "cpu_ms": 1.987,
+              "self_wt_ms": 2.78,
+              "self_cpu_ms": 1.987,
+              "memory_kb": 19.9,
+              "peak_kb": 0.3
+            },
+            {
+              "function": "mysqli_fetch_object",
+              "ct": 22416,
+              "wt_ms": 5.28,
+              "cpu_ms": 4.905,
+              "self_wt_ms": 5.28,
+              "self_cpu_ms": 4.905,
+              "memory_kb": 12389.6,
+              "peak_kb": 8600.3
+            }
+          ],
+          "top_edges": [
+            {
+              "edge": "do_action==>WP_Hook::do_action",
+              "parent": "do_action",
+              "child": "WP_Hook::do_action",
+              "ct": 23,
+              "wt_ms": 3030.974,
+              "cpu_ms": 2915.613,
+              "memory_kb": 20687.3,
+              "peak_kb": 26609.1
+            },
+            {
+              "edge": "main()==>get_the_block_template_html",
+              "parent": "main()",
+              "child": "get_the_block_template_html",
+              "ct": 1,
+              "wt_ms": 2326.987,
+              "cpu_ms": 2292.625,
+              "memory_kb": 6889.6,
+              "peak_kb": 6516.2
+            },
+            {
+              "edge": "do_blocks==>render_block",
+              "parent": "do_blocks",
+              "child": "render_block",
+              "ct": 10,
+              "wt_ms": 2326.018,
+              "cpu_ms": 2290.96,
+              "memory_kb": 7070.7,
+              "peak_kb": 6516.2
+            },
+            {
+              "edge": "render_block==>WP_Block::render",
+              "parent": "render_block",
+              "child": "WP_Block::render",
+              "ct": 10,
+              "wt_ms": 2325.296,
+              "cpu_ms": 2290.515,
+              "memory_kb": 7034.1,
+              "peak_kb": 6516.2
+            },
+            {
+              "edge": "get_the_block_template_html==>do_blocks",
+              "parent": "get_the_block_template_html",
+              "child": "do_blocks",
+              "ct": 2,
+              "wt_ms": 2316.304,
+              "cpu_ms": 2282.012,
+              "memory_kb": 6202.3,
+              "peak_kb": 6516.2
+            },
+            {
+              "edge": "WP_Block::render@3==>WP_Block::render@4",
+              "parent": "WP_Block::render@3",
+              "child": "WP_Block::render@4",
+              "ct": 14,
+              "wt_ms": 2279.879,
+              "cpu_ms": 2248.133,
+              "memory_kb": 4698.3,
+              "peak_kb": 6516.2
+            },
+            {
+              "edge": "WP_Block::render@2==>WP_Block::render@3",
+              "parent": "WP_Block::render@2",
+              "child": "WP_Block::render@3",
+              "ct": 9,
+              "wt_ms": 2273.128,
+              "cpu_ms": 2251.293,
+              "memory_kb": 4646.8,
+              "peak_kb": 6516.2
+            },
+            {
+              "edge": "WP_Block::render==>WP_Block::render@1",
+              "parent": "WP_Block::render",
+              "child": "WP_Block::render@1",
+              "ct": 3,
+              "wt_ms": 2270.298,
+              "cpu_ms": 2239.089,
+              "memory_kb": 2943.3,
+              "peak_kb": 6516.2
+            },
+            {
+              "edge": "WP_Block::render@1==>WP_Block::render@2",
+              "parent": "WP_Block::render@1",
+              "child": "WP_Block::render@2",
+              "ct": 10,
+              "wt_ms": 2263.012,
+              "cpu_ms": 2233.126,
+              "memory_kb": 2911.2,
+              "peak_kb": 6516.2
+            },
+            {
+              "edge": "WP_Block::render@4==>Automattic\\WooCommerce\\Blocks\\BlockTypes\\AbstractBlock::render_callback",
+              "parent": "WP_Block::render@4",
+              "child": "Automattic\\WooCommerce\\Blocks\\BlockTypes\\AbstractBlock::render_callback",
+              "ct": 6,
+              "wt_ms": 2227.851,
+              "cpu_ms": 2198.84,
+              "memory_kb": 2378.3,
+              "peak_kb": 6470.4
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\Blocks\\BlockTypes\\AbstractBlock::render_callback==>Automattic\\WooCommerce\\Blocks\\BlockTypes\\AddToCartForm::render",
+              "parent": "Automattic\\WooCommerce\\Blocks\\BlockTypes\\AbstractBlock::render_callback",
+              "child": "Automattic\\WooCommerce\\Blocks\\BlockTypes\\AddToCartForm::render",
+              "ct": 1,
+              "wt_ms": 2195.696,
+              "cpu_ms": 2175.358,
+              "memory_kb": 3435.5,
+              "peak_kb": 5855.8
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\Blocks\\BlockTypes\\AddToCartForm::render==>do_action",
+              "parent": "Automattic\\WooCommerce\\Blocks\\BlockTypes\\AddToCartForm::render",
+              "child": "do_action",
+              "ct": 1,
+              "wt_ms": 2193.197,
+              "cpu_ms": 2173.378,
+              "memory_kb": 1923.8,
+              "peak_kb": 5855.8
+            },
+            {
+              "edge": "WP_Hook::do_action==>woocommerce_variable_add_to_cart",
+              "parent": "WP_Hook::do_action",
+              "child": "woocommerce_variable_add_to_cart",
+              "ct": 1,
+              "wt_ms": 2193.177,
+              "cpu_ms": 2173.378,
+              "memory_kb": 1922.6,
+              "peak_kb": 5855.8
+            },
+            {
+              "edge": "woocommerce_variable_add_to_cart==>WC_Product_Variable::get_available_variations",
+              "parent": "woocommerce_variable_add_to_cart",
+              "child": "WC_Product_Variable::get_available_variations",
+              "ct": 1,
+              "wt_ms": 2176.913,
+              "cpu_ms": 2160.496,
+              "memory_kb": 2390.4,
+              "peak_kb": 2164.4
+            },
+            {
+              "edge": "WC_Product_Variable::get_available_variations==>WC_Product_Variable::get_available_variation",
+              "parent": "WC_Product_Variable::get_available_variations",
+              "child": "WC_Product_Variable::get_available_variation",
+              "ct": 800,
+              "wt_ms": 1637.129,
+              "cpu_ms": 1625.058,
+              "memory_kb": 2351.6,
+              "peak_kb": 2164.4
+            },
+            {
+              "edge": "WC_Product_Variable::get_variation_sale_price==>WC_Product_Variable::get_variation_prices",
+              "parent": "WC_Product_Variable::get_variation_sale_price",
+              "child": "WC_Product_Variable::get_variation_prices",
+              "ct": 1603,
+              "wt_ms": 1285.289,
+              "cpu_ms": 1283.958,
+              "memory_kb": 193995.7,
+              "peak_kb": 2168.1
+            },
+            {
+              "edge": "WC_Product_Variable::get_available_variation==>WC_Product_Variable::get_variation_sale_price",
+              "parent": "WC_Product_Variable::get_available_variation",
+              "child": "WC_Product_Variable::get_variation_sale_price",
+              "ct": 1600,
+              "wt_ms": 1282.368,
+              "cpu_ms": 1279.152,
+              "memory_kb": 193267.4,
+              "peak_kb": 2164.4
+            },
+            {
+              "edge": "wc_get_product==>WC_Product_Factory::get_product",
+              "parent": "wc_get_product",
+              "child": "WC_Product_Factory::get_product",
+              "ct": 1613,
+              "wt_ms": 1063.107,
+              "cpu_ms": 1040.042,
+              "memory_kb": 21397,
+              "peak_kb": 489
+            },
+            {
+              "edge": "WC_Product_Variable::get_variation_prices==>WC_Product_Variable::sort_variation_prices",
+              "parent": "WC_Product_Variable::get_variation_prices",
+              "child": "WC_Product_Variable::sort_variation_prices",
+              "ct": 4845,
+              "wt_ms": 1009.07,
+              "cpu_ms": 1011.153,
+              "memory_kb": 194217.5,
+              "peak_kb": 1623.9
+            },
+            {
+              "edge": "WC_Product_Variable::sort_variation_prices==>asort",
+              "parent": "WC_Product_Variable::sort_variation_prices",
+              "child": "asort",
+              "ct": 4845,
+              "wt_ms": 1003.415,
+              "cpu_ms": 1004.689,
+              "memory_kb": 194065.5,
+              "peak_kb": 1623.9
+            },
+            {
+              "edge": "WC_Product_Variable::get_variation_prices==>WC_Data_Store::__call",
+              "parent": "WC_Product_Variable::get_variation_prices",
+              "child": "WC_Data_Store::__call",
+              "ct": 1615,
+              "wt_ms": 935.363,
+              "cpu_ms": 860.955,
+              "memory_kb": 3772.3,
+              "peak_kb": 4133.9
+            },
+            {
+              "edge": "WC_Data_Store::__call==>WC_Product_Variable_Data_Store_CPT::read_price_data",
+              "parent": "WC_Data_Store::__call",
+              "child": "WC_Product_Variable_Data_Store_CPT::read_price_data",
+              "ct": 1615,
+              "wt_ms": 930.02,
+              "cpu_ms": 860.955,
+              "memory_kb": 6311.6,
+              "peak_kb": 4133.9
+            },
+            {
+              "edge": "WC_Product_Factory::get_product==>WC_Product_Variation::__construct",
+              "parent": "WC_Product_Factory::get_product",
+              "child": "WC_Product_Variation::__construct",
+              "ct": 1601,
+              "wt_ms": 923.036,
+              "cpu_ms": 907.778,
+              "memory_kb": 19486.3,
+              "peak_kb": 0
+            },
+            {
+              "edge": "WC_Product_Variation::__construct==>WC_Product_Simple::__construct",
+              "parent": "WC_Product_Variation::__construct",
+              "child": "WC_Product_Simple::__construct",
+              "ct": 1601,
+              "wt_ms": 921.486,
+              "cpu_ms": 905.79,
+              "memory_kb": 15395.6,
+              "peak_kb": 0
+            },
+            {
+              "edge": "WC_Product_Simple::__construct==>WC_Product::__construct",
+              "parent": "WC_Product_Simple::__construct",
+              "child": "WC_Product::__construct",
+              "ct": 1601,
+              "wt_ms": 920.571,
+              "cpu_ms": 904.797,
+              "memory_kb": 15057.3,
+              "peak_kb": 0
+            },
+            {
+              "edge": "WC_Product::__construct==>WC_Data_Store::read",
+              "parent": "WC_Product::__construct",
+              "child": "WC_Data_Store::read",
+              "ct": 1613,
+              "wt_ms": 920.539,
+              "cpu_ms": 902.93,
+              "memory_kb": 10990.8,
+              "peak_kb": 487.9
+            },
+            {
+              "edge": "WC_Data_Store::read==>WC_Product_Variation_Data_Store_CPT::read",
+              "parent": "WC_Data_Store::read",
+              "child": "WC_Product_Variation_Data_Store_CPT::read",
+              "ct": 1601,
+              "wt_ms": 898.8,
+              "cpu_ms": 884.486,
+              "memory_kb": 11266.1,
+              "peak_kb": 0
+            },
+            {
+              "edge": "main()==>do_action",
+              "parent": "main()",
+              "child": "do_action",
+              "ct": 11,
+              "wt_ms": 780.478,
+              "cpu_ms": 686.713,
+              "memory_kb": 17239.2,
+              "peak_kb": 20708.6
+            },
+            {
+              "edge": "WP_Hook::do_action==>Automattic\\WooCommerce\\Blocks\\Templates\\SingleProductTemplate::render_block_template",
+              "parent": "WP_Hook::do_action",
+              "child": "Automattic\\WooCommerce\\Blocks\\Templates\\SingleProductTemplate::render_block_template",
+              "ct": 1,
+              "wt_ms": 712.666,
+              "cpu_ms": 623.987,
+              "memory_kb": 8287.3,
+              "peak_kb": 11903.8
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Hydration::get_rest_api_response_data==>Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Hydration::get_response_from_controller",
+              "parent": "Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Hydration::get_rest_api_response_data",
+              "child": "Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Hydration::get_response_from_controller",
+              "ct": 2,
+              "wt_ms": 708.277,
+              "cpu_ms": 620.522,
+              "memory_kb": 7890,
+              "peak_kb": 11144.5
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Hydration::get_response_from_controller==>call_user_func_array",
+              "parent": "Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Hydration::get_response_from_controller",
+              "child": "call_user_func_array",
+              "ct": 2,
+              "wt_ms": 707.264,
+              "cpu_ms": 619.529,
+              "memory_kb": 7803.8,
+              "peak_kb": 11065.8
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\Blocks\\Templates\\SingleProductTemplate::render_block_template==>Automattic\\WooCommerce\\Blocks\\SharedStores\\ProductsStore::load_product",
+              "parent": "Automattic\\WooCommerce\\Blocks\\Templates\\SingleProductTemplate::render_block_template",
+              "child": "Automattic\\WooCommerce\\Blocks\\SharedStores\\ProductsStore::load_product",
+              "ct": 1,
+              "wt_ms": 702.26,
+              "cpu_ms": 613.959,
+              "memory_kb": 7554.5,
+              "peak_kb": 11144.5
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\Blocks\\SharedStores\\ProductsStore::load_product==>Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Hydration::get_rest_api_response_data",
+              "parent": "Automattic\\WooCommerce\\Blocks\\SharedStores\\ProductsStore::load_product",
+              "child": "Automattic\\WooCommerce\\Blocks\\Domain\\Services\\Hydration::get_rest_api_response_data",
+              "ct": 1,
+              "wt_ms": 702.211,
+              "cpu_ms": 613.959,
+              "memory_kb": 7552.4,
+              "peak_kb": 11144.5
+            },
+            {
+              "edge": "call_user_func_array==>Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute::get_response",
+              "parent": "call_user_func_array",
+              "child": "Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute::get_response",
+              "ct": 1,
+              "wt_ms": 701.559,
+              "cpu_ms": 613.959,
+              "memory_kb": 7462.2,
+              "peak_kb": 11065.8
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute::get_response==>Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute::get_response_by_request_method",
+              "parent": "Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute::get_response",
+              "child": "Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute::get_response_by_request_method",
+              "ct": 1,
+              "wt_ms": 701.557,
+              "cpu_ms": 613.959,
+              "memory_kb": 7461.6,
+              "peak_kb": 11065.8
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute::get_response_by_request_method==>Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\ProductsById::get_route_response",
+              "parent": "Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute::get_response_by_request_method",
+              "child": "Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\ProductsById::get_route_response",
+              "ct": 1,
+              "wt_ms": 701.542,
+              "cpu_ms": 613.959,
+              "memory_kb": 7706.7,
+              "peak_kb": 11065.8
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\ProductsById::get_route_response==>Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute::prepare_item_for_response",
+              "parent": "Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\ProductsById::get_route_response",
+              "child": "Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute::prepare_item_for_response",
+              "ct": 1,
+              "wt_ms": 699.81,
+              "cpu_ms": 611.972,
+              "memory_kb": 7684.1,
+              "peak_kb": 11065.8
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute::prepare_item_for_response==>Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\ProductSchema::get_item_response",
+              "parent": "Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute::prepare_item_for_response",
+              "child": "Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\ProductSchema::get_item_response",
+              "ct": 1,
+              "wt_ms": 699.693,
+              "cpu_ms": 611.972,
+              "memory_kb": 7666.7,
+              "peak_kb": 11065.8
+            },
+            {
+              "edge": "WC_Product_Variable::is_on_sale==>WC_Product_Variable::get_variation_prices",
+              "parent": "WC_Product_Variable::is_on_sale",
+              "child": "WC_Product_Variable::get_variation_prices",
+              "ct": 5,
+              "wt_ms": 654.834,
+              "cpu_ms": 581.227,
+              "memory_kb": 3100.6,
+              "peak_kb": 3543.8
+            },
+            {
+              "edge": "Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\ProductSchema::get_item_response==>WC_Product_Variable::is_on_sale",
+              "parent": "Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\ProductSchema::get_item_response",
+              "child": "WC_Product_Variable::is_on_sale",
+              "ct": 1,
+              "wt_ms": 642.717,
+              "cpu_ms": 569.301,
+              "memory_kb": 1835.6,
+              "peak_kb": 2970.7
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "fixture": {
+    "fixture": {
+      "orders": 60000,
+      "products": 6000,
+      "variations": 800,
+      "variable_parent_id": 6014,
+      "first_product_id": 14,
+      "first_order_id": 9000001,
+      "last_order_id": 9060000,
+      "created_gmt": "2026-07-01T11:27:24+00:00"
+    },
+    "pathological": {
+      "orders": 1000000,
+      "products": 200000,
+      "variations": 800,
+      "analytics_rows": 1000000,
+      "heavy_order_id": 9999001,
+      "heavy_order_items": 1000,
+      "first_product_id": 14,
+      "last_product_id": 200877,
+      "created_gmt": "2026-07-01T12:58:15+00:00"
+    },
+    "shipping_tax": {
+      "fixture": "core-shipping-tax-postcode-ranges",
+      "product_id": 200929,
+      "shipping_zones": 8000,
+      "shipping_methods": 8000,
+      "tax_rates": 12000,
+      "tax_locations": 12000,
+      "target_country": "US",
+      "target_state": "CA",
+      "target_postcode": "94105",
+      "target_city": "Perf City",
+      "generated_at_gmt": "2026-07-02T10:24:40+00:00"
+    },
+    "active_plugins": {
+      "3": "woocommerce/woocommerce.php"
+    }
+  },
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "active_plugins": {
+      "3": "woocommerce/woocommerce.php"
+    },
+    "xhprof_loaded": false
+  },
+  "measured_at_gmt": "2026-07-02T10:41:27.972Z",
+  "note": "XHProf adds significant overhead. Use these samples for relative function ranking, call counts, and callgraph edges, not as latency replacement for non-XHProf benchmarks."
+}
