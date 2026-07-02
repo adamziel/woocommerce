@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WooCommerce Core Shipping and Tax Performance Lane</title>
+<style>
+:root{--ink:#15202b;--muted:#5d6976;--line:#d7dde3;--bg:#f6f8fa;--panel:#fff;--accent:#1f7a6d;--warn:#a84800;--bad:#a12a2a;--blue:#2764b5}
+*{box-sizing:border-box} body{margin:0;font:14px/1.45 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:var(--bg)}
+header{background:#fff;border-bottom:1px solid var(--line);padding:22px 28px 16px} main{max-width:1180px;margin:0 auto;padding:22px 24px 40px}
+h1{font-size:26px;line-height:1.15;margin:0 0 8px} h2{font-size:17px;margin:26px 0 10px} h3{font-size:14px;margin:18px 0 8px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.sub{color:var(--muted);max-width:900px}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px}
+.metric{font-size:26px;font-weight:720}.label{color:var(--muted);font-size:12px}.two{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+table{width:100%;border-collapse:collapse} th,td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left} th{font-size:12px;color:var(--muted);background:#f1f4f7} tr:last-child td{border-bottom:0}
+.barrow{display:grid;grid-template-columns:140px 1fr 70px;gap:10px;align-items:center;margin:8px 0}.bartrack{height:12px;background:#e5eaef;border-radius:4px;overflow:hidden}.bar{height:100%;background:var(--accent)}.barlabel,.barvalue{font-size:12px;color:var(--muted)}svg{width:100%;height:95px;color:var(--blue)}
+.pill{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;padding:2px 8px;background:#fff;color:var(--muted);font-size:12px}.risk{color:var(--warn);font-weight:650}.bad{color:var(--bad);font-weight:650} code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;background:#eef2f5;padding:1px 4px;border-radius:4px}
+pre{white-space:pre-wrap;word-break:break-word;background:#101820;color:#eef7ff;padding:12px;border-radius:8px;max-height:320px;overflow:auto;font-size:12px}
+.scenario-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.scenario-list a{display:block;background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px;text-decoration:none;color:var(--ink)}
+.scenario-list strong{display:block}.scenario-list span{color:var(--muted);font-size:12px}
+@media(max-width:800px){main{padding:16px}.grid,.two,.scenario-list{grid-template-columns:1fr}.barrow{grid-template-columns:100px 1fr 62px}header{padding:18px 16px}}
+</style>
+</head>
+<body>
+<header><h1>WooCommerce Core Shipping and Tax Performance Lane</h1><div class="sub">Focused Store API cart-total benchmark for high-cardinality core shipping zones and tax postcode ranges.</div></header>
+<main>
+<h2>Run Summary</h2>
+<table class="table"><tbody>
+  <tr><th>Scenarios measured</th><td>1</td><th>Fixture</th><td>n/a orders, n/a products, n/a variations</td></tr>
+  <tr><th>Worst p95</th><td><a href="01-core-shipping-tax-cart-update.html">Core Shipping/Tax Cart Totals: 8000 postcode shipping zones and 12000 postcode tax ranges</a>: 101ms</td><th>Highest query p95</th><td><a href="01-core-shipping-tax-cart-update.html">Core Shipping/Tax Cart Totals: 8000 postcode shipping zones and 12000 postcode tax ranges</a>: 67.0</td></tr>
+</tbody></table>
+<h2>Worst Offenders</h2>
+<table class="table"><thead><tr><th>#</th><th>Offender</th><th>HTTP p95</th><th>DB p95</th><th>Queries p95</th><th>Why it matters</th></tr></thead><tbody>
+<tr><td>1</td><td><span class="bad">Highest DB time</span><br><a href="01-core-shipping-tax-cart-update.html">Core Shipping/Tax Cart Totals: 8000 postcode shipping zones and 12000 postcode tax ranges</a></td><td>101ms</td><td>55.7ms</td><td>67.0</td><td>Largest captured database-time p95, useful for separating SQL pressure from PHP/application overhead.</td></tr><tr><td>2</td><td><span class="bad">Prior report lead</span><br><a href="https://adamziel.github.io/woocommerce/reports/woocommerce-core-performance-bottlenecks-2026-07-01/08-variable-product-variations.html">Variable Product Variation Loading</a></td><td>prior report</td><td>n/a</td><td>batch-loading candidate</td><td>Large variation products remain a known Woo core sharp edge; this row links to the earlier benchmark because this pathological rerun focused on orders, analytics, facets, and checkout pressure.</td></tr>
+</tbody></table>
+<h2>Executive Read</h2>
+<table class="table"><tbody>
+  <tr><th>Local worst path</th><td>Core Shipping/Tax Cart Totals: 8000 postcode shipping zones and 12000 postcode tax ranges at 101ms p95, with 67.0 queries p95 and a 3111 byte response.</td></tr>
+  <tr><th>Most DB-bound path</th><td>Core Shipping/Tax Cart Totals: 8000 postcode shipping zones and 12000 postcode tax ranges at 55.7ms DB p95.</td></tr>
+  <tr><th>Highest buyer-write pressure</th><td>Core Shipping/Tax Cart Totals: 8000 postcode shipping zones and 12000 postcode tax ranges at 101ms p95, 67.0 queries p95, HTTP 200: 8.</td></tr>
+  <tr><th>Other severe leads</th><td>No non-checkout/non-variation scenario crossed 1s p95 in this local run.</td></tr>
+</tbody></table>
+<h2>Top Latency</h2>
+<table class="table"><thead><tr><th>Rank</th><th>Scenario</th><th>HTTP p95</th><th>Relative bar</th></tr></thead><tbody><tr><td>#1</td><td><a href="01-core-shipping-tax-cart-update.html">Core Shipping/Tax Cart Totals: 8000 postcode shipping zones and 12000 postcode tax ranges</a></td><td>101ms</td><td><div class="barrow"><div class="barlabel"></div><div class="bartrack"><div class="bar" style="width:100%"></div></div><div class="barvalue">101ms</div></div></td></tr></tbody></table>
+<h2>Core Readout</h2>
+<table class="table"><thead><tr><th>Lead</th><th>Evidence in this run</th><th>Likely Woo core surface</th><th>Why it slows down</th></tr></thead><tbody>
+<tr><td><a href="01-core-shipping-tax-cart-update.html">Core Shipping/Tax Cart Totals: 8000 postcode shipping zones and 12000 postcode tax ranges</a></td><td>94.3ms median, 101ms p95, 67.0 queries p95, 55.7ms DB p95</td><td>/wp-json/wc/store/v1/cart/update-customer</td><td>Fresh Store API cart with one taxable shippable product, then customer address update to US/CA/94105. This isolates cart totals, shipping-zone postcode matching, flat-rate taxable shipping, and tax-rate postcode matching without checkout order writes.</td></tr>
+</tbody></table>
+<h2>Bottleneck Stack</h2>
+<table class="table"><thead><tr><th>Local severity</th><th>Core path</th><th>HTTP p95</th><th>DB p95</th><th>DB share</th><th>Queries p95</th><th>Pressure</th></tr></thead><tbody>
+<tr><td>1</td><td><a href="01-core-shipping-tax-cart-update.html">Core Shipping/Tax Cart Totals: 8000 postcode shipping zones and 12000 postcode tax ranges</a><br><span class="label">Fresh Store API cart with one taxable shippable product, then customer address update to US/CA/94105. This isolates cart totals, shipping-zone postcode matching, flat-rate taxable shipping, and tax-rate postcode matching without checkout order writes.</span></td><td class="">101ms</td><td>55.7ms</td><td>55%</td><td>67.0</td><td><div class="barrow"><div class="barlabel"></div><div class="bartrack"><div class="bar" style="width:100%"></div></div><div class="barvalue">101ms</div></div></td></tr>
+</tbody></table>
+<h2>Query Pressure</h2>
+<table class="table"><thead><tr><th>Rank</th><th>Scenario</th><th>Queries p95</th><th>DB p95</th><th>Query bar</th><th>DB bar</th></tr></thead><tbody>
+<tr><td>1</td><td><a href="01-core-shipping-tax-cart-update.html">Core Shipping/Tax Cart Totals: 8000 postcode shipping zones and 12000 postcode tax ranges</a></td><td class="">67.0</td><td>55.7ms</td><td><div class="barrow"><div class="barlabel"></div><div class="bartrack"><div class="bar" style="width:100%"></div></div><div class="barvalue">67.0</div></div></td><td><div class="barrow"><div class="barlabel"></div><div class="bartrack"><div class="bar" style="width:100%"></div></div><div class="barvalue">55.7ms</div></div></td></tr>
+</tbody></table>
+<h2>Scenario Coverage</h2>
+<table class="table"><thead><tr><th>Rank</th><th>Scenario</th><th>HTTP median</th><th>HTTP p95</th><th>Queries p95</th><th>DB p95</th><th>Status</th></tr></thead><tbody>
+<tr><td>1</td><td><a href="01-core-shipping-tax-cart-update.html">Core Shipping/Tax Cart Totals: 8000 postcode shipping zones and 12000 postcode tax ranges</a><br><span class="label">/wp-json/wc/store/v1/cart/update-customer</span></td><td>94.3ms</td><td class="">101ms</td><td>67.0</td><td>55.7ms</td><td>200: 8</td></tr>
+</tbody></table>
+<h2>Fixture and Caveats</h2>
+<table class="table"><tbody>
+  <tr><th>Dataset</th><td>n/a HPOS orders, n/a simple products, n/a variations on one variable product</td><th>Stack</th><td>WordPress 7.0, WooCommerce 10.9.1, PHP 8.3.31, PHP-FPM max children 0.0</td></tr>
+  <tr><th>Fixture method</th><td>Fixtures were generated through WooCommerce CRUD/application APIs: product objects, variation objects, <code>wc_create_order</code>, HPOS saves, order items, item meta, and analytics sync. Due scheduled lookup/import actions were drained before this rerun, and checkout stock was replenished through product APIs before measured checkout batches. No direct fixture <code>INSERT</code>/<code>UPDATE</code> writes were used.</td><th>Stack path</th><td>nginx -&gt; php-fpm with HTTP requests through nginx and PHP-FPM, not WP-CLI route execution.</td></tr>
+  <tr><th>Measurement</th><td>Concurrent curl fan-outs against one Docker site with <code>SAVEQUERIES</code>; reports include HTTP wall time, PHP wall time, query count, DB time, peak memory, slow SQL excerpts, batch wall time, summed request time, and effective parallelism.</td><th>Interpretation</th><td>Good for code-path shape and relative local pressure. Not a replacement for production RUM, k6 load curves, or multi-node database contention testing.</td></tr>
+</tbody></table>
+<h2>Reports</h2>
+<table class="table"><thead><tr><th>Rank</th><th>Scenario</th><th>HTTP median</th><th>HTTP p95</th><th>Queries p95</th></tr></thead><tbody>
+<tr><td>1</td><td><a href="01-core-shipping-tax-cart-update.html">Core Shipping/Tax Cart Totals: 8000 postcode shipping zones and 12000 postcode tax ranges</a></td><td>94.3ms</td><td>101ms</td><td>67.0</td></tr>
+</tbody></table>
+</main>
+</body>
+</html>

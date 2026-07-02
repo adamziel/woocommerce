@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WooCommerce Deep Performance Audit - July 2, 2026</title>
+<style>
+:root{--ink:#16202a;--muted:#5d6875;--line:#d8dee4;--bg:#f6f8fa;--panel:#fff;--accent:#176c62;--bad:#9b2424;--warn:#9a5b00;--blue:#285f9f}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+header{background:#fff;border-bottom:1px solid var(--line);padding:26px 28px 18px} main{max-width:1200px;margin:0 auto;padding:24px 22px 46px}
+h1{font-size:28px;line-height:1.15;margin:0 0 8px} h2{font-size:19px;margin:30px 0 10px} h3{font-size:15px;margin:20px 0 8px}
+p{margin:0 0 12px}.sub{color:var(--muted);max-width:940px}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px}.metric{font-size:26px;font-weight:720}.label{color:var(--muted);font-size:12px}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line)} th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top} th{background:#eef2f6;color:var(--muted);font-size:12px} tr:last-child td{border-bottom:0}
+code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;background:#eef2f5;border-radius:4px;padding:1px 4px} .bad{color:var(--bad);font-weight:700}.warn{color:var(--warn);font-weight:700}.ok{color:var(--accent);font-weight:700}
+a{color:#285f9f}.pill{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:2px 8px;background:#fff;color:var(--muted);font-size:12px;margin:0 4px 4px 0}
+pre{white-space:pre-wrap;word-break:break-word;background:#101820;color:#edf7ff;border-radius:8px;padding:12px;overflow:auto;max-height:260px;font-size:12px}
+@media(max-width:820px){main{padding:16px}.grid,.two{grid-template-columns:1fr}header{padding:20px 16px}}
+</style>
+</head>
+<body>
+<header>
+<h1>WooCommerce Deep Performance Audit</h1>
+<div class="sub">Incremental findings from July 2, 2026. This page combines prior pathological/core reports, mined profiler artifacts, and a new focused core shipping/tax benchmark. The Subscriptions + PayPal/Stripe/WooPayments lane is not yet measured on this host because the current benchmark site has only WooCommerce active.</div>
+</header>
+<main>
+
+<section class="grid">
+  <div class="card"><div class="label">Worst measured p95</div><div class="metric">5.47s</div><div class="label">Store API checkout, 20-line cart</div></div>
+  <div class="card"><div class="label">Highest query p95</div><div class="metric">2,688</div><div class="label">Checkout order creation</div></div>
+  <div class="card"><div class="label">New lane</div><div class="metric">101ms</div><div class="label">8k shipping zones + 12k tax ranges</div></div>
+  <div class="card"><div class="label">Current coverage</div><div class="metric">Core</div><div class="label">Plugin-stack lane pending</div></div>
+</section>
+
+<h2>Source Reports and Artifacts</h2>
+<table>
+<thead><tr><th>Artifact</th><th>What it contributes</th></tr></thead>
+<tbody>
+<tr><td><a href="../woocommerce-pathological-performance-2026-07-01/">Pathological performance report</a></td><td>Large stress shapes: broad HPOS search, Store API facet counts, analytics, heavy checkout, and concurrent buyer writes.</td></tr>
+<tr><td><a href="../woocommerce-core-performance-bottlenecks-2026-07-01/">Core bottleneck report</a></td><td>Original local core suite: checkout, add-to-cart, catalog, variable product page, admin order edit, and Woo Admin.</td></tr>
+<tr><td><a href="../woocommerce-crud-invariant-nginx-fpm-48-rebenchmark-2026-07-01-2130z/">CRUD-invariant nginx/php-fpm rebenchmark</a></td><td>Cleaner HTTP/profiler data with WooCommerce CRUD-created fixtures, PHP-FPM max children 48, and per-request SQL digests.</td></tr>
+<tr><td><a href="shipping-tax-core/index.html">New shipping/tax core lane</a></td><td>Fresh Store API cart-total run over 8,000 generated shipping zones/methods and 12,000 generated tax postcode ranges.</td></tr>
+</tbody>
+</table>
+
+<h2>Ranked Problems</h2>
+<table>
+<thead><tr><th>Rank</th><th>Problem</th><th>Measured conditions</th><th>Slowest evidence</th><th>Developer handoff</th></tr></thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><span class="bad">Checkout/order creation write amplification</span></td>
+<td>Store API checkout, 20 distinct line items, WooCommerce core only, HPOS enabled, MySQL 8, PHP 8.3. CRUD-invariant 48-worker report shows 5,471ms HTTP p95, 5,110ms DB p95, 2,688 query p95.</td>
+<td>Across profiled samples: order item meta inserts dominate, followed by reserved stock inserts, product lookup table rewrites, order item inserts, repeated itemmeta cache probes, stock meta updates, and sales-count updates.</td>
+<td>Start in <code>StoreApi\Routes\V1\Checkout</code>, order creation/save, <code>WC_Abstract_Order::save_items</code>, <code>ReserveStock::reserve_stock_for_order</code>, and product stock/sales lookup refresh. The likely fix area is bulk persistence and avoiding per-item metadata existence/cache probes.</td>
+</tr>
+<tr>
+<td>2</td>
+<td><span class="bad">Concurrent checkout stock/order writes</span></td>
+<td>40 concurrent Store API checkouts against managed stock. CRUD-invariant profiler: 1,871ms server p95, 1,741ms DB p95, 519 query p95.</td>
+<td>Top SQL totals in the mined profiler: <code>wp_wc_orders_meta</code> inserts, <code>wp_woocommerce_order_itemmeta</code> inserts, <code>wp_wc_orders_meta</code> deletes, order-note <code>wp_comments</code>/<code>wp_commentmeta</code> writes, and <code>wp_posts.comment_count</code> updates.</td>
+<td>Separate stock reservation logging from the hot reservation path, batch meta writes/deletes, and profile lock/wait behavior around reservation and stock decrement SQL.</td>
+</tr>
+<tr>
+<td>3</td>
+<td><span class="bad">Variable product variation formatting</span></td>
+<td>Variable product with hundreds of variations. Runtime artifacts show 224 profiled samples, 1,948ms server p95, 265ms DB p95, 885 query p95, with some HTTP 500s in older artifacts.</td>
+<td>121,607 repeated term lookups across samples: <code>WC_Product_Variation_Data_Store_CPT->generate_product_title</code> -> <code>wc_get_formatted_variation</code> -> <code>get_term_by</code> -> <code>WP_Term_Query</code>.</td>
+<td>This maps to the recent variation PRs. The developer handoff is to avoid per-variation term lookup/title sync work in available variation payload generation and cache taxonomy term-name maps per request.</td>
+</tr>
+<tr>
+<td>4</td>
+<td><span class="warn">HPOS admin broad search and list count cost</span></td>
+<td>HPOS admin order search all-filter. CRUD-invariant report: 826ms server p95, 516ms DB p95, 126 query p95. Pathological report: 2,880ms HTTP p95, 2,751ms DB p95 at larger order scale.</td>
+<td>Repeated wide <code>COUNT(*)</code> and ID queries over <code>wp_wc_orders</code> with OR/LIKE/subquery search across transaction ID, billing email, order IDs, meta, addresses, and order items. Cache priming then adds postmeta/order-itemmeta/product term work.</td>
+<td>Fixes split across indexed search routing, short-circuiting counts, and reducing list-table cache priming when the first page is partial or search selectivity is low.</td>
+</tr>
+<tr>
+<td>5</td>
+<td><span class="warn">Store API product collection-data facet counts</span></td>
+<td>Store API <code>products/collection-data</code> with price, stock, rating, category, and attribute counts. CRUD-invariant report: 267ms server p95, 150ms DB p95, 51 query p95. Pathological report reached 6,963ms HTTP p95 at larger catalog scale.</td>
+<td>Top SQL is count aggregation over posts/postmeta/product lookup/term relationships, especially stock status and taxonomy/attribute count queries over broad product ID subqueries.</td>
+<td>Work in <code>ProductCollectionData</code>, <code>ProductQueryFilters</code>, and filter-count SQL. The existing PR split around product-ID subqueries and post__in merging is aligned with this problem.</td>
+</tr>
+<tr>
+<td>6</td>
+<td><span class="warn">Analytics stats broad aggregates</span></td>
+<td>Woo Analytics revenue/products stats with forced cache refresh. CRUD-invariant report: revenue 217ms server p95, products 147ms server p95. Pathological report reached 2,595ms and 2,304ms HTTP p95 at larger analytics-row scale.</td>
+<td>Revenue stats spend time in distinct product counts and monthly SUM/COUNT aggregates over <code>wc_order_stats</code>, coupon lookup subqueries, and product lookup joins. Products stats spend time in SUM/COUNT DISTINCT over <code>wc_order_product_lookup</code>.</td>
+<td>Review report datastore query shapes, cache invalidation/refresh behavior, and whether high-cardinality aggregates can be precomputed or split by narrower indexed windows.</td>
+</tr>
+<tr>
+<td>7</td>
+<td><span class="warn">Core tax postcode matching scales linearly</span></td>
+<td>New core lane: one Store API cart update with one taxable shippable product, US/CA/94105 address, WooCommerce only, 8,000 shipping zones/methods, 12,000 tax postcode ranges. Result: 101ms HTTP p95, 92.5ms PHP p95, 55.7ms DB p95, 67 query p95.</td>
+<td>Per request averages from 8 samples: tax main joined query about 22ms, tax postcode range prequery about 10ms. MySQL plan uses <code>tax_rate_class</code> for about 6,044 rows, temp table/filesort, joins locations by <code>tax_rate_id</code>, and dependent subqueries for city/postcode existence.</td>
+<td>Primary issue is SQL shape, not just missing indexes. Candidate fixes: precompute searchable postcode range representation, avoid broad GROUP BY over all same-class rates, use anti-joins/derived tables instead of dependent subqueries, and add a composite index only after rewriting predicates to use it.</td>
+</tr>
+<tr>
+<td>8</td>
+<td><span class="warn">Core shipping postcode-zone matching loads all postcode locations</span></td>
+<td>Same new core lane. Shipping contributes about 5ms/request loading all postcode locations and about 3ms/request selecting the matching zone at 8,000 generated zones.</td>
+<td><code>WC_Shipping_Zone_Data_Store->get_zone_id_from_package</code> first runs <code>SELECT zone_id, location_code FROM wp_woocommerce_shipping_zone_locations WHERE location_type = 'postcode'</code>, then builds a large <code>NOT IN (...)</code> exclusion list for the zone query.</td>
+<td>For larger merchants, replace all-postcode loading with indexed candidate selection or persisted normalized ranges. Avoid constructing a large NOT IN list after PHP matching.</td>
+</tr>
+</tbody>
+</table>
+
+<h2>New Shipping/Tax Lane Detail</h2>
+<div class="two">
+<div class="card">
+<h3>Fixture</h3>
+<p><span class="pill">WordPress 7.0</span><span class="pill">WooCommerce 10.9.1</span><span class="pill">PHP 8.3.31</span><span class="pill">MySQL 8.0.46</span><span class="pill">HPOS yes</span></p>
+<p>Active plugins: <code>woocommerce/woocommerce.php</code> only. Generated product ID <code>200929</code>, 8,000 generated shipping zones, 8,000 flat-rate methods, 12,000 generated tax rates, 12,000 tax postcode locations. Target address: US, CA, 94105, Perf City.</p>
+</div>
+<div class="card">
+<h3>Measured Result</h3>
+<p>8 requests, all HTTP 200. HTTP p95 <strong>101ms</strong>, PHP p95 <strong>92.5ms</strong>, DB p95 <strong>55.7ms</strong>, query count p95 <strong>67</strong>, memory p95 <strong>18MB</strong>.</p>
+<p><a href="shipping-tax-core/01-core-shipping-tax-cart-update.html">Open generated scenario page</a> or <a href="shipping-tax-core/01-core-shipping-tax-cart-update.json">raw JSON</a>.</p>
+</div>
+</div>
+
+<h3>Top SQL in the New Lane</h3>
+<table>
+<thead><tr><th>SQL shape</th><th>Total over 8 samples</th><th>Caller</th></tr></thead>
+<tbody>
+<tr><td><code>SELECT tax_rates.*, COUNT(locations.location_id), COUNT(locations2.location_id) ... GROUP BY tax_rates.tax_rate_id ORDER BY tax_rate_priority</code></td><td>177.6ms total, 8 calls</td><td><code>WC_Cart_Totals->get_item_tax_rates</code> -> <code>WC_Tax::get_matched_tax_rates</code></td></tr>
+<tr><td><code>SELECT tax_rate_id, location_code FROM wp_woocommerce_tax_rate_locations WHERE location_type='postcode' AND location_code LIKE '%...%'</code></td><td>81.4ms total, 8 calls</td><td><code>WC_Tax::get_matched_tax_rates</code></td></tr>
+<tr><td><code>SELECT zone_id, location_code FROM wp_woocommerce_shipping_zone_locations WHERE location_type='postcode'</code></td><td>41.3ms total, 8 calls</td><td><code>WC_Shipping_Zone_Data_Store->get_zone_id_from_package</code></td></tr>
+<tr><td><code>SELECT zones.zone_id FROM wp_woocommerce_shipping_zones ... NOT IN (...)</code></td><td>23.0ms total, 8 calls</td><td><code>WC_Shipping_Zones::get_zone_matching_package</code></td></tr>
+</tbody>
+</table>
+
+<h3>EXPLAIN Summary</h3>
+<pre>tax range prequery:
+type=ref, key=location_type_code, rows=6049, filtered=11.11, Extra=Using where
+
+shipping postcode prequery:
+type=ref, key=location_type_code, rows=8085, filtered=100.00, Extra=Using where
+
+tax main query:
+tax_rates uses key=tax_rate_class, rows=6044, Extra=Using where; Using temporary; Using filesort
+locations and locations2 join by tax_rate_id
+city/postcode absence checks appear as dependent subqueries</pre>
+
+<h2>Static Audit Notes</h2>
+<table>
+<thead><tr><th>Area</th><th>Code path</th><th>Concern</th></tr></thead>
+<tbody>
+<tr><td>Taxes</td><td><code>WC_Tax::get_matched_tax_rates</code></td><td>Cart totals cache rates per tax class in request scope, but the cold lookup still walks all postcode ranges and then runs a broad grouped join for matching rates. The single-rate helper methods <code>is_compound</code>, <code>get_rate_label</code>, <code>get_rate_percent_value</code>, and <code>get_rate_code</code> still query by ID when callers pass IDs instead of hydrated rate rows; this is a separate N-query audit target.</td></tr>
+<tr><td>Shipping</td><td><code>WC_Shipping_Zone_Data_Store->get_zone_id_from_package</code></td><td>The matcher loads every postcode location into PHP, runs postcode/range matching there, then excludes nonmatches via a generated <code>NOT IN</code> list. The existing <code>location_type_code(location_type(10), location_code(20))</code> index helps only with the location type filter in the measured shape.</td></tr>
+<tr><td>Prettyboymp commit context</td><td>Recent trunk history</td><td>Recent performance work clusters around object caching, HPOS datastore caching, product variation payloads, shipping-zone read-multiple support, analytics lazy loading, and tax/cart query reductions. The current slow paths line up with those themes: repeated object hydration, broad aggregates, and lookup shapes that need preselection rather than post-filtering.</td></tr>
+</tbody>
+</table>
+
+<h2>Open Lanes</h2>
+<table>
+<thead><tr><th>Lane</th><th>Status</th><th>Next measurement</th></tr></thead>
+<tbody>
+<tr><td>Bookings</td><td>Not measured yet</td><td>Requires plugin availability and a booking-heavy fixture: bookable products, resources, availability rules, calendar/admin requests, and checkout with booking line items.</td></tr>
+<tr><td>Subscriptions + PayPal/Stripe/WooPayments</td><td>Not measured yet</td><td>Current benchmark site has only WooCommerce active. Next step is to install available gateway plugins, confirm whether WooCommerce Subscriptions/WooPayments are available in this environment, then profile renewal/payment-method/admin order hot paths.</td></tr>
+<tr><td>Function-level CPU profiling</td><td>Not measured yet</td><td>Current mu-plugin profiler captures SQL/query digests and caller stacks, not inclusive/exclusive PHP function timings. A Tideways/XHProf or sampled profiler lane is still needed for non-SQL CPU hotspots.</td></tr>
+</tbody>
+</table>
+
+</main>
+</body>
+</html>
