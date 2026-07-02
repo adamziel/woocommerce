@@ -1,0 +1,142 @@
+{
+  "measured_at_utc": "2026-07-02T12:30:01Z",
+  "pull_request": {
+    "repo": "Automattic/woocommerce-payments",
+    "number": 11914,
+    "url": "https://github.com/Automattic/woocommerce-payments/pull/11914",
+    "title": "Cache selected currency during requests",
+    "branch": "perf/cache-selected-currency-lookup",
+    "commit": "5442883"
+  },
+  "problem": "WooPayments multicurrency frontend price filters repeatedly resolve the selected currency while rendering large variable product pages.",
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "woopayments_installed_version": "10.9.0",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "active_plugins": [
+      "woocommerce-gateway-stripe/woocommerce-gateway-stripe.php",
+      "woocommerce-payments/woocommerce-payments.php",
+      "woocommerce-paypal-payments/woocommerce-paypal-payments.php",
+      "woocommerce/woocommerce.php"
+    ]
+  },
+  "fixture": {
+    "orders": 60000,
+    "products": 6000,
+    "variations": 800,
+    "variable_parent_id": 6014,
+    "path": "/product/benchmark-variable-product-many-variations/"
+  },
+  "candidate": {
+    "summary": "Caches the resolved selected Currency object for the current request when no wcpay_multi_currency_override_selected_currency filters are active.",
+    "safety_guards": [
+      "Bypasses the cache whenever selected-currency override filters are active.",
+      "Clears the cache when update_selected_currency() runs.",
+      "Clears the cache whenever enabled currencies are rebuilt."
+    ],
+    "files": [
+      "includes/multi-currency/MultiCurrency.php",
+      "tests/unit/multi-currency/test-class-multi-currency.php"
+    ]
+  },
+  "regular_request_benchmark": {
+    "iterations": 5,
+    "baseline_artifact": "/home/claude/woocommerce/results/pr-woopayments-selected-currency-cache-baseline-1/08-variable-product-variations.json",
+    "candidate_artifact": "/home/claude/woocommerce/results/pr-woopayments-selected-currency-cache-candidate-1/08-variable-product-variations.json",
+    "baseline": {
+      "total_ms_median": 1361.273,
+      "total_ms_p95": 1445.9,
+      "server_ms_median": 1356.99,
+      "server_ms_p95": 1443.37,
+      "query_count_median": 250,
+      "query_time_ms_median": 101.77,
+      "memory_peak_mb_median": 40
+    },
+    "candidate": {
+      "total_ms_median": 1239.675,
+      "total_ms_p95": 1298.2,
+      "server_ms_median": 1237.88,
+      "server_ms_p95": 1296.31,
+      "query_count_median": 250,
+      "query_time_ms_median": 100.12,
+      "memory_peak_mb_median": 40
+    },
+    "delta": {
+      "total_ms_median": -121.598,
+      "total_ms_p95": -147.7,
+      "server_ms_median": -119.11,
+      "server_ms_p95": -147.06,
+      "query_count_median": 0
+    }
+  },
+  "xhprof_benchmark": {
+    "iterations": 1,
+    "baseline_artifact": "/home/claude/woocommerce/results/pr-woopayments-selected-currency-cache-xhprof-baseline-1/03-xhprof-variable-product-page.json",
+    "candidate_artifact": "/home/claude/woocommerce/results/pr-woopayments-selected-currency-cache-xhprof-candidate-1/03-xhprof-variable-product-page.json",
+    "baseline_summary": {
+      "total_ms": 3198.22,
+      "server_ms": 3144.13,
+      "query_count": 250,
+      "query_time_ms": 108.36,
+      "xhprof_edge_count": 17373
+    },
+    "candidate_summary": {
+      "total_ms": 2590.26,
+      "server_ms": 2530.31,
+      "query_count": 250,
+      "query_time_ms": 112.83,
+      "xhprof_edge_count": 17373
+    },
+    "function_deltas": [
+      {
+        "function": "WCPay\\MultiCurrency\\MultiCurrency::get_selected_currency",
+        "baseline_calls": 40041,
+        "baseline_inclusive_ms": 616.212,
+        "candidate_calls": 40041,
+        "candidate_inclusive_ms": 6.643
+      },
+      {
+        "function": "WCPay\\MultiCurrency\\MultiCurrency::get_stored_currency_code",
+        "baseline_calls": 40041,
+        "baseline_inclusive_ms": 542.719,
+        "candidate": "dropped out of the XHProf hot lists"
+      },
+      {
+        "function": "WCPay\\MultiCurrency\\MultiCurrency::get_price",
+        "baseline_calls": 40039,
+        "baseline_inclusive_ms": 662.756,
+        "candidate_calls": 40039,
+        "candidate_inclusive_ms": 50.74
+      },
+      {
+        "function": "WCPay\\MultiCurrency\\FrontendPrices::get_product_price",
+        "baseline_calls": 40839,
+        "baseline_inclusive_ms": 698.266,
+        "candidate_calls": 40839,
+        "candidate_inclusive_ms": 84.279
+      }
+    ]
+  },
+  "verification": {
+    "passed": [
+      "php -l includes/multi-currency/MultiCurrency.php",
+      "php -l tests/unit/multi-currency/test-class-multi-currency.php",
+      "git diff --check",
+      "./vendor/bin/phpcs --standard=phpcs.xml.dist tests/unit/multi-currency/test-class-multi-currency.php",
+      "runtime benchmark in /home/claude/woocommerce"
+    ],
+    "not_run_successfully": [
+      {
+        "command": "./bin/run-tests.sh --filter WCPay_Multi_Currency_Tests",
+        "reason": "The local WooPayments Docker test environment failed before PHPUnit because generated DB/WordPress bind mounts denied writes and containers restarted."
+      },
+      {
+        "command": "./vendor/bin/phpcs --standard=phpcs.xml.dist includes/multi-currency/MultiCurrency.php",
+        "reason": "Whole-file scan reports class-structure ordering errors in MultiCurrency.php. The PR does not auto-reorder unrelated methods."
+      }
+    ]
+  }
+}
