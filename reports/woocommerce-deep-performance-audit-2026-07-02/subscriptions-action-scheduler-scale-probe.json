@@ -1,0 +1,324 @@
+{
+  "generated_at": "2026-07-02T14:05:49Z",
+  "type": "subscription-action-scheduler-scale-probe",
+  "conclusion": "Runtime proxy for WooCommerce Subscriptions one-action-per-contract scheduler scale. This does not benchmark full Subscriptions renewals because the commercial extension is absent; it measures the shared Action Scheduler DBStore table/API shape used by the WooCommerce source Subscriptions engine bridge.",
+  "raw_results": {
+    "ten_k": "/home/claude/woocommerce/results/subscriptions-action-scheduler-scale-10k-1/probe.json",
+    "fifty_k": "/home/claude/woocommerce/results/subscriptions-action-scheduler-scale-50k-1/probe.json"
+  },
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "action_scheduler": "3.9.3",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "active_scheduler_store": "ActionScheduler_HybridStore",
+    "measured_scheduler_store": "ActionScheduler_DBStore",
+    "migration_status_option": null,
+    "store_class_option": null
+  },
+  "fixture_notes": {
+    "hook": "woocommerce_subscriptions_engine_process_renewal",
+    "contract_id_args": "[contract_id], matching RenewalScheduler::schedule( int $contract_id, DateTimeImmutable $when )",
+    "claim_size": 25,
+    "cleanup_after": true
+  },
+  "scales": {
+    "ten_k": {
+      "fixture": {
+        "hook": "woocommerce_subscriptions_engine_process_renewal",
+        "group": "wc-perf-subscription-scale-10000-d92de444",
+        "group_id": 11,
+        "seeded_actions": 10000,
+        "due_actions": 6401,
+        "future_actions": 3599,
+        "seed_ms": 673.815,
+        "iterations": 40,
+        "claim_size": 25,
+        "cleanup_after": true,
+        "contract_id_args": "[contract_id], matching RenewalScheduler::schedule( int $contract_id, DateTimeImmutable $when )"
+      },
+      "db_store_summary": {
+        "next_scheduled_existing": {
+          "iterations": 40,
+          "median_total_ms": 0.754,
+          "p95_total_ms": 1.243,
+          "median_query_count": 3,
+          "median_query_ms": 0.568,
+          "p95_query_ms": 0.98
+        },
+        "next_scheduled_missing": {
+          "iterations": 40,
+          "median_total_ms": 0.444,
+          "p95_total_ms": 0.569,
+          "median_query_count": 2,
+          "median_query_ms": 0.353,
+          "p95_query_ms": 0.47
+        },
+        "unschedule_existing": {
+          "iterations": 40,
+          "median_total_ms": 9.622,
+          "p95_total_ms": 11.531,
+          "median_query_count": 3,
+          "median_query_ms": 9.436,
+          "p95_query_ms": 11.324
+        },
+        "schedule_new": {
+          "iterations": 40,
+          "median_total_ms": 10.234,
+          "p95_total_ms": 11.952,
+          "median_query_count": 3,
+          "median_query_ms": 9.988,
+          "p95_query_ms": 11.439
+        },
+        "stake_claim": {
+          "iterations": 40,
+          "median_total_ms": 54.128,
+          "p95_total_ms": 60.483,
+          "median_query_count": 6,
+          "median_query_ms": 53.836,
+          "p95_query_ms": 60.199
+        }
+      },
+      "direct_summary": {
+        "query_action_existing_pending": {
+          "iterations": 40,
+          "median_total_ms": 0.189,
+          "p95_total_ms": 0.307,
+          "median_query_count": 1,
+          "median_query_ms": 0.165,
+          "p95_query_ms": 0.282
+        },
+        "query_action_missing_pending": {
+          "iterations": 40,
+          "median_total_ms": 0.177,
+          "p95_total_ms": 0.204,
+          "median_query_count": 1,
+          "median_query_ms": 0.156,
+          "p95_query_ms": 0.183
+        },
+        "claim_select_due": {
+          "iterations": 40,
+          "median_total_ms": 9.196,
+          "p95_total_ms": 9.336,
+          "median_query_count": 1,
+          "median_query_ms": 9.14,
+          "p95_query_ms": 9.275
+        },
+        "bulk_cancel_select": {
+          "iterations": 40,
+          "median_total_ms": 0.193,
+          "p95_total_ms": 0.222,
+          "median_query_count": 1,
+          "median_query_ms": 0.168,
+          "p95_query_ms": 0.194
+        }
+      },
+      "explain": {
+        "query_action_existing_pending": {
+          "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a LEFT JOIN wp_actionscheduler_groups g ON g.group_id=a.group_id WHERE 1=1 AND g.slug='wc-perf-subscription-scale-10000-d92de444' AND a.hook='woocommerce_subscriptions_engine_process_renewal' AND a.args='[1]' AND a.status IN ('pending') ORDER BY a.scheduled_date_gmt ASC LIMIT 0, 1",
+          "explain": [
+            {
+              "id": "1",
+              "select_type": "SIMPLE",
+              "table": "a",
+              "partitions": null,
+              "type": "ref",
+              "possible_keys": "hook_status_scheduled_date_gmt,status_scheduled_date_gmt,args,group_id,status_last_attempt_gmt,status_claim_id",
+              "key": "args",
+              "key_len": "767",
+              "ref": "const",
+              "rows": "1",
+              "filtered": "49.99",
+              "Extra": "Using where; Using filesort"
+            },
+            {
+              "id": "1",
+              "select_type": "SIMPLE",
+              "table": "g",
+              "partitions": null,
+              "type": "eq_ref",
+              "possible_keys": "PRIMARY,slug",
+              "key": "PRIMARY",
+              "key_len": "8",
+              "ref": "wordpress.a.group_id",
+              "rows": "1",
+              "filtered": "10.00",
+              "Extra": "Using where"
+            }
+          ]
+        },
+        "claim_select_due": {
+          "sql": "SELECT action_id FROM wp_actionscheduler_actions WHERE claim_id = 0 AND scheduled_date_gmt <= '2026-07-02 14:03:04' AND status='pending' AND hook IN ('woocommerce_subscriptions_engine_process_renewal') AND group_id IN ( 11 ) ORDER BY priority ASC, attempts ASC, scheduled_date_gmt ASC, action_id ASC LIMIT 25",
+          "explain": [
+            {
+              "id": "1",
+              "select_type": "SIMPLE",
+              "table": "wp_actionscheduler_actions",
+              "partitions": null,
+              "type": "index_merge",
+              "possible_keys": "hook_status_scheduled_date_gmt,status_scheduled_date_gmt,scheduled_date_gmt,group_id,claim_id_status_priority_scheduled_date_gmt,status_last_attempt_gmt,status_claim_id",
+              "key": "status_claim_id,group_id",
+              "key_len": "90,8",
+              "ref": null,
+              "rows": "2473",
+              "filtered": "5.00",
+              "Extra": "Using intersect(status_claim_id,group_id); Using where; Using filesort"
+            }
+          ]
+        }
+      }
+    },
+    "fifty_k": {
+      "fixture": {
+        "hook": "woocommerce_subscriptions_engine_process_renewal",
+        "group": "wc-perf-subscription-scale-50000-5e329be4",
+        "group_id": 12,
+        "seeded_actions": 50000,
+        "due_actions": 25206,
+        "future_actions": 24794,
+        "seed_ms": 2434.23,
+        "iterations": 30,
+        "claim_size": 25,
+        "cleanup_after": true,
+        "contract_id_args": "[contract_id], matching RenewalScheduler::schedule( int $contract_id, DateTimeImmutable $when )"
+      },
+      "db_store_summary": {
+        "next_scheduled_existing": {
+          "iterations": 30,
+          "median_total_ms": 0.954,
+          "p95_total_ms": 1.271,
+          "median_query_count": 3,
+          "median_query_ms": 0.713,
+          "p95_query_ms": 0.954
+        },
+        "next_scheduled_missing": {
+          "iterations": 30,
+          "median_total_ms": 0.461,
+          "p95_total_ms": 0.556,
+          "median_query_count": 2,
+          "median_query_ms": 0.367,
+          "p95_query_ms": 0.444
+        },
+        "unschedule_existing": {
+          "iterations": 30,
+          "median_total_ms": 9.406,
+          "p95_total_ms": 18.633,
+          "median_query_count": 3,
+          "median_query_ms": 9.213,
+          "p95_query_ms": 18.422
+        },
+        "schedule_new": {
+          "iterations": 30,
+          "median_total_ms": 9.079,
+          "p95_total_ms": 17.831,
+          "median_query_count": 3,
+          "median_query_ms": 8.775,
+          "p95_query_ms": 17.551
+        },
+        "stake_claim": {
+          "iterations": 30,
+          "median_total_ms": 181.919,
+          "p95_total_ms": 213.549,
+          "median_query_count": 6,
+          "median_query_ms": 181.432,
+          "p95_query_ms": 213.054
+        }
+      },
+      "direct_summary": {
+        "query_action_existing_pending": {
+          "iterations": 30,
+          "median_total_ms": 0.204,
+          "p95_total_ms": 0.313,
+          "median_query_count": 1,
+          "median_query_ms": 0.18,
+          "p95_query_ms": 0.277
+        },
+        "query_action_missing_pending": {
+          "iterations": 30,
+          "median_total_ms": 0.183,
+          "p95_total_ms": 0.244,
+          "median_query_count": 1,
+          "median_query_ms": 0.161,
+          "p95_query_ms": 0.224
+        },
+        "claim_select_due": {
+          "iterations": 30,
+          "median_total_ms": 45.513,
+          "p95_total_ms": 55.566,
+          "median_query_count": 1,
+          "median_query_ms": 45.423,
+          "p95_query_ms": 55.472
+        },
+        "bulk_cancel_select": {
+          "iterations": 30,
+          "median_total_ms": 0.202,
+          "p95_total_ms": 0.35,
+          "median_query_count": 1,
+          "median_query_ms": 0.178,
+          "p95_query_ms": 0.299
+        }
+      },
+      "explain": {
+        "query_action_existing_pending": {
+          "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a LEFT JOIN wp_actionscheduler_groups g ON g.group_id=a.group_id WHERE 1=1 AND g.slug='wc-perf-subscription-scale-50000-5e329be4' AND a.hook='woocommerce_subscriptions_engine_process_renewal' AND a.args='[1]' AND a.status IN ('pending') ORDER BY a.scheduled_date_gmt ASC LIMIT 0, 1",
+          "explain": [
+            {
+              "id": "1",
+              "select_type": "SIMPLE",
+              "table": "a",
+              "partitions": null,
+              "type": "ref",
+              "possible_keys": "hook_status_scheduled_date_gmt,status_scheduled_date_gmt,args,group_id,status_last_attempt_gmt,status_claim_id",
+              "key": "args",
+              "key_len": "767",
+              "ref": "const",
+              "rows": "1",
+              "filtered": "50.00",
+              "Extra": "Using where; Using filesort"
+            },
+            {
+              "id": "1",
+              "select_type": "SIMPLE",
+              "table": "g",
+              "partitions": null,
+              "type": "eq_ref",
+              "possible_keys": "PRIMARY,slug",
+              "key": "PRIMARY",
+              "key_len": "8",
+              "ref": "wordpress.a.group_id",
+              "rows": "1",
+              "filtered": "10.00",
+              "Extra": "Using where"
+            }
+          ]
+        },
+        "claim_select_due": {
+          "sql": "SELECT action_id FROM wp_actionscheduler_actions WHERE claim_id = 0 AND scheduled_date_gmt <= '2026-07-02 14:03:33' AND status='pending' AND hook IN ('woocommerce_subscriptions_engine_process_renewal') AND group_id IN ( 12 ) ORDER BY priority ASC, attempts ASC, scheduled_date_gmt ASC, action_id ASC LIMIT 25",
+          "explain": [
+            {
+              "id": "1",
+              "select_type": "SIMPLE",
+              "table": "wp_actionscheduler_actions",
+              "partitions": null,
+              "type": "index_merge",
+              "possible_keys": "hook_status_scheduled_date_gmt,status_scheduled_date_gmt,scheduled_date_gmt,group_id,claim_id_status_priority_scheduled_date_gmt,status_last_attempt_gmt,status_claim_id",
+              "key": "status_claim_id,group_id",
+              "key_len": "90,8",
+              "ref": null,
+              "rows": "12286",
+              "filtered": "5.00",
+              "Extra": "Using intersect(status_claim_id,group_id); Using where; Using filesort"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "interpretation": {
+    "exact_contract_lookup": "DBStore next_scheduled lookups by exact [contract_id] args used the args index and stayed sub-millisecond to about 1ms at 10k-50k seeded actions.",
+    "claim_path": "The due-action claim path scaled with due row count. DBStore::stake_claim for a 25-action batch rose from 54.128ms median at 10k seeded actions to 181.919ms median at 50k seeded actions; the direct claim SELECT rose from 9.196ms to 45.513ms median.",
+    "optimizer": "For 50k actions, MySQL estimated 12,286 rows for the claim SELECT and used index_merge(status_claim_id,group_id) plus filesort rather than an order-covering claim index."
+  }
+}
