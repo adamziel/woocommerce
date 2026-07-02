@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-07-02T14:22:41Z",
+  "generated_at": "2026-07-02T15:34:50.839Z",
   "source": "gh pr list --repo adamziel/woocommerce --state all --limit 50 --json number,title,state,createdAt,updatedAt,url,headRefName,baseRefName,isDraft; gh pr view 11914 --repo Automattic/woocommerce-payments --json number,title,state,createdAt,updatedAt,url,headRefName,baseRefName,isDraft,headRepositoryOwner; gh pr view 4494 --repo woocommerce/woocommerce-paypal-payments --json number,title,state,createdAt,updatedAt,url,headRefName,baseRefName,isDraft,headRepositoryOwner; gh pr view 1340 --repo woocommerce/action-scheduler --json number,title,state,createdAt,updatedAt,url,headRefName,baseRefName,isDraft,headRepositoryOwner",
   "scope": "WooCommerce performance PRs created in the last 36 hours, plus external gateway/plugin PRs and older June 26 PRs for project context.",
   "last_36_hours": {
-    "window_note": "As of 2026-07-02T13:34:30Z, WooCommerce core PRs #16-#33, WooPayments PR #11914, and PayPal Payments PR #4494 were created within the previous 36 hours. Action Scheduler PR #1340 was also created in this window as the upstream fix candidate for the scheduler claim-index lane.",
+    "window_note": "As of 2026-07-02T15:45:00Z, WooCommerce core PRs #16-#33, WooPayments PR #11914, PayPal Payments PRs #4494 and #4495, and Action Scheduler PR #1340 were created within the previous 36 hours.",
     "problems": [
       {
         "problem": "Gateway admin provider/onboarding remote calls",
@@ -66,6 +66,22 @@
         ],
         "superseded_or_duplicate_prs": [],
         "profiling_link": "PayPal settings profile showed ReferenceTransactionStatus calling PartnersEndpoint::seller_status during settings render. In a primed-failure XHProf/HTTP trace, PR #4494 reduced PayPal merchant-integration HTTP calls from 3/3 requests to 0/3 while leaving the separate Jetpack/WooPayments calls for core PR #31."
+      },
+      {
+        "problem": "PayPal settings REST data loading during unrelated Store API requests",
+        "current_prs": [
+          {
+            "number": 4495,
+            "title": "Defer settings REST endpoint data loading",
+            "url": "https://github.com/woocommerce/woocommerce-paypal-payments/pull/4495",
+            "repository": "woocommerce/woocommerce-paypal-payments",
+            "state": "OPEN",
+            "created_at": "2026-07-02T15:45:00Z",
+            "branch": "perf/lazy-settings-rest-endpoint-data"
+          }
+        ],
+        "superseded_or_duplicate_prs": [],
+        "profiling_link": "Store API Cart-Token read with PayPal active originally triggered wp_woocommerce_sessions SELECT through PayPal settings REST route registration -> PaymentRestEndpoint->get_details(). PR #4495 defers login_link/todos/features data dependencies so the session SELECT caller moves back to Woo Store API route schema registration. Remaining PayPal-active query delta is mostly separate HPOS background-sync option read amplification."
       },
       {
         "problem": "Shipping postcode-zone location reloads across split-package lookups",

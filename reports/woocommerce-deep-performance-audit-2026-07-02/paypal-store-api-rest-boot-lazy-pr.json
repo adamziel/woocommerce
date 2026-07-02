@@ -1,0 +1,209 @@
+{
+  "measured_at_gmt": "2026-07-02T15:34:50.838Z",
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "active_plugins": [
+      "woocommerce-gateway-stripe/woocommerce-gateway-stripe.php",
+      "woocommerce-payments/woocommerce-payments.php",
+      "woocommerce-paypal-payments/woocommerce-paypal-payments.php",
+      "woocommerce/woocommerce.php"
+    ],
+    "destroy_empty_sessions_enabled": false
+  },
+  "fixture": {
+    "fixture": {
+      "orders": 60000,
+      "products": 6000,
+      "variations": 800,
+      "variable_parent_id": 6014,
+      "first_product_id": 14,
+      "first_order_id": 9000001,
+      "last_order_id": 9060000,
+      "created_gmt": "2026-07-01T11:27:24+00:00"
+    },
+    "pathological": {
+      "orders": 1000000,
+      "products": 200000,
+      "variations": 800,
+      "analytics_rows": 1000000,
+      "heavy_order_id": 9999001,
+      "heavy_order_items": 1000,
+      "first_product_id": 14,
+      "last_product_id": 200877,
+      "created_gmt": "2026-07-01T12:58:15+00:00"
+    },
+    "shipping_tax": {
+      "fixture": "core-shipping-tax-postcode-ranges",
+      "product_id": 200929,
+      "shipping_zones": 8000,
+      "shipping_methods": 8000,
+      "tax_rates": 12000,
+      "tax_locations": 12000,
+      "target_country": "US",
+      "target_state": "CA",
+      "target_postcode": "94105",
+      "target_city": "Perf City",
+      "generated_at_gmt": "2026-07-02T12:14:39+00:00"
+    }
+  },
+  "pull_request": {
+    "repository": "woocommerce/woocommerce-paypal-payments",
+    "number": 4495,
+    "url": "https://github.com/woocommerce/woocommerce-paypal-payments/pull/4495",
+    "title": "Defer settings REST endpoint data loading",
+    "branch": "perf/lazy-settings-rest-endpoint-data",
+    "commit": "c4b7301"
+  },
+  "source_paths": [
+    "modules/ppcp-settings/src/SettingsModule.php:286",
+    "modules/ppcp-settings/services.php:269",
+    "modules/ppcp-settings/services.php:477",
+    "modules/ppcp-settings/services.php:662",
+    "modules/ppcp-settings/src/Endpoint/LoginLinkRestEndpoint.php:100",
+    "modules/ppcp-settings/src/Endpoint/TodosRestEndpoint.php:135",
+    "modules/ppcp-settings/src/Endpoint/FeaturesRestEndpoint.php:84",
+    "modules/ppcp-api-client/services.php:346",
+    "modules/ppcp-settings/services.php:668",
+    "modules/ppcp-settings/src/Endpoint/PaymentRestEndpoint.php:162",
+    "modules/ppcp-settings/src/Data/Definition/PaymentMethodsDefinition.php:99"
+  ],
+  "comparisons": {
+    "02-empty-cart-with-token": {
+      "paypal_active_baseline": {
+        "label": "02-empty-cart-with-token",
+        "run_id": "02-empty-cart-with-token-1783005861243-68ff275d80436",
+        "server_ms": 68.99,
+        "query_count": 96,
+        "query_time_ms": 16.61,
+        "session_selects": 1,
+        "session_caller_summary": "PayPal settings route registration -> PaymentRestEndpoint->get_details -> payment gateways -> WooPayments multicurrency -> StoreApi session",
+        "session_caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\Settings\\SettingsModule::WooCommerce\\PayPalCommerce\\Settings\\{closure}, WooCommerce\\PayPalCommerce\\Vendor\\Inpsyde\\Modularity\\Container\\ReadOnlyContainer->get, WooCommerce\\PayPalCommerce\\Settings\\SettingsModule::WooCommerce\\PayPalCommerce\\Settings\\{closure}, WooCommerce\\PayPalCommerce\\Vendor\\Inpsyde\\Modularity\\Container\\ReadOnlyContainer->get, WooCommerce\\PayPalCommerce\\Settings\\SettingsModule::WooCommerce\\PayPalCommerce\\Settings\\{closure}, WooCommerce\\PayPalCommerce\\Vendor\\Inpsyde\\Modularity\\Container\\ReadOnlyContainer->get, WooCommerce\\PayPalCommerce\\ApiClient\\ApiModule::WooCommerce\\PayPalCommerce\\ApiClient\\{closure}, WooCommerce\\PayPalCommerce\\Vendor\\Inpsyde\\Modularity\\Container\\ReadOnlyContainer->get, WooCommerce\\PayPalCommerce\\Settings\\SettingsModule::WooCommerce\\PayPalCommerce\\Settings\\{closure}, WooCommerce\\PayPalCommerce\\Settings\\Endpoint\\PaymentRestEndpoint->get_details, WooCommerce\\PayPalCommerce\\Settings\\Endpoint\\PaymentRestEndpoint->gateways, WooCommerce\\PayPalCommerce\\Settings\\Data\\Definition\\PaymentMethodsDefinition->get_definitions, WooCommerce->payment_gateways, WC_Payment_Gateways::instance, WC_Payment_Gateways->__construct, WC_Payment_Gateways->init, WC_Gateway_Paypal->__construct, WC_Gateway_Paypal->is_valid_for_use, get_woocommerce_currency, apply_filters('woocommerce_currency'), WP_Hook->apply_filters, WCPay\\MultiCurrency\\FrontendCurrencies->get_woocommerce_currency, WCPay\\MultiCurrency\\FrontendCurrencies->get_selected_currency_code, WCPay\\MultiCurrency\\MultiCurrency->get_selected_currency, WCPay\\MultiCurrency\\MultiCurrency->get_stored_currency_code, WooCommerce->initialize_session, Automattic\\WooCommerce\\StoreApi\\SessionHandler->init, Automattic\\WooCommerce\\StoreApi\\Sessi",
+        "hpos_background_sync_option_reads": 76,
+        "hpos_background_sync_option_seconds": 0.011731,
+        "session_row_after_request": null
+      },
+      "paypal_inactive_comparison": {
+        "label": "02-empty-cart-with-token",
+        "run_id": "02-empty-cart-with-token-1783005903067-b7eeae856bd63",
+        "server_ms": 47.42,
+        "query_count": 66,
+        "query_time_ms": 9.54,
+        "session_selects": 1,
+        "session_caller_summary": "Woo Store API checkout route schema registration -> payment gateways -> WooPayments multicurrency -> StoreApi session",
+        "session_caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\StoreApi\\StoreApi->Automattic\\WooCommerce\\StoreApi\\{closure}, Automattic\\WooCommerce\\StoreApi\\RoutesController->register_all_routes, Automattic\\WooCommerce\\StoreApi\\RoutesController->register_routes, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\Checkout->get_args, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_context_param, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_item_schema, Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\AbstractSchema->get_item_schema, Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\CheckoutSchema->get_properties, WooCommerce->__get, WooCommerce->payment_gateways, WC_Payment_Gateways::instance, WC_Payment_Gateways->__construct, WC_Payment_Gateways->init, WC_Gateway_Paypal->__construct, WC_Gateway_Paypal->is_valid_for_use, get_woocommerce_currency, apply_filters('woocommerce_currency'), WP_Hook->apply_filters, WCPay\\MultiCurrency\\FrontendCurrencies->get_woocommerce_currency, WCPay\\MultiCurrency\\FrontendCurrencies->get_selected_currency_code, WCPay\\MultiCurrency\\MultiCurrency->get_selected_currency, WCPay\\MultiCurrency\\MultiCurrency->get_stored_currency_code, WooCommerce->initialize_session, Automattic\\WooCommerce\\StoreApi\\SessionHandler->init, Automattic\\WooCommerce\\StoreApi\\SessionHandler->init_session_from_token, Automattic\\WooCommerce\\StoreApi\\SessionHandler->get_session",
+        "hpos_background_sync_option_reads": 49,
+        "hpos_background_sync_option_seconds": 0.00566,
+        "session_row_after_request": null
+      },
+      "lazy_endpoint_candidate": {
+        "label": "02-empty-cart-with-token",
+        "run_id": "02-empty-cart-with-token-1783006261385-cdac863228e5d",
+        "server_ms": 51.58,
+        "query_count": 95,
+        "query_time_ms": 11.95,
+        "session_selects": 1,
+        "session_caller_summary": "Woo Store API checkout route schema registration -> payment gateways -> WooPayments multicurrency -> StoreApi session",
+        "session_caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\StoreApi\\StoreApi->Automattic\\WooCommerce\\StoreApi\\{closure}, Automattic\\WooCommerce\\StoreApi\\RoutesController->register_all_routes, Automattic\\WooCommerce\\StoreApi\\RoutesController->register_routes, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\Checkout->get_args, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_context_param, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_item_schema, Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\AbstractSchema->get_item_schema, Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\CheckoutSchema->get_properties, WooCommerce->__get, WooCommerce->payment_gateways, WC_Payment_Gateways::instance, WC_Payment_Gateways->__construct, WC_Payment_Gateways->init, WC_Gateway_Paypal->__construct, WC_Gateway_Paypal->is_valid_for_use, get_woocommerce_currency, apply_filters('woocommerce_currency'), WP_Hook->apply_filters, WCPay\\MultiCurrency\\FrontendCurrencies->get_woocommerce_currency, WCPay\\MultiCurrency\\FrontendCurrencies->get_selected_currency_code, WCPay\\MultiCurrency\\MultiCurrency->get_selected_currency, WCPay\\MultiCurrency\\MultiCurrency->get_stored_currency_code, WooCommerce->initialize_session, Automattic\\WooCommerce\\StoreApi\\SessionHandler->init, Automattic\\WooCommerce\\StoreApi\\SessionHandler->init_session_from_token, Automattic\\WooCommerce\\StoreApi\\SessionHandler->get_session",
+        "hpos_background_sync_option_reads": 75,
+        "hpos_background_sync_option_seconds": 0.008096,
+        "session_row_after_request": null
+      }
+    },
+    "07-empty-after-remove-first-read": {
+      "paypal_active_baseline": {
+        "label": "07-empty-after-remove-first-read",
+        "run_id": "07-empty-after-remove-first-read-1783005872927-6b47b9332b44f",
+        "server_ms": 57.73,
+        "query_count": 96,
+        "query_time_ms": 12.15,
+        "session_selects": 1,
+        "session_caller_summary": "PayPal settings route registration -> PaymentRestEndpoint->get_details -> payment gateways -> WooPayments multicurrency -> StoreApi session",
+        "session_caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\Settings\\SettingsModule::WooCommerce\\PayPalCommerce\\Settings\\{closure}, WooCommerce\\PayPalCommerce\\Vendor\\Inpsyde\\Modularity\\Container\\ReadOnlyContainer->get, WooCommerce\\PayPalCommerce\\Settings\\SettingsModule::WooCommerce\\PayPalCommerce\\Settings\\{closure}, WooCommerce\\PayPalCommerce\\Vendor\\Inpsyde\\Modularity\\Container\\ReadOnlyContainer->get, WooCommerce\\PayPalCommerce\\Settings\\SettingsModule::WooCommerce\\PayPalCommerce\\Settings\\{closure}, WooCommerce\\PayPalCommerce\\Vendor\\Inpsyde\\Modularity\\Container\\ReadOnlyContainer->get, WooCommerce\\PayPalCommerce\\ApiClient\\ApiModule::WooCommerce\\PayPalCommerce\\ApiClient\\{closure}, WooCommerce\\PayPalCommerce\\Vendor\\Inpsyde\\Modularity\\Container\\ReadOnlyContainer->get, WooCommerce\\PayPalCommerce\\Settings\\SettingsModule::WooCommerce\\PayPalCommerce\\Settings\\{closure}, WooCommerce\\PayPalCommerce\\Settings\\Endpoint\\PaymentRestEndpoint->get_details, WooCommerce\\PayPalCommerce\\Settings\\Endpoint\\PaymentRestEndpoint->gateways, WooCommerce\\PayPalCommerce\\Settings\\Data\\Definition\\PaymentMethodsDefinition->get_definitions, WooCommerce->payment_gateways, WC_Payment_Gateways::instance, WC_Payment_Gateways->__construct, WC_Payment_Gateways->init, WC_Gateway_Paypal->__construct, WC_Gateway_Paypal->is_valid_for_use, get_woocommerce_currency, apply_filters('woocommerce_currency'), WP_Hook->apply_filters, WCPay\\MultiCurrency\\FrontendCurrencies->get_woocommerce_currency, WCPay\\MultiCurrency\\FrontendCurrencies->get_selected_currency_code, WCPay\\MultiCurrency\\MultiCurrency->get_selected_currency, WCPay\\MultiCurrency\\MultiCurrency->get_stored_currency_code, WooCommerce->initialize_session, Automattic\\WooCommerce\\StoreApi\\SessionHandler->init, Automattic\\WooCommerce\\StoreApi\\Sessi",
+        "hpos_background_sync_option_reads": 76,
+        "hpos_background_sync_option_seconds": 0.008257,
+        "session_row_after_request": {
+          "session_id": 1112,
+          "session_key": "t_77372ae88be9248b30f1573ff65b22",
+          "session_value_bytes": 1018,
+          "session_expiry": 1783178663,
+          "data_keys": [
+            "shipping_for_package_0",
+            "ppcp_fees",
+            "removed_cart_contents"
+          ],
+          "cart_items": 0,
+          "removed_cart_items": 1,
+          "cart_totals_set": false,
+          "raw_cart_empty": false
+        }
+      },
+      "paypal_inactive_comparison": {
+        "label": "07-empty-after-remove-first-read",
+        "run_id": "07-empty-after-remove-first-read-1783005914415-9fc27cce62ad7",
+        "server_ms": 44.04,
+        "query_count": 67,
+        "query_time_ms": 10.37,
+        "session_selects": 1,
+        "session_caller_summary": "Woo Store API checkout route schema registration -> payment gateways -> WooPayments multicurrency -> StoreApi session",
+        "session_caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\StoreApi\\StoreApi->Automattic\\WooCommerce\\StoreApi\\{closure}, Automattic\\WooCommerce\\StoreApi\\RoutesController->register_all_routes, Automattic\\WooCommerce\\StoreApi\\RoutesController->register_routes, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\Checkout->get_args, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_context_param, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_item_schema, Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\AbstractSchema->get_item_schema, Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\CheckoutSchema->get_properties, WooCommerce->__get, WooCommerce->payment_gateways, WC_Payment_Gateways::instance, WC_Payment_Gateways->__construct, WC_Payment_Gateways->init, WC_Gateway_Paypal->__construct, WC_Gateway_Paypal->is_valid_for_use, get_woocommerce_currency, apply_filters('woocommerce_currency'), WP_Hook->apply_filters, WCPay\\MultiCurrency\\FrontendCurrencies->get_woocommerce_currency, WCPay\\MultiCurrency\\FrontendCurrencies->get_selected_currency_code, WCPay\\MultiCurrency\\MultiCurrency->get_selected_currency, WCPay\\MultiCurrency\\MultiCurrency->get_stored_currency_code, WooCommerce->initialize_session, Automattic\\WooCommerce\\StoreApi\\SessionHandler->init, Automattic\\WooCommerce\\StoreApi\\SessionHandler->init_session_from_token, Automattic\\WooCommerce\\StoreApi\\SessionHandler->get_session",
+        "hpos_background_sync_option_reads": 49,
+        "hpos_background_sync_option_seconds": 0.00619,
+        "session_row_after_request": {
+          "session_id": 1114,
+          "session_key": "t_9d709b1b737d085baa930234d17817",
+          "session_value_bytes": 989,
+          "session_expiry": 1783178705,
+          "data_keys": [
+            "shipping_for_package_0",
+            "removed_cart_contents"
+          ],
+          "cart_items": 0,
+          "removed_cart_items": 1,
+          "cart_totals_set": false,
+          "raw_cart_empty": false
+        }
+      },
+      "lazy_endpoint_candidate": {
+        "label": "07-empty-after-remove-first-read",
+        "run_id": "07-empty-after-remove-first-read-1783006273200-f470beba9ed2e",
+        "server_ms": 58.26,
+        "query_count": 95,
+        "query_time_ms": 12.87,
+        "session_selects": 1,
+        "session_caller_summary": "Woo Store API checkout route schema registration -> payment gateways -> WooPayments multicurrency -> StoreApi session",
+        "session_caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\StoreApi\\StoreApi->Automattic\\WooCommerce\\StoreApi\\{closure}, Automattic\\WooCommerce\\StoreApi\\RoutesController->register_all_routes, Automattic\\WooCommerce\\StoreApi\\RoutesController->register_routes, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\Checkout->get_args, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_context_param, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_item_schema, Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\AbstractSchema->get_item_schema, Automattic\\WooCommerce\\StoreApi\\Schemas\\V1\\CheckoutSchema->get_properties, WooCommerce->__get, WooCommerce->payment_gateways, WC_Payment_Gateways::instance, WC_Payment_Gateways->__construct, WC_Payment_Gateways->init, WC_Gateway_Paypal->__construct, WC_Gateway_Paypal->is_valid_for_use, get_woocommerce_currency, apply_filters('woocommerce_currency'), WP_Hook->apply_filters, WCPay\\MultiCurrency\\FrontendCurrencies->get_woocommerce_currency, WCPay\\MultiCurrency\\FrontendCurrencies->get_selected_currency_code, WCPay\\MultiCurrency\\MultiCurrency->get_selected_currency, WCPay\\MultiCurrency\\MultiCurrency->get_stored_currency_code, WooCommerce->initialize_session, Automattic\\WooCommerce\\StoreApi\\SessionHandler->init, Automattic\\WooCommerce\\StoreApi\\SessionHandler->init_session_from_token, Automattic\\WooCommerce\\StoreApi\\SessionHandler->get_session",
+        "hpos_background_sync_option_reads": 75,
+        "hpos_background_sync_option_seconds": 0.008742,
+        "session_row_after_request": {
+          "session_id": 1118,
+          "session_key": "t_31f4203fe4580820ff909e5902ed8d",
+          "session_value_bytes": 1018,
+          "session_expiry": 1783179063,
+          "data_keys": [
+            "shipping_for_package_0",
+            "ppcp_fees",
+            "removed_cart_contents"
+          ],
+          "cart_items": 0,
+          "removed_cart_items": 1,
+          "cart_totals_set": false,
+          "raw_cart_empty": false
+        }
+      }
+    }
+  },
+  "finding": "PayPal Payments settings REST route registration was doing admin data construction during unrelated Store API requests. The path went through login_link/partner-referrals/features/payment details and initialized WooCommerce gateways, which in turn triggered WooPayments multicurrency and the Store API session SELECT. PR #4495 defers login_link, todos, and features endpoint data dependencies until their endpoint callbacks run; the measured Store API session SELECT caller moves back to Woo Store API route schema registration.",
+  "remaining_gap": "The broader PayPal-active query delta is not resolved by PR #4495. In the tokenized empty cart sample, PayPal active candidate still had 95 queries vs 66 with PayPal inactive. Most of that remaining delta is repeated HPOS background-sync option reads: 75 reads with PayPal active candidate vs 49 with PayPal inactive. Treat this as a separate PayPal/core initialization interaction, not the settings REST eager data bug.",
+  "tests": [
+    "php -l on changed PayPal endpoint/service files",
+    "vendor/bin/phpcs modules/ppcp-settings/services.php modules/ppcp-settings/src/Endpoint/FeaturesRestEndpoint.php modules/ppcp-settings/src/Endpoint/LoginLinkRestEndpoint.php modules/ppcp-settings/src/Endpoint/TodosRestEndpoint.php",
+    "vendor/bin/phpunit: 1407 tests, 5442 assertions, 3 skipped"
+  ],
+  "notes": [
+    "The benchmark WordPress install uses the WordPress.org PayPal Payments 4.1.0 production build. The candidate was applied equivalently to the built plugin files for runtime measurement; the PR itself targets source branch dev/develop.",
+    "The profiler stores caller strings with a length cap, so very long PayPal active session callers are truncated after StoreApi\\Sessi in the raw query digest. The summarized path is reconstructed from the complete source audit plus the retained caller prefix."
+  ]
+}
