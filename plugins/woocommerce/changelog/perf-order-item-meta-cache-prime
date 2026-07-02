@@ -1,0 +1,4 @@
+Significance: patch
+Type: performance
+
+Prime order item meta caches before hydrating large order item lists.

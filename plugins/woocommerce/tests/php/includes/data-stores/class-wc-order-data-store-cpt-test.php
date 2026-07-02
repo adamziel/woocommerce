@@ -1520,4 +1520,49 @@ class WC_Order_Data_Store_CPT_Test extends WC_Unit_Test_Case {
 			$this->assertGreaterThan( 0, $item->get_product_id(), 'Item should have a product ID from cached meta' );
 		}
 	}
+
+	/**
+	 * @testdox Loading a single order's items primes item meta instead of querying one item at a time.
+	 */
+	public function test_get_items_primes_item_meta_for_single_order_load(): void {
+		$order = WC_Helper_Order::create_order();
+
+		for ( $i = 0; $i < 2; $i++ ) {
+			$order->add_product( WC_Helper_Product::create_simple_product(), 1 );
+		}
+		$order->save();
+
+		wp_cache_flush();
+		WC_Cache_Helper::invalidate_cache_group( 'orders' );
+
+		$item_meta_queries = array();
+		$query_filter      = static function ( $query ) use ( &$item_meta_queries ) {
+			if (
+				false !== strpos( $query, 'woocommerce_order_itemmeta' )
+				&& false !== strpos( $query, 'WHERE order_item_id =' )
+			) {
+				$item_meta_queries[] = $query;
+			}
+
+			return $query;
+		};
+
+		add_filter( 'query', $query_filter );
+
+		try {
+			$reloaded_order = wc_get_order( $order->get_id() );
+			$items          = $reloaded_order->get_items();
+
+			$this->assertCount( 3, $items, 'Order should have three line items.' );
+
+			foreach ( $items as $item ) {
+				$this->assertGreaterThan( 0, $item->get_product_id(), 'Item should have a product ID from cached meta.' );
+				$this->assertIsArray( $item->get_all_formatted_meta_data( '' ), 'Formatted meta access should use cached item meta.' );
+			}
+		} finally {
+			remove_filter( 'query', $query_filter );
+		}
+
+		$this->assertCount( 0, $item_meta_queries, 'Order item hydration should not query item meta one item at a time.' );
+	}
 }
