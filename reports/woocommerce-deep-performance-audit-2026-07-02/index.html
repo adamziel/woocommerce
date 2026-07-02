@@ -103,7 +103,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#101820;color:#edf7ff;
 <td><span class="warn">Core shipping postcode-zone matching loads all postcode locations</span></td>
 <td>Same new core lane. Shipping contributes about 5ms/request loading all postcode locations and about 3ms/request selecting the matching zone at 8,000 generated zones.</td>
 <td><code>WC_Shipping_Zone_Data_Store->get_zone_id_from_package</code> first runs <code>SELECT zone_id, location_code FROM wp_woocommerce_shipping_zone_locations WHERE location_type = 'postcode'</code>, then builds a large <code>NOT IN (...)</code> exclusion list for the zone query.</td>
-<td>For larger merchants, replace all-postcode loading with indexed candidate selection or persisted normalized ranges. Avoid constructing a large NOT IN list after PHP matching.</td>
+<td>Measured dead-end: a PHP matcher micro-optimization did not improve request p95. Better direction: persist normalized postcode candidate data. A copied-table range-bound probe turns the matching numeric range lookup from an 8,000-row scan into a one-row index scan.</td>
 </tr>
 <tr>
 <td>9</td>
@@ -175,6 +175,20 @@ city/postcode absence checks appear as dependent subqueries</pre>
 </table>
 <p>Developer handoff: a production fix should not use MySQL casts as the final implementation. Store normalized range bounds at tax-location write time using the same PHP semantics as <code>wc_postcode_location_matcher()</code>, index <code>(location_type, range_max, range_min)</code>, query candidate ranges by bounds, and keep malformed/plugin-supplied range rows on the existing fallback path. This is a schema/migration project, not a small query-only PR.</p>
 
+<h3>Shipping Postcode Matcher Audit</h3>
+<p>The shipping path has the same high-level problem as taxes, but with a broader matcher call: <code>WC_Shipping_Zone_Data_Store->get_zone_id_from_package()</code> loads every postcode rule, then <code>wc_postcode_location_matcher()</code> performs range/wildcard matching in PHP before the final zone query excludes nonmatches with a generated <code>NOT IN</code> list.</p>
+<table>
+<thead><tr><th>Probe</th><th>Result</th><th>Interpretation</th><th>Artifact</th></tr></thead>
+<tbody>
+<tr><td>Current postcode load</td><td><code>SELECT zone_id, location_code ... location_type='postcode'</code> returns 8,000 rows; <code>EXPLAIN ANALYZE</code> actual <code>0.0975..4.6ms</code>.</td><td>This is the primary shipping-specific linear SQL cost in the measured fixture.</td><td><a href="shipping-core-audit.json">JSON</a></td></tr>
+<tr><td>SQL-side numeric range parse</td><td>Adding <code>CAST(SUBSTRING_INDEX(...))</code> returns one row but still scans/parses all 8,000 postcode rows; actual <code>4.94ms</code>.</td><td>Not a real scalability fix, and it does not cover alphanumeric postcode semantics safely.</td><td><a href="shipping-core-audit.json">JSON</a></td></tr>
+<tr><td>Generated final <code>NOT IN</code> zone query</td><td>With 7,999 excluded postcode-zone IDs, MySQL profile for the final zone select was <code>0.001668s</code> and returned zone <code>9501</code>.</td><td>The long SQL text is undesirable, but it was not the dominant runtime cost in this fixture.</td><td><a href="shipping-core-audit.json">JSON</a></td></tr>
+<tr><td>Copied-table range-bound probe</td><td>Generated <code>range_min</code>/<code>range_max</code> columns and <code>KEY(location_type(10), range_max, range_min)</code>; lookup actual <code>0.0331..0.0364ms</code>, one row.</td><td>Persisted normalized range bounds are the most promising shipping fix direction from this lane.</td><td><a href="shipping-core-audit.json">JSON</a></td></tr>
+</tbody>
+</table>
+<p>The PHP matcher rewrite was rejected by benchmark. Adjacent baseline request p95 was <code>109.683ms</code>. Candidate 1 p95 was <code>109.953ms</code>; candidate 2 p95 was <code>113.576ms</code> with worse DB p95. XHProf showed candidate 2 reduced <code>array_map</code> calls from <code>20,263</code> to <code>263</code> and matcher inclusive time from <code>40.240ms</code> to <code>34.178ms</code> in a one-request profile, but that did not translate into a reliable request-level improvement.</p>
+<p>Developer handoff: normalize shipping postcode rules when they are saved, store exact/wildcard candidates separately from numeric range bounds, and query only candidate postcode rows for the destination before invoking the existing PHP matcher as a compatibility fallback. The final zone query should consume a short matched-zone candidate list instead of the full all-postcode set.</p>
+
 <h2>Gateway Stack First Pass</h2>
 <div class="two">
 <div class="card">
@@ -239,7 +253,7 @@ city/postcode absence checks appear as dependent subqueries</pre>
 <thead><tr><th>Area</th><th>Code path</th><th>Concern</th></tr></thead>
 <tbody>
 <tr><td>Taxes</td><td><code>WC_Tax::get_matched_tax_rates</code></td><td><a href="https://github.com/adamziel/woocommerce/pull/29">PR #29</a> addresses the broad grouped matching-rate join. Cart totals still walk all postcode ranges in the cold lookup. A copied-table proof shows persisted normalized range bounds plus <code>(location_type, range_max, range_min)</code> can turn the numeric range lookup into an indexed candidate query. The single-rate helper methods <code>is_compound</code>, <code>get_rate_label</code>, <code>get_rate_percent_value</code>, and <code>get_rate_code</code> still query by ID when callers pass IDs instead of hydrated rate rows; those remain separate audit targets.</td></tr>
-<tr><td>Shipping</td><td><code>WC_Shipping_Zone_Data_Store->get_zone_id_from_package</code></td><td>The matcher loads every postcode location into PHP, runs postcode/range matching there, then excludes nonmatches via a generated <code>NOT IN</code> list. The existing <code>location_type_code(location_type(10), location_code(20))</code> index helps only with the location type filter in the measured shape.</td></tr>
+<tr><td>Shipping</td><td><code>WC_Shipping_Zone_Data_Store->get_zone_id_from_package</code></td><td>The matcher loads every postcode location into PHP, runs postcode/range matching there, then excludes nonmatches via a generated <code>NOT IN</code> list. The existing <code>location_type_code(location_type(10), location_code(20))</code> index helps only with the location type filter in the measured shape. A PHP matcher micro-optimization was benchmarked and rejected; persisted normalized range bounds are the stronger path.</td></tr>
 <tr><td>Prettyboymp commit context</td><td>Recent trunk history</td><td>Recent performance work clusters around object caching, HPOS datastore caching, product variation payloads, shipping-zone read-multiple support, analytics lazy loading, and tax/cart query reductions. The current slow paths line up with those themes: repeated object hydration, broad aggregates, and lookup shapes that need preselection rather than post-filtering.</td></tr>
 </tbody>
 </table>

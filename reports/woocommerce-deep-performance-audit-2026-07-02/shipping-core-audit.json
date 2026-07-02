@@ -1,0 +1,147 @@
+{
+  "measured_at_utc": "2026-07-02T11:21:19Z",
+  "fixture": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1 benchmark site",
+    "php": "8.3 Apache container",
+    "mysql": "8.0.46",
+    "shipping_zones": 8001,
+    "shipping_zone_locations": {
+      "country": 8001,
+      "postcode": 8000
+    },
+    "destination": {
+      "country": "US",
+      "state": "CA",
+      "postcode": "94105",
+      "city": "Perf City"
+    },
+    "matching_zone": {
+      "zone_id": 9501,
+      "location_code": "94100...94199"
+    }
+  },
+  "request_benchmark": {
+    "baseline": {
+      "artifact": "/home/claude/woocommerce/results/pr-postcode-matcher-adjacent-baseline-core-1/01-core-shipping-tax-cart-update.json",
+      "total_ms": {
+        "median": 99.729,
+        "p95": 109.683
+      },
+      "server_ms": {
+        "median": 91.45,
+        "p95": 99.4
+      },
+      "db_ms": {
+        "median": 51.01,
+        "p95": 52.61
+      },
+      "queries": {
+        "median": 66,
+        "p95": 66
+      }
+    },
+    "php_matcher_candidate_1": {
+      "artifact": "/home/claude/woocommerce/results/pr-postcode-matcher-candidate-core-1/01-core-shipping-tax-cart-update.json",
+      "total_ms": {
+        "median": 99.959,
+        "p95": 109.953
+      },
+      "server_ms": {
+        "median": 90.76,
+        "p95": 100.85
+      },
+      "db_ms": {
+        "median": 51.25,
+        "p95": 54.48
+      },
+      "queries": {
+        "median": 66,
+        "p95": 66
+      }
+    },
+    "php_matcher_candidate_2": {
+      "artifact": "/home/claude/woocommerce/results/pr-postcode-matcher-candidate-core-2/01-core-shipping-tax-cart-update.json",
+      "total_ms": {
+        "median": 98.936,
+        "p95": 113.576
+      },
+      "server_ms": {
+        "median": 89.26,
+        "p95": 101.08
+      },
+      "db_ms": {
+        "median": 51.76,
+        "p95": 57.87
+      },
+      "queries": {
+        "median": 66,
+        "p95": 66
+      }
+    }
+  },
+  "xhprof_matcher": {
+    "baseline": {
+      "artifact": "/home/claude/woocommerce/results/pr-postcode-matcher-xhprof-baseline-core/01-xhprof-cart-shipping-tax-gateways.json",
+      "wc_postcode_location_matcher": {
+        "calls": 2,
+        "inclusive_ms": 40.24,
+        "self_ms": 19.536
+      },
+      "array_map_calls": 20263,
+      "array_map_self_ms": 10.605,
+      "trim_calls": 45494,
+      "trim_self_ms": 4.166,
+      "explode_calls": 20895,
+      "explode_self_ms": 2.556
+    },
+    "candidate_2": {
+      "artifact": "/home/claude/woocommerce/results/pr-postcode-matcher-xhprof-candidate-core-2/01-xhprof-cart-shipping-tax-gateways.json",
+      "wc_postcode_location_matcher": {
+        "calls": 2,
+        "inclusive_ms": 34.178,
+        "self_ms": 22.274
+      },
+      "array_map_calls": 263,
+      "array_map_self_ms": 1.943,
+      "trim_calls": 45494,
+      "trim_self_ms": 4.1,
+      "explode_calls": 20895,
+      "explode_self_ms": 2.457
+    }
+  },
+  "sql_probes": {
+    "current_postcode_load": {
+      "sql": "SELECT zone_id, location_code FROM wp_woocommerce_shipping_zone_locations WHERE location_type = 'postcode';",
+      "explain_analyze": "Index lookup on location_type_code (location_type='postcode'); actual time=0.0965..4.1 rows=8000, filter actual time=0.0975..4.6 rows=8000",
+      "rows_returned": 8000,
+      "actual_ms_end": 4.6
+    },
+    "sql_numeric_range_parse": {
+      "sql": "SELECT zone_id, location_code FROM wp_woocommerce_shipping_zone_locations WHERE location_type = 'postcode' AND location_code LIKE '%...%' AND CAST(SUBSTRING_INDEX(location_code, '...', 1) AS UNSIGNED) <= 94105 AND CAST(SUBSTRING_INDEX(location_code, '...', -1) AS UNSIGNED) >= 94105;",
+      "explain_analyze": "Index lookup on location_type_code (location_type='postcode'); actual time=0.0562..3.19 rows=8000, filter actual time=4.94..4.94 rows=1",
+      "rows_returned": 1,
+      "actual_ms_end": 4.94,
+      "interpretation": "This returns fewer rows but still scans and parses all postcode rows, so it is not a real scalability fix."
+    },
+    "current_generated_not_in_zone_select": {
+      "sql": "Generated current final zone query with 7,999 nonmatching postcode zone IDs in NOT IN.",
+      "result_zone_id": 9501,
+      "mysql_profile_execute_seconds": 0.001668,
+      "interpretation": "The long NOT IN list is ugly and adds query text, but in this fixture it is not the primary SQL runtime problem. The all-postcode PHP prequery dominates shipping-specific work."
+    },
+    "range_bound_schema_probe": {
+      "table": "copy of wp_woocommerce_shipping_zone_locations, dropped after probe",
+      "generated_columns": [
+        "range_min BIGINT generated from SUBSTRING_INDEX(location_code, '...', 1)",
+        "range_max BIGINT generated from SUBSTRING_INDEX(location_code, '...', -1)"
+      ],
+      "index": "KEY location_type_range_max_min (location_type(10), range_max, range_min)",
+      "sql": "SELECT zone_id, location_code FROM probe WHERE location_type = 'postcode' AND range_max >= 94105 AND range_min <= 94105;",
+      "explain_analyze": "Index range scan using location_type_range_max_min over location_type='postcode' and 94105 <= range_max, with index condition range_max >= 94105 and range_min <= 94105; actual time=0.0331..0.0347 rows=1, filter actual time=0.0346..0.0364 rows=1",
+      "rows_returned": 1,
+      "actual_ms_end": 0.0364
+    }
+  },
+  "conclusion": "The PHP matcher micro-optimization reduced some function call counts but did not improve request p95, so it should not become a PR. The scalable direction is persisted normalized candidate data for postcode rules: exact/wildcard candidate lookup plus indexed numeric range bounds, with fallback to the existing PHP matcher for malformed or plugin-supplied codes that cannot be normalized safely."
+}
