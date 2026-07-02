@@ -187,6 +187,94 @@ class WC_Tests_Tax extends WC_Unit_Test_Case {
 	}
 
 	/**
+	 * Find tax rates across no-location, postcode, and city-only rules.
+	 */
+	public function test_find_rates_matches_location_rule_shapes() {
+		$base_tax_rate = array(
+			'tax_rate_country'  => 'US',
+			'tax_rate_state'    => 'CA',
+			'tax_rate'          => '1.0000',
+			'tax_rate_name'     => 'Base',
+			'tax_rate_priority' => '2',
+			'tax_rate_compound' => '0',
+			'tax_rate_shipping' => '1',
+			'tax_rate_order'    => '1',
+			'tax_rate_class'    => '',
+		);
+
+		$postcode_tax_rate = array(
+			'tax_rate_country'  => 'US',
+			'tax_rate_state'    => 'CA',
+			'tax_rate'          => '2.0000',
+			'tax_rate_name'     => 'Postcode',
+			'tax_rate_priority' => '3',
+			'tax_rate_compound' => '0',
+			'tax_rate_shipping' => '1',
+			'tax_rate_order'    => '2',
+			'tax_rate_class'    => '',
+		);
+
+		$city_tax_rate = array(
+			'tax_rate_country'  => 'US',
+			'tax_rate_state'    => 'CA',
+			'tax_rate'          => '3.0000',
+			'tax_rate_name'     => 'City',
+			'tax_rate_priority' => '4',
+			'tax_rate_compound' => '0',
+			'tax_rate_shipping' => '1',
+			'tax_rate_order'    => '3',
+			'tax_rate_class'    => '',
+		);
+
+		$miss_tax_rate = array(
+			'tax_rate_country'  => 'US',
+			'tax_rate_state'    => 'CA',
+			'tax_rate'          => '4.0000',
+			'tax_rate_name'     => 'Miss',
+			'tax_rate_priority' => '5',
+			'tax_rate_compound' => '0',
+			'tax_rate_shipping' => '1',
+			'tax_rate_order'    => '4',
+			'tax_rate_class'    => '',
+		);
+
+		$base_tax_rate_id     = WC_Tax::_insert_tax_rate( $base_tax_rate );
+		$postcode_tax_rate_id = WC_Tax::_insert_tax_rate( $postcode_tax_rate );
+		$city_tax_rate_id     = WC_Tax::_insert_tax_rate( $city_tax_rate );
+		$miss_tax_rate_id     = WC_Tax::_insert_tax_rate( $miss_tax_rate );
+
+		WC_Tax::_update_tax_rate_postcodes( $postcode_tax_rate_id, '94100...94199' );
+		WC_Tax::_update_tax_rate_cities( $city_tax_rate_id, 'PERF CITY' );
+		WC_Tax::_update_tax_rate_postcodes( $miss_tax_rate_id, '95000...95099' );
+		WC_Tax::_update_tax_rate_cities( $miss_tax_rate_id, 'OTHER CITY' );
+
+		$tax_rates = WC_Tax::find_rates(
+			array(
+				'country'   => 'US',
+				'state'     => 'CA',
+				'postcode'  => '94105',
+				'city'      => 'Perf City',
+				'tax_class' => '',
+			)
+		);
+
+		$this->assertSame(
+			array(
+				$base_tax_rate_id,
+				$postcode_tax_rate_id,
+				$city_tax_rate_id,
+			),
+			array_keys( $tax_rates )
+		);
+		$this->assertArrayNotHasKey( $miss_tax_rate_id, $tax_rates );
+
+		WC_Tax::_delete_tax_rate( $base_tax_rate_id );
+		WC_Tax::_delete_tax_rate( $postcode_tax_rate_id );
+		WC_Tax::_delete_tax_rate( $city_tax_rate_id );
+		WC_Tax::_delete_tax_rate( $miss_tax_rate_id );
+	}
+
+	/**
 	 * Find tax rates.
 	 */
 	public function test_find_shipping_rates() {
