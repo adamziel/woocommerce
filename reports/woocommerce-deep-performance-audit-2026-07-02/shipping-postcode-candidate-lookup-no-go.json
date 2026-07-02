@@ -1,0 +1,181 @@
+{
+  "measured_at_utc": "2026-07-02T12:12:10Z",
+  "branch": "perf/shipping-postcode-candidate-lookup",
+  "decision": "do_not_open_pr",
+  "reason": "The PHP-only candidate adds extra shipping-zone-location queries and does not improve request-level latency in either the range-heavy fixture or an exact-postcode fixture.",
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "site_url": "http://localhost:8099",
+    "active_plugins": [
+      "woocommerce-gateway-stripe/woocommerce-gateway-stripe.php",
+      "woocommerce-payments/woocommerce-payments.php",
+      "woocommerce-paypal-payments/woocommerce-paypal-payments.php",
+      "woocommerce/woocommerce.php"
+    ]
+  },
+  "request": {
+    "method": "POST",
+    "path": "/wp-json/wc/store/v1/cart/update-customer",
+    "target_address": {
+      "country": "US",
+      "state": "CA",
+      "postcode": "94105",
+      "city": "Perf City"
+    },
+    "iterations_per_run": 8
+  },
+  "candidate_shape": {
+    "intent": "Avoid loading all exact/wildcard postcode rows by querying exact postcode candidates through the existing location_type_code index, while preserving PHP matcher behavior for range rows and preserving legacy woocommerce_get_zone_criteria filter data.",
+    "new_queries": [
+      "SELECT DISTINCT zone_id FROM wp_woocommerce_shipping_zone_locations WHERE location_type = 'postcode';",
+      "SELECT DISTINCT zone_id FROM wp_woocommerce_shipping_zone_locations WHERE location_type = 'postcode' AND location_code IN ( ... );",
+      "SELECT zone_id, location_code FROM wp_woocommerce_shipping_zone_locations WHERE location_type = 'postcode' AND location_code LIKE '%...%';"
+    ],
+    "compatibility_fallback": "If woocommerce_get_zone_criteria has callbacks, the candidate keeps the legacy all-postcode row load so callbacks receive the same postcode_locations argument."
+  },
+  "range_postcode_fixture": {
+    "description": "Generated shipping fixture with 8,000 zones and one postcode range per zone. Matching zone uses 94100...94199. Tax fixture remains 12,000 postcode ranges.",
+    "local_artifacts": {
+      "baseline": "/home/claude/woocommerce/results/pr-shipping-postcode-candidate-lookup-adjacent-baseline-1/01-core-shipping-tax-cart-update.json",
+      "candidate": "/home/claude/woocommerce/results/pr-shipping-postcode-candidate-lookup-candidate-1/01-core-shipping-tax-cart-update.json"
+    },
+    "baseline_summary": {
+      "total_ms_median": 123.517,
+      "total_ms_p95": 139.421,
+      "server_ms_median": 113.19,
+      "server_ms_p95": 127.69,
+      "query_count_median": 120,
+      "query_time_ms_median": 58.4,
+      "query_time_ms_p95": 59.4
+    },
+    "candidate_summary": {
+      "total_ms_median": 129.583,
+      "total_ms_p95": 140.501,
+      "server_ms_median": 118.63,
+      "server_ms_p95": 127.11,
+      "query_count_median": 122,
+      "query_time_ms_median": 62.37,
+      "query_time_ms_p95": 64.25
+    },
+    "shipping_query_digests_over_8_requests": {
+      "baseline": [
+        {
+          "sql": "SELECT zone_id, location_code FROM wp_woocommerce_shipping_zone_locations WHERE location_type = 'postcode';",
+          "count": 8,
+          "total_seconds": 0.04083514213562012,
+          "max_seconds": 0.005394935607910156
+        },
+        {
+          "sql": "SELECT zones.zone_id FROM wp_woocommerce_shipping_zones ... NOT IN (...)",
+          "count": 8,
+          "total_seconds": 0.023064136505126953,
+          "max_seconds": 0.0032758712768554688
+        }
+      ],
+      "candidate": [
+        {
+          "sql": "SELECT DISTINCT zone_id FROM wp_woocommerce_shipping_zone_locations WHERE location_type = 'postcode' AND location_code IN ( '94105', '94105*', '9410*', '941*', '94*', '9*', '*' );",
+          "count": 8,
+          "total_seconds": 0.0018918514251708984,
+          "max_seconds": 0.00039005279541015625
+        },
+        {
+          "sql": "SELECT DISTINCT zone_id FROM wp_woocommerce_shipping_zone_locations WHERE location_type = 'postcode';",
+          "count": 8,
+          "total_seconds": 0.043637752532958984,
+          "max_seconds": 0.005792856216430664
+        },
+        {
+          "sql": "SELECT zone_id, location_code FROM wp_woocommerce_shipping_zone_locations WHERE location_type = 'postcode' AND location_code LIKE '%...%';",
+          "count": 8,
+          "total_seconds": 0.036907196044921875,
+          "max_seconds": 0.005207061767578125
+        },
+        {
+          "sql": "SELECT zones.zone_id FROM wp_woocommerce_shipping_zones ... NOT IN (...)",
+          "count": 8,
+          "total_seconds": 0.022365570068359375,
+          "max_seconds": 0.0030069351196289062
+        }
+      ]
+    },
+    "interpretation": "This is the pathological shape found in the main shipping audit. Because all postcode rules are ranges, the candidate still has to load the full range set and adds a distinct-zone scan plus exact-candidate lookup."
+  },
+  "exact_postcode_fixture": {
+    "description": "Same generated fixture, but the 8,000 shipping postcode rows were rewritten in-place to exact five-digit codes; the matching final zone uses 94105. Tax rows stayed as 12,000 postcode ranges.",
+    "local_artifacts": {
+      "baseline": "/home/claude/woocommerce/results/pr-shipping-postcode-candidate-lookup-exact-baseline-1/01-core-shipping-tax-cart-update.json",
+      "candidate": "/home/claude/woocommerce/results/pr-shipping-postcode-candidate-lookup-exact-candidate-1/01-core-shipping-tax-cart-update.json"
+    },
+    "baseline_summary": {
+      "total_ms_median": 121.558,
+      "total_ms_p95": 131.141,
+      "server_ms_median": 109.41,
+      "server_ms_p95": 116.67,
+      "query_count_median": 120,
+      "query_time_ms_median": 58.14,
+      "query_time_ms_p95": 66.19
+    },
+    "candidate_summary": {
+      "total_ms_median": 126.281,
+      "total_ms_p95": 134.072,
+      "server_ms_median": 115.42,
+      "server_ms_p95": 124.22,
+      "query_count_median": 122,
+      "query_time_ms_median": 63.31,
+      "query_time_ms_p95": 70.67
+    },
+    "shipping_query_digests_over_8_requests": {
+      "baseline": [
+        {
+          "sql": "SELECT zone_id, location_code FROM wp_woocommerce_shipping_zone_locations WHERE location_type = 'postcode';",
+          "count": 8,
+          "total_seconds": 0.042263031005859375,
+          "max_seconds": 0.005877017974853516
+        },
+        {
+          "sql": "SELECT zones.zone_id FROM wp_woocommerce_shipping_zones ... NOT IN (...)",
+          "count": 8,
+          "total_seconds": 0.021286964416503906,
+          "max_seconds": 0.0030078887939453125
+        }
+      ],
+      "candidate": [
+        {
+          "sql": "SELECT DISTINCT zone_id FROM wp_woocommerce_shipping_zone_locations WHERE location_type = 'postcode' AND location_code IN ( '94105', '94105*', '9410*', '941*', '94*', '9*', '*' );",
+          "count": 8,
+          "total_seconds": 0.0018885135650634766,
+          "max_seconds": 0.0002510547637939453
+        },
+        {
+          "sql": "SELECT DISTINCT zone_id FROM wp_woocommerce_shipping_zone_locations WHERE location_type = 'postcode';",
+          "count": 8,
+          "total_seconds": 0.04630136489868164,
+          "max_seconds": 0.005978107452392578
+        },
+        {
+          "sql": "SELECT zone_id, location_code FROM wp_woocommerce_shipping_zone_locations WHERE location_type = 'postcode' AND location_code LIKE '%...%';",
+          "count": 8,
+          "total_seconds": 0.03374791145324707,
+          "max_seconds": 0.006040096282958984
+        },
+        {
+          "sql": "SELECT zones.zone_id FROM wp_woocommerce_shipping_zones ... NOT IN (...)",
+          "count": 8,
+          "total_seconds": 0.02085423469543457,
+          "max_seconds": 0.0027201175689697266
+        }
+      ]
+    },
+    "interpretation": "Even in the candidate's favorable exact-code shape, the all-zone distinct scan is about as expensive as the legacy all-postcode row fetch, and the separate range probe adds cost despite returning no useful candidates."
+  },
+  "developer_handoff": {
+    "do_not_pursue": "Do not pursue the measured PHP-only split-query candidate as-is.",
+    "next_viable_direction": "Persist normalized shipping postcode rule metadata at write time: exact/wildcard lookup candidates and numeric range bounds. Index range bounds with a shape like (location_type, range_max, range_min), query only destination-relevant candidate rows, and keep the existing PHP matcher as a compatibility fallback for malformed, alphanumeric, or plugin-supplied rules that cannot be normalized safely.",
+    "why_schema_level_work_is_needed": "Without persisted normalized data, the code must still scan all postcode rules to know which zones have rules and which range rows might match. Splitting the current scan into multiple queries increases query count and query time rather than removing the O(n) work."
+  }
+}
