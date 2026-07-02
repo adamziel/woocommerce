@@ -96,7 +96,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#101820;color:#edf7ff;
 <td><span class="warn">Core tax postcode matching scales linearly</span></td>
 <td>New core lane: one Store API cart update with one taxable shippable product, US/CA/94105 address, WooCommerce only, 8,000 shipping zones/methods, 12,000 tax postcode ranges. Result: 101ms HTTP p95, 92.5ms PHP p95, 55.7ms DB p95, 67 query p95.</td>
 <td>Per request averages from 8 samples: tax main joined query about 22ms, tax postcode range prequery about 10ms. MySQL plan uses <code>tax_rate_class</code> for about 6,044 rows, temp table/filesort, joins locations by <code>tax_rate_id</code>, and dependent subqueries for city/postcode existence.</td>
-<td>Primary issue is SQL shape, not just missing indexes. Candidate fixes: precompute searchable postcode range representation, avoid broad GROUP BY over all same-class rates, use anti-joins/derived tables instead of dependent subqueries, and add a composite index only after rewriting predicates to use it.</td>
+<td><a href="https://github.com/adamziel/woocommerce/pull/29">PR #29</a> rewrites the matching-rate SQL into no-location, matching-postcode, and city-only branches in one <code>UNION DISTINCT</code>. It reduces the tax matching SQL total by about 23-24% in adjacent samples. The remaining tax range prequery still scans all postcode ranges and remains a separate follow-up.</td>
 </tr>
 <tr>
 <td>8</td>
@@ -151,6 +151,18 @@ tax main query:
 tax_rates uses key=tax_rate_class, rows=6044, Extra=Using where; Using temporary; Using filesort
 locations and locations2 join by tax_rate_id
 city/postcode absence checks appear as dependent subqueries</pre>
+
+<h3>Tax Query Candidate PR</h3>
+<p><a href="https://github.com/adamziel/woocommerce/pull/29">PR #29</a> targets the tax main joined query, not the separate postcode-range prequery. It replaces the broad grouped join with one <code>UNION DISTINCT</code> query split into no-location, matching-postcode, and city-only branches.</p>
+<table>
+<thead><tr><th>Run</th><th>Total median</th><th>Total p95</th><th>Server median</th><th>Server p95</th><th>DB median</th><th>DB p95</th><th>Query median</th><th>WC_Tax SQL total</th><th>Raw JSON</th></tr></thead>
+<tbody>
+<tr><td>Adjacent baseline</td><td>99.602ms</td><td>110.366ms</td><td>92.420ms</td><td>99.890ms</td><td>51.420ms</td><td>51.810ms</td><td>66</td><td>0.274338s</td><td><a href="tax-query-pr/adjacent-baseline-core-1.json">JSON</a></td></tr>
+<tr><td>Candidate 1</td><td>92.643ms</td><td>105.611ms</td><td>84.770ms</td><td>96.160ms</td><td>42.890ms</td><td>52.510ms</td><td>66</td><td>0.211642s</td><td><a href="tax-query-pr/union-candidate-core-1.json">JSON</a></td></tr>
+<tr><td>Candidate 2</td><td>94.151ms</td><td>100.726ms</td><td>84.490ms</td><td>91.260ms</td><td>42.070ms</td><td>48.510ms</td><td>66</td><td>0.207795s</td><td><a href="tax-query-pr/union-candidate-core-2.json">JSON</a></td></tr>
+</tbody>
+</table>
+<p>Interpretation: request-level gains are modest but repeatable in this fixture. The tax main query improves; the remaining top tax cost is still <code>SELECT tax_rate_id, location_code ... location_code LIKE '%...%'</code>, which scans every stored postcode range before PHP numeric-range matching.</p>
 
 <h2>Gateway Stack First Pass</h2>
 <div class="two">
@@ -215,7 +227,7 @@ city/postcode absence checks appear as dependent subqueries</pre>
 <table>
 <thead><tr><th>Area</th><th>Code path</th><th>Concern</th></tr></thead>
 <tbody>
-<tr><td>Taxes</td><td><code>WC_Tax::get_matched_tax_rates</code></td><td>Cart totals cache rates per tax class in request scope, but the cold lookup still walks all postcode ranges and then runs a broad grouped join for matching rates. The single-rate helper methods <code>is_compound</code>, <code>get_rate_label</code>, <code>get_rate_percent_value</code>, and <code>get_rate_code</code> still query by ID when callers pass IDs instead of hydrated rate rows; this is a separate N-query audit target.</td></tr>
+<tr><td>Taxes</td><td><code>WC_Tax::get_matched_tax_rates</code></td><td><a href="https://github.com/adamziel/woocommerce/pull/29">PR #29</a> addresses the broad grouped matching-rate join. Cart totals still walk all postcode ranges in the cold lookup, and the single-rate helper methods <code>is_compound</code>, <code>get_rate_label</code>, <code>get_rate_percent_value</code>, and <code>get_rate_code</code> still query by ID when callers pass IDs instead of hydrated rate rows; those remain separate audit targets.</td></tr>
 <tr><td>Shipping</td><td><code>WC_Shipping_Zone_Data_Store->get_zone_id_from_package</code></td><td>The matcher loads every postcode location into PHP, runs postcode/range matching there, then excludes nonmatches via a generated <code>NOT IN</code> list. The existing <code>location_type_code(location_type(10), location_code(20))</code> index helps only with the location type filter in the measured shape.</td></tr>
 <tr><td>Prettyboymp commit context</td><td>Recent trunk history</td><td>Recent performance work clusters around object caching, HPOS datastore caching, product variation payloads, shipping-zone read-multiple support, analytics lazy loading, and tax/cart query reductions. The current slow paths line up with those themes: repeated object hydration, broad aggregates, and lookup shapes that need preselection rather than post-filtering.</td></tr>
 </tbody>
