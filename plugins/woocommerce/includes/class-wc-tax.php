@@ -387,50 +387,60 @@ class WC_Tax {
 
 		$postcode_search = array_unique( $postcode_search );
 
-		/**
-		 * Location matching criteria - ORed
-		 * Needs to match:
-		 * - rates with no postcodes and cities
-		 * - rates with a matching postcode and city
-		 * - rates with matching postcode, no city
-		 * - rates with matching city, no postcode
-		 */
-		$locations_criteria   = array();
-		$locations_criteria[] = 'locations.location_type IS NULL';
-		$locations_criteria[] = "
-			locations.location_type = 'postcode' AND locations.location_code IN ('" . implode( "','", array_map( 'esc_sql', $postcode_search ) ) . "')
-			AND (
-				( locations2.location_type = 'city' AND locations2.location_code = '" . esc_sql( strtoupper( $city ) ) . "' )
-				OR NOT EXISTS (
-					SELECT sub.tax_rate_id FROM {$wpdb->prefix}woocommerce_tax_rate_locations as sub
-					WHERE sub.location_type = 'city'
-					AND sub.tax_rate_id = tax_rates.tax_rate_id
-				)
-			)
-		";
-		$locations_criteria[] = "
-			locations.location_type = 'city' AND locations.location_code = '" . esc_sql( strtoupper( $city ) ) . "'
-			AND NOT EXISTS (
-				SELECT sub.tax_rate_id FROM {$wpdb->prefix}woocommerce_tax_rate_locations as sub
-				WHERE sub.location_type = 'postcode'
-				AND sub.tax_rate_id = tax_rates.tax_rate_id
-			)
-		";
+		$criteria_string     = implode( ' AND ', $criteria );
+		$tax_rates_table     = $wpdb->prefix . 'woocommerce_tax_rates';
+		$tax_locations_table = $wpdb->prefix . 'woocommerce_tax_rate_locations';
+		$postcode_values_sql = $wpdb->prepare( implode( ', ', array_fill( 0, count( $postcode_search ), '%s' ) ), $postcode_search );
+		$city_sql            = esc_sql( strtoupper( $city ) );
 
-		$criteria[] = '( ( ' . implode( ' ) OR ( ', $locations_criteria ) . ' ) )';
-
-		$criteria_string = implode( ' AND ', $criteria );
-
-		// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 		$found_rates = $wpdb->get_results(
 			"
-			SELECT tax_rates.*, COUNT( locations.location_id ) as postcode_count, COUNT( locations2.location_id ) as city_count
-			FROM {$wpdb->prefix}woocommerce_tax_rates as tax_rates
-			LEFT OUTER JOIN {$wpdb->prefix}woocommerce_tax_rate_locations as locations ON tax_rates.tax_rate_id = locations.tax_rate_id
-			LEFT OUTER JOIN {$wpdb->prefix}woocommerce_tax_rate_locations as locations2 ON tax_rates.tax_rate_id = locations2.tax_rate_id
-			WHERE 1=1 AND {$criteria_string}
+			(
+			SELECT tax_rates.*, 0 as postcode_count, 0 as city_count
+			FROM {$tax_rates_table} as tax_rates
+			WHERE {$criteria_string}
+			AND NOT EXISTS (
+				SELECT 1 FROM {$tax_locations_table} as locations
+				WHERE locations.tax_rate_id = tax_rates.tax_rate_id
+			)
+			)
+			UNION DISTINCT
+			(
+			SELECT tax_rates.*, COUNT( postcode_locations.location_id ) as postcode_count, COUNT( city_locations.location_id ) as city_count
+			FROM {$tax_locations_table} as postcode_locations
+			INNER JOIN {$tax_rates_table} as tax_rates ON tax_rates.tax_rate_id = postcode_locations.tax_rate_id
+			LEFT OUTER JOIN {$tax_locations_table} as city_locations
+				ON city_locations.tax_rate_id = tax_rates.tax_rate_id
+				AND city_locations.location_type = 'city'
+				AND city_locations.location_code = '{$city_sql}'
+			WHERE {$criteria_string}
+			AND postcode_locations.location_type = 'postcode'
+			AND postcode_locations.location_code IN ( {$postcode_values_sql} )
+			AND (
+				city_locations.location_id IS NOT NULL
+				OR NOT EXISTS (
+					SELECT 1 FROM {$tax_locations_table} as city_check
+					WHERE city_check.tax_rate_id = tax_rates.tax_rate_id
+					AND city_check.location_type = 'city'
+				)
+			)
 			GROUP BY tax_rates.tax_rate_id
-			ORDER BY tax_rates.tax_rate_priority
+			)
+			UNION DISTINCT
+			(
+			SELECT tax_rates.*, 0 as postcode_count, COUNT( city_locations.location_id ) as city_count
+			FROM {$tax_locations_table} as city_locations
+			INNER JOIN {$tax_rates_table} as tax_rates ON tax_rates.tax_rate_id = city_locations.tax_rate_id
+			LEFT OUTER JOIN {$tax_locations_table} as postcode_locations
+				ON postcode_locations.tax_rate_id = tax_rates.tax_rate_id
+				AND postcode_locations.location_type = 'postcode'
+			WHERE {$criteria_string}
+			AND city_locations.location_type = 'city'
+			AND city_locations.location_code = '{$city_sql}'
+			AND postcode_locations.location_id IS NULL
+			GROUP BY tax_rates.tax_rate_id
+			)
 			"
 		);
 		// phpcs:enable
