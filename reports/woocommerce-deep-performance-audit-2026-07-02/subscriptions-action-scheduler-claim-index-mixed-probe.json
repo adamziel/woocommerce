@@ -1,0 +1,999 @@
+{
+    "measured_at_gmt": "2026-07-02T14:15:51+00:00",
+    "type": "subscription-action-scheduler-claim-index-mixed-probe",
+    "conclusion": "Copied-table probe for Action Scheduler default unfiltered queue claims and hook\/group-filtered claims under a mixed hook\/group fixture.",
+    "environment": {
+        "wordpress": "7.0",
+        "woocommerce": "10.9.1",
+        "action_scheduler": "3.9.3",
+        "php": "8.3.31",
+        "mysql": "8.0.46"
+    },
+    "fixture": {
+        "seeded_actions_per_table": 100000,
+        "target_percent": 20,
+        "iterations": 15,
+        "claim_size": 25,
+        "target_hook": "woocommerce_subscriptions_engine_process_renewal",
+        "target_group_id": 990001,
+        "noise_hook_count": 8,
+        "noise_group_count": 20
+    },
+    "candidates": {
+        "baseline_existing_indexes": {
+            "table": "wp_wc_perf_probe_as_claim_mixed_baseline",
+            "seed_ms": 3937.244,
+            "indexes_added": [],
+            "counts": {
+                "total": 100000,
+                "due_total": 50413,
+                "target_total": 20000,
+                "target_due": 10093
+            },
+            "shapes": {
+                "generic": {
+                    "optimizer_sql": "SELECT action_id FROM wp_wc_perf_probe_as_claim_mixed_baseline WHERE claim_id = 0 AND scheduled_date_gmt <= '2026-07-02 14:15:51' AND status='pending' ORDER BY priority ASC, attempts ASC, scheduled_date_gmt ASC, action_id ASC LIMIT 25",
+                    "optimizer_explain": [
+                        {
+                            "id": "1",
+                            "select_type": "SIMPLE",
+                            "table": "wp_wc_perf_probe_as_claim_mixed_baseline",
+                            "partitions": null,
+                            "type": "ref",
+                            "possible_keys": "status_scheduled_date_gmt,scheduled_date_gmt,claim_id_status_priority_scheduled_date_gmt,status_last_attempt_gmt,status_claim_id",
+                            "key": "claim_id_status_priority_scheduled_date_gmt",
+                            "key_len": "90",
+                            "ref": "const,const",
+                            "rows": "49680",
+                            "filtered": "50.00",
+                            "Extra": "Using index condition; Using filesort"
+                        }
+                    ],
+                    "optimizer_summary": {
+                        "iterations": 15,
+                        "median_ms": 36.959,
+                        "p95_ms": 57.157,
+                        "min_ms": 35.279,
+                        "max_ms": 57.157,
+                        "median_count": 25
+                    },
+                    "optimizer_samples": [
+                        {
+                            "ms": 57.157,
+                            "count": 25
+                        },
+                        {
+                            "ms": 40.669,
+                            "count": 25
+                        },
+                        {
+                            "ms": 38.924,
+                            "count": 25
+                        },
+                        {
+                            "ms": 38.684,
+                            "count": 25
+                        },
+                        {
+                            "ms": 38.196,
+                            "count": 25
+                        },
+                        {
+                            "ms": 35.846,
+                            "count": 25
+                        },
+                        {
+                            "ms": 35.279,
+                            "count": 25
+                        },
+                        {
+                            "ms": 36.203,
+                            "count": 25
+                        },
+                        {
+                            "ms": 38.079,
+                            "count": 25
+                        },
+                        {
+                            "ms": 36.665,
+                            "count": 25
+                        }
+                    ],
+                    "update_summary": {
+                        "iterations": 15,
+                        "median_ms": 97.222,
+                        "p95_ms": 117.859,
+                        "min_ms": 86.591,
+                        "max_ms": 117.859,
+                        "median_count": 25
+                    }
+                },
+                "filtered": {
+                    "optimizer_sql": "SELECT action_id FROM wp_wc_perf_probe_as_claim_mixed_baseline WHERE claim_id = 0 AND scheduled_date_gmt <= '2026-07-02 14:15:51' AND status='pending' AND hook IN ('woocommerce_subscriptions_engine_process_renewal') AND group_id IN ( 990001 ) ORDER BY priority ASC, attempts ASC, scheduled_date_gmt ASC, action_id ASC LIMIT 25",
+                    "optimizer_explain": [
+                        {
+                            "id": "1",
+                            "select_type": "SIMPLE",
+                            "table": "wp_wc_perf_probe_as_claim_mixed_baseline",
+                            "partitions": null,
+                            "type": "ref",
+                            "possible_keys": "hook_status_scheduled_date_gmt,status_scheduled_date_gmt,scheduled_date_gmt,group_id,claim_id_status_priority_scheduled_date_gmt,status_last_attempt_gmt,status_claim_id",
+                            "key": "group_id",
+                            "key_len": "8",
+                            "ref": "const",
+                            "rows": "39674",
+                            "filtered": "14.09",
+                            "Extra": "Using where; Using filesort"
+                        }
+                    ],
+                    "optimizer_summary": {
+                        "iterations": 15,
+                        "median_ms": 12.085,
+                        "p95_ms": 13.782,
+                        "min_ms": 11.881,
+                        "max_ms": 13.782,
+                        "median_count": 25
+                    },
+                    "optimizer_samples": [
+                        {
+                            "ms": 13.782,
+                            "count": 25
+                        },
+                        {
+                            "ms": 13.144,
+                            "count": 25
+                        },
+                        {
+                            "ms": 12.881,
+                            "count": 25
+                        },
+                        {
+                            "ms": 13.057,
+                            "count": 25
+                        },
+                        {
+                            "ms": 12.703,
+                            "count": 25
+                        },
+                        {
+                            "ms": 12.404,
+                            "count": 25
+                        },
+                        {
+                            "ms": 12.085,
+                            "count": 25
+                        },
+                        {
+                            "ms": 12.008,
+                            "count": 25
+                        },
+                        {
+                            "ms": 12.46,
+                            "count": 25
+                        },
+                        {
+                            "ms": 12.052,
+                            "count": 25
+                        }
+                    ],
+                    "update_summary": {
+                        "iterations": 15,
+                        "median_ms": 23.444,
+                        "p95_ms": 39.888,
+                        "min_ms": 21.722,
+                        "max_ms": 39.888,
+                        "median_count": 25
+                    }
+                }
+            }
+        },
+        "generic_claim_order": {
+            "table": "wp_wc_perf_probe_as_claim_mixed_generic",
+            "seed_ms": 4010.521,
+            "indexes_added": [
+                "ALTER TABLE %s ADD KEY claim_status_priority_attempts_date_id (claim_id, status, priority, attempts, scheduled_date_gmt, action_id)"
+            ],
+            "counts": {
+                "total": 100000,
+                "due_total": 50413,
+                "target_total": 20000,
+                "target_due": 10093
+            },
+            "shapes": {
+                "generic": {
+                    "optimizer_sql": "SELECT action_id FROM wp_wc_perf_probe_as_claim_mixed_generic WHERE claim_id = 0 AND scheduled_date_gmt <= '2026-07-02 14:15:51' AND status='pending' ORDER BY priority ASC, attempts ASC, scheduled_date_gmt ASC, action_id ASC LIMIT 25",
+                    "optimizer_explain": [
+                        {
+                            "id": "1",
+                            "select_type": "SIMPLE",
+                            "table": "wp_wc_perf_probe_as_claim_mixed_generic",
+                            "partitions": null,
+                            "type": "range",
+                            "possible_keys": "status_scheduled_date_gmt,scheduled_date_gmt,claim_id_status_priority_scheduled_date_gmt,status_last_attempt_gmt,status_claim_id,claim_status_priority_attempts_date_id",
+                            "key": "claim_status_priority_attempts_date_id",
+                            "key_len": "101",
+                            "ref": null,
+                            "rows": "16551",
+                            "filtered": "100.00",
+                            "Extra": "Using where; Using index for skip scan"
+                        }
+                    ],
+                    "optimizer_summary": {
+                        "iterations": 15,
+                        "median_ms": 0.215,
+                        "p95_ms": 0.713,
+                        "min_ms": 0.198,
+                        "max_ms": 0.713,
+                        "median_count": 25
+                    },
+                    "optimizer_samples": [
+                        {
+                            "ms": 0.713,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.35,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.269,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.263,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.213,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.23,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.198,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.209,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.211,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.208,
+                            "count": 25
+                        }
+                    ],
+                    "update_summary": {
+                        "iterations": 15,
+                        "median_ms": 5.449,
+                        "p95_ms": 16.306,
+                        "min_ms": 4.311,
+                        "max_ms": 16.306,
+                        "median_count": 25
+                    },
+                    "forced_sql": "SELECT action_id FROM wp_wc_perf_probe_as_claim_mixed_generic FORCE INDEX (claim_status_priority_attempts_date_id) WHERE claim_id = 0 AND scheduled_date_gmt <= '2026-07-02 14:15:51' AND status='pending' ORDER BY priority ASC, attempts ASC, scheduled_date_gmt ASC, action_id ASC LIMIT 25",
+                    "forced_explain": [
+                        {
+                            "id": "1",
+                            "select_type": "SIMPLE",
+                            "table": "wp_wc_perf_probe_as_claim_mixed_generic",
+                            "partitions": null,
+                            "type": "range",
+                            "possible_keys": "claim_status_priority_attempts_date_id",
+                            "key": "claim_status_priority_attempts_date_id",
+                            "key_len": "101",
+                            "ref": null,
+                            "rows": "33103",
+                            "filtered": "100.00",
+                            "Extra": "Using where; Using index for skip scan"
+                        }
+                    ],
+                    "forced_summary": {
+                        "iterations": 15,
+                        "median_ms": 0.179,
+                        "p95_ms": 0.225,
+                        "min_ms": 0.165,
+                        "max_ms": 0.225,
+                        "median_count": 25
+                    },
+                    "forced_samples": [
+                        {
+                            "ms": 0.225,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.185,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.189,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.18,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.178,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.17,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.165,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.197,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.17,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.166,
+                            "count": 25
+                        }
+                    ],
+                    "forced_update_summary": {
+                        "iterations": 15,
+                        "median_ms": 13.317,
+                        "p95_ms": 30.47,
+                        "min_ms": 8.341,
+                        "max_ms": 30.47,
+                        "median_count": 25
+                    }
+                },
+                "filtered": {
+                    "optimizer_sql": "SELECT action_id FROM wp_wc_perf_probe_as_claim_mixed_generic WHERE claim_id = 0 AND scheduled_date_gmt <= '2026-07-02 14:15:51' AND status='pending' AND hook IN ('woocommerce_subscriptions_engine_process_renewal') AND group_id IN ( 990001 ) ORDER BY priority ASC, attempts ASC, scheduled_date_gmt ASC, action_id ASC LIMIT 25",
+                    "optimizer_explain": [
+                        {
+                            "id": "1",
+                            "select_type": "SIMPLE",
+                            "table": "wp_wc_perf_probe_as_claim_mixed_generic",
+                            "partitions": null,
+                            "type": "range",
+                            "possible_keys": "hook_status_scheduled_date_gmt,status_scheduled_date_gmt,scheduled_date_gmt,group_id,claim_id_status_priority_scheduled_date_gmt,status_last_attempt_gmt,status_claim_id,claim_status_priority_attempts_date_id",
+                            "key": "claim_status_priority_attempts_date_id",
+                            "key_len": "90",
+                            "ref": null,
+                            "rows": "49660",
+                            "filtered": "2.00",
+                            "Extra": "Using index condition; Using where"
+                        }
+                    ],
+                    "optimizer_summary": {
+                        "iterations": 15,
+                        "median_ms": 0.358,
+                        "p95_ms": 0.985,
+                        "min_ms": 0.292,
+                        "max_ms": 0.985,
+                        "median_count": 25
+                    },
+                    "optimizer_samples": [
+                        {
+                            "ms": 0.577,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.381,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.335,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.371,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.985,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.427,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.365,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.401,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.358,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.339,
+                            "count": 25
+                        }
+                    ],
+                    "update_summary": {
+                        "iterations": 15,
+                        "median_ms": 6.068,
+                        "p95_ms": 12.11,
+                        "min_ms": 4.291,
+                        "max_ms": 12.11,
+                        "median_count": 25
+                    }
+                }
+            }
+        },
+        "filtered_claim_order": {
+            "table": "wp_wc_perf_probe_as_claim_mixed_filtered",
+            "seed_ms": 3821.769,
+            "indexes_added": [
+                "ALTER TABLE %s ADD KEY claim_group_hook_order (claim_id, status, group_id, hook(163), priority, attempts, scheduled_date_gmt, action_id)"
+            ],
+            "counts": {
+                "total": 100000,
+                "due_total": 50413,
+                "target_total": 20000,
+                "target_due": 10093
+            },
+            "shapes": {
+                "generic": {
+                    "optimizer_sql": "SELECT action_id FROM wp_wc_perf_probe_as_claim_mixed_filtered WHERE claim_id = 0 AND scheduled_date_gmt <= '2026-07-02 14:15:51' AND status='pending' ORDER BY priority ASC, attempts ASC, scheduled_date_gmt ASC, action_id ASC LIMIT 25",
+                    "optimizer_explain": [
+                        {
+                            "id": "1",
+                            "select_type": "SIMPLE",
+                            "table": "wp_wc_perf_probe_as_claim_mixed_filtered",
+                            "partitions": null,
+                            "type": "ref",
+                            "possible_keys": "status_scheduled_date_gmt,scheduled_date_gmt,claim_id_status_priority_scheduled_date_gmt,status_last_attempt_gmt,status_claim_id,claim_group_hook_order",
+                            "key": "claim_id_status_priority_scheduled_date_gmt",
+                            "key_len": "90",
+                            "ref": "const,const",
+                            "rows": "49640",
+                            "filtered": "50.00",
+                            "Extra": "Using index condition; Using filesort"
+                        }
+                    ],
+                    "optimizer_summary": {
+                        "iterations": 15,
+                        "median_ms": 36.794,
+                        "p95_ms": 60.294,
+                        "min_ms": 35.939,
+                        "max_ms": 60.294,
+                        "median_count": 25
+                    },
+                    "optimizer_samples": [
+                        {
+                            "ms": 50.107,
+                            "count": 25
+                        },
+                        {
+                            "ms": 37.995,
+                            "count": 25
+                        },
+                        {
+                            "ms": 38.352,
+                            "count": 25
+                        },
+                        {
+                            "ms": 36.794,
+                            "count": 25
+                        },
+                        {
+                            "ms": 36.484,
+                            "count": 25
+                        },
+                        {
+                            "ms": 36.036,
+                            "count": 25
+                        },
+                        {
+                            "ms": 35.939,
+                            "count": 25
+                        },
+                        {
+                            "ms": 36.01,
+                            "count": 25
+                        },
+                        {
+                            "ms": 36.552,
+                            "count": 25
+                        },
+                        {
+                            "ms": 36.804,
+                            "count": 25
+                        }
+                    ],
+                    "update_summary": {
+                        "iterations": 15,
+                        "median_ms": 92.538,
+                        "p95_ms": 110.634,
+                        "min_ms": 86.525,
+                        "max_ms": 110.634,
+                        "median_count": 25
+                    }
+                },
+                "filtered": {
+                    "optimizer_sql": "SELECT action_id FROM wp_wc_perf_probe_as_claim_mixed_filtered WHERE claim_id = 0 AND scheduled_date_gmt <= '2026-07-02 14:15:51' AND status='pending' AND hook IN ('woocommerce_subscriptions_engine_process_renewal') AND group_id IN ( 990001 ) ORDER BY priority ASC, attempts ASC, scheduled_date_gmt ASC, action_id ASC LIMIT 25",
+                    "optimizer_explain": [
+                        {
+                            "id": "1",
+                            "select_type": "SIMPLE",
+                            "table": "wp_wc_perf_probe_as_claim_mixed_filtered",
+                            "partitions": null,
+                            "type": "range",
+                            "possible_keys": "hook_status_scheduled_date_gmt,status_scheduled_date_gmt,scheduled_date_gmt,group_id,claim_id_status_priority_scheduled_date_gmt,status_last_attempt_gmt,status_claim_id,claim_group_hook_order",
+                            "key": "claim_group_hook_order",
+                            "key_len": "752",
+                            "ref": null,
+                            "rows": "41388",
+                            "filtered": "50.00",
+                            "Extra": "Using index condition; Using where"
+                        }
+                    ],
+                    "optimizer_summary": {
+                        "iterations": 15,
+                        "median_ms": 0.324,
+                        "p95_ms": 0.58,
+                        "min_ms": 0.299,
+                        "max_ms": 0.58,
+                        "median_count": 25
+                    },
+                    "optimizer_samples": [
+                        {
+                            "ms": 0.58,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.374,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.361,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.332,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.316,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.322,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.33,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.303,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.324,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.319,
+                            "count": 25
+                        }
+                    ],
+                    "update_summary": {
+                        "iterations": 15,
+                        "median_ms": 10.323,
+                        "p95_ms": 14.155,
+                        "min_ms": 5.039,
+                        "max_ms": 14.155,
+                        "median_count": 25
+                    },
+                    "forced_sql": "SELECT action_id FROM wp_wc_perf_probe_as_claim_mixed_filtered FORCE INDEX (claim_group_hook_order) WHERE claim_id = 0 AND scheduled_date_gmt <= '2026-07-02 14:15:51' AND status='pending' AND hook IN ('woocommerce_subscriptions_engine_process_renewal') AND group_id IN ( 990001 ) ORDER BY priority ASC, attempts ASC, scheduled_date_gmt ASC, action_id ASC LIMIT 25",
+                    "forced_explain": [
+                        {
+                            "id": "1",
+                            "select_type": "SIMPLE",
+                            "table": "wp_wc_perf_probe_as_claim_mixed_filtered",
+                            "partitions": null,
+                            "type": "ref",
+                            "possible_keys": "claim_group_hook_order",
+                            "key": "claim_group_hook_order",
+                            "key_len": "752",
+                            "ref": "const,const,const,const",
+                            "rows": "3309",
+                            "filtered": "33.33",
+                            "Extra": "Using index condition; Using where"
+                        }
+                    ],
+                    "forced_summary": {
+                        "iterations": 15,
+                        "median_ms": 0.277,
+                        "p95_ms": 0.433,
+                        "min_ms": 0.263,
+                        "max_ms": 0.433,
+                        "median_count": 25
+                    },
+                    "forced_samples": [
+                        {
+                            "ms": 0.433,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.27,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.263,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.271,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.315,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.299,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.28,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.271,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.266,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.288,
+                            "count": 25
+                        }
+                    ],
+                    "forced_update_summary": {
+                        "iterations": 15,
+                        "median_ms": 15.597,
+                        "p95_ms": 24.31,
+                        "min_ms": 4.911,
+                        "max_ms": 24.31,
+                        "median_count": 25
+                    }
+                }
+            }
+        },
+        "both_claim_orders": {
+            "table": "wp_wc_perf_probe_as_claim_mixed_both",
+            "seed_ms": 3538.314,
+            "indexes_added": [
+                "ALTER TABLE %s ADD KEY claim_status_priority_attempts_date_id (claim_id, status, priority, attempts, scheduled_date_gmt, action_id)",
+                "ALTER TABLE %s ADD KEY claim_group_hook_order (claim_id, status, group_id, hook(163), priority, attempts, scheduled_date_gmt, action_id)"
+            ],
+            "counts": {
+                "total": 100000,
+                "due_total": 50413,
+                "target_total": 20000,
+                "target_due": 10093
+            },
+            "shapes": {
+                "generic": {
+                    "optimizer_sql": "SELECT action_id FROM wp_wc_perf_probe_as_claim_mixed_both WHERE claim_id = 0 AND scheduled_date_gmt <= '2026-07-02 14:15:51' AND status='pending' ORDER BY priority ASC, attempts ASC, scheduled_date_gmt ASC, action_id ASC LIMIT 25",
+                    "optimizer_explain": [
+                        {
+                            "id": "1",
+                            "select_type": "SIMPLE",
+                            "table": "wp_wc_perf_probe_as_claim_mixed_both",
+                            "partitions": null,
+                            "type": "range",
+                            "possible_keys": "status_scheduled_date_gmt,scheduled_date_gmt,claim_id_status_priority_scheduled_date_gmt,status_last_attempt_gmt,status_claim_id,claim_status_priority_attempts_date_id,claim_group_hook_order",
+                            "key": "claim_status_priority_attempts_date_id",
+                            "key_len": "101",
+                            "ref": null,
+                            "rows": "16545",
+                            "filtered": "100.00",
+                            "Extra": "Using where; Using index for skip scan"
+                        }
+                    ],
+                    "optimizer_summary": {
+                        "iterations": 15,
+                        "median_ms": 0.221,
+                        "p95_ms": 0.748,
+                        "min_ms": 0.207,
+                        "max_ms": 0.748,
+                        "median_count": 25
+                    },
+                    "optimizer_samples": [
+                        {
+                            "ms": 0.748,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.257,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.308,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.276,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.226,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.214,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.217,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.21,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.221,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.213,
+                            "count": 25
+                        }
+                    ],
+                    "update_summary": {
+                        "iterations": 15,
+                        "median_ms": 6.038,
+                        "p95_ms": 6.638,
+                        "min_ms": 4.978,
+                        "max_ms": 6.638,
+                        "median_count": 25
+                    },
+                    "forced_sql": "SELECT action_id FROM wp_wc_perf_probe_as_claim_mixed_both FORCE INDEX (claim_status_priority_attempts_date_id) WHERE claim_id = 0 AND scheduled_date_gmt <= '2026-07-02 14:15:51' AND status='pending' ORDER BY priority ASC, attempts ASC, scheduled_date_gmt ASC, action_id ASC LIMIT 25",
+                    "forced_explain": [
+                        {
+                            "id": "1",
+                            "select_type": "SIMPLE",
+                            "table": "wp_wc_perf_probe_as_claim_mixed_both",
+                            "partitions": null,
+                            "type": "range",
+                            "possible_keys": "claim_status_priority_attempts_date_id",
+                            "key": "claim_status_priority_attempts_date_id",
+                            "key_len": "101",
+                            "ref": null,
+                            "rows": "33090",
+                            "filtered": "100.00",
+                            "Extra": "Using where; Using index for skip scan"
+                        }
+                    ],
+                    "forced_summary": {
+                        "iterations": 15,
+                        "median_ms": 0.19,
+                        "p95_ms": 0.235,
+                        "min_ms": 0.175,
+                        "max_ms": 0.235,
+                        "median_count": 25
+                    },
+                    "forced_samples": [
+                        {
+                            "ms": 0.235,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.221,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.22,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.18,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.177,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.177,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.187,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.193,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.19,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.201,
+                            "count": 25
+                        }
+                    ],
+                    "forced_update_summary": {
+                        "iterations": 15,
+                        "median_ms": 9.913,
+                        "p95_ms": 18.265,
+                        "min_ms": 4.552,
+                        "max_ms": 18.265,
+                        "median_count": 25
+                    }
+                },
+                "filtered": {
+                    "optimizer_sql": "SELECT action_id FROM wp_wc_perf_probe_as_claim_mixed_both WHERE claim_id = 0 AND scheduled_date_gmt <= '2026-07-02 14:15:51' AND status='pending' AND hook IN ('woocommerce_subscriptions_engine_process_renewal') AND group_id IN ( 990001 ) ORDER BY priority ASC, attempts ASC, scheduled_date_gmt ASC, action_id ASC LIMIT 25",
+                    "optimizer_explain": [
+                        {
+                            "id": "1",
+                            "select_type": "SIMPLE",
+                            "table": "wp_wc_perf_probe_as_claim_mixed_both",
+                            "partitions": null,
+                            "type": "range",
+                            "possible_keys": "hook_status_scheduled_date_gmt,status_scheduled_date_gmt,scheduled_date_gmt,group_id,claim_id_status_priority_scheduled_date_gmt,status_last_attempt_gmt,status_claim_id,claim_status_priority_attempts_date_id,claim_group_hook_order",
+                            "key": "claim_status_priority_attempts_date_id",
+                            "key_len": "90",
+                            "ref": null,
+                            "rows": "49640",
+                            "filtered": "2.00",
+                            "Extra": "Using index condition; Using where"
+                        }
+                    ],
+                    "optimizer_summary": {
+                        "iterations": 15,
+                        "median_ms": 0.307,
+                        "p95_ms": 0.625,
+                        "min_ms": 0.276,
+                        "max_ms": 0.625,
+                        "median_count": 25
+                    },
+                    "optimizer_samples": [
+                        {
+                            "ms": 0.58,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.625,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.361,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.331,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.33,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.307,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.289,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.341,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.333,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.295,
+                            "count": 25
+                        }
+                    ],
+                    "update_summary": {
+                        "iterations": 15,
+                        "median_ms": 6.158,
+                        "p95_ms": 13.457,
+                        "min_ms": 4.328,
+                        "max_ms": 13.457,
+                        "median_count": 25
+                    },
+                    "forced_sql": "SELECT action_id FROM wp_wc_perf_probe_as_claim_mixed_both FORCE INDEX (claim_group_hook_order) WHERE claim_id = 0 AND scheduled_date_gmt <= '2026-07-02 14:15:51' AND status='pending' AND hook IN ('woocommerce_subscriptions_engine_process_renewal') AND group_id IN ( 990001 ) ORDER BY priority ASC, attempts ASC, scheduled_date_gmt ASC, action_id ASC LIMIT 25",
+                    "forced_explain": [
+                        {
+                            "id": "1",
+                            "select_type": "SIMPLE",
+                            "table": "wp_wc_perf_probe_as_claim_mixed_both",
+                            "partitions": null,
+                            "type": "ref",
+                            "possible_keys": "claim_group_hook_order",
+                            "key": "claim_group_hook_order",
+                            "key_len": "752",
+                            "ref": "const,const,const,const",
+                            "rows": "3309",
+                            "filtered": "33.33",
+                            "Extra": "Using index condition; Using where"
+                        }
+                    ],
+                    "forced_summary": {
+                        "iterations": 15,
+                        "median_ms": 0.239,
+                        "p95_ms": 0.367,
+                        "min_ms": 0.223,
+                        "max_ms": 0.367,
+                        "median_count": 25
+                    },
+                    "forced_samples": [
+                        {
+                            "ms": 0.367,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.24,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.245,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.247,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.245,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.239,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.226,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.237,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.245,
+                            "count": 25
+                        },
+                        {
+                            "ms": 0.224,
+                            "count": 25
+                        }
+                    ],
+                    "forced_update_summary": {
+                        "iterations": 15,
+                        "median_ms": 6.258,
+                        "p95_ms": 7.761,
+                        "min_ms": 5.141,
+                        "max_ms": 7.761,
+                        "median_count": 25
+                    }
+                }
+            }
+        }
+    }
+}
