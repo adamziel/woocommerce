@@ -33,6 +33,13 @@ class WC_Tax {
 	public static $round_at_subtotal = false;
 
 	/**
+	 * Cached tax rate rows for repeated single-rate lookups.
+	 *
+	 * @var array
+	 */
+	private static $tax_rate_cache = array();
+
+	/**
 	 * Load options.
 	 */
 	public static function init() {
@@ -699,14 +706,13 @@ class WC_Tax {
 	 * @return  bool
 	 */
 	public static function is_compound( $key_or_rate ) {
-		global $wpdb;
-
 		if ( is_object( $key_or_rate ) ) {
 			$key      = (int) $key_or_rate->tax_rate_id;
 			$compound = (bool) $key_or_rate->tax_rate_compound;
 		} else {
 			$key      = $key_or_rate;
-			$compound = (bool) $wpdb->get_var( $wpdb->prepare( "SELECT tax_rate_compound FROM {$wpdb->prefix}woocommerce_tax_rates WHERE tax_rate_id = %s", $key ) );
+			$rate     = self::_get_tax_rate( $key, OBJECT );
+			$compound = $rate ? (bool) $rate->tax_rate_compound : false;
 		}
 
 		return (bool) apply_filters( 'woocommerce_rate_compound', $compound, $key );
@@ -719,14 +725,13 @@ class WC_Tax {
 	 * @return  string
 	 */
 	public static function get_rate_label( $key_or_rate ) {
-		global $wpdb;
-
 		if ( is_object( $key_or_rate ) ) {
 			$key       = (int) $key_or_rate->tax_rate_id;
 			$rate_name = $key_or_rate->tax_rate_name;
 		} else {
 			$key       = $key_or_rate;
-			$rate_name = $wpdb->get_var( $wpdb->prepare( "SELECT tax_rate_name FROM {$wpdb->prefix}woocommerce_tax_rates WHERE tax_rate_id = %s", $key ) );
+			$rate      = self::_get_tax_rate( $key, OBJECT );
+			$rate_name = $rate ? $rate->tax_rate_name : '';
 		}
 
 		if ( ! $rate_name ) {
@@ -755,13 +760,12 @@ class WC_Tax {
 	 * @return  float
 	 */
 	public static function get_rate_percent_value( $key_or_rate ) {
-		global $wpdb;
-
 		if ( is_object( $key_or_rate ) ) {
 			$tax_rate = $key_or_rate->tax_rate;
 		} else {
 			$key      = $key_or_rate;
-			$tax_rate = $wpdb->get_var( $wpdb->prepare( "SELECT tax_rate FROM {$wpdb->prefix}woocommerce_tax_rates WHERE tax_rate_id = %s", $key ) );
+			$rate     = self::_get_tax_rate( $key, OBJECT );
+			$tax_rate = $rate ? $rate->tax_rate : 0;
 		}
 
 		return floatval( $tax_rate );
@@ -775,14 +779,12 @@ class WC_Tax {
 	 * @return string
 	 */
 	public static function get_rate_code( $key_or_rate ) {
-		global $wpdb;
-
 		if ( is_object( $key_or_rate ) ) {
 			$key  = (int) $key_or_rate->tax_rate_id;
 			$rate = $key_or_rate;
 		} else {
 			$key  = $key_or_rate;
-			$rate = $wpdb->get_row( $wpdb->prepare( "SELECT tax_rate_country, tax_rate_state, tax_rate_name, tax_rate_priority FROM {$wpdb->prefix}woocommerce_tax_rates WHERE tax_rate_id = %s", $key ) );
+			$rate = self::_get_tax_rate( $key, OBJECT );
 		}
 
 		$code_string = '';
@@ -984,6 +986,7 @@ class WC_Tax {
 
 		wp_cache_delete( 'tax-rate-classes', 'taxes' );
 		WC_Cache_Helper::invalidate_cache_group( 'taxes' );
+		self::clear_tax_rate_cache();
 
 		return (bool) $delete;
 	}
@@ -1102,6 +1105,7 @@ class WC_Tax {
 		$tax_rate_id = $wpdb->insert_id;
 
 		WC_Cache_Helper::invalidate_cache_group( 'taxes' );
+		self::clear_tax_rate_cache( $tax_rate_id );
 
 		do_action( 'woocommerce_tax_rate_added', $tax_rate_id, $tax_rate );
 
@@ -1122,17 +1126,55 @@ class WC_Tax {
 	public static function _get_tax_rate( $tax_rate_id, $output_type = ARRAY_A ) {
 		global $wpdb;
 
-		return $wpdb->get_row(
-			$wpdb->prepare(
-				"
-					SELECT *
-					FROM {$wpdb->prefix}woocommerce_tax_rates
-					WHERE tax_rate_id = %d
-				",
-				$tax_rate_id
-			),
-			$output_type
-		);
+		$tax_rate_id = absint( $tax_rate_id );
+
+		if ( ! $tax_rate_id ) {
+			return null;
+		}
+
+		if ( ! array_key_exists( $tax_rate_id, self::$tax_rate_cache ) ) {
+			self::$tax_rate_cache[ $tax_rate_id ] = $wpdb->get_row(
+				$wpdb->prepare(
+					"
+						SELECT *
+						FROM {$wpdb->prefix}woocommerce_tax_rates
+						WHERE tax_rate_id = %d
+					",
+					$tax_rate_id
+				),
+				ARRAY_A
+			);
+		}
+
+		$tax_rate = self::$tax_rate_cache[ $tax_rate_id ];
+
+		if ( null === $tax_rate ) {
+			return null;
+		}
+
+		if ( OBJECT === $output_type ) {
+			return (object) $tax_rate;
+		}
+
+		if ( ARRAY_N === $output_type ) {
+			return array_values( $tax_rate );
+		}
+
+		return $tax_rate;
+	}
+
+	/**
+	 * Clear cached tax rate rows.
+	 *
+	 * @param int|null $tax_rate_id Tax rate ID, or null to clear all rows.
+	 */
+	private static function clear_tax_rate_cache( $tax_rate_id = null ) {
+		if ( null === $tax_rate_id ) {
+			self::$tax_rate_cache = array();
+			return;
+		}
+
+		unset( self::$tax_rate_cache[ absint( $tax_rate_id ) ] );
 	}
 
 	/**
@@ -1159,6 +1201,7 @@ class WC_Tax {
 		);
 
 		WC_Cache_Helper::invalidate_cache_group( 'taxes' );
+		self::clear_tax_rate_cache( $tax_rate_id );
 
 		do_action( 'woocommerce_tax_rate_updated', $tax_rate_id, $tax_rate );
 	}
@@ -1178,6 +1221,7 @@ class WC_Tax {
 		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}woocommerce_tax_rates WHERE tax_rate_id = %d;", $tax_rate_id ) );
 
 		WC_Cache_Helper::invalidate_cache_group( 'taxes' );
+		self::clear_tax_rate_cache( $tax_rate_id );
 
 		do_action( 'woocommerce_tax_rate_deleted', $tax_rate_id );
 	}

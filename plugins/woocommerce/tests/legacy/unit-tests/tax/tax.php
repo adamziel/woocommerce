@@ -488,6 +488,75 @@ class WC_Tests_Tax extends WC_Unit_Test_Case {
 	}
 
 	/**
+	 * Test rate helpers share one cached row when called with the same scalar ID.
+	 */
+	public function test_rate_helpers_share_cached_tax_rate_row() {
+		global $wpdb;
+
+		$tax_rate = array(
+			'tax_rate_country'  => 'US',
+			'tax_rate_state'    => 'CA',
+			'tax_rate'          => '7.2500',
+			'tax_rate_name'     => 'PERF',
+			'tax_rate_priority' => '1',
+			'tax_rate_compound' => '0',
+			'tax_rate_shipping' => '1',
+			'tax_rate_order'    => '1',
+			'tax_rate_class'    => '',
+		);
+
+		$tax_rate_id = WC_Tax::_insert_tax_rate( $tax_rate );
+
+		$queries_before = $wpdb->num_queries;
+
+		$this->assertSame( 'US-CA-PERF-1', WC_Tax::get_rate_code( $tax_rate_id ) );
+		$this->assertSame( 'PERF', WC_Tax::get_rate_label( $tax_rate_id ) );
+		$this->assertFalse( WC_Tax::is_compound( $tax_rate_id ) );
+		$this->assertSame( 7.25, WC_Tax::get_rate_percent_value( $tax_rate_id ) );
+
+		$this->assertSame( 1, $wpdb->num_queries - $queries_before );
+
+		$queries_before = $wpdb->num_queries;
+
+		WC_Tax::get_rate_code( $tax_rate_id );
+		WC_Tax::get_rate_label( $tax_rate_id );
+		WC_Tax::is_compound( $tax_rate_id );
+		WC_Tax::get_rate_percent_value( $tax_rate_id );
+
+		$this->assertSame( 0, $wpdb->num_queries - $queries_before );
+
+		WC_Tax::_delete_tax_rate( $tax_rate_id );
+	}
+
+	/**
+	 * Test updating a tax rate clears the cached row.
+	 */
+	public function test_rate_helper_cache_is_cleared_when_tax_rate_updates() {
+		$tax_rate = array(
+			'tax_rate_country'  => 'US',
+			'tax_rate_state'    => 'CA',
+			'tax_rate'          => '7.2500',
+			'tax_rate_name'     => 'OLD',
+			'tax_rate_priority' => '1',
+			'tax_rate_compound' => '0',
+			'tax_rate_shipping' => '1',
+			'tax_rate_order'    => '1',
+			'tax_rate_class'    => '',
+		);
+
+		$tax_rate_id = WC_Tax::_insert_tax_rate( $tax_rate );
+
+		$this->assertSame( 'OLD', WC_Tax::get_rate_label( $tax_rate_id ) );
+
+		$tax_rate['tax_rate_name'] = 'NEW';
+		WC_Tax::_update_tax_rate( $tax_rate_id, $tax_rate );
+
+		$this->assertSame( 'NEW', WC_Tax::get_rate_label( $tax_rate_id ) );
+
+		WC_Tax::_delete_tax_rate( $tax_rate_id );
+	}
+
+	/**
 	 * Test the rounding method.
 	 */
 	public function test_round() {
