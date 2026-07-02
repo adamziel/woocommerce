@@ -1,0 +1,4 @@
+Significance: patch
+Type: performance
+
+Cache variation price range checks while building available variation payloads.
