@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-07-02T13:02:57Z",
+  "generated_at": "2026-07-02T13:15:17Z",
   "source": "gh pr list --repo adamziel/woocommerce --state all --limit 40 --json number,title,state,createdAt,updatedAt,url,headRefName,baseRefName,isDraft; gh pr view 4494 --repo woocommerce/woocommerce-paypal-payments --json number,title,state,createdAt,updatedAt,url,headRefName,baseRefName,isDraft,headRepositoryOwner",
   "scope": "WooCommerce performance PRs created in the last 36 hours, plus external gateway PRs and older June 26 PRs for project context.",
   "last_36_hours": {
-    "window_note": "As of 2026-07-02T13:02:57Z, WooCommerce core PRs #16-#31 and PayPal Payments PR #4494 were created within the previous 36 hours.",
+    "window_note": "As of 2026-07-02T13:15:17Z, WooCommerce core PRs #16-#32 and PayPal Payments PR #4494 were created within the previous 36 hours.",
     "problems": [
       {
         "problem": "Gateway admin provider/onboarding remote calls",
@@ -35,6 +35,21 @@
         ],
         "superseded_or_duplicate_prs": [],
         "profiling_link": "PayPal settings profile showed ReferenceTransactionStatus calling PartnersEndpoint::seller_status during settings render. In a primed-failure XHProf/HTTP trace, PR #4494 reduced PayPal merchant-integration HTTP calls from 3/3 requests to 0/3 while leaving the separate Jetpack/WooPayments calls for core PR #31."
+      },
+      {
+        "problem": "Shipping postcode-zone location reloads across split-package lookups",
+        "current_prs": [
+          {
+            "number": 32,
+            "title": "Cache shipping postcode zone locations",
+            "url": "https://github.com/adamziel/woocommerce/pull/32",
+            "state": "OPEN",
+            "created_at": "2026-07-02T13:15:06Z",
+            "branch": "perf/cache-shipping-postcode-locations"
+          }
+        ],
+        "superseded_or_duplicate_prs": [],
+        "profiling_link": "Direct repeated shipping-zone lookup probe with 8,000 postcode rules: 100 distinct destination lookups dropped from 100 all-postcode loads to 1, median queries from 200 to 101, and median total time from 1003.922ms to 538.870ms. Default one-package cart still needs the separate normalized-index direction."
       },
       {
         "problem": "Tax single-rate helper scalar ID lookups",

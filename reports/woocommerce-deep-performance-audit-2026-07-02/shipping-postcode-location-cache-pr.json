@@ -1,0 +1,97 @@
+{
+  "generated_at": "2026-07-02T13:15:17Z",
+  "problem": "Repeated shipping postcode-zone location loads across distinct destination lookups",
+  "pull_request": {
+    "number": 32,
+    "title": "Cache shipping postcode zone locations",
+    "url": "https://github.com/adamziel/woocommerce/pull/32",
+    "repository": "adamziel/woocommerce",
+    "state": "OPEN",
+    "base": "trunk",
+    "branch": "perf/cache-shipping-postcode-locations",
+    "commit": "e6a4b864f900b8061c201d56d517cb969195411a",
+    "created_at": "2026-07-02T13:15:06Z"
+  },
+  "change_summary": [
+    "Adds a private WC_Shipping_Zone_Data_Store::get_postcode_locations() helper.",
+    "Caches the all-postcode shipping zone location list under the existing shipping_zones cache prefix and group.",
+    "Reuses the cached postcode list across distinct get_zone_id_from_package() destination lookups.",
+    "Relies on existing shipping zone create/update/delete invalidation through WC_Cache_Helper::invalidate_cache_group( 'shipping_zones' )."
+  ],
+  "benchmark": {
+    "stack": {
+      "wordpress_image": "wordpress:php8.3-apache",
+      "wordpress": "7.0",
+      "woocommerce": "10.9.1 benchmark site",
+      "php": "8.3.31",
+      "mysql": "8.0.46",
+      "active_plugins": [
+        "woocommerce/woocommerce.php",
+        "woocommerce-paypal-payments/woocommerce-paypal-payments.php",
+        "woocommerce-gateway-stripe/woocommerce-gateway-stripe.php",
+        "woocommerce-payments/woocommerce-payments.php",
+        "wc-perf-profiler mu-plugin"
+      ]
+    },
+    "direct_probe": {
+      "script": "/home/claude/woocommerce/scripts/probe-shipping-postcode-location-cache.php",
+      "iterations": 5,
+      "lookups_per_iteration": 100,
+      "lookup_path": "Direct WC_Shipping_Zone_Data_Store::get_zone_id_from_package() calls",
+      "destinations": "US/CA postcodes 94100-94199",
+      "precondition": "wp_cache_flush() and WC_Cache_Helper::invalidate_cache_group( 'shipping_zones' ) before each iteration",
+      "fixture": {
+        "shipping_zone_locations": 16001,
+        "postcode_locations": 8000,
+        "destination_postcodes": "94100-94199"
+      },
+      "baseline": {
+        "result_path": "/home/claude/woocommerce/results/pr-shipping-postcode-location-cache-baseline-1/probe.json",
+        "median_total_ms": 1003.922,
+        "p95_total_ms": 1042.221,
+        "median_query_count": 200,
+        "median_query_time_ms": 671.601,
+        "median_postcode_location_loads": 100,
+        "median_postcode_location_ms": 397.894
+      },
+      "candidate": {
+        "result_path": "/home/claude/woocommerce/results/pr-shipping-postcode-location-cache-candidate-1/probe.json",
+        "median_total_ms": 538.87,
+        "p95_total_ms": 560.858,
+        "median_query_count": 101,
+        "median_query_time_ms": 277.261,
+        "median_postcode_location_loads": 1,
+        "median_postcode_location_ms": 5.19
+      },
+      "delta": {
+        "median_total_ms": -465.052,
+        "median_query_count": -99,
+        "median_query_time_ms": -394.34,
+        "median_postcode_location_loads": -99,
+        "median_postcode_location_ms": -392.704
+      }
+    },
+    "default_cart_sanity_check": {
+      "result_path": "/home/claude/woocommerce/results/pr-shipping-postcode-location-cache-cart-candidate-1/01-core-shipping-tax-cart-update.json",
+      "scenario": "Store API cart/update-customer with one shippable taxable product and US/CA/94105 destination",
+      "requests": 8,
+      "http_200": 8,
+      "median_total_ms": 124.147,
+      "p95_total_ms": 131.202,
+      "median_server_ms": 113.84,
+      "median_query_count": 120,
+      "median_query_time_ms": 58.43,
+      "interpretation": "Default one-package cart requests still perform one postcode-location load per request. PR #32 targets repeated distinct destination lookups inside the same request or persistent cache window, not the already measured one-package cart baseline."
+    }
+  },
+  "verification": [
+    "php -l plugins/woocommerce/includes/data-stores/class-wc-shipping-zone-data-store.php",
+    "php -l plugins/woocommerce/tests/php/includes/data-stores/class-wc-shipping-zone-data-store-test.php",
+    "git diff --check",
+    "npx pnpm@10.33.0 --filter @woocommerce/plugin-woocommerce test:php:env -- --filter WC_Shipping_Zone_Data_Store_CPT_Test: OK (7 tests, 13 assertions)"
+  ],
+  "notes": [
+    "PHPCS was run on the touched files. It exits non-zero on existing legacy filename/class-name and hook-doc sniffs in these files; new alignment warnings from the added test were fixed before commit.",
+    "The benchmark container was restored to the original WooCommerce data-store file after measuring the candidate."
+  ]
+}
