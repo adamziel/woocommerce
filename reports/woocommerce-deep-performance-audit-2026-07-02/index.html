@@ -116,6 +116,24 @@ pre{white-space:pre-wrap;word-break:break-word;background:#101820;color:#edf7ff;
 </tbody>
 </table>
 
+<h2>PR Map by Problem</h2>
+<p>The current last-36-hours PR batch is <code>#16</code> through <code>#29</code>, created between July 1, 2026 19:09 UTC and July 2, 2026 11:00 UTC. PRs <code>#1</code> through <code>#15</code> were created on June 26, 2026, so they are part of the same project but not part of this latest batch. Raw mapping: <a href="pr-problem-map.json">pr-problem-map.json</a>.</p>
+<table>
+<thead><tr><th>Problem / lane</th><th>Current PRs</th><th>Superseded / duplicate PRs</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr><td>Tax rate location matching during cart totals</td><td><a href="https://github.com/adamziel/woocommerce/pull/29">#29</a></td><td>none</td><td>Rewrite the broad tax-rate location matching query; remaining postcode range prequery needs a schema/index follow-up.</td></tr>
+<tr><td>Admin heavy order edit order-item meta N+1</td><td><a href="https://github.com/adamziel/woocommerce/pull/28">#28</a></td><td>none</td><td>Prime order item meta caches when loading order items.</td></tr>
+<tr><td>Checkout/order creation product order-item meta creation</td><td><a href="https://github.com/adamziel/woocommerce/pull/27">#27</a></td><td><a href="https://github.com/adamziel/woocommerce/pull/20">#20</a></td><td>Reduce repeated/internal product order-item meta creation overhead.</td></tr>
+<tr><td>HPOS operational flag setter overhead</td><td><a href="https://github.com/adamziel/woocommerce/pull/26">#26</a></td><td><a href="https://github.com/adamziel/woocommerce/pull/19">#19</a></td><td>Avoid unnecessary HPOS operational flag setter work.</td></tr>
+<tr><td>Variable product formatted term-name lookups</td><td><a href="https://github.com/adamziel/woocommerce/pull/25">#25</a></td><td><a href="https://github.com/adamziel/woocommerce/pull/21">#21</a></td><td>Cache taxonomy term-name maps used by formatted variation output.</td></tr>
+<tr><td>Variable product available-variation price range checks</td><td><a href="https://github.com/adamziel/woocommerce/pull/24">#24</a></td><td>none</td><td>Cache repeated min/max price range checks in available variation payload generation.</td></tr>
+<tr><td>Variable product title sync overhead</td><td><a href="https://github.com/adamziel/woocommerce/pull/23">#23</a></td><td><a href="https://github.com/adamziel/woocommerce/pull/22">#22</a> closed</td><td>Skip unnecessary variation title sync work while building available variation payloads.</td></tr>
+<tr><td>Analytics import scheduling micro-path</td><td><a href="https://github.com/adamziel/woocommerce/pull/18">#18</a></td><td>none</td><td>Reuse the order object for analytics import scheduling.</td></tr>
+<tr><td>Product lookup stock update refresh scope</td><td><a href="https://github.com/adamziel/woocommerce/pull/17">#17</a></td><td>none</td><td>Narrow product lookup refresh work during stock updates.</td></tr>
+<tr><td>Checkout debug log source meta writes</td><td><a href="https://github.com/adamziel/woocommerce/pull/16">#16</a></td><td>none</td><td>Reduce single-meta-save overhead in checkout/order-step logging.</td></tr>
+</tbody>
+</table>
+
 <h2>New Shipping/Tax Lane Detail</h2>
 <div class="two">
 <div class="card">

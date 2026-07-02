@@ -1,0 +1,214 @@
+{
+  "generated_at": "2026-07-02T11:40:17Z",
+  "source": "gh pr list --repo adamziel/woocommerce --state all --limit 40 --json number,title,state,createdAt,updatedAt,url,headRefName,baseRefName,isDraft",
+  "scope": "WooCommerce performance PRs created in the last 36 hours, plus older June 26 PRs for project context.",
+  "last_36_hours": {
+    "window_note": "As of 2026-07-02T11:40:17Z, PRs #16-#29 were created within the previous 36 hours.",
+    "problems": [
+      {
+        "problem": "Tax rate location matching during cart totals",
+        "current_prs": [
+          {
+            "number": 29,
+            "title": "Optimize tax rate location matching",
+            "url": "https://github.com/adamziel/woocommerce/pull/29",
+            "state": "OPEN",
+            "created_at": "2026-07-02T11:00:39Z",
+            "branch": "perf/tax-rate-location-match-query"
+          }
+        ],
+        "superseded_or_duplicate_prs": [],
+        "profiling_link": "Core tax postcode/rate matching lane; PR addresses broad grouped tax-rate matching SQL, not the remaining postcode range prequery."
+      },
+      {
+        "problem": "Admin heavy order edit order-item meta N+1",
+        "current_prs": [
+          {
+            "number": 28,
+            "title": "Prime order item meta caches when loading items",
+            "url": "https://github.com/adamziel/woocommerce/pull/28",
+            "state": "OPEN",
+            "created_at": "2026-07-02T01:20:55Z",
+            "branch": "perf/order-item-meta-cache-prime-current"
+          }
+        ],
+        "superseded_or_duplicate_prs": [],
+        "profiling_link": "Heavy order edit profile with thousands of order-item meta queries."
+      },
+      {
+        "problem": "Checkout/order creation product order-item meta creation",
+        "current_prs": [
+          {
+            "number": 27,
+            "title": "Improve product order item meta creation",
+            "url": "https://github.com/adamziel/woocommerce/pull/27",
+            "state": "OPEN",
+            "created_at": "2026-07-01T22:47:08Z",
+            "branch": "perf/order-item-internal-meta-create-current"
+          }
+        ],
+        "superseded_or_duplicate_prs": [
+          {
+            "number": 20,
+            "title": "Improve product order item meta creation",
+            "url": "https://github.com/adamziel/woocommerce/pull/20",
+            "state": "OPEN",
+            "created_at": "2026-07-01T20:51:09Z",
+            "branch": "perf/order-item-bulk-meta-create"
+          }
+        ],
+        "profiling_link": "Store API checkout/order creation write amplification."
+      },
+      {
+        "problem": "HPOS operational flag setter overhead",
+        "current_prs": [
+          {
+            "number": 26,
+            "title": "Improve HPOS operational flag setters",
+            "url": "https://github.com/adamziel/woocommerce/pull/26",
+            "state": "OPEN",
+            "created_at": "2026-07-01T22:32:33Z",
+            "branch": "perf/hpos-operational-flag-setters-current"
+          }
+        ],
+        "superseded_or_duplicate_prs": [
+          {
+            "number": 19,
+            "title": "Improve HPOS operational flag setters",
+            "url": "https://github.com/adamziel/woocommerce/pull/19",
+            "state": "OPEN",
+            "created_at": "2026-07-01T20:01:26Z",
+            "branch": "perf/hpos-operational-flag-setters"
+          }
+        ],
+        "profiling_link": "HPOS admin/list/order paths and gateway settings count/option overhead."
+      },
+      {
+        "problem": "Variable product payload formatted term-name lookups",
+        "current_prs": [
+          {
+            "number": 25,
+            "title": "Cache variation formatted term names",
+            "url": "https://github.com/adamziel/woocommerce/pull/25",
+            "state": "OPEN",
+            "created_at": "2026-07-01T22:15:47Z",
+            "branch": "perf/variation-format-taxonomy-map-current"
+          }
+        ],
+        "superseded_or_duplicate_prs": [
+          {
+            "number": 21,
+            "title": "Cache taxonomy term names for variation formatting",
+            "url": "https://github.com/adamziel/woocommerce/pull/21",
+            "state": "OPEN",
+            "created_at": "2026-07-01T21:00:32Z",
+            "branch": "perf/variation-format-taxonomy-map"
+          }
+        ],
+        "profiling_link": "Variable product page repeated get_term_by/WP_Term_Query inside formatted variation generation."
+      },
+      {
+        "problem": "Variable product payload price range checks",
+        "current_prs": [
+          {
+            "number": 24,
+            "title": "Cache variation price range checks in available variation payloads",
+            "url": "https://github.com/adamziel/woocommerce/pull/24",
+            "state": "OPEN",
+            "created_at": "2026-07-01T21:55:32Z",
+            "branch": "perf/available-variation-price-range-cache"
+          }
+        ],
+        "superseded_or_duplicate_prs": [],
+        "profiling_link": "Variable product available-variation payload repeated price checks."
+      },
+      {
+        "problem": "Variable product payload title sync overhead",
+        "current_prs": [
+          {
+            "number": 23,
+            "title": "Skip variation title sync in available variation payloads",
+            "url": "https://github.com/adamziel/woocommerce/pull/23",
+            "state": "OPEN",
+            "created_at": "2026-07-01T21:26:19Z",
+            "branch": "perf/available-variations-skip-title-sync"
+          }
+        ],
+        "superseded_or_duplicate_prs": [
+          {
+            "number": 22,
+            "title": "Skip variation title sync in available variation payloads",
+            "url": "https://github.com/adamziel/woocommerce/pull/22",
+            "state": "CLOSED",
+            "created_at": "2026-07-01T21:23:11Z",
+            "branch": "perf/available-variations-skip-title-sync"
+          }
+        ],
+        "profiling_link": "Variable product available-variation payload repeated title/formatting work."
+      },
+      {
+        "problem": "Analytics import scheduling order-object reuse",
+        "current_prs": [
+          {
+            "number": 18,
+            "title": "Use order object for analytics import scheduling",
+            "url": "https://github.com/adamziel/woocommerce/pull/18",
+            "state": "OPEN",
+            "created_at": "2026-07-01T19:35:07Z",
+            "branch": "perf/orders-scheduler-use-order-object"
+          }
+        ],
+        "superseded_or_duplicate_prs": [],
+        "profiling_link": "Small analytics/order scheduling path found while reviewing order write amplification."
+      },
+      {
+        "problem": "Product lookup stock update refresh scope",
+        "current_prs": [
+          {
+            "number": 17,
+            "title": "Narrow product lookup stock updates",
+            "url": "https://github.com/adamziel/woocommerce/pull/17",
+            "state": "OPEN",
+            "created_at": "2026-07-01T19:29:06Z",
+            "branch": "perf/stock-update-narrow-lookup-refresh"
+          }
+        ],
+        "superseded_or_duplicate_prs": [],
+        "profiling_link": "Checkout/order creation and stock update write amplification."
+      },
+      {
+        "problem": "Checkout debug log source meta writes",
+        "current_prs": [
+          {
+            "number": 16,
+            "title": "Improve checkout debug log source meta writes",
+            "url": "https://github.com/adamziel/woocommerce/pull/16",
+            "state": "OPEN",
+            "created_at": "2026-07-01T19:09:37Z",
+            "branch": "perf/order-step-log-single-meta-save"
+          }
+        ],
+        "superseded_or_duplicate_prs": [],
+        "profiling_link": "Small checkout/order-step logging write path found while reviewing order write amplification."
+      }
+    ]
+  },
+  "older_project_prs": {
+    "created_at": "2026-06-26",
+    "note": "PRs #1-#15 belong to the same WooCommerce performance project but are outside the last-36-hour batch.",
+    "clusters": [
+      {
+        "problem": "Variable product/variation payload and lookup lanes",
+        "prs": [1, 2, 3, 4, 5]
+      },
+      {
+        "problem": "Product search, Store API, collection-data, and product query lanes",
+        "prs": [6, 7, 8, 9, 10]
+      },
+      {
+        "problem": "HPOS order query/search/count lanes",
+        "prs": [11, 12, 13, 14, 15]
+      }
+    ]
+  }
+}
