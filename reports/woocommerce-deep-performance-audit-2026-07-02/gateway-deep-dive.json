@@ -1,0 +1,375 @@
+{
+  "measured_at_utc": "2026-07-02T11:27:00Z",
+  "stack": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3 Apache container",
+    "mysql": "8.0.46",
+    "active_plugins": [
+      {
+        "name": "woocommerce",
+        "version": "10.9.1"
+      },
+      {
+        "name": "woocommerce-paypal-payments",
+        "version": "4.1.0"
+      },
+      {
+        "name": "woocommerce-gateway-stripe",
+        "version": "10.8.3"
+      },
+      {
+        "name": "woocommerce-payments",
+        "version": "10.9.0"
+      }
+    ],
+    "credentials": "No Stripe, PayPal, WooPayments, Jetpack, or Woo.com credentials configured.",
+    "subscriptions_note": "WooPayments bundles vendor/woocommerce/subscriptions-core, but the full commercial WooCommerce Subscriptions product UI/renewal flows were not installed locally."
+  },
+  "http_benchmarks": {
+    "cart_update_with_gateways": {
+      "artifact": "/home/claude/woocommerce/results/gateway-stack-shipping-tax/01-core-shipping-tax-cart-update.json",
+      "requests": 8,
+      "http": "8/8 200",
+      "total_ms": {
+        "median": 122.818,
+        "p95": 133.356
+      },
+      "server_ms": {
+        "median": 108.05,
+        "p95": 113.31
+      },
+      "query_count": {
+        "median": 126,
+        "p95": 126
+      },
+      "query_time_ms": {
+        "median": 56.96,
+        "p95": 59.11
+      },
+      "memory_peak_mb": {
+        "median": 26,
+        "p95": 26
+      }
+    },
+    "admin_payment_settings": {
+      "all_gateways": {
+        "artifact": "/home/claude/woocommerce/results/gateway-stack-admin-auth/01-admin-payment-settings-all.json",
+        "requests": 5,
+        "http": "5/5 200",
+        "total_ms": {
+          "median": 945.972,
+          "p95": 3104.317
+        },
+        "query_count": {
+          "median": 246,
+          "p95": 356
+        },
+        "query_time_ms": {
+          "median": 251.22,
+          "p95": 727.94
+        }
+      },
+      "stripe_settings": {
+        "artifact": "/home/claude/woocommerce/results/gateway-stack-admin-auth/02-admin-payment-settings-stripe.json",
+        "requests": 5,
+        "http": "5/5 200",
+        "total_ms": {
+          "median": 1014.495,
+          "p95": 1208.933
+        },
+        "query_count": {
+          "median": 267,
+          "p95": 279
+        },
+        "query_time_ms": {
+          "median": 266.91,
+          "p95": 304.63
+        }
+      },
+      "woopayments_settings": {
+        "artifact": "/home/claude/woocommerce/results/gateway-stack-admin-auth/03-admin-payment-settings-woopayments.json",
+        "requests": 5,
+        "http": "5/5 302",
+        "total_ms": {
+          "median": 208.711,
+          "p95": 218.813
+        },
+        "query_count": {
+          "median": 121,
+          "p95": 121
+        },
+        "query_time_ms": {
+          "median": 163.89,
+          "p95": 165.73
+        }
+      },
+      "paypal_settings": {
+        "artifact": "/home/claude/woocommerce/results/gateway-stack-admin-auth/04-admin-payment-settings-paypal.json",
+        "requests": 5,
+        "http": "5/5 200",
+        "total_ms": {
+          "median": 1357.433,
+          "p95": 1696.935
+        },
+        "query_count": {
+          "median": 268,
+          "p95": 269
+        },
+        "query_time_ms": {
+          "median": 282.55,
+          "p95": 286.72
+        }
+      }
+    }
+  },
+  "function_profiles": {
+    "cart_gateway_vs_core": {
+      "core_xhprof_artifact": "/home/claude/woocommerce/results/xhprof-function-core-only/01-xhprof-cart-shipping-tax-gateways.json",
+      "gateway_xhprof_artifact": "/home/claude/woocommerce/results/xhprof-function-lane/01-xhprof-cart-shipping-tax-gateways.json",
+      "core": {
+        "server_ms": 205.2,
+        "query_count": 66,
+        "query_time_ms": 58.13,
+        "xhprof_edge_count": 9315
+      },
+      "gateway": {
+        "server_ms": 261.69,
+        "query_count": 123,
+        "query_time_ms": 62.13,
+        "xhprof_edge_count": 13831
+      },
+      "delta": {
+        "server_ms": 56.49,
+        "queries": 57,
+        "xhprof_edges": 4516
+      },
+      "top_gateway_specific_rows": [
+        "WC_Payments::init: 1 call, 8.611ms inclusive",
+        "PayPal ReadOnlyContainer::get: 308 combined calls across two top rows, 32.832ms inclusive",
+        "Jetpack autoloader class loading/manifest work appears in the top gateway-specific rows"
+      ]
+    },
+    "variable_product_with_gateways": {
+      "artifact": "/home/claude/woocommerce/results/xhprof-function-lane/03-xhprof-variable-product-page.json",
+      "server_ms": 3872.67,
+      "query_count": 256,
+      "query_time_ms": 162.99,
+      "wcpay_multicurrency": {
+        "WCPay\\MultiCurrency\\MultiCurrency::get_selected_currency": {
+          "calls": 40041,
+          "inclusive_ms": 624.367,
+          "self_ms": 54.72
+        },
+        "WCPay\\MultiCurrency\\MultiCurrency::get_stored_currency_code": {
+          "calls": 40041,
+          "inclusive_ms": 549.559,
+          "self_ms": 65.71
+        },
+        "WCPay\\MultiCurrency\\MultiCurrency::get_price": {
+          "calls": 40039,
+          "inclusive_ms": 671.524,
+          "self_ms": 38.425
+        },
+        "WCPay\\MultiCurrency\\FrontendPrices::get_product_price": {
+          "calls": 40839,
+          "inclusive_ms": 707.963,
+          "self_ms": 30.15
+        }
+      }
+    },
+    "paypal_settings": {
+      "artifact": "/home/claude/woocommerce/results/xhprof-function-lane/04-xhprof-admin-paypal-settings.json",
+      "http_trace_artifact": "/home/claude/woocommerce/results/xhprof-http-trace-gateway/04-xhprof-admin-paypal-settings.json",
+      "server_ms": 1879.36,
+      "query_count": 268,
+      "query_time_ms": 264.98,
+      "curl_exec": {
+        "calls": 3,
+        "self_ms": 1069.379
+      },
+      "woopayments_onboarding": {
+        "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService::get_onboarding_details": {
+          "calls": 2,
+          "inclusive_ms": 764.111
+        },
+        "Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService::get_wpcom_connection_authorization": {
+          "calls": 2,
+          "inclusive_ms": 760.759
+        },
+        "Automattic\\Jetpack\\Connection\\Manager::try_registration": {
+          "calls": 2,
+          "inclusive_ms": 746.015
+        }
+      },
+      "paypal_reference_transaction_status": {
+        "WooCommerce\\PayPalCommerce\\WcGateway\\Assets\\SettingsPageAssets::register_paypal_admin_assets": {
+          "calls": 1,
+          "inclusive_ms": 419.089
+        },
+        "WooCommerce\\PayPalCommerce\\ApiClient\\Helper\\ReferenceTransactionStatus::reference_transaction_enabled": {
+          "calls": 1,
+          "inclusive_ms": 418.846
+        }
+      }
+    },
+    "heavy_order_edit_gateway_vs_core": {
+      "core_artifact": "/home/claude/woocommerce/results/xhprof-function-core-only/05-xhprof-admin-heavy-order-edit.json",
+      "gateway_artifact": "/home/claude/woocommerce/results/xhprof-function-lane/05-xhprof-admin-heavy-order-edit.json",
+      "core": {
+        "server_ms": 2669.86,
+        "query_count": 3096,
+        "query_time_ms": 585.21
+      },
+      "gateway": {
+        "server_ms": 3485.04,
+        "query_count": 3244,
+        "query_time_ms": 751.02
+      },
+      "delta": {
+        "server_ms": 815.18,
+        "queries": 148,
+        "query_time_ms": 165.81
+      },
+      "gateway_specific": {
+        "curl_exec": {
+          "calls": 2,
+          "self_ms": 570.484
+        },
+        "WooPaymentsService::get_onboarding_details": {
+          "calls": 2,
+          "inclusive_ms": 666.098
+        },
+        "Jetpack Manager::try_registration": {
+          "calls": 2,
+          "inclusive_ms": 648.872
+        }
+      },
+      "core_bottleneck_still_present": {
+        "WC_Meta_Box_Order_Items::output": {
+          "calls": 1,
+          "inclusive_ms": 2208.996
+        },
+        "order_itemmeta_single_item_read": {
+          "calls": 1000,
+          "total_ms": 147.101
+        },
+        "order_itemmeta_one_item_cache_prime": {
+          "calls": 1000,
+          "total_ms": 130.593
+        }
+      }
+    }
+  },
+  "http_calls": {
+    "paypal_settings": [
+      {
+        "url": "https://public-api.wordpress.com/wpcom/v2/wcpay/incentives",
+        "method": "GET",
+        "status_code": 204,
+        "elapsed_ms": 443.534,
+        "caller": "WC_Payments_Incentives_Service->get_connect_incentive"
+      },
+      {
+        "url": "https://jetpack.wordpress.com/jetpack.register/1/",
+        "method": "POST",
+        "status_code": 400,
+        "elapsed_ms": 312.003,
+        "caller": "WooPaymentsService->get_wpcom_connection_authorization -> JetpackConnection::get_authorization_url"
+      },
+      {
+        "url": "https://jetpack.wordpress.com/jetpack.register/1/",
+        "method": "POST",
+        "status_code": 400,
+        "elapsed_ms": 289.364,
+        "caller": "WooPaymentsService->get_wpcom_connection_authorization -> JetpackConnection::get_authorization_url"
+      },
+      {
+        "url": "https://api.woocommerce.com/integrations/ppc/v1/customer/partners/K8SKZ36LQBWXJ/merchant-integrations/",
+        "method": "GET",
+        "status_code": 404,
+        "elapsed_ms": 365.31,
+        "caller": "PayPal SettingsPageAssets->register_paypal_admin_assets -> ReferenceTransactionStatus->reference_transaction_enabled"
+      }
+    ],
+    "heavy_order_edit": [
+      {
+        "url": "https://jetpack.wordpress.com/jetpack.register/1/",
+        "method": "POST",
+        "status_code": 400,
+        "elapsed_ms": 300.872,
+        "caller": "WooPaymentsService->get_wpcom_connection_authorization -> JetpackConnection::get_authorization_url"
+      },
+      {
+        "url": "https://jetpack.wordpress.com/jetpack.register/1/",
+        "method": "POST",
+        "status_code": 400,
+        "elapsed_ms": 294.909,
+        "caller": "WooPaymentsService->get_wpcom_connection_authorization -> JetpackConnection::get_authorization_url"
+      }
+    ]
+  },
+  "sql_signatures": {
+    "gateway_cart": [
+      {
+        "count": 82,
+        "total_ms": 8.836,
+        "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+        "caller": "DataSynchronizer->__construct -> get_background_sync_mode -> get_option"
+      },
+      {
+        "count": 9,
+        "total_ms": 1.491,
+        "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_wcpay_currency_format','_transient_timeout_wcpay_currency_format')",
+        "caller": "WC_Payments_Localization_Service->__construct -> load_locale_data"
+      }
+    ],
+    "paypal_settings": [
+      {
+        "count": 150,
+        "total_ms": 20.182,
+        "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+        "caller": "DataSynchronizer->__construct -> get_background_sync_mode -> get_option"
+      },
+      {
+        "count": 10,
+        "total_ms": 50.558,
+        "sql": "UPDATE wp_options SET option_value = '1' WHERE option_name = 'jetpack_tos_agreed'",
+        "caller": "Jetpack Connection Manager->try_registration -> Terms_Of_Service->agree"
+      },
+      {
+        "count": 4,
+        "total_ms": 9.748,
+        "sql": "UPDATE wp_options SET option_value = serialized jetpack_register_1 secrets",
+        "caller": "Jetpack Connection Manager->try_registration -> Secrets->generate"
+      }
+    ],
+    "heavy_order_edit_with_gateways": [
+      {
+        "count": 1000,
+        "total_ms": 147.101,
+        "sql": "SELECT meta_id, meta_key, meta_value FROM wp_woocommerce_order_itemmeta WHERE order_item_id = ? ORDER BY meta_id",
+        "caller": "WC_Data_Store_WP->read_meta"
+      },
+      {
+        "count": 1000,
+        "total_ms": 130.593,
+        "sql": "SELECT order_item_id, meta_key, meta_value FROM wp_woocommerce_order_itemmeta WHERE order_item_id IN (?) ORDER BY meta_id ASC",
+        "caller": "update_meta_cache"
+      },
+      {
+        "count": 147,
+        "total_ms": 19.027,
+        "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+        "caller": "DataSynchronizer->__construct -> get_background_sync_mode -> get_option"
+      }
+    ]
+  },
+  "developer_handoff": [
+    "WooPayments provider details should not trigger Jetpack registration/authorization URL generation during unrelated admin renders. Cache or defer WooPaymentsService::get_onboarding_details / get_wpcom_connection_authorization until the explicit onboarding action.",
+    "PayPal settings asset localization should not make a blocking partner merchant integration status request on every settings render. Cache ReferenceTransactionStatus or move it behind the refresh_feature_status endpoint already exposed to the page.",
+    "Gateway bootstrap repeatedly instantiates DataSynchronizer and reads woocommerce_custom_orders_table_background_sync_mode; cache this option/value within the request or avoid repeated container construction.",
+    "WooPayments multicurrency price filters are very hot on large variable product pages: about 40k calls each to selected/stored currency and price conversion helpers in the measured 800-variation page. Add request-level memoization or a batch conversion path.",
+    "The heavy order edit page remains dominated by core order-item meta N+1, now addressed by PR #28; gateway activation adds remote WooPayments onboarding calls on top and should be gated away from order-edit pages."
+  ]
+}

@@ -225,6 +225,17 @@ city/postcode absence checks appear as dependent subqueries</pre>
 </tbody>
 </table>
 
+<h3>Gateway Deep Dive Handoff</h3>
+<table>
+<thead><tr><th>Path</th><th>Measured hotspot</th><th>Developer handoff</th><th>Artifact</th></tr></thead>
+<tbody>
+<tr><td>Gateway-active cart update</td><td>Core-only XHProf sample: 66 queries, 205.2ms server. Gateway stack sample: 123 queries, 261.7ms server. The additional work is mostly plugin bootstrap, option reads, Jetpack autoloader/container work, and WooPayments localization transients; the core tax/shipping SQL remains the largest request-specific cost.</td><td>Reduce gateway bootstrap on Store API cart requests and cache repeated request-local reads such as <code>woocommerce_custom_orders_table_background_sync_mode</code>. Keep the tax/shipping fixes separate; gateway activation adds overhead but does not replace those core bottlenecks.</td><td><a href="gateway-deep-dive.json">JSON</a></td></tr>
+<tr><td>Variable product page with gateways</td><td>WooPayments multicurrency functions fire about 40k times each on the 800-variation product page: <code>get_selected_currency</code> 624.4ms inclusive, <code>get_stored_currency_code</code> 549.6ms, <code>get_price</code> 671.5ms, <code>FrontendPrices::get_product_price</code> 708.0ms.</td><td>Add request-level memoization or a batch price-conversion path for variation payload generation. This is separate from the core variation PRs because it comes from WooPayments multicurrency filters layered over the same large variation loop.</td><td><a href="gateway-deep-dive.json">JSON</a></td></tr>
+<tr><td>PayPal settings page</td><td>XHProf: <code>curl_exec</code> 3 calls, 1,069.4ms self. WooPayments onboarding details spend 764.1ms inclusive and Jetpack registration 746.0ms; PayPal <code>ReferenceTransactionStatus</code> adds 418.8ms inclusive.</td><td>Defer/cache WooPayments onboarding authorization details and PayPal reference-transaction capability checks. PayPal already exposes a refresh-feature-status AJAX endpoint; use that for explicit refresh rather than blocking the settings render.</td><td><a href="gateway-deep-dive.json">JSON</a></td></tr>
+<tr><td>Heavy order edit with gateways</td><td>Gateway sample: 3,485ms server, 3,244 queries, plus <code>curl_exec</code> 570.5ms. Core sample: 2,670ms server, 3,096 queries. The core order-item meta N+1 remains dominant, but WooPayments provider details add two Jetpack registration attempts on an unrelated order edit page.</td><td>Gate WooPayments provider/onboarding detail generation away from non-payment settings admin pages. PR #28 addresses the core order-item meta N+1; the gateway follow-up is to avoid remote onboarding calls during order editing.</td><td><a href="gateway-deep-dive.json">JSON</a></td></tr>
+</tbody>
+</table>
+
 <h2>Function-Level Profiling</h2>
 <div class="two">
 <div class="card">
