@@ -98,6 +98,75 @@ class WC_Shipping_Zone_Data_Store_CPT_Test extends WC_Unit_Test_Case {
 	}
 
 	/**
+	 * @testdox get_zone_id_from_package() reuses postcode locations across destination lookups.
+	 */
+	public function test_get_zone_id_from_package_caches_postcode_locations() {
+		global $wpdb;
+
+		$california_zone = new WC_Shipping_Zone();
+		$california_zone->set_zone_name( 'California postcodes' );
+		$california_zone->set_zone_order( 1 );
+		$california_zone->add_location( 'US:CA', 'state' );
+		$california_zone->add_location( '90210', 'postcode' );
+		$california_zone->save();
+
+		$new_york_zone = new WC_Shipping_Zone();
+		$new_york_zone->set_zone_name( 'New York postcodes' );
+		$new_york_zone->set_zone_order( 2 );
+		$new_york_zone->add_location( 'US:NY', 'state' );
+		$new_york_zone->add_location( '10001', 'postcode' );
+		$new_york_zone->save();
+
+		$expected_california_zone_id = $california_zone->get_id();
+		$expected_new_york_zone_id   = $new_york_zone->get_id();
+
+		WC_Cache_Helper::invalidate_cache_group( 'shipping_zones' );
+
+		$postcode_location_queries = 0;
+		$query_counter             = function ( $query ) use ( $wpdb, &$postcode_location_queries ) {
+			if ( "SELECT zone_id, location_code FROM {$wpdb->prefix}woocommerce_shipping_zone_locations WHERE location_type = 'postcode';" === $query ) {
+				++$postcode_location_queries;
+			}
+
+			return $query;
+		};
+
+		add_filter( 'query', $query_counter );
+
+		try {
+			$data_store = new WC_Shipping_Zone_Data_Store();
+
+			$california_zone_id = $data_store->get_zone_id_from_package(
+				array(
+					'destination' => array(
+						'country'  => 'US',
+						'state'    => 'CA',
+						'postcode' => '90210',
+					),
+				)
+			);
+			$new_york_zone_id   = $data_store->get_zone_id_from_package(
+				array(
+					'destination' => array(
+						'country'  => 'US',
+						'state'    => 'NY',
+						'postcode' => '10001',
+					),
+				)
+			);
+		} finally {
+			remove_filter( 'query', $query_counter );
+			$california_zone->delete();
+			$new_york_zone->delete();
+			WC_Cache_Helper::invalidate_cache_group( 'shipping_zones' );
+		}
+
+		$this->assertSame( $expected_california_zone_id, (int) $california_zone_id );
+		$this->assertSame( $expected_new_york_zone_id, (int) $new_york_zone_id );
+		$this->assertSame( 1, $postcode_location_queries );
+	}
+
+	/**
 	 * @testdox add_meta() returns 0 as shipping zones do not support meta storage.
 	 */
 	public function test_add_meta_returns_zero() {
