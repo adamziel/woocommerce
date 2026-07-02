@@ -549,6 +549,7 @@ abstract class Abstract_WC_Order_Data_Store_CPT extends WC_Data_Store_WP impleme
 		$items = wp_list_filter( $items, array( 'order_item_type' => $type ) );
 
 		if ( ! empty( $items ) ) {
+			$this->prime_order_item_raw_meta_data_cache( $items );
 			$items = array_map( array( 'WC_Order_Factory', 'get_order_item' ), array_combine( wp_list_pluck( $items, 'order_item_id' ), $items ) );
 		} else {
 			$items = array();
@@ -631,31 +632,86 @@ abstract class Abstract_WC_Order_Data_Store_CPT extends WC_Data_Store_WP impleme
 		foreach ( $order_items as $item ) {
 			wp_cache_set( 'item-' . $item->order_item_id, $item, 'order-items' );
 		}
-		$order_item_ids = wp_list_pluck( $order_items, 'order_item_id' );
-		update_meta_cache( 'order_item', $order_item_ids );
+		$raw_meta_data_collection = $this->prime_order_item_raw_meta_data_cache( $order_items );
+		$this->prime_product_post_caches_for_order_items( $order_items, $raw_meta_data_collection );
+	}
 
-		// Prime WC_Data meta cache (includes meta_id required by read_meta_data).
-		$id_placeholders     = implode( ', ', array_fill( 0, count( $order_item_ids ), '%d' ) );
+	/**
+	 * Prime raw meta caches for order items.
+	 *
+	 * WC_Data uses a separate raw meta cache because WordPress metadata caches do
+	 * not include meta_id. Priming it here avoids one itemmeta query per order
+	 * item when large orders are hydrated through get_items().
+	 *
+	 * @since 10.9.0
+	 *
+	 * @param array<int,object{order_item_id:int}> $order_items Order item rows.
+	 * @return array<int,array<int,object{object_id:int,meta_id:int,meta_key:string,meta_value:mixed}>> Meta entries grouped by order item id.
+	 */
+	private function prime_order_item_raw_meta_data_cache( array $order_items ): array {
+		global $wpdb;
+
+		$order_item_ids = array_values(
+			array_unique(
+				array_filter(
+					array_map( 'absint', wp_list_pluck( $order_items, 'order_item_id' ) )
+				)
+			)
+		);
+
+		if ( empty( $order_item_ids ) ) {
+			return array();
+		}
+
+		$cache_keys_mapping        = array();
+		$raw_meta_data_collection  = array();
+		$non_cached_order_item_ids = array();
+
+		foreach ( $order_item_ids as $order_item_id ) {
+			$cache_keys_mapping[ $order_item_id ] = \WC_Order_Item::generate_meta_cache_key( $order_item_id, 'order-items' );
+		}
+
+		$cache_values = wc_cache_get_multiple( array_values( $cache_keys_mapping ), 'order-items' );
+		foreach ( $cache_keys_mapping as $order_item_id => $cache_key ) {
+			$cached_meta = is_array( $cache_values ) && isset( $cache_values[ $cache_key ] ) ? $cache_values[ $cache_key ] : false;
+			if ( is_array( $cached_meta ) ) {
+				/**
+				 * Cached raw order item meta rows.
+				 *
+				 * @var array<int,object{object_id:int,meta_id:int,meta_key:string,meta_value:mixed}> $cached_meta
+				 */
+				$raw_meta_data_collection[ $order_item_id ] = $cached_meta;
+			} else {
+				$raw_meta_data_collection[ $order_item_id ] = array();
+				$non_cached_order_item_ids[]                = $order_item_id;
+			}
+		}
+
+		if ( empty( $non_cached_order_item_ids ) ) {
+			return $raw_meta_data_collection;
+		}
+
+		update_meta_cache( 'order_item', $non_cached_order_item_ids );
+
+		$id_placeholders     = implode( ', ', array_fill( 0, count( $non_cached_order_item_ids ), '%d' ) );
 		$raw_meta_data_array = $wpdb->get_results(
 			$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- $id_placeholders is generated above.
 				"SELECT order_item_id as object_id, meta_id, meta_key, meta_value FROM {$wpdb->prefix}woocommerce_order_itemmeta WHERE order_item_id IN ({$id_placeholders}) ORDER BY meta_id",
-				...$order_item_ids
+				...$non_cached_order_item_ids
 			)
 		);
 
-		if ( ! empty( $raw_meta_data_array ) ) {
-			$raw_meta_data_collection = array();
-			foreach ( $raw_meta_data_array as $raw_meta_data ) {
-				if ( ! isset( $raw_meta_data_collection[ $raw_meta_data->object_id ] ) ) {
-					$raw_meta_data_collection[ $raw_meta_data->object_id ] = array();
-				}
-				$raw_meta_data_collection[ $raw_meta_data->object_id ][] = $raw_meta_data;
+		foreach ( $raw_meta_data_array as $raw_meta_data ) {
+			if ( ! isset( $raw_meta_data_collection[ $raw_meta_data->object_id ] ) ) {
+				$raw_meta_data_collection[ $raw_meta_data->object_id ] = array();
 			}
-			\WC_Order_Item::prime_raw_meta_data_cache( $raw_meta_data_collection, 'order-items' );
-
-			$this->prime_product_post_caches_for_order_items( $order_items, $raw_meta_data_collection );
+			$raw_meta_data_collection[ $raw_meta_data->object_id ][] = $raw_meta_data;
 		}
+
+		\WC_Order_Item::prime_raw_meta_data_cache( $raw_meta_data_collection, 'order-items' );
+
+		return $raw_meta_data_collection;
 	}
 
 	/**
