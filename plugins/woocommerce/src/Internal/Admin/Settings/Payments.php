@@ -44,6 +44,13 @@ class Payments {
 	private ExtensionSuggestions $extension_suggestions;
 
 	/**
+	 * Memoized payment provider details for the current request.
+	 *
+	 * @var array
+	 */
+	private array $payment_providers_memo = array();
+
+	/**
 	 * Initialize the class instance.
 	 *
 	 * @param PaymentsProviders    $payment_providers             The payment providers service.
@@ -76,6 +83,21 @@ class Payments {
 	 * @throws Exception If there are malformed or invalid suggestions.
 	 */
 	public function get_payment_providers( string $location, bool $for_display = true, bool $remove_shells = false ): array {
+		$can_install_plugins = current_user_can( 'install_plugins' );
+		$memo_key            = implode(
+			':',
+			array(
+				$location,
+				$for_display ? 'display' : 'internal',
+				$remove_shells ? 'remove-shells' : 'keep-shells',
+				(string) get_current_user_id(),
+				$can_install_plugins ? 'can-install' : 'cannot-install',
+			)
+		);
+		if ( isset( $this->payment_providers_memo[ $memo_key ] ) ) {
+			return $this->payment_providers_memo[ $memo_key ];
+		}
+
 		$payment_gateways = $this->providers->get_payment_gateways( $for_display );
 		if ( ! $for_display && $remove_shells ) {
 			$payment_gateways = $this->providers->remove_shell_payment_gateways( $payment_gateways, $location );
@@ -87,7 +109,7 @@ class Payments {
 
 		// Only include suggestions if the requesting user can install plugins.
 		$suggestions = array();
-		if ( current_user_can( 'install_plugins' ) ) {
+		if ( $can_install_plugins ) {
 			$suggestions = $this->providers->get_extension_suggestions( $location, self::SUGGESTIONS_CONTEXT );
 		}
 		// If we have preferred suggestions, add them to the providers list.
@@ -204,7 +226,19 @@ class Payments {
 			$this->process_payment_provider_states( $payment_providers );
 		}
 
+		$this->payment_providers_memo[ $memo_key ] = $payment_providers;
+
 		return $payment_providers;
+	}
+
+	/**
+	 * Reset the memoized data. Useful for testing purposes.
+	 *
+	 * @internal
+	 * @return void
+	 */
+	public function reset_memo(): void {
+		$this->payment_providers_memo = array();
 	}
 
 	/**

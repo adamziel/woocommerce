@@ -587,6 +587,67 @@ class WooPaymentsServiceTest extends WC_Unit_Test_Case {
 	}
 
 	/**
+	 * Test get onboarding details reuses WPCOM authorization details during a request.
+	 */
+	public function test_get_onboarding_details_reuses_wpcom_authorization_for_same_return_url(): void {
+		$location               = 'US';
+		$authorization_requests = 0;
+
+		$this->mock_wpcom_connection_manager
+			->expects( $this->any() )
+			->method( 'is_connected' )
+			->willReturn( false );
+		$this->mock_wpcom_connection_manager
+			->expects( $this->any() )
+			->method( 'has_connected_owner' )
+			->willReturn( false );
+		$this->mock_wpcom_connection_manager
+			->expects( $this->any() )
+			->method( 'is_connection_owner' )
+			->willReturn( false );
+
+		$this->mockable_proxy->register_static_mocks(
+			array(
+				Utils::class => array(
+					// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+					'wc_payments_settings_url'           => function ( ?string $path = null, array $query = array() ) {
+						unset( $path, $query );
+						return 'https://example.com/payments-settings';
+					},
+					// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+					'get_wpcom_connection_authorization' => function ( string $return_url ) use ( &$authorization_requests ) {
+						++$authorization_requests;
+
+						return array(
+							'success'      => true,
+							'errors'       => array(),
+							'color_scheme' => 'fresh',
+							'url'          => 'https://wordpress.com/auth?return=' . rawurlencode( $return_url ),
+						);
+					},
+					// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+					'rest_endpoint_get_request'          => function ( string $endpoint, array $params = array() ) {
+						unset( $params );
+						if ( '/wc/v3/payments/onboarding/fields' === $endpoint ) {
+							return array(
+								'data' => array(),
+							);
+						}
+
+						throw new \Exception( esc_html( 'GET endpoint response is not mocked: ' . $endpoint ) );
+					},
+				),
+			)
+		);
+
+		$first_result  = $this->sut->get_onboarding_details( $location, '/some/path' );
+		$second_result = $this->sut->get_onboarding_details( $location, '/some/path' );
+
+		$this->assertSame( 1, $authorization_requests );
+		$this->assertSame( $first_result['steps'], $second_result['steps'] );
+	}
+
+	/**
 	 * Test get onboarding details - steps.
 	 *
 	 * @dataProvider provider_get_onboarding_details_steps

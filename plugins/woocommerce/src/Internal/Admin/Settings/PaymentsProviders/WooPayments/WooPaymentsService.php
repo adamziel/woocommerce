@@ -123,6 +123,13 @@ class WooPaymentsService {
 	private PaymentsProviders\PaymentGateway $provider;
 
 	/**
+	 * Memoized WPCOM authorization details for the current request.
+	 *
+	 * @var array
+	 */
+	private array $wpcom_connection_authorization_memo = array();
+
+	/**
 	 * Initialize the class instance.
 	 *
 	 * @param PaymentsProviders $payment_providers The PaymentsProviders instance.
@@ -2523,7 +2530,13 @@ class WooPaymentsService {
 	 * @return array The WPCOM connection authorization details.
 	 */
 	private function get_wpcom_connection_authorization( string $return_url ): array {
-		return $this->proxy->call_static( Utils::class, 'get_wpcom_connection_authorization', $return_url );
+		if ( isset( $this->wpcom_connection_authorization_memo[ $return_url ] ) ) {
+			return $this->wpcom_connection_authorization_memo[ $return_url ];
+		}
+
+		$this->wpcom_connection_authorization_memo[ $return_url ] = $this->proxy->call_static( Utils::class, 'get_wpcom_connection_authorization', $return_url );
+
+		return $this->wpcom_connection_authorization_memo[ $return_url ];
 	}
 
 	/**

@@ -106,6 +106,44 @@ class PaymentsTest extends WC_Unit_Test_Case {
 	}
 
 	/**
+	 * Test memoizing payment providers during a request.
+	 */
+	public function test_get_payment_providers_memoizes_identical_requests() {
+		// Arrange.
+		$location = 'US';
+
+		$this->mock_providers
+			->expects( $this->once() )
+			->method( 'get_payment_gateways' )
+			->with( true )
+			->willReturn( array() );
+
+		$this->mock_providers
+			->expects( $this->once() )
+			->method( 'get_extension_suggestions' )
+			->with( $location, Payments::SUGGESTIONS_CONTEXT )
+			->willReturn( array() );
+
+		$this->mock_providers
+			->expects( $this->once() )
+			->method( 'get_order_map' )
+			->willReturn( array() );
+
+		$this->mock_providers
+			->expects( $this->once() )
+			->method( 'enhance_order_map' )
+			->with( array() )
+			->willReturn( array() );
+
+		// Act.
+		$first_result  = $this->sut->get_payment_providers( $location );
+		$second_result = $this->sut->get_payment_providers( $location );
+
+		// Assert.
+		$this->assertSame( $first_result, $second_result );
+	}
+
+	/**
 	 * Test getting payment providers with gateways but no suggestions.
 	 */
 	public function test_get_payment_providers_only_gateways_no_suggestions() {
