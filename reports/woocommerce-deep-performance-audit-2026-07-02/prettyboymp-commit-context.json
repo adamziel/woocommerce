@@ -1,0 +1,182 @@
+{
+  "measured_at_utc": "2026-07-02T11:30:18Z",
+  "source": {
+    "url": "https://github.com/woocommerce/woocommerce/commits/trunk/?author=prettyboymp",
+    "fetched_remote": "upstream",
+    "fetched_ref": "upstream/trunk",
+    "upstream_trunk_sha": "d9ddaf5e73",
+    "commits_since": "2025-09-01",
+    "commit_count_since": 43
+  },
+  "clusters": [
+    {
+      "cluster": "Large variable product payload avoidance",
+      "commits": [
+        {
+          "sha": "de8f979f30",
+          "date": "2026-01-08",
+          "title": "Add performance guidance to get_available_variations() docblock (#62715)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/de8f979f302420256b4f46b618a44fdf9d18ca6f"
+        },
+        {
+          "sha": "215b50531a",
+          "date": "2026-01-12",
+          "title": "Replace get_available_variations() with get_visible_children() in product-image.php (#62754)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/215b50531a1d831761e89bb27fae45b7bfc43b3a"
+        },
+        {
+          "sha": "31ef4a8a06",
+          "date": "2026-01-14",
+          "title": "Use variation objects instead of arrays in ProductPrice block (#62797)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/31ef4a8a065de1f06813ef89064efe878da814a3"
+        },
+        {
+          "sha": "6854cc21db",
+          "date": "2026-01-27",
+          "title": "VariationSelectorAttribute: Use variation objects instead of arrays for better performance (#62795)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/6854cc21db4d8175e2ff1c0f9a53c6f54327971a"
+        },
+        {
+          "sha": "9e07cfcecc",
+          "date": "2026-01-28",
+          "title": "Product Gallery: Use variation objects instead of arrays for better performance (#62792)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/9e07cfceccb8d993f8898939c74809a8528444d5"
+        }
+      ],
+      "measured_connection": "The report's variable-product lane and PRs #23-#25 sit in the same area: avoid full per-variation payload generation, title sync, term lookups, and repeated parent-level price work. The gateway deep dive adds a new overlay: WooPayments multicurrency hooks still run roughly 40k times on the same 800-variation page.",
+      "handoff": "Keep replacing broad get_available_variations array hydration with narrower child/object paths where possible. For unavoidable full payloads, cache taxonomy labels, parent price-range decisions, and gateway price/currency state per request."
+    },
+    {
+      "cluster": "Product object caching and product-loop cache priming",
+      "commits": [
+        {
+          "sha": "1985a2981c",
+          "date": "2025-12-22",
+          "title": "Wooplug 5884/product object cache (#62041)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/1985a2981ca5e8d4adff1986bf4d417750bcb5b1"
+        },
+        {
+          "sha": "3021d723af",
+          "date": "2026-02-19",
+          "title": "Change Cache Product Objects default plugin compatibility to COMPATIBLE (#63243)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/3021d723afa170ab42382a16491148fafc59f7fc"
+        },
+        {
+          "sha": "7f77a18b6e",
+          "date": "2026-06-02",
+          "title": "Enable product object caching by default for new installs (#65445)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/7f77a18b6e981b99569f49d9debb84b3d02edd5d"
+        },
+        {
+          "sha": "fde1065c5e",
+          "date": "2025-12-10",
+          "title": "Performance: Add cache priming for grouped product child product loops (#61784)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/fde1065c5ed40a1cf6b55fb2e321a19462f8d273"
+        }
+      ],
+      "measured_connection": "The heavy order edit and checkout lanes still show repeated object/meta hydration. PR #28 applies the same cache-priming idea to order item meta for single-order admin loads.",
+      "handoff": "Look for remaining places that instantiate many product/order/item objects without first priming the matching raw meta and object caches."
+    },
+    {
+      "cluster": "HPOS caching, search, and status filtering",
+      "commits": [
+        {
+          "sha": "b2f5359adf",
+          "date": "2025-10-23",
+          "title": "Move HPOS Datastore caching out of experimental features. (#61521)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/b2f5359adfd777a73e2c4f7bbeb4d63eaef7a4a1"
+        },
+        {
+          "sha": "060af14c4a",
+          "date": "2025-11-24",
+          "title": "Fix HPOS to exclude internal statuses when status='any' (#61856)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/060af14c4afed148062f308f2a4deba577849630"
+        },
+        {
+          "sha": "ae9c01e9f6",
+          "date": "2026-04-13",
+          "title": "Exclude checkout-draft orders from default REST API order queries (#63743)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/ae9c01e9f6e9c122b02ebc3d427dcdd7b438513a"
+        },
+        {
+          "sha": "7cc97cbe19",
+          "date": "2026-06-11",
+          "title": "Add OrderUtil::custom_orders_table_data_sync_is_enabled() accessor (#65649)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/7cc97cbe19ee08af58261775268393848e8e3761"
+        }
+      ],
+      "measured_connection": "The HPOS admin search/count lane and gateway settings pages both show HPOS order-count/search overhead. The gateway deep dive also shows repeated DataSynchronizer option reads for woocommerce_custom_orders_table_background_sync_mode.",
+      "handoff": "Continue reducing repeated HPOS datastore setup and broad counts/searches. Cache request-local DataSynchronizer state and avoid broad admin counts when a page does not need them synchronously."
+    },
+    {
+      "cluster": "Analytics REST/report performance",
+      "commits": [
+        {
+          "sha": "8304a9b55e",
+          "date": "2025-09-08",
+          "title": "Performance: Strip the rel=self link from the report response as it is built by the Reports/Controller (#60791)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/8304a9b55e6e0a75c00e68dce8a07fe3f92e2796"
+        },
+        {
+          "sha": "36f311f00b",
+          "date": "2025-10-06",
+          "title": "Performance improvements to analytics reports endpoints. (#61263)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/36f311f00b3df42803bea65d0b5dd76137f0132e"
+        },
+        {
+          "sha": "5cdefcf905",
+          "date": "2025-10-07",
+          "title": "Update WooCommerce Analytics REST API Namespaces to lazy load for improved performance. (#60684)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/5cdefcf9059a7fd07970679c14f44396523368e0"
+        }
+      ],
+      "measured_connection": "The pathological and CRUD-invariant reports still show broad revenue/product stats aggregates as an open lane. These commits reduce API boot and report response overhead but do not remove the large aggregate SQL shapes.",
+      "handoff": "Separate REST namespace boot cost from report datastore aggregate cost. The remaining hard work is precomputation/index-windowing for wc_order_stats and wc_order_product_lookup aggregates."
+    },
+    {
+      "cluster": "Shipping-zone bulk reads",
+      "commits": [
+        {
+          "sha": "205db58026",
+          "date": "2025-09-16",
+          "title": "Introduce read multiple to shipping zones (#60917)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/205db5802632ba90a46e9236555a10893c6dded4"
+        }
+      ],
+      "measured_connection": "This commit improves reading multiple known shipping zones by adding WC_Shipping_Zones::get_shipping_zones() and data-store read_multiple(). The measured shipping/tax lane is one step earlier: get_zone_id_from_package() still loads all postcode locations before it knows the candidate zone IDs.",
+      "handoff": "A shipping postcode fix should feed a short candidate zone list into the existing bulk-read capable path, using persisted normalized exact/wildcard/range candidate data rather than loading every postcode location first."
+    },
+    {
+      "cluster": "Term count and permalink/product-list overhead",
+      "commits": [
+        {
+          "sha": "6d0562432a",
+          "date": "2025-10-14",
+          "title": "Wooplug 5655/defer term counting for batch product editing (#61383)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/6d0562432af0da79714869435ef6020552d91067"
+        },
+        {
+          "sha": "e50d54857f",
+          "date": "2025-10-21",
+          "title": "Only update term counts when product visibility changes (#61457)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/e50d54857f051aaa0a71567f47a6890e9a78b787"
+        },
+        {
+          "sha": "ee6866e42e",
+          "date": "2026-02-09",
+          "title": "Skip category processing in product permalinks when not needed (#63121)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/ee6866e42eac7adb29ef941ee1490269ebfc2ee1"
+        },
+        {
+          "sha": "599ca7d753",
+          "date": "2026-02-19",
+          "title": "Cache Store API products last modified timestamp (#63228)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/599ca7d7537893ba5367601d9acbc9b802e5c8b7"
+        }
+      ],
+      "measured_connection": "The Store API product collection-data and catalog paths still have broad count/query costs. These commits reduce surrounding product-list churn, but the remaining measured costs are query-shape and count aggregation problems.",
+      "handoff": "Keep shrinking product-list per-item work, but prioritize Store API count SQL and unbounded ID materialization for the largest residual wins."
+    }
+  ],
+  "interpretation": "The author history points to the same architectural themes seen in profiling: avoid full variation payloads, prime/cache object data before loops, reduce HPOS broad counts/searches, lazy-load analytics/report code, and make shipping-zone data access bulk-aware. The remaining measured bottlenecks are generally the next layer down: broad SQL candidate selection, unbounded aggregate/count queries, gateway remote calls during render, and per-item meta persistence."
+}
