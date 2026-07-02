@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-07-02T13:15:17Z",
-  "source": "gh pr list --repo adamziel/woocommerce --state all --limit 40 --json number,title,state,createdAt,updatedAt,url,headRefName,baseRefName,isDraft; gh pr view 4494 --repo woocommerce/woocommerce-paypal-payments --json number,title,state,createdAt,updatedAt,url,headRefName,baseRefName,isDraft,headRepositoryOwner",
-  "scope": "WooCommerce performance PRs created in the last 36 hours, plus external gateway PRs and older June 26 PRs for project context.",
+  "generated_at": "2026-07-02T13:34:30Z",
+  "source": "gh pr list --repo adamziel/woocommerce --state all --limit 50 --json number,title,state,createdAt,updatedAt,url,headRefName,baseRefName,isDraft; gh pr view 11914 --repo Automattic/woocommerce-payments --json number,title,state,createdAt,updatedAt,url,headRefName,baseRefName,isDraft,headRepositoryOwner; gh pr view 4494 --repo woocommerce/woocommerce-paypal-payments --json number,title,state,createdAt,updatedAt,url,headRefName,baseRefName,isDraft,headRepositoryOwner",
+  "scope": "WooCommerce performance PRs created in the last 36 hours, plus external gateway/plugin PRs and older June 26 PRs for project context.",
   "last_36_hours": {
-    "window_note": "As of 2026-07-02T13:15:17Z, WooCommerce core PRs #16-#32 and PayPal Payments PR #4494 were created within the previous 36 hours.",
+    "window_note": "As of 2026-07-02T13:34:30Z, WooCommerce core PRs #16-#33, WooPayments PR #11914, and PayPal Payments PR #4494 were created within the previous 36 hours.",
     "problems": [
       {
         "problem": "Gateway admin provider/onboarding remote calls",
@@ -19,6 +19,37 @@
         ],
         "superseded_or_duplicate_prs": [],
         "profiling_link": "Gateway-active PayPal settings and heavy HPOS order edit profiles showed repeated WooPayments WPCOM/Jetpack authorization work; PR #31 reduces Jetpack registration attempts from 3 to 1 in adjacent cold XHProf samples."
+      },
+      {
+        "problem": "Jetpack/WPCOM registration retry after recent failure",
+        "current_prs": [
+          {
+            "number": 33,
+            "title": "Throttle Jetpack registration failure retries",
+            "url": "https://github.com/adamziel/woocommerce/pull/33",
+            "state": "OPEN",
+            "created_at": "2026-07-02T13:33:59Z",
+            "branch": "perf/throttle-jetpack-registration-failures"
+          }
+        ],
+        "superseded_or_duplicate_prs": [],
+        "profiling_link": "Gateway-active heavy HPOS order edit benchmark with a primed recent Jetpack registration failure: baseline made 6 jetpack.wordpress.com/jetpack.register/1/ calls across 3 requests, totalling 1874.587ms HTTP time; PR #33 made 0 calls, reduced median server time from 3423.44ms to 2672.36ms, and reduced median query count from 3242 to 3196."
+      },
+      {
+        "problem": "WooPayments multicurrency selected-currency lookups",
+        "current_prs": [
+          {
+            "number": 11914,
+            "title": "Cache selected currency during requests",
+            "url": "https://github.com/Automattic/woocommerce-payments/pull/11914",
+            "repository": "Automattic/woocommerce-payments",
+            "state": "OPEN",
+            "created_at": "2026-07-02T12:29:45Z",
+            "branch": "perf/cache-selected-currency-lookup"
+          }
+        ],
+        "superseded_or_duplicate_prs": [],
+        "profiling_link": "Gateway-stack variable-product page with 800 variations showed WooPayments multicurrency selected-currency resolution in the hot path about 40k times. PR #11914 reduced median total time from 1361.273ms to 1239.675ms and dropped get_selected_currency inclusive XHProf time from 616.212ms to 6.643ms."
       },
       {
         "problem": "PayPal settings seller-status remote call after recent failure",
