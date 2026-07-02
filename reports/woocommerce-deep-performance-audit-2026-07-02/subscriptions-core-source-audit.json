@@ -1,0 +1,152 @@
+{
+  "generated_at": "2026-07-02T12:00:49Z",
+  "type": "subscriptions-core-source-audit",
+  "package": "woocommerce-payments/vendor/woocommerce/subscriptions-core",
+  "version": "6.7.1",
+  "conclusion": "WooPayments bundles WooCommerce Subscriptions Core 6.7.1 source, but the benchmark runtime does not load WC_Subscription APIs. This artifact is therefore source-level handoff, not runtime latency coverage. The classic Subscriptions Core renewal path is still directly relevant to gateway renewals: it creates Woo renewal orders by copying subscription object data and line items, records related-order metadata, maintains related-order caches, and schedules one Action Scheduler row per subscription date event.",
+  "runtime_status": {
+    "WC_Subscription": false,
+    "wcs_create_subscription": false,
+    "wcs_order_contains_subscription": false,
+    "runtime_benchmark": "not measured because Subscriptions Core is not active in the WordPress runtime"
+  },
+  "verification": {
+    "source_version": "woocommerce-payments/vendor/woocommerce/subscriptions-core/woocommerce-subscriptions-core.php declares Version: 6.7.1",
+    "syntax": {
+      "command": "php -l selected Subscriptions Core renewal, related-order, scheduler, data copier, and datastore files copied from the running container",
+      "result": "No syntax errors detected in wcs-renewal-functions.php, wcs-order-functions.php, class-wcs-action-scheduler.php, class-wcs-related-order-store-cpt.php, class-wcs-related-order-store-cached-cpt.php, and class-wc-subscriptions-data-copier.php."
+    }
+  },
+  "entrypoints": [
+    {
+      "name": "Create renewal order",
+      "source_files": [
+        "includes/wcs-renewal-functions.php",
+        "includes/wcs-order-functions.php",
+        "includes/class-wc-subscriptions-data-copier.php"
+      ],
+      "path": [
+        "wcs_create_renewal_order( subscription )",
+        "wcs_create_order_from_subscription( subscription, renewal_order )",
+        "WCS_SQL_Transaction::start",
+        "wc_create_order",
+        "wcs_copy_order_meta -> WC_Subscriptions_Data_Copier::copy",
+        "subscription->get_items( line_item, fee, shipping, tax, coupon )",
+        "foreach copied item: wc_add_order_item, new_order->get_item, wcs_copy_order_item, order_item->save",
+        "line items with products call set_backorder_meta and save again",
+        "transaction commit",
+        "fresh wc_get_order",
+        "WCS_Related_Order_Store::add_relation"
+      ],
+      "performance_note": "This path inherits Woo core order/order-item write amplification. It also copies subscription meta/core/operational/address/payment-token data and saves the target order before looping item copies."
+    },
+    {
+      "name": "Related-order lookup and cache fallback",
+      "source_files": [
+        "includes/data-stores/class-wcs-related-order-store-cpt.php",
+        "includes/data-stores/class-wcs-related-order-store-cached-cpt.php",
+        "includes/wcs-order-functions.php",
+        "includes/class-wc-subscription.php"
+      ],
+      "path": [
+        "subscription->get_related_orders",
+        "subscription->get_related_order_ids",
+        "WCS_Related_Order_Store_Cached_CPT::get_related_order_ids",
+        "read subscription cache meta",
+        "if cache missing, fallback to parent::get_related_order_ids",
+        "wcs_get_orders_with_meta_query limit=-1 by _subscription_{relation}",
+        "update related-order id cache on subscription"
+      ],
+      "performance_note": "The persistent cache avoids repeated broad meta queries once warm, but a cold or deleted cache falls back to an unbounded related-order meta query and then persists the full related-order ID list."
+    },
+    {
+      "name": "Schedule subscription date events",
+      "source_files": [
+        "includes/class-wcs-action-scheduler.php"
+      ],
+      "path": [
+        "WCS_Action_Scheduler::update_date",
+        "get scheduled action hook and args",
+        "as_next_scheduled_action",
+        "as_unschedule_all_actions when timestamp changes",
+        "as_schedule_single_action for next_payment, trial_end, payment_retry, expiration, and end_of_prepaid_term"
+      ],
+      "performance_note": "The scheduler stores one Action Scheduler action per subscription date event. Status updates can iterate every date type and repeatedly call Action Scheduler next/unschedule/schedule APIs."
+    },
+    {
+      "name": "Renewal payment status transition",
+      "source_files": [
+        "includes/class-wc-subscriptions-renewal-order.php",
+        "includes/wcs-renewal-functions.php",
+        "includes/wcs-order-functions.php"
+      ],
+      "path": [
+        "woocommerce_order_status_changed",
+        "WC_Subscriptions_Renewal_Order::maybe_record_subscription_payment",
+        "wcs_order_contains_renewal",
+        "wcs_get_subscriptions_for_renewal_order",
+        "order->set_date_paid and save",
+        "foreach related subscription: payment_complete or payment_failed",
+        "subscription status hooks and order notes"
+      ],
+      "performance_note": "A renewal status change can load related subscriptions, save the renewal order, transition subscription status, schedule/unschedule subscription actions, and add subscription order notes."
+    },
+    {
+      "name": "Related-order cache update hooks",
+      "source_files": [
+        "includes/class-wcs-object-data-cache-manager.php",
+        "includes/data-stores/class-wcs-related-order-store-cached-cpt.php"
+      ],
+      "path": [
+        "woocommerce_before_order_object_save",
+        "WCS_Object_Data_Cache_Manager::prepare_object_changes",
+        "object->get_changes, get_base_data, get_meta_data",
+        "data_store->read_meta for raw previous meta",
+        "woocommerce_after_order_object_save",
+        "trigger cache update hooks for tracked relation meta keys"
+      ],
+      "performance_note": "Tracking relation changes requires object meta inspection and raw meta reads around saves. This is the price of keeping the persistent related-order cache current under HPOS/CPT compatibility."
+    }
+  ],
+  "hot_path_risks": [
+    {
+      "risk": "Renewal order creation copies every relevant order item and saves product line items at least once, sometimes twice",
+      "evidence": "wcs_create_order_from_subscription() loops subscription items, creates each order item with wc_add_order_item(), copies item data/meta, saves it, then product line items with an existing product call set_backorder_meta() and save again.",
+      "handoff": "Benchmark wcs_create_renewal_order() with subscriptions containing 1, 10, 50, and 200 recurring line items under HPOS. Compare query families for wp_woocommerce_order_items, wp_woocommerce_order_itemmeta, wc_orders, wc_orders_meta, and the impact of PR #27/#28-style order item/meta improvements."
+    },
+    {
+      "risk": "Cold related-order caches fall back to unbounded meta queries",
+      "evidence": "WCS_Related_Order_Store_CPT::get_related_order_ids() uses wcs_get_orders_with_meta_query() with limit=-1 and meta_query key _subscription_{relation}=subscription_id. Cached store calls this parent method when cache meta is missing.",
+      "handoff": "Benchmark subscription->get_related_orders() and wcs_get_subscriptions_for_renewal_order() with cache present, cache deleted, and cache stale for subscriptions with 10/100/1k/10k related renewal orders."
+    },
+    {
+      "risk": "Related-order cache stores growing arrays of all related order IDs on the subscription",
+      "evidence": "add_related_order_id_to_cache() reads the existing related-order ID list, array_unshift()s the new order id, and update_related_order_id_cache() writes the full array back to subscription metadata, with optional CPT backfill when HPOS sync is enabled.",
+      "handoff": "Measure cache metadata size and write time for long-lived subscriptions. Consider whether the newest/last-order paths can avoid reading or rewriting the full historical ID list."
+    },
+    {
+      "risk": "Action Scheduler row count scales with active subscription date events",
+      "evidence": "WCS_Action_Scheduler::update_date() and update_status() use as_next_scheduled_action(), as_unschedule_all_actions(), and as_schedule_single_action() for subscription next_payment, trial_end, retry, expiration, and prepaid-term events.",
+      "handoff": "Seed 10k/100k/1M subscriptions with active next_payment events and measure subscription date/status update throughput plus Action Scheduler table/index behavior."
+    },
+    {
+      "risk": "Payment retry scheduling can touch related-order history",
+      "evidence": "WCS_Action_Scheduler::get_action_args() calls subscription->get_last_order( 'ids', 'renewal' ) for payment_retry; source comments call this resource intensive when no retry date exists.",
+      "handoff": "Benchmark failed renewal retry scheduling on subscriptions with many renewal orders, cache warm and cold."
+    },
+    {
+      "risk": "Status transitions combine relation lookups, order saves, subscription saves, notes, and scheduler updates",
+      "evidence": "WC_Subscriptions_Renewal_Order::maybe_record_subscription_payment() checks renewal relation, gets subscriptions for renewal order, saves paid date, calls payment_complete/payment_failed on each subscription, and status transition adds order notes and fires scheduler hooks.",
+      "handoff": "Profile gateway renewal success/failure with XHProf and SQL tracing. Split relation lookup/cache cost, renewal order save, subscription status save, order notes, and Action Scheduler operations."
+    }
+  ],
+  "minimum_runtime_fixture_needed": [
+    "Subscriptions Core loaded so WC_Subscription and wcs_create_renewal_order are available",
+    "HPOS enabled with and without CPT synchronization",
+    "Subscriptions with 1, 10, 50, and 200 line items",
+    "Subscriptions with 10, 100, 1k, and 10k historical renewal orders",
+    "Warm related-order cache, missing cache, and stale/deleted cache scenarios",
+    "Active next_payment, trial_end, payment_retry, and end date schedules in Action Scheduler",
+    "Gateway renewal success and failure flows for Stripe, PayPal, and WooPayments"
+  ]
+}

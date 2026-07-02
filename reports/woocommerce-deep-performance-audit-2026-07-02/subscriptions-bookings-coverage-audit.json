@@ -132,6 +132,7 @@
     ],
     "source_handoff_artifacts": [
       "subscriptions-engine-source-audit.json",
+      "subscriptions-core-source-audit.json",
       "bookings-gateway-source-audit.json"
     ],
     "standalone_extensions_absent": [
@@ -158,6 +159,26 @@
         "resolve_outcome updates cycle and contract schedule fields"
       ],
       "why_it_is_interesting": "This is the package-level renewal money path in the WooCommerce source tree. It combines Action Scheduler scale, custom subscription tables, HPOS/order writes, order item writes, and gateway hooks."
+    },
+    {
+      "area": "WooPayments-bundled Subscriptions Core renewal path",
+      "entrypoints": [
+        "wcs_create_renewal_order",
+        "wcs_create_order_from_subscription",
+        "WCS_Related_Order_Store::add_relation",
+        "WCS_Action_Scheduler::update_date",
+        "WC_Subscriptions_Renewal_Order::maybe_record_subscription_payment"
+      ],
+      "static_path": [
+        "create Woo renewal order",
+        "copy subscription object data and payment tokens",
+        "copy line/fee/shipping/tax/coupon items",
+        "record renewal relation",
+        "update or backfill related-order ID cache",
+        "schedule one Action Scheduler row per subscription date event",
+        "on renewal payment, load related subscriptions, save order/subscription state, add notes, and update scheduled actions"
+      ],
+      "why_it_is_interesting": "This is the classic Subscriptions Core money path bundled inside WooPayments. It combines Woo order-item write amplification, related-order cache fallback/meta queries, Action Scheduler scale, subscription status hooks, and gateway renewal callbacks."
     },
     {
       "area": "WooPayments Stripe Billing invoice.paid webhook",
