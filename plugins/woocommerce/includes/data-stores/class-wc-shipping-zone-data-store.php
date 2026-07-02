@@ -318,7 +318,7 @@ class WC_Shipping_Zone_Data_Store extends WC_Data_Store_WP implements WC_Object_
 		$criteria[] = 'OR ( location_type IS NULL ) )';
 
 		// Postcode range and wildcard matching.
-		$postcode_locations = $wpdb->get_results( "SELECT zone_id, location_code FROM {$wpdb->prefix}woocommerce_shipping_zone_locations WHERE location_type = 'postcode';" );
+		$postcode_locations = $this->get_postcode_locations();
 
 		if ( $postcode_locations ) {
 			$zone_ids_with_postcode_rules = array_map( 'absint', wp_list_pluck( $postcode_locations, 'zone_id' ) );
@@ -347,6 +347,26 @@ class WC_Shipping_Zone_Data_Store extends WC_Data_Store_WP implements WC_Object_
 			WHERE " . implode( ' ', $criteria ) // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			. ' ORDER BY zone_order ASC, zones.zone_id ASC LIMIT 1'
 		);
+	}
+
+	/**
+	 * Return all postcode shipping zone locations.
+	 *
+	 * @since 11.0.0
+	 * @return array
+	 */
+	private function get_postcode_locations() {
+		global $wpdb;
+
+		$cache_key          = WC_Cache_Helper::get_cache_prefix( 'shipping_zones' ) . 'postcode_locations';
+		$postcode_locations = wp_cache_get( $cache_key, 'shipping_zones' );
+
+		if ( false === $postcode_locations ) {
+			$postcode_locations = $wpdb->get_results( "SELECT zone_id, location_code FROM {$wpdb->prefix}woocommerce_shipping_zone_locations WHERE location_type = 'postcode';" );
+			wp_cache_set( $cache_key, $postcode_locations, 'shipping_zones' );
+		}
+
+		return $postcode_locations;
 	}
 
 	/**
