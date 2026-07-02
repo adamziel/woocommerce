@@ -199,8 +199,8 @@
           "url": "https://github.com/woocommerce/woocommerce/commit/6650fc001ddc140fa2c774ed4a7d838e2eac1d5a"
         }
       ],
-      "measured_connection": "The cart/checkout and Store API-adjacent lanes measured in this report still spend most time in tax/shipping SQL, gateway hooks, and queue/order-item work. These commits are guardrails around boot/session behavior rather than the primary remaining bottlenecks found in the backend traces.",
-      "handoff": "Keep these separated from the high-confidence backend fixes. They justify a Store API cart/checkout session follow-up with empty-session churn, guest cart, authenticated cart, and abandoned-cart feature toggles controlled explicitly."
+      "measured_connection": "The cart/checkout and Store API-adjacent lanes measured in this report still spend most time in tax/shipping SQL, gateway hooks, and queue/order-item work. A targeted Store API session probe now shows the guardrail detail: fresh empty carts do not create a session row, every valid Cart-Token read performs one direct wp_woocommerce_sessions SELECT via StoreApi\\SessionHandler, and remove-item can leave a residual empty-cart session row containing shipping/gateway/removed-cart keys.",
+      "handoff": "Keep this separated from the high-confidence backend fixes. If optimizing the session lane, define a Store API-safe cleanup policy for residual keys after carts become empty, and consider whether tokenized Store API reads should share a short request/object-cache layer for absent or unchanged session rows. Do not blindly apply regular cookie-session destroy-empty-sessions behavior to Cart-Token sessions without extension compatibility checks."
     },
     {
       "cluster": "Term count and permalink/product-list overhead",
