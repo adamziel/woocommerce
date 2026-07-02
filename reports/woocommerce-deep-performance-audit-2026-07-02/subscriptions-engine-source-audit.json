@@ -1,0 +1,152 @@
+{
+  "generated_at": "2026-07-02T11:53:29Z",
+  "type": "source-package-static-audit",
+  "package": "packages/php/woocommerce-subscriptions-engine",
+  "conclusion": "The WooCommerce source tree contains a Subscriptions engine package with concrete renewal, contract, cycle, and Action Scheduler paths. It is not active in the Docker benchmark site, so this artifact is a source-level handoff rather than runtime latency coverage. The package's pure unit suite passes locally.",
+  "verification": {
+    "syntax": {
+      "command": "find packages/php/woocommerce-subscriptions-engine/src -name '*.php' -print0 | xargs -0 -n1 php -l",
+      "result": "All package source files reported no syntax errors."
+    },
+    "unit_tests": {
+      "setup": "composer install --no-interaction --no-progress in packages/php/woocommerce-subscriptions-engine",
+      "command": "composer run-script test:unit",
+      "runtime": "PHP 8.5.6",
+      "result": "OK (184 tests, 399 assertions)"
+    },
+    "runtime_benchmark": {
+      "result": "Not run",
+      "reason": "The package is not active in the Docker benchmark site and integration/runtime coverage requires the Subscriptions engine to be booted in a WordPress test/runtime environment."
+    }
+  },
+  "entrypoints": [
+    {
+      "name": "Boot",
+      "file": "src/Integration/Bootstrap.php",
+      "path": [
+        "CapabilityRegistry::init()",
+        "RenewalEngine::register_hooks()",
+        "PlansController::register_hooks()",
+        "SchemaInstaller::maybe_install() on init"
+      ],
+      "performance_note": "Every boot performs a version-gated schema check. Common case is an option read; install/upgrade runs dbDelta across all engine tables."
+    },
+    {
+      "name": "Schedule renewal",
+      "file": "src/Integration/Renewal/RenewalEngine.php",
+      "path": [
+        "RenewalEngine::schedule( Contract )",
+        "gateway-scheduled contracts are unscheduled and skipped",
+        "CapabilityRegistry::supports( gateway, recurring )",
+        "RenewalScheduler::unschedule( contract_id )",
+        "RenewalScheduler::schedule( contract_id, next_payment_gmt )"
+      ],
+      "performance_note": "Current scheduler shape is one pending Action Scheduler row per primitive-scheduled contract. Source comments explicitly call out that the long-term target is a few recurring jobs scanning a due index with lease claims."
+    },
+    {
+      "name": "Process due renewal",
+      "file": "src/Integration/Renewal/RenewalEngine.php",
+      "path": [
+        "ContractRepository::find( contract_id ) hydrates contract row, items, addresses, and meta",
+        "ContractRepository::find_current_cycle() gets head cycle",
+        "renewal_exists_for_cycle() checks existing renewal orders",
+        "resolve_billing_policy() reads plan snapshot or live plan",
+        "RenewalCalculator::compute_next_cycle()",
+        "ContractRepository::append_cycle() creates pending cycle as claim",
+        "build_renewal_order() creates WC order, line items, address data, relation meta, and payment token",
+        "attempt_charge() fires woocommerce_subscriptions_engine_scheduled_payment_{gateway}",
+        "resolve_outcome() updates cycle and contract schedule/attempt fields"
+      ],
+      "performance_note": "The path combines custom subscription tables, HPOS/order writes, order item creation, gateway hooks, and contract/cycle updates in one synchronous Action Scheduler callback."
+    },
+    {
+      "name": "Contract creation from checkout order",
+      "file": "src/Integration/Checkout/ContractFactory.php",
+      "path": [
+        "map order totals, payment instrument, addresses, and recurring line items",
+        "ContractRepository::insert_with_origin_cycle()",
+        "insert contract, contract items, addresses, meta",
+        "resolve and store plan/items snapshots",
+        "insert cycle 1 as billed",
+        "tag origin order with contract relation meta and save order"
+      ],
+      "performance_note": "Checkout contract creation is durable-intent-first but not transactional. Large recurring carts multiply contract item inserts and order meta writes."
+    }
+  ],
+  "schema_indexes": {
+    "contracts": [
+      "PRIMARY KEY(id)",
+      "KEY customer_status(customer_id, status)",
+      "KEY due(next_payment_gmt, status)",
+      "KEY origin_order(origin_order_id)",
+      "KEY extension_slug(extension_slug)"
+    ],
+    "cycles": [
+      "PRIMARY KEY(id)",
+      "UNIQUE KEY chain_seq(contract_id, kind, sequence_no)",
+      "UNIQUE KEY chain_count(contract_id, kind, count)",
+      "KEY due(kind, status, starts_at_gmt)",
+      "KEY order_id(order_id)",
+      "KEY contract_kind(contract_id, kind)"
+    ],
+    "contract_children": [
+      "contract_items KEY contract(contract_id)",
+      "contract_addresses PRIMARY KEY(contract_id, address_type)",
+      "contract_meta KEY contract_key(contract_id, meta_key(100))",
+      "snapshots KEY contract_type(contract_id, snapshot_type), KEY parent(parent_id)"
+    ]
+  },
+  "hot_path_risks": [
+    {
+      "risk": "One Action Scheduler row per active primitive-scheduled contract",
+      "evidence": "RenewalScheduler::schedule() calls as_schedule_single_action() for the contract id. RenewalEngine::schedule() clears and re-enqueues one row per contract.",
+      "impact": "Large subscription stores can accumulate a very large scheduled-action table and per-contract scheduling churn. The package comments already identify a future batch dispatcher as the target shape.",
+      "handoff": "Benchmark with 10k, 100k, and 1M primitive-scheduled contracts/actions. Compare per-contract AS rows against a recurring dispatcher that scans contracts by KEY due(next_payment_gmt,status) and claims due work in batches."
+    },
+    {
+      "risk": "Renewal idempotency uses unbounded order lookup by meta",
+      "evidence": "RenewalEngine::renewal_exists_for_cycle() calls wc_get_orders() with limit=-1, meta_key=_subscription_contract_id, meta_value=contract_id, then filters relation type and cycle number in PHP.",
+      "impact": "A long-lived contract with many related orders can make every due renewal scan all orders tagged to that contract before cycle claiming. HPOS helps, but the lookup is still broader than the desired contract+relation+cycle predicate.",
+      "handoff": "Profile contracts with 10, 100, 1k, and 10k historical renewal orders. Consider using the engine's cycle table as the idempotency source, or a narrower HPOS/order-meta query that includes relation type and renewal cycle."
+    },
+    {
+      "risk": "Schedule-only contract updates still read child rows",
+      "evidence": "ContractRepository::update() updates the contract row, then sync_children() compares find_items(), find_addresses(), and find_meta() against the entity arrays before deciding not to rewrite them.",
+      "impact": "Successful and failed renewals update last_payment/last_attempt/next_payment fields but still issue child SELECTs. This avoids write churn but can add reads to every renewal.",
+      "handoff": "Benchmark RenewalEngine::resolve_outcome() on contracts with many items/meta rows. Consider a targeted contract-row update method for schedule/status fields, or dirty tracking that skips child comparisons when children are known unchanged."
+    },
+    {
+      "risk": "Renewal order creation loops contract items synchronously",
+      "evidence": "build_renewal_order() creates one WC_Order_Item_Product per contract item, sets product/variation/quantity/subtotal/total, adds it to the order, saves order relation meta, then attaches payment token.",
+      "impact": "The path inherits the Woo core order-item write amplification seen in checkout profiles, especially for subscriptions with many recurring line items.",
+      "handoff": "Benchmark renewal orders with 1, 10, 50, and 200 recurring line items against PR #27/#28-style order-item/meta improvements. Capture SQL by order-item and order-itemmeta table."
+    },
+    {
+      "risk": "Snapshot copy-forward performs payload reads and JSON decode",
+      "evidence": "ContractRepository::copy_forward_or_insert() reads the previous snapshot payload and compares decoded JSON before reusing snapshot ids.",
+      "impact": "This avoids duplicate snapshot writes, but unchanged renewals still pay read/decode cost for plan/items snapshots.",
+      "handoff": "Profile renewals where plan/items are stable across many cycles. If snapshot reads appear in top SQL/function lists, consider stored payload hashes or contract-row snapshot reuse shortcuts."
+    }
+  ],
+  "existing_tests_observed": [
+    "schedule is gated on gateway recurring capability",
+    "schedule replaces any existing pending row",
+    "process_due creates renewal order tagged for next chargeable number",
+    "process_due skips when a renewal order is already tagged for the cycle",
+    "process_due advances the chain on successful charge",
+    "process_due builds renewal from contract items and addresses",
+    "process_due marks failed charge cycles failed and leaves schedule unchanged",
+    "retry of unsettled cycle is idempotent",
+    "non-active, gateway-scheduled, and unknown contracts skip",
+    "cancellation transitions contract and unschedules pending renewal"
+  ],
+  "minimum_runtime_fixture_needed": [
+    "Subscriptions engine booted in WordPress runtime with schema installed",
+    "Large contract table: at least 10k to 100k active primitive-scheduled contracts",
+    "Action Scheduler seeded with matching renewal actions",
+    "Contracts with varying historical renewal counts to stress renewal_exists_for_cycle()",
+    "Contracts with 1, 10, 50, and 200 recurring line items",
+    "Gateway adapters for PayPal, Stripe, and WooPayments, or deterministic test handlers that mimic success, failure, and thrown exceptions",
+    "HPOS enabled so renewal orders exercise the current order storage path"
+  ]
+}

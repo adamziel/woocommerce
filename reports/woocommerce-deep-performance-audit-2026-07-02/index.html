@@ -43,6 +43,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#101820;color:#edf7ff;
 <tr><td><a href="gateway-stack/01-core-shipping-tax-cart-update.html">Gateway stack cart lane</a></td><td>Same cart-total request after activating WooCommerce Stripe Payment Gateway 10.8.3, WooCommerce PayPal Payments 4.1.0, and WooPayments 10.9.0.</td></tr>
 <tr><td><a href="xhprof-function-lane/index.html">XHProf function profiling lane</a></td><td>One function-level profile per hot path, with core-only and gateway-stack comparisons for cart totals, checkout, variable product rendering, PayPal settings, and heavy order edit.</td></tr>
 <tr><td><a href="tax-helper-cache-probe.json">Tax helper cache probe</a></td><td>Focused WP-CLI micro-benchmark for scalar <code>WC_Tax</code> helper calls and the request-local row cache in PR #30.</td></tr>
+<tr><td><a href="subscriptions-engine-source-audit.json">Subscriptions engine source audit</a></td><td>Static source-package map for <code>packages/php/woocommerce-subscriptions-engine</code>: Action Scheduler renewal path, contract/cycle schema indexes, idempotency query risk, and renewal order construction risks.</td></tr>
 <tr><td><a href="subscriptions-bookings-coverage-audit.json">Subscriptions/Bookings coverage audit</a></td><td>Runtime availability checks, WordPress.org installability evidence, and static handoff paths for WooPayments, Stripe, PayPal Payments, and Bookings compatibility code.</td></tr>
 </tbody>
 </table>
@@ -297,6 +298,19 @@ city/postcode absence checks appear as dependent subqueries</pre>
 </table>
 
 <p>Minimum fixture still needed for runtime coverage: licensed/available Subscriptions and Bookings extensions, active subscription products and <code>WC_Subscription</code> records across Stripe/PayPal/WooPayments methods, sandbox or mocked gateway APIs, renewal/webhook payloads, Action Scheduler renewal/migration actions, bookable products with resources/persons/availability/cost rules, AJAX booking cost requests, and booking line items through checkout/gateway button flows.</p>
+
+<h3>Subscriptions Engine Source Package</h3>
+<p>The WooCommerce source checkout also contains <code>packages/php/woocommerce-subscriptions-engine</code>. This package is not active in the Docker benchmark site, so it is not runtime latency coverage. It is still useful source evidence for the future Subscriptions hot path. Package source syntax passed, and the package unit suite passed locally: <code>184 tests, 399 assertions</code>.</p>
+<table>
+<thead><tr><th>Path</th><th>Static finding</th><th>Developer handoff</th><th>Artifact</th></tr></thead>
+<tbody>
+<tr><td>Renewal scheduling</td><td><code>RenewalEngine::schedule()</code> gates on gateway recurring capability, then clears and enqueues one Action Scheduler row per primitive-scheduled contract via <code>as_schedule_single_action()</code>.</td><td>Benchmark large stores with 10k/100k/1M contracts and scheduled actions. The package comments already identify the future target as a batch dispatcher scanning a due index instead of one job per contract.</td><td><a href="subscriptions-engine-source-audit.json">JSON</a></td></tr>
+<tr><td>Due renewal processing</td><td><code>process_due()</code> hydrates contract children, loads the current cycle, checks existing renewal orders, resolves billing policy, claims the next cycle, builds a Woo order, fires the gateway payment hook, then updates cycle and contract rows.</td><td>Profile this as one synchronous Action Scheduler callback. Capture custom table reads/writes, HPOS order writes, order item/meta writes, and gateway hook time separately.</td><td><a href="subscriptions-engine-source-audit.json">JSON</a></td></tr>
+<tr><td>Idempotency pre-check</td><td><code>renewal_exists_for_cycle()</code> calls <code>wc_get_orders()</code> with <code>limit=-1</code> for <code>_subscription_contract_id</code>, then filters renewal relation and cycle number in PHP.</td><td>Stress contracts with many historical renewal orders. Consider using the engine cycle table as the idempotency source or a narrower HPOS/order-meta predicate that includes relation type and cycle.</td><td><a href="subscriptions-engine-source-audit.json">JSON</a></td></tr>
+<tr><td>Contract updates</td><td><code>ContractRepository::update()</code> avoids child rewrites when unchanged, but still reads items, addresses, and meta to compare signatures on schedule-only renewal updates.</td><td>Benchmark renewal success/failure updates on contracts with many child rows. Consider a targeted contract-row update for schedule/status fields or dirty tracking to skip child comparisons.</td><td><a href="subscriptions-engine-source-audit.json">JSON</a></td></tr>
+<tr><td>Renewal order build</td><td><code>build_renewal_order()</code> loops contract items into <code>WC_Order_Item_Product</code> objects, saves relation meta, and attaches payment tokens.</td><td>This inherits the Woo core order-item write amplification seen in checkout. Benchmark 1/10/50/200 recurring line items and compare against PR #27/#28-style order item/meta improvements.</td><td><a href="subscriptions-engine-source-audit.json">JSON</a></td></tr>
+</tbody>
+</table>
 
 <h2>Function-Level Profiling</h2>
 <div class="two">

@@ -100,6 +100,13 @@
     }
   },
   "installed_static_code": {
+    "woocommerce_source_package": [
+      "packages/php/woocommerce-subscriptions-engine/src/Integration/Renewal/RenewalEngine.php",
+      "packages/php/woocommerce-subscriptions-engine/src/Integration/Renewal/RenewalScheduler.php",
+      "packages/php/woocommerce-subscriptions-engine/src/Integration/Storage/ContractRepository.php",
+      "packages/php/woocommerce-subscriptions-engine/src/Integration/Storage/SchemaInstaller.php",
+      "packages/php/woocommerce-subscriptions-engine/src/Integration/Checkout/ContractFactory.php"
+    ],
     "woocommerce_payments": [
       "woocommerce-payments/includes/subscriptions",
       "woocommerce-payments/includes/compat/subscriptions",
@@ -124,6 +131,25 @@
     ]
   },
   "subscription_hot_paths_to_profile_with_fixture": [
+    {
+      "area": "WooCommerce source Subscriptions engine renewal path",
+      "entrypoints": [
+        "RenewalEngine::schedule",
+        "RenewalScheduler::schedule",
+        "RenewalEngine::process_due",
+        "woocommerce_subscriptions_engine_scheduled_payment_{gateway}"
+      ],
+      "static_path": [
+        "one Action Scheduler row per primitive-scheduled contract",
+        "ContractRepository::find hydrates row, items, addresses, and meta",
+        "find_current_cycle reads the cycle head",
+        "renewal_exists_for_cycle uses unbounded wc_get_orders by contract meta",
+        "append_cycle claims the next cycle",
+        "build_renewal_order writes a Woo order and recurring line items",
+        "resolve_outcome updates cycle and contract schedule fields"
+      ],
+      "why_it_is_interesting": "This is the package-level renewal money path in the WooCommerce source tree. It combines Action Scheduler scale, custom subscription tables, HPOS/order writes, order item writes, and gateway hooks."
+    },
     {
       "area": "WooPayments Stripe Billing invoice.paid webhook",
       "entrypoints": [
