@@ -1,0 +1,38 @@
+{
+  "measured_at_utc": "2026-07-02T11:16:59Z",
+  "fixture": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1 benchmark site",
+    "php": "8.3 Apache container",
+    "mysql": "8.0.46",
+    "tax_rates": 12000,
+    "tax_rate_locations": {
+      "postcode": 12000
+    },
+    "destination": {
+      "country": "US",
+      "state": "CA",
+      "postcode": "94105",
+      "city": "Perf City"
+    }
+  },
+  "current_query": {
+    "sql": "SELECT tax_rate_id, location_code FROM wp_woocommerce_tax_rate_locations WHERE location_type = 'postcode' AND location_code LIKE '%...%';",
+    "explain_analyze": "Filter: location_type = 'postcode' and location_code like '%...%'; Index lookup on location_type_code (location_type='postcode'); actual time=0.174..9.53 rows=12000 loops=1",
+    "rows_returned": 12000,
+    "actual_ms_end": 9.53
+  },
+  "schema_probe": {
+    "table": "copy of wp_woocommerce_tax_rate_locations, dropped after probe",
+    "generated_columns": [
+      "range_min BIGINT generated from SUBSTRING_INDEX(location_code, '...', 1)",
+      "range_max BIGINT generated from SUBSTRING_INDEX(location_code, '...', -1)"
+    ],
+    "index": "KEY location_type_range_max_min (location_type(10), range_max, range_min)",
+    "sql": "SELECT tax_rate_id, location_code FROM probe WHERE location_type = 'postcode' AND range_max >= 94105 AND range_min <= 94105;",
+    "explain_analyze": "Index range scan using location_type_range_max_min over location_type='postcode' and 94105 <= range_max, with index condition range_max >= 94105 and range_min <= 94105; actual time=0.0179..0.0196 rows=1 loops=1",
+    "rows_returned": 1,
+    "actual_ms_end": 0.0196
+  },
+  "interpretation": "The existing schema forces a scan of every stored postcode range before PHP matching. Persisted normalized range bounds with an index ordered by range_max can reduce numeric-range candidate selection to the matching rows in this fixture. A production implementation should store bounds from WooCommerce's PHP postcode normalization at write time rather than relying on database casts, and must preserve fallback behavior for malformed or plugin-provided location codes."
+}

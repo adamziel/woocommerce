@@ -96,7 +96,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#101820;color:#edf7ff;
 <td><span class="warn">Core tax postcode matching scales linearly</span></td>
 <td>New core lane: one Store API cart update with one taxable shippable product, US/CA/94105 address, WooCommerce only, 8,000 shipping zones/methods, 12,000 tax postcode ranges. Result: 101ms HTTP p95, 92.5ms PHP p95, 55.7ms DB p95, 67 query p95.</td>
 <td>Per request averages from 8 samples: tax main joined query about 22ms, tax postcode range prequery about 10ms. MySQL plan uses <code>tax_rate_class</code> for about 6,044 rows, temp table/filesort, joins locations by <code>tax_rate_id</code>, and dependent subqueries for city/postcode existence.</td>
-<td><a href="https://github.com/adamziel/woocommerce/pull/29">PR #29</a> rewrites the matching-rate SQL into no-location, matching-postcode, and city-only branches in one <code>UNION DISTINCT</code>. It reduces the tax matching SQL total by about 23-24% in adjacent samples. The remaining tax range prequery still scans all postcode ranges and remains a separate follow-up.</td>
+<td><a href="https://github.com/adamziel/woocommerce/pull/29">PR #29</a> rewrites the matching-rate SQL into no-location, matching-postcode, and city-only branches in one <code>UNION DISTINCT</code>. It reduces the tax matching SQL total by about 23-24% in adjacent samples. A follow-up copied-table schema probe shows the remaining range prequery can become an indexed one-row lookup for numeric ranges if WooCommerce persists normalized range bounds.</td>
 </tr>
 <tr>
 <td>8</td>
@@ -164,6 +164,17 @@ city/postcode absence checks appear as dependent subqueries</pre>
 </table>
 <p>Interpretation: request-level gains are modest but repeatable in this fixture. The tax main query improves; the remaining top tax cost is still <code>SELECT tax_rate_id, location_code ... location_code LIKE '%...%'</code>, which scans every stored postcode range before PHP numeric-range matching.</p>
 
+<h3>Tax Postcode Range Index Probe</h3>
+<p>The remaining tax prequery is not safely reducible with a simple prefix filter: a prefix-only query would miss valid broad ranges such as <code>90000...99999</code> and alphanumeric ranges handled by <code>wc_postcode_location_matcher()</code>. A copied-table schema probe tested whether persisted range bounds could make the lookup indexable.</p>
+<table>
+<thead><tr><th>Shape</th><th>Plan</th><th>Rows</th><th>Measured time</th><th>Artifact</th></tr></thead>
+<tbody>
+<tr><td>Current prequery</td><td><code>location_type_code</code> lookup on <code>location_type='postcode'</code>, then filter <code>location_code LIKE '%...%'</code></td><td>12,000 rows returned</td><td>actual <code>0.174..9.53ms</code></td><td><a href="tax-range-index-probe.json">probe JSON</a></td></tr>
+<tr><td>Copied-table range-bound probe</td><td>Generated <code>range_min</code>/<code>range_max</code> columns and <code>KEY(location_type(10), range_max, range_min)</code>; query <code>range_max &gt;= 94105 AND range_min &lt;= 94105</code></td><td>1 row returned</td><td>actual <code>0.0179..0.0196ms</code></td><td><a href="tax-range-index-probe.json">probe JSON</a></td></tr>
+</tbody>
+</table>
+<p>Developer handoff: a production fix should not use MySQL casts as the final implementation. Store normalized range bounds at tax-location write time using the same PHP semantics as <code>wc_postcode_location_matcher()</code>, index <code>(location_type, range_max, range_min)</code>, query candidate ranges by bounds, and keep malformed/plugin-supplied range rows on the existing fallback path. This is a schema/migration project, not a small query-only PR.</p>
+
 <h2>Gateway Stack First Pass</h2>
 <div class="two">
 <div class="card">
@@ -227,7 +238,7 @@ city/postcode absence checks appear as dependent subqueries</pre>
 <table>
 <thead><tr><th>Area</th><th>Code path</th><th>Concern</th></tr></thead>
 <tbody>
-<tr><td>Taxes</td><td><code>WC_Tax::get_matched_tax_rates</code></td><td><a href="https://github.com/adamziel/woocommerce/pull/29">PR #29</a> addresses the broad grouped matching-rate join. Cart totals still walk all postcode ranges in the cold lookup, and the single-rate helper methods <code>is_compound</code>, <code>get_rate_label</code>, <code>get_rate_percent_value</code>, and <code>get_rate_code</code> still query by ID when callers pass IDs instead of hydrated rate rows; those remain separate audit targets.</td></tr>
+<tr><td>Taxes</td><td><code>WC_Tax::get_matched_tax_rates</code></td><td><a href="https://github.com/adamziel/woocommerce/pull/29">PR #29</a> addresses the broad grouped matching-rate join. Cart totals still walk all postcode ranges in the cold lookup. A copied-table proof shows persisted normalized range bounds plus <code>(location_type, range_max, range_min)</code> can turn the numeric range lookup into an indexed candidate query. The single-rate helper methods <code>is_compound</code>, <code>get_rate_label</code>, <code>get_rate_percent_value</code>, and <code>get_rate_code</code> still query by ID when callers pass IDs instead of hydrated rate rows; those remain separate audit targets.</td></tr>
 <tr><td>Shipping</td><td><code>WC_Shipping_Zone_Data_Store->get_zone_id_from_package</code></td><td>The matcher loads every postcode location into PHP, runs postcode/range matching there, then excludes nonmatches via a generated <code>NOT IN</code> list. The existing <code>location_type_code(location_type(10), location_code(20))</code> index helps only with the location type filter in the measured shape.</td></tr>
 <tr><td>Prettyboymp commit context</td><td>Recent trunk history</td><td>Recent performance work clusters around object caching, HPOS datastore caching, product variation payloads, shipping-zone read-multiple support, analytics lazy loading, and tax/cart query reductions. The current slow paths line up with those themes: repeated object hydration, broad aggregates, and lookup shapes that need preselection rather than post-filtering.</td></tr>
 </tbody>
