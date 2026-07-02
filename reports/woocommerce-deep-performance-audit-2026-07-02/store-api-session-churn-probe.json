@@ -55,7 +55,10 @@
     "plugins/woocommerce/src/StoreApi/SessionHandler.php:62",
     "plugins/woocommerce/src/StoreApi/SessionHandler.php:120",
     "plugins/woocommerce/src/StoreApi/SessionHandler.php:182",
-    "plugins/woocommerce/includes/class-wc-session-handler.php:731"
+    "plugins/woocommerce/includes/class-wc-session-handler.php:731",
+    "plugins/woocommerce/includes/class-wc-cart-session.php:402",
+    "plugins/woocommerce/includes/class-wc-cart-session.php:727",
+    "plugins/woocommerce/src/StoreApi/Routes/V1/CartRemoveItem.php:68"
   ],
   "session_stats_before": {
     "rows": 452,
@@ -608,5 +611,5 @@
     }
   },
   "profiler_shutdown_note": "The local profiler writes at shutdown priority 10. WC_Session_Handler and StoreApi\\\\SessionHandler save session data at shutdown priority 20, so post-request session row snapshots are authoritative for saved session state while profiler query digests can miss the final session save query.",
-  "finding": "Tokenized Store API cart requests use Automattic\\\\WooCommerce\\\\StoreApi\\\\SessionHandler and read wp_woocommerce_sessions directly on each request with a valid Cart-Token. Empty initial carts do not create a row, add-item creates the row, and removing the last item leaves a session row containing removed_cart_contents/other residual session data rather than using the regular frontend destroy-empty-sessions cleanup path."
+  "finding": "Tokenized Store API cart requests use Automattic\\\\WooCommerce\\\\StoreApi\\\\SessionHandler and read wp_woocommerce_sessions directly on each request with a valid Cart-Token. Empty initial carts do not create a row, add-item creates the row, and removing the last item leaves a session row containing removed_cart_contents/other residual session data rather than using the regular frontend destroy-empty-sessions cleanup path. Source audit confirms removed_cart_contents supports undo behavior and is normally cleared by WC_Cart_Session::clean_up_removed_cart_contents() on a later frontend page request, not by the Store API remove-item route itself."
 }
