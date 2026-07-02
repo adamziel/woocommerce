@@ -1,0 +1,70 @@
+{
+  "generated_at": "2026-07-02T11:49:51Z",
+  "type": "focused-wp-cli-micro-benchmark",
+  "problem": "WC_Tax scalar helper methods issue repeated single-rate queries when callers pass a tax rate ID instead of a hydrated rate object.",
+  "stack": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "server": "Docker Compose wordpress:php8.3-apache plus mysql:8.0",
+    "active_plugins": [
+      "woocommerce/woocommerce.php",
+      "woocommerce-gateway-stripe/woocommerce-gateway-stripe.php",
+      "woocommerce-payments/woocommerce-payments.php",
+      "woocommerce-paypal-payments/woocommerce-paypal-payments.php"
+    ]
+  },
+  "benchmark_shape": {
+    "fixture": "One inserted tax rate: US/CA, 7.2500, name PERF, priority 1, non-compound.",
+    "loop": "1,000 iterations; each iteration calls WC_Tax::get_rate_code(), WC_Tax::get_rate_label(), WC_Tax::is_compound(), and WC_Tax::get_rate_percent_value() with the same scalar tax_rate_id.",
+    "helper_calls": 4000,
+    "query_counter": "SAVEQUERIES wpdb query log filtered for woocommerce_tax_rates"
+  },
+  "baseline": {
+    "iterations": 1000,
+    "helper_calls": 4000,
+    "elapsed_ms": 534.113,
+    "total_queries": 4002,
+    "tax_rate_queries": 4000,
+    "interpretation": "Each scalar helper performs its own tax-rate SQL query. The extra total queries are cleanup deletes after the loop."
+  },
+  "candidate_pr_30": {
+    "url": "https://github.com/adamziel/woocommerce/pull/30",
+    "branch": "perf/tax-rate-helper-cache",
+    "commit": "33328e88e5",
+    "iterations": 1000,
+    "helper_calls": 4000,
+    "elapsed_ms": 0.982,
+    "total_queries": 3,
+    "tax_rate_queries": 1,
+    "interpretation": "The helper loop performs one tax-rate row query, then reuses request-local cached row data. The extra total queries are cleanup deletes after the loop."
+  },
+  "safety_checks": {
+    "cache_invalidation": {
+      "shape": "Insert tax rate named OLD, read/cache label, update rate name to NEW through WC_Tax::_update_tax_rate(), read label again.",
+      "result": {
+        "first": "OLD",
+        "second": "NEW"
+      }
+    },
+    "object_mutation": {
+      "shape": "Fetch _get_tax_rate( ..., OBJECT ), mutate the returned object's tax_rate_name, then read label through WC_Tax::get_rate_label().",
+      "result": {
+        "label_after_object_mutation": "ORIGINAL"
+      },
+      "interpretation": "The cache stores raw row data and returns fresh objects, so caller mutation of an object return does not poison the cached row."
+    }
+  },
+  "verification": [
+    "php -l plugins/woocommerce/includes/class-wc-tax.php",
+    "php -l plugins/woocommerce/tests/legacy/unit-tests/tax/tax.php",
+    "git diff --check",
+    "WP-CLI baseline and candidate micro-benchmarks",
+    "WP-CLI cache invalidation check",
+    "WP-CLI object mutation safety check"
+  ],
+  "not_run": [
+    "Local PHPUnit: checkout is missing /tmp/wordpress-tests-lib, and the system lacks mysqladmin and svn required by tests/bin/install.sh."
+  ]
+}

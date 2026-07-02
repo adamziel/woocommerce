@@ -42,6 +42,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#101820;color:#edf7ff;
 <tr><td><a href="shipping-tax-core/index.html">New shipping/tax core lane</a></td><td>Fresh Store API cart-total run over 8,000 generated shipping zones/methods and 12,000 generated tax postcode ranges.</td></tr>
 <tr><td><a href="gateway-stack/01-core-shipping-tax-cart-update.html">Gateway stack cart lane</a></td><td>Same cart-total request after activating WooCommerce Stripe Payment Gateway 10.8.3, WooCommerce PayPal Payments 4.1.0, and WooPayments 10.9.0.</td></tr>
 <tr><td><a href="xhprof-function-lane/index.html">XHProf function profiling lane</a></td><td>One function-level profile per hot path, with core-only and gateway-stack comparisons for cart totals, checkout, variable product rendering, PayPal settings, and heavy order edit.</td></tr>
+<tr><td><a href="tax-helper-cache-probe.json">Tax helper cache probe</a></td><td>Focused WP-CLI micro-benchmark for scalar <code>WC_Tax</code> helper calls and the request-local row cache in PR #30.</td></tr>
 <tr><td><a href="subscriptions-bookings-coverage-audit.json">Subscriptions/Bookings coverage audit</a></td><td>Runtime availability checks, WordPress.org installability evidence, and static handoff paths for WooPayments, Stripe, PayPal Payments, and Bookings compatibility code.</td></tr>
 </tbody>
 </table>
@@ -117,11 +118,12 @@ pre{white-space:pre-wrap;word-break:break-word;background:#101820;color:#edf7ff;
 </table>
 
 <h2>PR Map by Problem</h2>
-<p>The current last-36-hours PR batch is <code>#16</code> through <code>#29</code>, created between July 1, 2026 19:09 UTC and July 2, 2026 11:00 UTC. PRs <code>#1</code> through <code>#15</code> were created on June 26, 2026, so they are part of the same project but not part of this latest batch. Raw mapping: <a href="pr-problem-map.json">pr-problem-map.json</a>.</p>
+<p>The current last-36-hours PR batch is <code>#16</code> through <code>#30</code>, created between July 1, 2026 19:09 UTC and July 2, 2026 11:49 UTC. PRs <code>#1</code> through <code>#15</code> were created on June 26, 2026, so they are part of the same project but not part of this latest batch. Raw mapping: <a href="pr-problem-map.json">pr-problem-map.json</a>.</p>
 <table>
 <thead><tr><th>Problem / lane</th><th>Current PRs</th><th>Superseded / duplicate PRs</th><th>Purpose</th></tr></thead>
 <tbody>
 <tr><td>Tax rate location matching during cart totals</td><td><a href="https://github.com/adamziel/woocommerce/pull/29">#29</a></td><td>none</td><td>Rewrite the broad tax-rate location matching query; remaining postcode range prequery needs a schema/index follow-up.</td></tr>
+<tr><td>Tax single-rate helper scalar ID lookups</td><td><a href="https://github.com/adamziel/woocommerce/pull/30">#30</a></td><td>none</td><td>Cache tax-rate rows behind scalar <code>WC_Tax</code> helper calls; focused probe drops 4,000 helper-loop tax-rate queries to 1.</td></tr>
 <tr><td>Admin heavy order edit order-item meta N+1</td><td><a href="https://github.com/adamziel/woocommerce/pull/28">#28</a></td><td>none</td><td>Prime order item meta caches when loading order items.</td></tr>
 <tr><td>Checkout/order creation product order-item meta creation</td><td><a href="https://github.com/adamziel/woocommerce/pull/27">#27</a></td><td><a href="https://github.com/adamziel/woocommerce/pull/20">#20</a></td><td>Reduce repeated/internal product order-item meta creation overhead.</td></tr>
 <tr><td>HPOS operational flag setter overhead</td><td><a href="https://github.com/adamziel/woocommerce/pull/26">#26</a></td><td><a href="https://github.com/adamziel/woocommerce/pull/19">#19</a></td><td>Avoid unnecessary HPOS operational flag setter work.</td></tr>
@@ -182,6 +184,17 @@ city/postcode absence checks appear as dependent subqueries</pre>
 </tbody>
 </table>
 <p>Interpretation: request-level gains are modest but repeatable in this fixture. The tax main query improves; the remaining top tax cost is still <code>SELECT tax_rate_id, location_code ... location_code LIKE '%...%'</code>, which scans every stored postcode range before PHP numeric-range matching.</p>
+
+<h3>Tax Helper Scalar ID Probe</h3>
+<p>The cart/order hot paths already prefetch tax-rate objects through <code>TaxRateDataStore::get_rate_objects_for_ids()</code>, but public helper calls with scalar rate IDs still had a smaller N-query shape: <code>get_rate_code()</code>, <code>get_rate_label()</code>, <code>is_compound()</code>, and <code>get_rate_percent_value()</code> each queried <code>woocommerce_tax_rates</code> separately.</p>
+<table>
+<thead><tr><th>Run</th><th>Shape</th><th>Elapsed</th><th>Tax-rate queries</th><th>Handoff</th><th>Artifact</th></tr></thead>
+<tbody>
+<tr><td>Baseline</td><td>1,000 iterations, 4 helper calls per iteration, same scalar <code>tax_rate_id</code></td><td>534.113ms</td><td>4,000</td><td>Each helper performed its own single-rate query.</td><td><a href="tax-helper-cache-probe.json">JSON</a></td></tr>
+<tr><td><a href="https://github.com/adamziel/woocommerce/pull/30">PR #30</a></td><td>Same loop after caching full tax-rate rows behind <code>WC_Tax::_get_tax_rate()</code></td><td>0.982ms</td><td>1</td><td>Request-local row cache clears on WooCommerce tax-rate insert/update/delete and tax-class bulk delete. Returned objects are fresh copies so caller mutation does not poison the cached row.</td><td><a href="tax-helper-cache-probe.json">JSON</a></td></tr>
+</tbody>
+</table>
+<p>This is not the dominant cart-total cost compared with the postcode range scan, but it closes the separate helper-level N-query case and protects extension/admin code that still passes scalar IDs.</p>
 
 <h3>Tax Postcode Range Index Probe</h3>
 <p>The remaining tax prequery is not safely reducible with a simple prefix filter: a prefix-only query would miss valid broad ranges such as <code>90000...99999</code> and alphanumeric ranges handled by <code>wc_postcode_location_matcher()</code>. A copied-table schema probe tested whether persisted range bounds could make the lookup indexable.</p>
@@ -325,7 +338,7 @@ city/postcode absence checks appear as dependent subqueries</pre>
 <table>
 <thead><tr><th>Area</th><th>Code path</th><th>Concern</th></tr></thead>
 <tbody>
-<tr><td>Taxes</td><td><code>WC_Tax::get_matched_tax_rates</code></td><td><a href="https://github.com/adamziel/woocommerce/pull/29">PR #29</a> addresses the broad grouped matching-rate join. Cart totals still walk all postcode ranges in the cold lookup. A copied-table proof shows persisted normalized range bounds plus <code>(location_type, range_max, range_min)</code> can turn the numeric range lookup into an indexed candidate query. The single-rate helper methods <code>is_compound</code>, <code>get_rate_label</code>, <code>get_rate_percent_value</code>, and <code>get_rate_code</code> still query by ID when callers pass IDs instead of hydrated rate rows; those remain separate audit targets.</td></tr>
+<tr><td>Taxes</td><td><code>WC_Tax::get_matched_tax_rates</code> and scalar <code>WC_Tax</code> helper methods</td><td><a href="https://github.com/adamziel/woocommerce/pull/29">PR #29</a> addresses the broad grouped matching-rate join. Cart totals still walk all postcode ranges in the cold lookup. A copied-table proof shows persisted normalized range bounds plus <code>(location_type, range_max, range_min)</code> can turn the numeric range lookup into an indexed candidate query. <a href="https://github.com/adamziel/woocommerce/pull/30">PR #30</a> addresses the separate helper-level N-query case for <code>is_compound</code>, <code>get_rate_label</code>, <code>get_rate_percent_value</code>, and <code>get_rate_code</code> when callers pass scalar IDs.</td></tr>
 <tr><td>Shipping</td><td><code>WC_Shipping_Zone_Data_Store->get_zone_id_from_package</code></td><td>The matcher loads every postcode location into PHP, runs postcode/range matching there, then excludes nonmatches via a generated <code>NOT IN</code> list. The existing <code>location_type_code(location_type(10), location_code(20))</code> index helps only with the location type filter in the measured shape. A PHP matcher micro-optimization was benchmarked and rejected; persisted normalized range bounds are the stronger path.</td></tr>
 <tr><td>Subscriptions and Bookings</td><td>WooPayments, Stripe Gateway, and PayPal Payments compatibility modules</td><td>Runtime APIs for the commercial extensions are absent in this environment, but installed gateway code exposes concrete next paths: WooPayments invoice webhooks and migration actions, Stripe scheduled renewal and update-all-payment-method loops, PayPal renewal/change-payment-method flows, WooPayments booking multicurrency filters, and PayPal booking cart-item creation. These require licensed extension fixtures before latency numbers would be meaningful.</td></tr>
 <tr><td>Prettyboymp commit context</td><td>Recent trunk history</td><td>Recent performance work clusters around object caching, HPOS datastore caching, product variation payloads, shipping-zone read-multiple support, analytics lazy loading, and tax/cart query reductions. The current slow paths line up with those themes: repeated object hydration, broad aggregates, and lookup shapes that need preselection rather than post-filtering.</td></tr>
