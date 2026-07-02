@@ -1,10 +1,10 @@
 {
-  "measured_at_utc": "2026-07-02T11:30:18Z",
+  "measured_at_utc": "2026-07-02T14:33:50Z",
   "source": {
     "url": "https://github.com/woocommerce/woocommerce/commits/trunk/?author=prettyboymp",
     "fetched_remote": "upstream",
     "fetched_ref": "upstream/trunk",
-    "upstream_trunk_sha": "d9ddaf5e73",
+    "upstream_trunk_sha": "40b162f72b",
     "commits_since": "2025-09-01",
     "commit_count_since": 43
   },
@@ -41,10 +41,16 @@
           "date": "2026-01-28",
           "title": "Product Gallery: Use variation objects instead of arrays for better performance (#62792)",
           "url": "https://github.com/woocommerce/woocommerce/commit/9e07cfceccb8d993f8898939c74809a8528444d5"
+        },
+        {
+          "sha": "e0e2318a90",
+          "date": "2025-12-04",
+          "title": "Performance: Store tax display option in variation price loop (#61782)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/e0e2318a9018f25dbb8bb738242ca4867ca5180f"
         }
       ],
-      "measured_connection": "The report's variable-product lane and PRs #23-#25 sit in the same area: avoid full per-variation payload generation, title sync, term lookups, and repeated parent-level price work. The gateway deep dive adds a new overlay: WooPayments multicurrency hooks still run roughly 40k times on the same 800-variation page.",
-      "handoff": "Keep replacing broad get_available_variations array hydration with narrower child/object paths where possible. For unavoidable full payloads, cache taxonomy labels, parent price-range decisions, and gateway price/currency state per request."
+      "measured_connection": "The report's variable-product lane and PRs #23-#25 sit in the same area: avoid full per-variation payload generation, title sync, term lookups, repeated parent-level price work, and repeated tax-display option reads inside variation price loops. The gateway deep dive adds a new overlay: WooPayments multicurrency hooks still run roughly 40k times on the same 800-variation page.",
+      "handoff": "Keep replacing broad get_available_variations array hydration with narrower child/object paths where possible. For unavoidable full payloads, cache taxonomy labels, parent price-range decisions, tax display state, and gateway price/currency state per request."
     },
     {
       "cluster": "Product object caching and product-loop cache priming",
@@ -147,6 +153,56 @@
       "handoff": "A shipping postcode fix should feed a short candidate zone list into the existing bulk-read capable path, using persisted normalized exact/wildcard/range candidate data rather than loading every postcode location first."
     },
     {
+      "cluster": "Blocks frontend enqueue and resource-hint overhead",
+      "commits": [
+        {
+          "sha": "b5640b450b",
+          "date": "2025-09-19",
+          "title": "Improve the performance of Blocks\\AssetsController::get_block_asset_resource_hints() (#61015)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/b5640b450b21468a619e57f66298d2409426b635"
+        },
+        {
+          "sha": "d2a600204d",
+          "date": "2025-09-23",
+          "title": "Improve performance when enqueueing block styles for classic themes (#60990)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/d2a600204d9802383323a60259f93dd369609667"
+        }
+      ],
+      "measured_connection": "These commits were not the dominant backend SQL/function lanes in the current request profiles, but they are relevant to frontend product/category requests where WooCommerce Blocks assets are booted under classic themes or resource hints are generated.",
+      "handoff": "Add a targeted frontend follow-up with classic-theme product archive, product page, cart, and checkout requests. Profile block asset enqueue/resource-hint call counts separately from product query, variation payload, and gateway price hooks."
+    },
+    {
+      "cluster": "Store API, sessions, and feature boot guardrails",
+      "commits": [
+        {
+          "sha": "6002cabab5",
+          "date": "2026-06-18",
+          "title": "Reject non-WC_Order objects in Store API order authorization (#64568)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/6002cabab5ecdd06cdc6331b0f986cefdadfb9ba"
+        },
+        {
+          "sha": "07d8ca45ef",
+          "date": "2026-06-08",
+          "title": "Make abandoned cart recovery experimental and opt-in (not default-on for new installs) (#65521)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/07d8ca45ef351ed72cfd3b51f0df2bdb4cfc1c70"
+        },
+        {
+          "sha": "ae5d1aaace",
+          "date": "2025-09-29",
+          "title": "Add experimental feature to destroy empty WooCommerce sessions (#60855)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/ae5d1aaace4b404fc23536926b81fad0623f1f87"
+        },
+        {
+          "sha": "6650fc001d",
+          "date": "2025-09-29",
+          "title": "Add default_plugin_compatibility option to Session Destroying (#61177)",
+          "url": "https://github.com/woocommerce/woocommerce/commit/6650fc001ddc140fa2c774ed4a7d838e2eac1d5a"
+        }
+      ],
+      "measured_connection": "The cart/checkout and Store API-adjacent lanes measured in this report still spend most time in tax/shipping SQL, gateway hooks, and queue/order-item work. These commits are guardrails around boot/session behavior rather than the primary remaining bottlenecks found in the backend traces.",
+      "handoff": "Keep these separated from the high-confidence backend fixes. They justify a Store API cart/checkout session follow-up with empty-session churn, guest cart, authenticated cart, and abandoned-cart feature toggles controlled explicitly."
+    },
+    {
       "cluster": "Term count and permalink/product-list overhead",
       "commits": [
         {
@@ -178,5 +234,5 @@
       "handoff": "Keep shrinking product-list per-item work, but prioritize Store API count SQL and unbounded ID materialization for the largest residual wins."
     }
   ],
-  "interpretation": "The author history points to the same architectural themes seen in profiling: avoid full variation payloads, prime/cache object data before loops, reduce HPOS broad counts/searches, lazy-load analytics/report code, and make shipping-zone data access bulk-aware. The remaining measured bottlenecks are generally the next layer down: broad SQL candidate selection, unbounded aggregate/count queries, gateway remote calls during render, and per-item meta persistence."
+  "interpretation": "The author history points to the same architectural themes seen in profiling: avoid full variation payloads, prime/cache object data before loops, reduce HPOS broad counts/searches, lazy-load analytics/report code, make shipping-zone data access bulk-aware, trim frontend Blocks boot overhead, and keep costly features opt-in. The remaining measured bottlenecks are generally the next layer down: broad SQL candidate selection, unbounded aggregate/count queries, queue claiming over large pending-action tables, gateway remote calls during render, and per-item meta persistence."
 }
