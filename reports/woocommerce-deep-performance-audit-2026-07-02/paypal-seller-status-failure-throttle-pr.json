@@ -1,0 +1,119 @@
+{
+  "generated_at": "2026-07-02T13:02:57Z",
+  "problem": "PayPal settings seller-status remote call after recent failure",
+  "pull_request": {
+    "number": 4494,
+    "title": "Throttle seller status retries after failures",
+    "url": "https://github.com/woocommerce/woocommerce-paypal-payments/pull/4494",
+    "repository": "woocommerce/woocommerce-paypal-payments",
+    "state": "OPEN",
+    "base": "dev/develop",
+    "branch": "perf/seller-status-failure-throttle",
+    "commit": "2086217e77aa10535e4d286ec2ad483c6dba5dcc",
+    "created_at": "2026-07-02T13:02:29Z"
+  },
+  "change_summary": [
+    "Adds a 60-second seller-status failure retry timeout constant in PartnersEndpoint.",
+    "Checks FailureRegistry::SELLER_STATUS_KEY after the successful-response cache miss and before fetching PayPal seller status from the API.",
+    "Keeps cached successful SellerStatus responses ahead of the failure-registry check.",
+    "Adds a PartnersEndpoint unit test proving a recent seller-status failure avoids wp_remote_get and throws RuntimeException."
+  ],
+  "benchmark": {
+    "stack": {
+      "wordpress_image": "wordpress:php8.3-apache",
+      "wordpress": "6.9-alpha-60093",
+      "woocommerce": "10.9.1",
+      "woocommerce_paypal_payments": "4.1.0",
+      "woocommerce_gateway_stripe": "10.8.3",
+      "woopayments": "10.9.0",
+      "profiler": "local wc-perf-profiler mu-plugin with XHProf and HTTP API tracing"
+    },
+    "scenario": {
+      "id": "04-xhprof-admin-paypal-settings",
+      "request": "GET /wp-admin/admin.php?page=wc-settings&tab=checkout&section=ppcp-gateway",
+      "auth": "authenticated administrator",
+      "precondition": "delete ppcp-seller-status-seller_status; set ppcp-seller-status-failure_registry_seller_status to current time before each run group",
+      "iterations": 3,
+      "note": "XHProf adds overhead; use call counts, HTTP traces, and relative timing deltas."
+    },
+    "baseline": {
+      "result_path": "/home/claude/woocommerce/results/pr-paypal-seller-status-failure-baseline-1/04-xhprof-admin-paypal-settings.json",
+      "summary": {
+        "requests": 3,
+        "median_total_ms": 1738.973,
+        "median_server_ms": 1678.18,
+        "median_query_count": 268,
+        "median_query_time_ms": 292.04,
+        "paypal_seller_status_http_calls": 3,
+        "total_http_calls": 9
+      },
+      "paypal_calls": [
+        {
+          "status_code": 404,
+          "elapsed_ms": 382.912,
+          "path": "/integrations/ppc/v1/customer/partners/K8SKZ36LQBWXJ/merchant-integrations/"
+        },
+        {
+          "status_code": 404,
+          "elapsed_ms": 369.636,
+          "path": "/integrations/ppc/v1/customer/partners/K8SKZ36LQBWXJ/merchant-integrations/"
+        },
+        {
+          "status_code": 404,
+          "elapsed_ms": 365.8,
+          "path": "/integrations/ppc/v1/customer/partners/K8SKZ36LQBWXJ/merchant-integrations/"
+        }
+      ],
+      "function_hotspot": {
+        "ReferenceTransactionStatus::reference_transaction_enabled_inclusive_ms": 420.205,
+        "PartnersEndpoint::seller_status_inclusive_ms": 420.2,
+        "PartnersEndpoint::fetch_seller_status_from_api_inclusive_ms": 419.909,
+        "wp_remote_get_inclusive_ms": 383.027,
+        "curl_exec_self_ms": 1054.145,
+        "curl_exec_calls": 3
+      }
+    },
+    "candidate": {
+      "result_path": "/home/claude/woocommerce/results/pr-paypal-seller-status-failure-candidate-2/04-xhprof-admin-paypal-settings.json",
+      "summary": {
+        "requests": 3,
+        "median_total_ms": 1309.862,
+        "median_server_ms": 1252.12,
+        "median_query_count": 260,
+        "median_query_time_ms": 258.91,
+        "paypal_seller_status_http_calls": 0,
+        "total_http_calls": 6
+      },
+      "remaining_http_hosts": [
+        {
+          "host": "jetpack.wordpress.com",
+          "count": 6
+        }
+      ],
+      "function_hotspot": {
+        "paypal_seller_status_functions_in_top_40": false,
+        "curl_exec_self_ms": 854.092,
+        "curl_exec_calls": 2
+      }
+    },
+    "delta": {
+      "paypal_seller_status_http_calls": -3,
+      "median_total_ms": -429.111,
+      "median_server_ms": -426.06,
+      "median_query_count": -8,
+      "median_query_time_ms": -33.13,
+      "total_http_calls": -3
+    }
+  },
+  "verification": [
+    "php -l modules/ppcp-api-client/src/Endpoint/PartnersEndpoint.php",
+    "php -l tests/PHPUnit/ApiClient/Endpoint/PartnersEndpointTest.php",
+    "git diff --check",
+    "vendor/bin/phpcs modules/ppcp-api-client/src/Endpoint/PartnersEndpoint.php tests/PHPUnit/ApiClient/Endpoint/PartnersEndpointTest.php",
+    "vendor/bin/phpunit --filter PartnersEndpointTest tests/PHPUnit/ApiClient/Endpoint/PartnersEndpointTest.php: OK (6 tests, 6 assertions)"
+  ],
+  "notes": [
+    "The first direct packaged-file benchmark attempt copied the unprefixed source file into the packaged plugin and was discarded because the packaged plugin type-hints the prefixed PSR logger. The final candidate benchmark patched the packaged file shape and then restored the benchmark container to the original packaged file.",
+    "The candidate still has Jetpack/WooPayments HTTP calls on this settings page; those are separate from the PayPal seller-status call and are covered by WooCommerce core PR #31."
+  ]
+}
