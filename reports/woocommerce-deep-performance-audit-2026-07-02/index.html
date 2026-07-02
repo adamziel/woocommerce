@@ -21,7 +21,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#101820;color:#edf7ff;
 <body>
 <header>
 <h1>WooCommerce Deep Performance Audit</h1>
-<div class="sub">Incremental findings from July 2, 2026. This page combines prior pathological/core reports, mined profiler artifacts, a focused core shipping/tax benchmark, and an initial Stripe/PayPal/WooPayments gateway-stack pass. Full WooCommerce Subscriptions and Bookings remain pending because those commercial extensions are not locally available.</div>
+<div class="sub">Incremental findings from July 2, 2026. This page combines prior pathological/core reports, mined profiler artifacts, a focused core shipping/tax benchmark, an initial Stripe/PayPal/WooPayments gateway-stack pass, and a Subscriptions/Bookings availability plus static hot-path audit. Full WooCommerce Subscriptions and Bookings runtime benchmarks remain pending because those commercial extensions are not locally available.</div>
 </header>
 <main>
 
@@ -42,6 +42,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#101820;color:#edf7ff;
 <tr><td><a href="shipping-tax-core/index.html">New shipping/tax core lane</a></td><td>Fresh Store API cart-total run over 8,000 generated shipping zones/methods and 12,000 generated tax postcode ranges.</td></tr>
 <tr><td><a href="gateway-stack/01-core-shipping-tax-cart-update.html">Gateway stack cart lane</a></td><td>Same cart-total request after activating WooCommerce Stripe Payment Gateway 10.8.3, WooCommerce PayPal Payments 4.1.0, and WooPayments 10.9.0.</td></tr>
 <tr><td><a href="xhprof-function-lane/index.html">XHProf function profiling lane</a></td><td>One function-level profile per hot path, with core-only and gateway-stack comparisons for cart totals, checkout, variable product rendering, PayPal settings, and heavy order edit.</td></tr>
+<tr><td><a href="subscriptions-bookings-coverage-audit.json">Subscriptions/Bookings coverage audit</a></td><td>Runtime availability checks, WordPress.org installability evidence, and static handoff paths for WooPayments, Stripe, PayPal Payments, and Bookings compatibility code.</td></tr>
 </tbody>
 </table>
 
@@ -194,7 +195,7 @@ city/postcode absence checks appear as dependent subqueries</pre>
 <div class="card">
 <h3>Installed Stack</h3>
 <p><span class="pill">woocommerce-gateway-stripe 10.8.3</span><span class="pill">woocommerce-paypal-payments 4.1.0</span><span class="pill">woocommerce-payments 10.9.0</span></p>
-<p>Full WooCommerce Subscriptions and WooCommerce Bookings were not installed locally. WordPress.org search only surfaced third-party/adjacent substitutes; the official <a href="https://woocommerce.com/products/woocommerce-subscriptions/">Subscriptions</a> and <a href="https://woocommerce.com/products/woocommerce-bookings/">Bookings</a> products are commercial WooCommerce.com extensions, so this pass does not claim coverage for them.</p>
+<p>Full WooCommerce Subscriptions and WooCommerce Bookings were not installed locally. WordPress.org search only surfaced third-party/adjacent substitutes; the official <a href="https://woocommerce.com/products/woocommerce-subscriptions/">Subscriptions</a> and <a href="https://woocommerce.com/products/woocommerce-bookings/">Bookings</a> products are commercial WooCommerce.com extensions, so runtime renewal/booking benchmark coverage is not claimed here. See the <a href="subscriptions-bookings-coverage-audit.json">coverage audit JSON</a> for the exact API checks and static handoff paths.</p>
 </div>
 <div class="card">
 <h3>Cart Delta</h3>
@@ -235,6 +236,36 @@ city/postcode absence checks appear as dependent subqueries</pre>
 <tr><td>Heavy order edit with gateways</td><td>Gateway sample: 3,485ms server, 3,244 queries, plus <code>curl_exec</code> 570.5ms. Core sample: 2,670ms server, 3,096 queries. The core order-item meta N+1 remains dominant, but WooPayments provider details add two Jetpack registration attempts on an unrelated order edit page.</td><td>Gate WooPayments provider/onboarding detail generation away from non-payment settings admin pages. PR #28 addresses the core order-item meta N+1; the gateway follow-up is to avoid remote onboarding calls during order editing.</td><td><a href="gateway-deep-dive.json">JSON</a></td></tr>
 </tbody>
 </table>
+
+<h2>Subscriptions and Bookings Coverage Audit</h2>
+<div class="two">
+<div class="card">
+<h3>Runtime Availability</h3>
+<p>Current active plugins: WooCommerce 10.9.1, Stripe Gateway 10.8.3, PayPal Payments 4.1.0, WooPayments 10.9.0, plus the local profiler mu-plugin. Runtime checks returned false for <code>wcs_create_subscription</code>, <code>WC_Subscription</code>, <code>wcs_order_contains_subscription</code>, <code>WC_Bookings</code>, <code>WC_Product_Booking</code>, and <code>wc_bookings_get_posted_data</code>.</p>
+<p>That means this environment can measure gateway bootstrap/admin/cart overhead, but it cannot honestly measure subscription renewals, subscription payment-method changes, booking calendar cost calculation, or booking checkout flows yet.</p>
+</div>
+<div class="card">
+<h3>Installability Check</h3>
+<p><code>wp plugin search woocommerce-subscriptions</code> returned WooCommerce, gateways, and third-party subscription plugins such as <code>subscriptions-for-woocommerce</code> and <code>flexible-subscriptions</code>, not the official commercial Subscriptions extension.</p>
+<p><code>wp plugin search woocommerce-bookings</code> returned WooCommerce, WooPayments, event/appointment plugins, and Accommodation Bookings, not the official commercial Bookings extension.</p>
+</div>
+</div>
+
+<h3>Static Hot Paths Found in Installed Gateway Code</h3>
+<table>
+<thead><tr><th>Area</th><th>Path that becomes hot with the missing extension</th><th>Developer handoff</th><th>Artifact</th></tr></thead>
+<tbody>
+<tr><td>WooPayments + Subscriptions</td><td><code>invoice.paid</code> and <code>invoice.payment_failed</code> webhooks dispatch into <code>WC_Payments_Subscriptions_Event_Handler</code>, look up subscriptions by WCPay subscription ID, query orders by invoice ID, call <code>wcs_create_renewal_order()</code>, mutate order/subscription status, and update invoice/charge/transaction metadata.</td><td>Benchmark with real or mocked Stripe Billing webhook payloads and HPOS enabled. Record SQL for invoice-ID meta lookups, renewal order creation, order notes, subscription status transitions, and remote charge/invoice API calls.</td><td><a href="subscriptions-bookings-coverage-audit.json">JSON</a></td></tr>
+<tr><td>WooPayments migration</td><td><code>WC_Payments_Subscriptions_Migrator</code> schedules <code>wcpay_schedule_subscription_migrations</code> and <code>wcpay_migrate_subscription</code>; the action validates subscription state, fetches/cancels the WCPay subscription, updates next payment date, verifies payment token, writes subscription meta, and adds notes.</td><td>Create an Action Scheduler fixture with many WCPay-backed subscriptions. Measure queue throughput, API latency, subscription save/meta write amplification, and retry behavior.</td><td><a href="subscriptions-bookings-coverage-audit.json">JSON</a></td></tr>
+<tr><td>Stripe Gateway + Subscriptions</td><td><code>trait-wc-stripe-subscriptions.php</code> attaches <code>woocommerce_scheduled_subscription_payment_{gateway_id}</code>, failed-payment-method, add-payment-method, and change-payment hooks only when Subscriptions is enabled. Renewal calls <code>process_subscription_payment()</code>; update-all-payment-method paths call <code>wcs_get_users_subscriptions()</code> and loop active subscriptions.</td><td>Profile scheduled renewals, failed renewal authentication, and customer update-all payment-method flows. Include one fixture user with many active subscriptions to expose loop and permission-check cost.</td><td><a href="subscriptions-bookings-coverage-audit.json">JSON</a></td></tr>
+<tr><td>PayPal Payments + Subscriptions</td><td><code>WcSubscriptionsModule</code> hooks scheduled payments for PayPal and card gateways. <code>RenewalHandler::renew()</code> calls <code>wcs_get_subscriptions_for_renewal_order()</code>, checks <code>ppcp_subscription</code> meta, processes the renewal order, and may inspect related parent/renewal orders for previous transactions.</td><td>Benchmark PayPal renewal orders with vaulting/subscriptions modes, saved tokens, and previous renewal history. Capture gateway API time separately from subscription lookup and related-order scans.</td><td><a href="subscriptions-bookings-coverage-audit.json">JSON</a></td></tr>
+<tr><td>PayPal Payments change payment method</td><td>The <code>ppc-subscription-change-payment-method</code> endpoint loads a subscription with <code>wcs_get_subscription()</code>, checks customer ownership, sets payment method/token data, and saves the subscription.</td><td>Profile with users that have many tokens/subscriptions and include concurrent updates if possible. This is a small but write-heavy customer account flow.</td><td><a href="subscriptions-bookings-coverage-audit.json">JSON</a></td></tr>
+<tr><td>WooPayments + Bookings</td><td><code>WooCommerceBookings</code> multicurrency compatibility is gated by <code>class_exists('WC_Bookings')</code>. When active, it filters booking calculated cost, block/resource/person costs, cost-rule processing, and <code>wc_bookings_calculate_costs</code> AJAX responses.</td><td>Given the measured WooPayments multicurrency 40k-call hotspot on large variation pages, benchmark bookable products with resources/persons/cost rules and isolate multicurrency conversion calls in calendar cost and add-to-cart requests.</td><td><a href="subscriptions-bookings-coverage-audit.json">JSON</a></td></tr>
+<tr><td>PayPal Payments + Bookings</td><td><code>CartProductsHelper::add_booking_product()</code> checks <code>wc_bookings_get_posted_data()</code>, builds booking cart item data, and calls <code>WC_Cart::add_to_cart()</code>. The PayPal compat module itself is gated by <code>class_exists('WC_Bookings')</code>.</td><td>Benchmark PayPal button checkout for booking products with resources, persons, availability rules, and blocked ranges. Separate Bookings cost calculation from gateway button/cart integration overhead.</td><td><a href="subscriptions-bookings-coverage-audit.json">JSON</a></td></tr>
+</tbody>
+</table>
+
+<p>Minimum fixture still needed for runtime coverage: licensed/available Subscriptions and Bookings extensions, active subscription products and <code>WC_Subscription</code> records across Stripe/PayPal/WooPayments methods, sandbox or mocked gateway APIs, renewal/webhook payloads, Action Scheduler renewal/migration actions, bookable products with resources/persons/availability/cost rules, AJAX booking cost requests, and booking line items through checkout/gateway button flows.</p>
 
 <h2>Function-Level Profiling</h2>
 <div class="two">
@@ -278,6 +309,7 @@ city/postcode absence checks appear as dependent subqueries</pre>
 <tbody>
 <tr><td>Taxes</td><td><code>WC_Tax::get_matched_tax_rates</code></td><td><a href="https://github.com/adamziel/woocommerce/pull/29">PR #29</a> addresses the broad grouped matching-rate join. Cart totals still walk all postcode ranges in the cold lookup. A copied-table proof shows persisted normalized range bounds plus <code>(location_type, range_max, range_min)</code> can turn the numeric range lookup into an indexed candidate query. The single-rate helper methods <code>is_compound</code>, <code>get_rate_label</code>, <code>get_rate_percent_value</code>, and <code>get_rate_code</code> still query by ID when callers pass IDs instead of hydrated rate rows; those remain separate audit targets.</td></tr>
 <tr><td>Shipping</td><td><code>WC_Shipping_Zone_Data_Store->get_zone_id_from_package</code></td><td>The matcher loads every postcode location into PHP, runs postcode/range matching there, then excludes nonmatches via a generated <code>NOT IN</code> list. The existing <code>location_type_code(location_type(10), location_code(20))</code> index helps only with the location type filter in the measured shape. A PHP matcher micro-optimization was benchmarked and rejected; persisted normalized range bounds are the stronger path.</td></tr>
+<tr><td>Subscriptions and Bookings</td><td>WooPayments, Stripe Gateway, and PayPal Payments compatibility modules</td><td>Runtime APIs for the commercial extensions are absent in this environment, but installed gateway code exposes concrete next paths: WooPayments invoice webhooks and migration actions, Stripe scheduled renewal and update-all-payment-method loops, PayPal renewal/change-payment-method flows, WooPayments booking multicurrency filters, and PayPal booking cart-item creation. These require licensed extension fixtures before latency numbers would be meaningful.</td></tr>
 <tr><td>Prettyboymp commit context</td><td>Recent trunk history</td><td>Recent performance work clusters around object caching, HPOS datastore caching, product variation payloads, shipping-zone read-multiple support, analytics lazy loading, and tax/cart query reductions. The current slow paths line up with those themes: repeated object hydration, broad aggregates, and lookup shapes that need preselection rather than post-filtering.</td></tr>
 </tbody>
 </table>
@@ -286,8 +318,8 @@ city/postcode absence checks appear as dependent subqueries</pre>
 <table>
 <thead><tr><th>Lane</th><th>Status</th><th>Next measurement</th></tr></thead>
 <tbody>
-<tr><td>Bookings</td><td>Not measured yet</td><td>Requires plugin availability and a booking-heavy fixture: bookable products, resources, availability rules, calendar/admin requests, and checkout with booking line items.</td></tr>
-<tr><td>Subscriptions + PayPal/Stripe/WooPayments</td><td>Partially measured</td><td>Stripe, PayPal Payments, and WooPayments bootstrap/admin overhead is measured. Full Subscriptions renewal/payment-method flows are still pending because the full WooCommerce Subscriptions extension is not available locally.</td></tr>
+<tr><td>Bookings</td><td>Availability/static audit complete; runtime not measured</td><td>Requires plugin availability and a booking-heavy fixture: bookable products, resources, persons, availability rules, cost rules, calendar/admin/AJAX cost requests, PayPal button checkout, WooPayments multicurrency enabled, and checkout with booking line items.</td></tr>
+<tr><td>Subscriptions + PayPal/Stripe/WooPayments</td><td>Gateway bootstrap measured; availability/static audit complete; runtime renewal/payment-method flows not measured</td><td>Requires full WooCommerce Subscriptions, active subscription records across Stripe/PayPal/WooPayments payment methods, sandbox or mocked gateway APIs, renewal orders, webhook payloads, Action Scheduler renewal/migration actions, and many-subscription customer fixtures.</td></tr>
 <tr><td>Function-level CPU profiling</td><td>Initial XHProf lane measured</td><td>Core-only and gateway-stack XHProf samples now cover cart totals, checkout, variable product rendering, PayPal settings, and heavy order edit. Broader repeated samples could reduce noise, but the main function hotspots are now identified.</td></tr>
 </tbody>
 </table>

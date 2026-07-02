@@ -1,0 +1,316 @@
+{
+  "generated_at": "2026-07-02T11:37:39Z",
+  "type": "availability-and-static-hot-path-audit",
+  "conclusion": "The current benchmark stack can measure WooCommerce core plus Stripe, PayPal Payments, and WooPayments bootstrap/admin/cart behavior, but it cannot truthfully benchmark WooCommerce Subscriptions renewal flows or WooCommerce Bookings checkout/calendar flows because the commercial Subscriptions and Bookings extensions are not installed or loaded. Static code in the active gateway plugins identifies the next hot paths to profile once a licensed fixture is available.",
+  "runtime_environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "server": "wordpress:php8.3-apache container on Docker Compose, MySQL 8.0 container",
+    "site_url": "http://localhost:8099"
+  },
+  "plugins": {
+    "active": [
+      {
+        "name": "woocommerce",
+        "title": "WooCommerce",
+        "version": "10.9.1"
+      },
+      {
+        "name": "woocommerce-paypal-payments",
+        "title": "WooCommerce PayPal Payments",
+        "version": "4.1.0"
+      },
+      {
+        "name": "woocommerce-gateway-stripe",
+        "title": "WooCommerce Stripe Gateway",
+        "version": "10.8.3"
+      },
+      {
+        "name": "woocommerce-payments",
+        "title": "WooPayments",
+        "version": "10.9.0"
+      }
+    ],
+    "must_use": [
+      {
+        "name": "wc-perf-profiler",
+        "title": "",
+        "version": ""
+      }
+    ],
+    "inactive": [
+      {
+        "name": "akismet",
+        "version": "5.7"
+      },
+      {
+        "name": "hello",
+        "version": "1.7.2"
+      }
+    ],
+    "active_plugins_option": [
+      "woocommerce-gateway-stripe/woocommerce-gateway-stripe.php",
+      "woocommerce-payments/woocommerce-payments.php",
+      "woocommerce-paypal-payments/woocommerce-paypal-payments.php",
+      "woocommerce/woocommerce.php"
+    ]
+  },
+  "runtime_api_checks": {
+    "wcs_create_subscription": false,
+    "WC_Subscription": false,
+    "WCS_ATT": false,
+    "wcs_order_contains_subscription": false,
+    "WC_Bookings": false,
+    "WC_Product_Booking": false,
+    "wc_bookings_get_posted_data": false
+  },
+  "wporg_search": {
+    "woocommerce-subscriptions": {
+      "official_commercial_extension_found": false,
+      "top_results": [
+        "woocommerce",
+        "woocommerce-paypal-payments",
+        "woocommerce-gateway-stripe",
+        "mailpoet",
+        "paid-member-subscriptions",
+        "woocommerce-payments",
+        "subscriptions-for-woocommerce",
+        "pymntpl-paypal-woocommerce",
+        "woo-stripe-payment",
+        "flexible-subscriptions"
+      ]
+    },
+    "woocommerce-bookings": {
+      "official_commercial_extension_found": false,
+      "top_results": [
+        "woocommerce",
+        "woocommerce-payments",
+        "events-manager",
+        "woocommerce-germanized",
+        "mage-eventpress",
+        "woocommerce-delivery-notes",
+        "ameliabooking",
+        "eventprime-event-calendar-management",
+        "woocommerce-accommodation-bookings",
+        "woocommerce-currency-switcher"
+      ]
+    }
+  },
+  "installed_static_code": {
+    "woocommerce_payments": [
+      "woocommerce-payments/includes/subscriptions",
+      "woocommerce-payments/includes/compat/subscriptions",
+      "woocommerce-payments/vendor/woocommerce/subscriptions-core",
+      "woocommerce-payments/includes/multi-currency/Compatibility/WooCommerceBookings.php"
+    ],
+    "paypal_payments": [
+      "woocommerce-paypal-payments/modules/ppcp-wc-subscriptions",
+      "woocommerce-paypal-payments/modules/ppcp-paypal-subscriptions",
+      "woocommerce-paypal-payments/modules/ppcp-compat",
+      "woocommerce-paypal-payments/modules/ppcp-button/src/Helper/CartProductsHelper.php"
+    ],
+    "stripe_gateway": [
+      "woocommerce-gateway-stripe/includes/compat/class-wc-stripe-subscriptions-helper.php",
+      "woocommerce-gateway-stripe/includes/compat/trait-wc-stripe-subscriptions.php",
+      "woocommerce-gateway-stripe/includes/payment-methods/class-wc-stripe-express-checkout-helper.php",
+      "woocommerce-gateway-stripe/includes/admin/class-wc-stripe-subscription-detached-bulk-action.php"
+    ],
+    "standalone_extensions_absent": [
+      "woocommerce-subscriptions",
+      "woocommerce-bookings"
+    ]
+  },
+  "subscription_hot_paths_to_profile_with_fixture": [
+    {
+      "area": "WooPayments Stripe Billing invoice.paid webhook",
+      "entrypoints": [
+        "WC_Payments_Webhook_Processing_Service invoice.paid dispatch",
+        "WC_Payments_Subscriptions_Event_Handler::handle_invoice_paid"
+      ],
+      "static_path": [
+        "get subscription by WCPay subscription ID",
+        "WC_Payments_Invoice_Service::get_order_id_by_invoice_id",
+        "wc_get_order",
+        "wcs_create_renewal_order",
+        "WC_Order::payment_complete",
+        "wcs_get_subscription refresh",
+        "invoice intent/charge/transaction metadata updates"
+      ],
+      "why_it_is_interesting": "This combines subscription lookup, HPOS meta-query order lookup by invoice ID, renewal order creation, payment completion side effects, and remote invoice/charge metadata updates."
+    },
+    {
+      "area": "WooPayments Stripe Billing invoice.payment_failed webhook",
+      "entrypoints": [
+        "WC_Payments_Webhook_Processing_Service invoice.payment_failed dispatch",
+        "WC_Payments_Subscriptions_Event_Handler::handle_invoice_payment_failed"
+      ],
+      "static_path": [
+        "subscription lookup by WCPay subscription ID",
+        "optional Get_Charge API call",
+        "WC_Payments_Invoice_Service::get_order_id_by_invoice_id",
+        "wcs_create_renewal_order",
+        "subscription order notes",
+        "subscription payment_failed state transition"
+      ],
+      "why_it_is_interesting": "Failure handling can combine remote charge retrieval, renewal order creation, notes/meta writes, and subscription status changes in one webhook request."
+    },
+    {
+      "area": "WooPayments subscription migration Action Scheduler flow",
+      "entrypoints": [
+        "wcpay_schedule_subscription_migrations",
+        "wcpay_migrate_subscription",
+        "WC_Payments_Subscriptions_Migrator::migrate_wcpay_subscription"
+      ],
+      "static_path": [
+        "validate Subscriptions extension and subscription state",
+        "fetch WCPay subscription",
+        "maybe cancel WCPay subscription",
+        "update next payment date",
+        "verify payment token",
+        "update subscription meta",
+        "add subscription order note",
+        "reschedule on exception"
+      ],
+      "why_it_is_interesting": "This is a background batch lane likely to surface Action Scheduler throughput, remote API latency, repeated subscription object saves, and meta/order-note write amplification."
+    },
+    {
+      "area": "Stripe Gateway scheduled subscription renewal",
+      "entrypoints": [
+        "woocommerce_scheduled_subscription_payment_{stripe_gateway_id}",
+        "WC_Stripe_Subscriptions::scheduled_subscription_payment",
+        "WC_Stripe_Subscriptions::process_subscription_payment"
+      ],
+      "static_path": [
+        "maybe_init_subscriptions attaches hooks only if WC_Stripe_Subscriptions_Helper::is_subscriptions_enabled",
+        "scheduled_subscription_payment forwards renewal order to process_subscription_payment",
+        "failed payment method update and change-payment-method hooks also attach",
+        "wcs_get_subscriptions_for_renewal_order used in payment intent/mandate paths"
+      ],
+      "why_it_is_interesting": "The renewal path crosses gateway API calls, renewal order processing, subscription lookup, failed-payment handling, and mandate/payment-method metadata."
+    },
+    {
+      "area": "Stripe Gateway update-all-subscriptions payment method",
+      "entrypoints": [
+        "wc_stripe_add_payment_method_{gateway_id}_success",
+        "woocommerce_stripe_add_payment_method",
+        "WC_Stripe_Subscriptions::handle_upe_add_payment_method_success"
+      ],
+      "static_path": [
+        "wcs_get_users_subscriptions",
+        "iterate active subscriptions for customer",
+        "current_user_can checks",
+        "WC_Subscriptions_Change_Payment_Gateway::update_payment_method",
+        "subscription payment-method meta writes"
+      ],
+      "why_it_is_interesting": "A customer with many active subscriptions can turn one add-payment-method request into a loop over subscription objects and payment-method writes."
+    },
+    {
+      "area": "PayPal Payments scheduled renewal",
+      "entrypoints": [
+        "woocommerce_scheduled_subscription_payment_ppcp-gateway",
+        "woocommerce_scheduled_subscription_payment_ppcp-credit-card-gateway",
+        "WooCommerce\\PayPalCommerce\\WcSubscriptions\\RenewalHandler::renew"
+      ],
+      "static_path": [
+        "wcs_get_subscriptions_for_renewal_order",
+        "subscription ppcp_subscription meta check",
+        "process_order",
+        "previous_transaction via subscription related orders",
+        "authorized payment processing",
+        "failed order status update on exception"
+      ],
+      "why_it_is_interesting": "The handler combines renewal-order subscription lookup, related-order scans for previous transactions, saved-payment-token lookup, PayPal API calls, and order status writes."
+    },
+    {
+      "area": "PayPal Payments subscription change-payment-method endpoint",
+      "entrypoints": [
+        "ppc-subscription-change-payment-method",
+        "SubscriptionChangePaymentMethod",
+        "ChangePaymentMethod"
+      ],
+      "static_path": [
+        "wcs_get_subscription",
+        "customer permission check",
+        "set payment method",
+        "add payment token",
+        "subscription save"
+      ],
+      "why_it_is_interesting": "This is a focused write path for subscription payment-method changes and should be profiled with users that have many tokens/subscriptions."
+    }
+  ],
+  "booking_hot_paths_to_profile_with_fixture": [
+    {
+      "area": "WooPayments multicurrency booking price conversion",
+      "entrypoints": [
+        "WooPayments MultiCurrency Compatibility WooCommerceBookings::init",
+        "woocommerce_bookings_calculated_booking_cost",
+        "woocommerce_product_get_block_cost",
+        "woocommerce_product_get_cost",
+        "woocommerce_product_get_resource_base_costs",
+        "woocommerce_bookings_process_cost_rules_cost",
+        "wp_ajax_wc_bookings_calculate_costs"
+      ],
+      "static_path": [
+        "class_exists('WC_Bookings') gate",
+        "booking cost calculation filters",
+        "selected-currency amount adjustment",
+        "resource/person/block cost conversion",
+        "backtrace checks for WC_Cart->add_to_cart and WC_Bookings_Cost_Calculation::calculate_booking_cost"
+      ],
+      "why_it_is_interesting": "The existing gateway profile found WooPayments multicurrency can add tens of thousands of calls on large variation pages. Booking cost/resource/person filters may produce a similar multiplier on calendar cost calculation and add-to-cart flows."
+    },
+    {
+      "area": "PayPal Payments booking cart-item creation",
+      "entrypoints": [
+        "WooCommerce\\PayPalCommerce\\Button\\Helper\\CartProductsHelper::add_booking_product"
+      ],
+      "static_path": [
+        "is_callable('wc_bookings_get_posted_data') gate",
+        "wc_bookings_get_posted_data",
+        "WC_Cart::add_to_cart with booking cart item data"
+      ],
+      "why_it_is_interesting": "This is the gateway button path for booking products and should be profiled against bookable products with resources, persons, availability rules, and blocked ranges."
+    },
+    {
+      "area": "PayPal Payments Bookings compatibility module",
+      "entrypoints": [
+        "compat.wc_bookings.is_supported_plugin_version_active",
+        "CompatModule booking integration"
+      ],
+      "static_path": [
+        "class_exists('WC_Bookings') gate",
+        "Bookings compatibility assets and integration setup"
+      ],
+      "why_it_is_interesting": "The module is dormant in the current stack. With Bookings active, it should be included in checkout/button/calendar profiles so compatibility boot cost is separated from core booking cost calculation."
+    }
+  ],
+  "minimum_fixture_needed_for_runtime_benchmark": {
+    "subscriptions": [
+      "Licensed/available WooCommerce Subscriptions extension loaded",
+      "Subscription products and several active WC_Subscription records across Stripe, PayPal, and WooPayments payment methods",
+      "Renewal orders with HPOS enabled",
+      "Mocked or sandbox gateway credentials for Stripe, PayPal, and WooPayments APIs",
+      "Webhook payloads for invoice.paid and invoice.payment_failed",
+      "Action Scheduler queue seeded with subscription renewal and WooPayments migration actions",
+      "Customer with many active subscriptions to profile update-all payment-method loops"
+    ],
+    "bookings": [
+      "Licensed/available WooCommerce Bookings extension loaded",
+      "Bookable products with resources, persons, cost rules, availability rules, and blocked date ranges",
+      "Calendar/admin availability requests",
+      "AJAX booking cost calculation requests",
+      "Cart/add-to-cart and checkout requests containing booking line items",
+      "Gateway button checkout flow for booking products with PayPal Payments active",
+      "WooPayments multicurrency enabled to isolate booking price-conversion overhead"
+    ]
+  },
+  "measurement_status": {
+    "gateway_bootstrap_admin_cart": "measured",
+    "subscriptions_runtime": "not measured because required commercial extension APIs are absent",
+    "bookings_runtime": "not measured because required commercial extension APIs are absent",
+    "static_handoff": "complete for currently installed gateway plugin code"
+  }
+}
