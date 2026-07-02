@@ -21,7 +21,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#101820;color:#edf7ff;
 <body>
 <header>
 <h1>WooCommerce Deep Performance Audit</h1>
-<div class="sub">Incremental findings from July 2, 2026. This page combines prior pathological/core reports, mined profiler artifacts, and a new focused core shipping/tax benchmark. The Subscriptions + PayPal/Stripe/WooPayments lane is not yet measured on this host because the current benchmark site has only WooCommerce active.</div>
+<div class="sub">Incremental findings from July 2, 2026. This page combines prior pathological/core reports, mined profiler artifacts, a focused core shipping/tax benchmark, and an initial Stripe/PayPal/WooPayments gateway-stack pass. Full WooCommerce Subscriptions and Bookings remain pending because those commercial extensions are not locally available.</div>
 </header>
 <main>
 
@@ -29,7 +29,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#101820;color:#edf7ff;
   <div class="card"><div class="label">Worst measured p95</div><div class="metric">5.47s</div><div class="label">Store API checkout, 20-line cart</div></div>
   <div class="card"><div class="label">Highest query p95</div><div class="metric">2,688</div><div class="label">Checkout order creation</div></div>
   <div class="card"><div class="label">New lane</div><div class="metric">101ms</div><div class="label">8k shipping zones + 12k tax ranges</div></div>
-  <div class="card"><div class="label">Current coverage</div><div class="metric">Core</div><div class="label">Plugin-stack lane pending</div></div>
+  <div class="card"><div class="label">Current coverage</div><div class="metric">Core+</div><div class="label">Gateway bootstrap/admin measured</div></div>
 </section>
 
 <h2>Source Reports and Artifacts</h2>
@@ -40,6 +40,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#101820;color:#edf7ff;
 <tr><td><a href="../woocommerce-core-performance-bottlenecks-2026-07-01/">Core bottleneck report</a></td><td>Original local core suite: checkout, add-to-cart, catalog, variable product page, admin order edit, and Woo Admin.</td></tr>
 <tr><td><a href="../woocommerce-crud-invariant-nginx-fpm-48-rebenchmark-2026-07-01-2130z/">CRUD-invariant nginx/php-fpm rebenchmark</a></td><td>Cleaner HTTP/profiler data with WooCommerce CRUD-created fixtures, PHP-FPM max children 48, and per-request SQL digests.</td></tr>
 <tr><td><a href="shipping-tax-core/index.html">New shipping/tax core lane</a></td><td>Fresh Store API cart-total run over 8,000 generated shipping zones/methods and 12,000 generated tax postcode ranges.</td></tr>
+<tr><td><a href="gateway-stack/01-core-shipping-tax-cart-update.html">Gateway stack cart lane</a></td><td>Same cart-total request after activating WooCommerce Stripe Payment Gateway 10.8.3, WooCommerce PayPal Payments 4.1.0, and WooPayments 10.9.0.</td></tr>
 </tbody>
 </table>
 
@@ -103,6 +104,13 @@ pre{white-space:pre-wrap;word-break:break-word;background:#101820;color:#edf7ff;
 <td><code>WC_Shipping_Zone_Data_Store->get_zone_id_from_package</code> first runs <code>SELECT zone_id, location_code FROM wp_woocommerce_shipping_zone_locations WHERE location_type = 'postcode'</code>, then builds a large <code>NOT IN (...)</code> exclusion list for the zone query.</td>
 <td>For larger merchants, replace all-postcode loading with indexed candidate selection or persisted normalized ranges. Avoid constructing a large NOT IN list after PHP matching.</td>
 </tr>
+<tr>
+<td>9</td>
+<td><span class="warn">Gateway stack bootstrap/admin settings overhead</span></td>
+<td>Activated official/free gateway plugins from WordPress.org: Stripe 10.8.3, PayPal Payments 4.1.0, WooPayments 10.9.0. No gateway credentials configured; most gateway methods are disabled. Cart-total p95 rose from 101ms to 133ms and query p95 from 67 to 126. Authenticated admin payment settings pages ranged from about 946ms median on the list view to 1,357ms median on the PayPal settings section.</td>
+<td>Top gateway-specific evidence: WooPayments/Jetpack connection authorization repeatedly updates and deletes options on settings pages; WooPayments localization primes transients; active gateway registry adds hundreds of option reads. Admin pages are also dominated by the Woo admin menu order-count query over HPOS orders.</td>
+<td>Separate core admin-menu count cost from gateway provider/settings cost. Then profile configured gateway flows with credentials or mocked gateway API responses. The current result proves bootstrap/settings overhead, not payment authorization or renewal behavior.</td>
+</tr>
 </tbody>
 </table>
 
@@ -143,6 +151,42 @@ tax_rates uses key=tax_rate_class, rows=6044, Extra=Using where; Using temporary
 locations and locations2 join by tax_rate_id
 city/postcode absence checks appear as dependent subqueries</pre>
 
+<h2>Gateway Stack First Pass</h2>
+<div class="two">
+<div class="card">
+<h3>Installed Stack</h3>
+<p><span class="pill">woocommerce-gateway-stripe 10.8.3</span><span class="pill">woocommerce-paypal-payments 4.1.0</span><span class="pill">woocommerce-payments 10.9.0</span></p>
+<p>Full WooCommerce Subscriptions and WooCommerce Bookings were not installed locally. WordPress.org search only surfaced third-party/adjacent substitutes; the official <a href="https://woocommerce.com/products/woocommerce-subscriptions/">Subscriptions</a> and <a href="https://woocommerce.com/products/woocommerce-bookings/">Bookings</a> products are commercial WooCommerce.com extensions, so this pass does not claim coverage for them.</p>
+</div>
+<div class="card">
+<h3>Cart Delta</h3>
+<p>Same cart-total request and fixture as the core shipping/tax lane. Core-only: 101ms HTTP p95, 67 query p95, 55.7ms DB p95, 18MB memory p95. Gateway stack: 133ms HTTP p95, 126 query p95, 59.1ms DB p95, 26MB memory p95.</p>
+<p><a href="gateway-stack/01-core-shipping-tax-cart-update.json">Gateway cart raw JSON</a></p>
+</div>
+</div>
+
+<h3>Authenticated Admin Payment Settings</h3>
+<table>
+<thead><tr><th>Request</th><th>HTTP p95</th><th>Median</th><th>Query p95</th><th>DB p95</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td><a href="gateway-stack/01-admin-payment-settings-all.json">Payment settings list</a></td><td>3,104ms</td><td>946ms</td><td>356</td><td>728ms</td><td>First hit is cold; warmed hits stayed near 940-980ms. Includes payment provider suggestion and WooPayments/Jetpack connection work.</td></tr>
+<tr><td><a href="gateway-stack/02-admin-payment-settings-stripe.json">Stripe settings section</a></td><td>1,209ms</td><td>1,014ms</td><td>279</td><td>305ms</td><td>Settings render with gateway stack active and no Stripe credentials configured.</td></tr>
+<tr><td><a href="gateway-stack/03-admin-payment-settings-woopayments.json">WooPayments settings section</a></td><td>219ms</td><td>209ms</td><td>121</td><td>166ms</td><td>Returned HTTP 302 to WooPayments onboarding. This measures redirect/setup path, not a rendered configured settings page.</td></tr>
+<tr><td><a href="gateway-stack/04-admin-payment-settings-paypal.json">PayPal Payments settings section</a></td><td>1,697ms</td><td>1,357ms</td><td>269</td><td>287ms</td><td>Slowest warmed gateway settings page in this pass.</td></tr>
+</tbody>
+</table>
+
+<h3>Gateway Stack SQL Signatures</h3>
+<table>
+<thead><tr><th>Signature</th><th>Where observed</th><th>Why it matters</th></tr></thead>
+<tbody>
+<tr><td><code>SELECT status, COUNT(*) FROM wp_wc_orders WHERE type='shop_order' GROUP BY status</code></td><td>All authenticated payment settings pages</td><td>Admin menu order count can consume hundreds of milliseconds on the same large HPOS fixture, masking gateway-specific cost.</td></tr>
+<tr><td><code>UPDATE wp_options ... jetpack_secrets / connection authorization</code></td><td>Payments list, Stripe section, PayPal section</td><td>WooPayments provider onboarding checks call Jetpack connection registration/authorization paths during settings render.</td></tr>
+<tr><td><code>SELECT option_value FROM wp_options WHERE option_name = ?</code></td><td>Cart and admin settings</td><td>Gateway activation roughly doubled cart request query count; the gateway stack adds many option reads during plugin bootstrap and gateway registry construction.</td></tr>
+<tr><td><code>WooCommerce\PayPalCommerce...ReferenceTransactionStatus</code></td><td>PayPal settings section</td><td>PayPal settings assets ask for reference transaction status during settings render, adding provider-specific option/transient work.</td></tr>
+</tbody>
+</table>
+
 <h2>Static Audit Notes</h2>
 <table>
 <thead><tr><th>Area</th><th>Code path</th><th>Concern</th></tr></thead>
@@ -158,7 +202,7 @@ city/postcode absence checks appear as dependent subqueries</pre>
 <thead><tr><th>Lane</th><th>Status</th><th>Next measurement</th></tr></thead>
 <tbody>
 <tr><td>Bookings</td><td>Not measured yet</td><td>Requires plugin availability and a booking-heavy fixture: bookable products, resources, availability rules, calendar/admin requests, and checkout with booking line items.</td></tr>
-<tr><td>Subscriptions + PayPal/Stripe/WooPayments</td><td>Not measured yet</td><td>Current benchmark site has only WooCommerce active. Next step is to install available gateway plugins, confirm whether WooCommerce Subscriptions/WooPayments are available in this environment, then profile renewal/payment-method/admin order hot paths.</td></tr>
+<tr><td>Subscriptions + PayPal/Stripe/WooPayments</td><td>Partially measured</td><td>Stripe, PayPal Payments, and WooPayments bootstrap/admin overhead is measured. Full Subscriptions renewal/payment-method flows are still pending because the full WooCommerce Subscriptions extension is not available locally.</td></tr>
 <tr><td>Function-level CPU profiling</td><td>Not measured yet</td><td>Current mu-plugin profiler captures SQL/query digests and caller stacks, not inclusive/exclusive PHP function timings. A Tideways/XHProf or sampled profiler lane is still needed for non-SQL CPU hotspots.</td></tr>
 </tbody>
 </table>

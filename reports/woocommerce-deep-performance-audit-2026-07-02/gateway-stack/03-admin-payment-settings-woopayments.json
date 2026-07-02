@@ -1,0 +1,821 @@
+{
+  "scenario": {
+    "id": "03-admin-payment-settings-woopayments",
+    "title": "Admin WooPayments settings section",
+    "path": "/wp-admin/admin.php?page=wc-settings&tab=checkout&section=woocommerce_payments",
+    "iterations": 5
+  },
+  "summary": {
+    "requests": 5,
+    "http_code_counts": {
+      "302": 5
+    },
+    "effective_urls": [
+      "http://localhost:8099/wp-admin/admin.php?page=wc-settings&tab=checkout&section=woocommerce_payments"
+    ],
+    "total_ms": {
+      "median": 208.711,
+      "p95": 218.81300000000002,
+      "max": 218.81300000000002
+    },
+    "server_ms": {
+      "median": 206.44,
+      "p95": 216.6,
+      "max": 216.6
+    },
+    "query_count": {
+      "median": 121,
+      "p95": 121,
+      "max": 121
+    },
+    "query_time_ms": {
+      "median": 163.89,
+      "p95": 165.73,
+      "max": 165.73
+    },
+    "memory_peak_mb": {
+      "median": 20,
+      "p95": 20,
+      "max": 20
+    }
+  },
+  "samples": [
+    {
+      "run_id": "03-admin-payment-settings-woopayments-1782988421457-1",
+      "http_code": 302,
+      "total_ms": 218.81300000000002,
+      "ttfb_ms": 218.76999999999998,
+      "size_download": 0,
+      "body_bytes": 0,
+      "url_effective": "http://localhost:8099/wp-admin/admin.php?page=wc-settings&tab=checkout&section=woocommerce_payments",
+      "redirect_url": "http://localhost:8099/wp-admin/admin.php?page=wc-settings&tab=checkout&path=/woopayments/onboarding&from=WCPAY_ACTIVE&source=unknown",
+      "body_excerpt": "",
+      "profiler": {
+        "run_id": "03-admin-payment-settings-woopayments-1782988421457-1",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-settings&tab=checkout&section=woocommerce_payments",
+        "status": 302,
+        "server_ms": 216.6,
+        "query_count": 121,
+        "query_time_ms": 165.73,
+        "memory_peak_mb": 20,
+        "slow_queries": [
+          {
+            "seconds": 0.14772510528564453,
+            "sql": "SELECT `status`, COUNT(*) AS `count` FROM wp_wc_orders WHERE `type` = 'shop_order' GROUP BY `status`"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 69,
+            "seconds": 0.008852243423461914,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 16,
+            "seconds": 0.002565145492553711,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_woocommerce_activated_plugin','_transient_timeout_woocommerce_activated_plugin')",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Packages::on_init, Automattic\\WooCommerce\\Packages::initialize_packages, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 5,
+            "seconds": 0.00116729736328125,
+            "sql": "SELECT COUNT(*) FROM wp_comments LEFT JOIN wp_posts AS wp_posts_to_exclude_reviews ON comment_post_ID = wp_posts_to_exclude_reviews.ID WHERE ( comment_approved = '1' ) AND comment_type NOT IN ('note') AND comment_type != 'order_note' AND comment_type != 'webhook_delivery' AND comment_type != 'action_log' AND wp_posts_to_exclude_reviews.post_type NOT IN ('product')",
+            "caller": "require('wp-admin/menu.php'), wp_count_comments, apply_filters('wp_count_comments'), WP_Hook->apply_filters, WC_Comments::wp_count_comments, get_comments, WP_Comment_Query->query, WP_Comment_Query->get_comments, WP_Comment_Query->get_comment_ids"
+          },
+          {
+            "count": 5,
+            "seconds": 0.0007288455963134766,
+            "sql": "SELECT note_id FROM wp_wc_admin_notes WHERE name = 'ppcp-working-capital-inbox-note' ORDER BY note_id ASC",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->get_notes_with_name"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0006437301635742188,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler_run_recurring_actions_schedule_hook' AND a.status IN ('in-progress', 'pending') LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler::{closure}, do_action('action_scheduler_init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler_RecurringActionScheduler->schedule_recurring_scheduler_hook, as_has_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0005028247833251953,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler_run_recurring_actions_schedule_hook' AND p.post_status IN ('in-progress', 'pending') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler::{closure}, do_action('action_scheduler_init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler_RecurringActionScheduler->schedule_recurring_scheduler_hook, as_has_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0003249645233154297,
+            "sql": "SELECT action_id, name, label, query, status, actioned_text, nonce_action, nonce_name FROM wp_wc_admin_note_actions WHERE note_id = 2",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note, Automattic\\WooCommerce\\Admin\\Notes\\Note->__construct, WC_Data_Store->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0003001689910888672,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler/migration_hook' AND p.post_status IN ('in-progress') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002770423889160156,
+            "sql": "SELECT * FROM wp_wc_admin_notes WHERE note_id = 2 LIMIT 1",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note, Automattic\\WooCommerce\\Admin\\Notes\\Note->__construct, WC_Data_Store->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00026679039001464844,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler/migration_hook' AND a.status IN ('in-progress') ORDER BY a.scheduled_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002510547637939453,
+            "sql": "SELECT a.*, g.slug AS `group` FROM wp_actionscheduler_actions a LEFT JOIN wp_actionscheduler_groups g ON a.group_id=g.group_id WHERE a.action_id=5",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_HybridStore->fetch_action, ActionScheduler_HybridStore->get_store_from_action_id, ActionScheduler_DBStore->fetch_action"
+          },
+          {
+            "count": 1,
+            "seconds": 0.14772510528564453,
+            "sql": "SELECT `status`, COUNT(*) AS `count` FROM wp_wc_orders WHERE `type` = 'shop_order' GROUP BY `status`",
+            "caller": "require('wp-admin/menu.php'), require_once('wp-admin/includes/menu.php'), do_action('admin_menu'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Admin_Menus->menu_order_count, wc_processing_order_count, wc_orders_count, Automattic\\WooCommerce\\Utilities\\OrderUtil::get_count_for_type"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0006620883941650391,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE autoload IN ( 'yes', 'on', 'auto-on', 'auto' )",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), wp_not_installed, is_blog_installed, wp_load_alloptions"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0003180503845214844,
+            "sql": "SELECT t.term_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('wp_theme') AND t.name IN ('twentytwentyfive') LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\BlockPatterns->register_block_patterns, Automattic\\WooCommerce\\Blocks\\BlockPatterns->load_pattern_content, include('/plugins/woocommerce/patterns/coming-soon-entire-site.php'), Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonTemplate::get_font_families, wp_get_global_settings, WP_Theme_JSON_Resolver::get_merged_data, WP_Theme_JSON_Resolver::get_user_data, WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles, WP_Query->query, WP_Query->get_posts, WP_Tax_Query->get_sql, WP_Tax_Query->get_sql_clauses, WP_Tax_Query->get_sql_for_query, WP_Tax_Query->get_sql_for_clause, WP_Tax_Query->clean_query, WP_Tax_Query->transform_query, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00021600723266601562,
+            "sql": "SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND ( 0 = 1 ) AND wp_posts.post_type = 'wp_global_styles' AND ((wp_posts.post_status = 'publish')) GROUP BY wp_posts.ID ORDER BY wp_posts.post_date DESC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\BlockPatterns->register_block_patterns, Automattic\\WooCommerce\\Blocks\\BlockPatterns->load_pattern_content, include('/plugins/woocommerce/patterns/coming-soon-entire-site.php'), Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonTemplate::get_font_families, wp_get_global_settings, WP_Theme_JSON_Resolver::get_merged_data, WP_Theme_JSON_Resolver::get_user_data, WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles, WP_Query->query, WP_Query->get_posts"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0002079010009765625,
+            "sql": "SELECT COUNT(*) FROM wp_comments JOIN wp_posts ON wp_posts.ID = wp_comments.comment_post_ID WHERE ( comment_approved = '0' ) AND comment_type IN ('review', '', 'comment') AND comment_type NOT IN ('note') AND wp_posts.post_type IN ('product') AND comment_type != 'order_note' AND comment_type != 'webhook_delivery' AND comment_type != 'action_log' ORDER BY wp_comments.comment_date_gmt DESC",
+            "caller": "require('wp-admin/menu.php'), require_once('wp-admin/includes/menu.php'), do_action('admin_menu'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\ProductReviews\\Reviews->add_reviews_page, Automattic\\WooCommerce\\Internal\\Admin\\ProductReviews\\Reviews->get_pending_count_bubble, WC_Comments::get_products_reviews_pending_moderation_counter, get_comments, WP_Comment_Query->query, WP_Comment_Query->get_comments, WP_Comment_Query->get_comment_ids"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00016498565673828125,
+            "sql": "SELECT user_id, meta_key, meta_value FROM wp_usermeta WHERE user_id IN (1) ORDER BY umeta_id ASC",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, wp_set_current_user, WP_User->__construct, WP_User->init, WP_User->for_site, WP_User->get_caps_data, get_user_meta, get_metadata, get_metadata_raw, update_meta_cache"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00016117095947265625,
+            "sql": "SELECT * FROM wp_users WHERE ID = '1' LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, wp_set_current_user, WP_User->__construct, WP_User::get_data_by"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00013399124145507812,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 5 LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00013113021850585938,
+            "sql": "SELECT COUNT(*) FROM wp_options WHERE option_name LIKE 'wp\\\\_1\\\\_wc\\\\_regenerate\\\\_images\\\\_batch\\\\_%'",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Regenerate_Images::regenerating_notice, WC_Regenerate_Images_Request->is_running, WC_Background_Process->is_queue_empty"
+          }
+        ],
+        "timestamp_gmt": "2026-07-02T10:33:41+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "03-admin-payment-settings-woopayments-1782988421683-2",
+      "http_code": 302,
+      "total_ms": 208.54500000000002,
+      "ttfb_ms": 208.495,
+      "size_download": 0,
+      "body_bytes": 0,
+      "url_effective": "http://localhost:8099/wp-admin/admin.php?page=wc-settings&tab=checkout&section=woocommerce_payments",
+      "redirect_url": "http://localhost:8099/wp-admin/admin.php?page=wc-settings&tab=checkout&path=/woopayments/onboarding&from=WCPAY_ACTIVE&source=unknown",
+      "body_excerpt": "",
+      "profiler": {
+        "run_id": "03-admin-payment-settings-woopayments-1782988421683-2",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-settings&tab=checkout&section=woocommerce_payments",
+        "status": 302,
+        "server_ms": 206.32,
+        "query_count": 121,
+        "query_time_ms": 162.94,
+        "memory_peak_mb": 20,
+        "slow_queries": [
+          {
+            "seconds": 0.1463918685913086,
+            "sql": "SELECT `status`, COUNT(*) AS `count` FROM wp_wc_orders WHERE `type` = 'shop_order' GROUP BY `status`"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 69,
+            "seconds": 0.007992982864379883,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 16,
+            "seconds": 0.0022821426391601562,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_woocommerce_activated_plugin','_transient_timeout_woocommerce_activated_plugin')",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Packages::on_init, Automattic\\WooCommerce\\Packages::initialize_packages, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 5,
+            "seconds": 0.0010790824890136719,
+            "sql": "SELECT COUNT(*) FROM wp_comments LEFT JOIN wp_posts AS wp_posts_to_exclude_reviews ON comment_post_ID = wp_posts_to_exclude_reviews.ID WHERE ( comment_approved = '1' ) AND comment_type NOT IN ('note') AND comment_type != 'order_note' AND comment_type != 'webhook_delivery' AND comment_type != 'action_log' AND wp_posts_to_exclude_reviews.post_type NOT IN ('product')",
+            "caller": "require('wp-admin/menu.php'), wp_count_comments, apply_filters('wp_count_comments'), WP_Hook->apply_filters, WC_Comments::wp_count_comments, get_comments, WP_Comment_Query->query, WP_Comment_Query->get_comments, WP_Comment_Query->get_comment_ids"
+          },
+          {
+            "count": 5,
+            "seconds": 0.0007004737854003906,
+            "sql": "SELECT note_id FROM wp_wc_admin_notes WHERE name = 'ppcp-working-capital-inbox-note' ORDER BY note_id ASC",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->get_notes_with_name"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0005509853363037109,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler_run_recurring_actions_schedule_hook' AND p.post_status IN ('in-progress', 'pending') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler::{closure}, do_action('action_scheduler_init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler_RecurringActionScheduler->schedule_recurring_scheduler_hook, as_has_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 3,
+            "seconds": 0.000457763671875,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler_run_recurring_actions_schedule_hook' AND a.status IN ('in-progress', 'pending') LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler::{closure}, do_action('action_scheduler_init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler_RecurringActionScheduler->schedule_recurring_scheduler_hook, as_has_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.000293731689453125,
+            "sql": "SELECT action_id, name, label, query, status, actioned_text, nonce_action, nonce_name FROM wp_wc_admin_note_actions WHERE note_id = 2",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note, Automattic\\WooCommerce\\Admin\\Notes\\Note->__construct, WC_Data_Store->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00027680397033691406,
+            "sql": "SELECT * FROM wp_wc_admin_notes WHERE note_id = 2 LIMIT 1",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note, Automattic\\WooCommerce\\Admin\\Notes\\Note->__construct, WC_Data_Store->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00027489662170410156,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler/migration_hook' AND p.post_status IN ('in-progress') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002620220184326172,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler/migration_hook' AND a.status IN ('in-progress') ORDER BY a.scheduled_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00025200843811035156,
+            "sql": "SELECT a.*, g.slug AS `group` FROM wp_actionscheduler_actions a LEFT JOIN wp_actionscheduler_groups g ON a.group_id=g.group_id WHERE a.action_id=5",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_HybridStore->fetch_action, ActionScheduler_HybridStore->get_store_from_action_id, ActionScheduler_DBStore->fetch_action"
+          },
+          {
+            "count": 1,
+            "seconds": 0.1463918685913086,
+            "sql": "SELECT `status`, COUNT(*) AS `count` FROM wp_wc_orders WHERE `type` = 'shop_order' GROUP BY `status`",
+            "caller": "require('wp-admin/menu.php'), require_once('wp-admin/includes/menu.php'), do_action('admin_menu'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Admin_Menus->menu_order_count, wc_processing_order_count, wc_orders_count, Automattic\\WooCommerce\\Utilities\\OrderUtil::get_count_for_type"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0008258819580078125,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE autoload IN ( 'yes', 'on', 'auto-on', 'auto' )",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), wp_not_installed, is_blog_installed, wp_load_alloptions"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00026416778564453125,
+            "sql": "SELECT t.term_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('wp_theme') AND t.name IN ('twentytwentyfive') LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\BlockPatterns->register_block_patterns, Automattic\\WooCommerce\\Blocks\\BlockPatterns->load_pattern_content, include('/plugins/woocommerce/patterns/coming-soon-entire-site.php'), Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonTemplate::get_font_families, wp_get_global_settings, WP_Theme_JSON_Resolver::get_merged_data, WP_Theme_JSON_Resolver::get_user_data, WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles, WP_Query->query, WP_Query->get_posts, WP_Tax_Query->get_sql, WP_Tax_Query->get_sql_clauses, WP_Tax_Query->get_sql_for_query, WP_Tax_Query->get_sql_for_clause, WP_Tax_Query->clean_query, WP_Tax_Query->transform_query, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00018596649169921875,
+            "sql": "SELECT COUNT(*) FROM wp_comments JOIN wp_posts ON wp_posts.ID = wp_comments.comment_post_ID WHERE ( comment_approved = '0' ) AND comment_type IN ('review', '', 'comment') AND comment_type NOT IN ('note') AND wp_posts.post_type IN ('product') AND comment_type != 'order_note' AND comment_type != 'webhook_delivery' AND comment_type != 'action_log' ORDER BY wp_comments.comment_date_gmt DESC",
+            "caller": "require('wp-admin/menu.php'), require_once('wp-admin/includes/menu.php'), do_action('admin_menu'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\ProductReviews\\Reviews->add_reviews_page, Automattic\\WooCommerce\\Internal\\Admin\\ProductReviews\\Reviews->get_pending_count_bubble, WC_Comments::get_products_reviews_pending_moderation_counter, get_comments, WP_Comment_Query->query, WP_Comment_Query->get_comments, WP_Comment_Query->get_comment_ids"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00016188621520996094,
+            "sql": "SELECT user_id, meta_key, meta_value FROM wp_usermeta WHERE user_id IN (1) ORDER BY umeta_id ASC",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, wp_set_current_user, WP_User->__construct, WP_User->init, WP_User->for_site, WP_User->get_caps_data, get_user_meta, get_metadata, get_metadata_raw, update_meta_cache"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00015997886657714844,
+            "sql": "SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND ( 0 = 1 ) AND wp_posts.post_type = 'wp_global_styles' AND ((wp_posts.post_status = 'publish')) GROUP BY wp_posts.ID ORDER BY wp_posts.post_date DESC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\BlockPatterns->register_block_patterns, Automattic\\WooCommerce\\Blocks\\BlockPatterns->load_pattern_content, include('/plugins/woocommerce/patterns/coming-soon-entire-site.php'), Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonTemplate::get_font_families, wp_get_global_settings, WP_Theme_JSON_Resolver::get_merged_data, WP_Theme_JSON_Resolver::get_user_data, WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles, WP_Query->query, WP_Query->get_posts"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00015282630920410156,
+            "sql": "SELECT * FROM wp_users WHERE ID = '1' LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, wp_set_current_user, WP_User->__construct, WP_User::get_data_by"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00014090538024902344,
+            "sql": "SELECT COUNT(*) FROM wp_options WHERE option_name LIKE 'wp\\\\_1\\\\_wc\\\\_regenerate\\\\_images\\\\_batch\\\\_%'",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Regenerate_Images::regenerating_notice, WC_Regenerate_Images_Request->is_running, WC_Background_Process->is_queue_empty"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001239776611328125,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 5 LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          }
+        ],
+        "timestamp_gmt": "2026-07-02T10:33:41+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "03-admin-payment-settings-woopayments-1782988421899-3",
+      "http_code": 302,
+      "total_ms": 207.77599999999998,
+      "ttfb_ms": 207.737,
+      "size_download": 0,
+      "body_bytes": 0,
+      "url_effective": "http://localhost:8099/wp-admin/admin.php?page=wc-settings&tab=checkout&section=woocommerce_payments",
+      "redirect_url": "http://localhost:8099/wp-admin/admin.php?page=wc-settings&tab=checkout&path=/woopayments/onboarding&from=WCPAY_ACTIVE&source=unknown",
+      "body_excerpt": "",
+      "profiler": {
+        "run_id": "03-admin-payment-settings-woopayments-1782988421899-3",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-settings&tab=checkout&section=woocommerce_payments",
+        "status": 302,
+        "server_ms": 205.69,
+        "query_count": 121,
+        "query_time_ms": 162.66,
+        "memory_peak_mb": 20,
+        "slow_queries": [
+          {
+            "seconds": 0.14609503746032715,
+            "sql": "SELECT `status`, COUNT(*) AS `count` FROM wp_wc_orders WHERE `type` = 'shop_order' GROUP BY `status`"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 69,
+            "seconds": 0.008019685745239258,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 16,
+            "seconds": 0.0024259090423583984,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_woocommerce_activated_plugin','_transient_timeout_woocommerce_activated_plugin')",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Packages::on_init, Automattic\\WooCommerce\\Packages::initialize_packages, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 5,
+            "seconds": 0.0010571479797363281,
+            "sql": "SELECT COUNT(*) FROM wp_comments LEFT JOIN wp_posts AS wp_posts_to_exclude_reviews ON comment_post_ID = wp_posts_to_exclude_reviews.ID WHERE ( comment_approved = '1' ) AND comment_type NOT IN ('note') AND comment_type != 'order_note' AND comment_type != 'webhook_delivery' AND comment_type != 'action_log' AND wp_posts_to_exclude_reviews.post_type NOT IN ('product')",
+            "caller": "require('wp-admin/menu.php'), wp_count_comments, apply_filters('wp_count_comments'), WP_Hook->apply_filters, WC_Comments::wp_count_comments, get_comments, WP_Comment_Query->query, WP_Comment_Query->get_comments, WP_Comment_Query->get_comment_ids"
+          },
+          {
+            "count": 5,
+            "seconds": 0.0007207393646240234,
+            "sql": "SELECT note_id FROM wp_wc_admin_notes WHERE name = 'ppcp-working-capital-inbox-note' ORDER BY note_id ASC",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->get_notes_with_name"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0004951953887939453,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler_run_recurring_actions_schedule_hook' AND p.post_status IN ('in-progress', 'pending') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler::{closure}, do_action('action_scheduler_init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler_RecurringActionScheduler->schedule_recurring_scheduler_hook, as_has_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0004372596740722656,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler_run_recurring_actions_schedule_hook' AND a.status IN ('in-progress', 'pending') LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler::{closure}, do_action('action_scheduler_init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler_RecurringActionScheduler->schedule_recurring_scheduler_hook, as_has_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0003669261932373047,
+            "sql": "SELECT action_id, name, label, query, status, actioned_text, nonce_action, nonce_name FROM wp_wc_admin_note_actions WHERE note_id = 2",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note, Automattic\\WooCommerce\\Admin\\Notes\\Note->__construct, WC_Data_Store->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00031065940856933594,
+            "sql": "SELECT * FROM wp_wc_admin_notes WHERE note_id = 2 LIMIT 1",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note, Automattic\\WooCommerce\\Admin\\Notes\\Note->__construct, WC_Data_Store->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002942085266113281,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler/migration_hook' AND p.post_status IN ('in-progress') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002617835998535156,
+            "sql": "SELECT a.*, g.slug AS `group` FROM wp_actionscheduler_actions a LEFT JOIN wp_actionscheduler_groups g ON a.group_id=g.group_id WHERE a.action_id=5",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_HybridStore->fetch_action, ActionScheduler_HybridStore->get_store_from_action_id, ActionScheduler_DBStore->fetch_action"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00025582313537597656,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler/migration_hook' AND a.status IN ('in-progress') ORDER BY a.scheduled_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 1,
+            "seconds": 0.14609503746032715,
+            "sql": "SELECT `status`, COUNT(*) AS `count` FROM wp_wc_orders WHERE `type` = 'shop_order' GROUP BY `status`",
+            "caller": "require('wp-admin/menu.php'), require_once('wp-admin/includes/menu.php'), do_action('admin_menu'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Admin_Menus->menu_order_count, wc_processing_order_count, wc_orders_count, Automattic\\WooCommerce\\Utilities\\OrderUtil::get_count_for_type"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0006570816040039062,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE autoload IN ( 'yes', 'on', 'auto-on', 'auto' )",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), wp_not_installed, is_blog_installed, wp_load_alloptions"
+          },
+          {
+            "count": 1,
+            "seconds": 0.000225067138671875,
+            "sql": "SELECT t.term_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('wp_theme') AND t.name IN ('twentytwentyfive') LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\BlockPatterns->register_block_patterns, Automattic\\WooCommerce\\Blocks\\BlockPatterns->load_pattern_content, include('/plugins/woocommerce/patterns/coming-soon-entire-site.php'), Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonTemplate::get_font_families, wp_get_global_settings, WP_Theme_JSON_Resolver::get_merged_data, WP_Theme_JSON_Resolver::get_user_data, WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles, WP_Query->query, WP_Query->get_posts, WP_Tax_Query->get_sql, WP_Tax_Query->get_sql_clauses, WP_Tax_Query->get_sql_for_query, WP_Tax_Query->get_sql_for_clause, WP_Tax_Query->clean_query, WP_Tax_Query->transform_query, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00020003318786621094,
+            "sql": "SELECT COUNT(*) FROM wp_comments JOIN wp_posts ON wp_posts.ID = wp_comments.comment_post_ID WHERE ( comment_approved = '0' ) AND comment_type IN ('review', '', 'comment') AND comment_type NOT IN ('note') AND wp_posts.post_type IN ('product') AND comment_type != 'order_note' AND comment_type != 'webhook_delivery' AND comment_type != 'action_log' ORDER BY wp_comments.comment_date_gmt DESC",
+            "caller": "require('wp-admin/menu.php'), require_once('wp-admin/includes/menu.php'), do_action('admin_menu'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\ProductReviews\\Reviews->add_reviews_page, Automattic\\WooCommerce\\Internal\\Admin\\ProductReviews\\Reviews->get_pending_count_bubble, WC_Comments::get_products_reviews_pending_moderation_counter, get_comments, WP_Comment_Query->query, WP_Comment_Query->get_comments, WP_Comment_Query->get_comment_ids"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00016498565673828125,
+            "sql": "SELECT user_id, meta_key, meta_value FROM wp_usermeta WHERE user_id IN (1) ORDER BY umeta_id ASC",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, wp_set_current_user, WP_User->__construct, WP_User->init, WP_User->for_site, WP_User->get_caps_data, get_user_meta, get_metadata, get_metadata_raw, update_meta_cache"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00014901161193847656,
+            "sql": "SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND ( 0 = 1 ) AND wp_posts.post_type = 'wp_global_styles' AND ((wp_posts.post_status = 'publish')) GROUP BY wp_posts.ID ORDER BY wp_posts.post_date DESC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\BlockPatterns->register_block_patterns, Automattic\\WooCommerce\\Blocks\\BlockPatterns->load_pattern_content, include('/plugins/woocommerce/patterns/coming-soon-entire-site.php'), Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonTemplate::get_font_families, wp_get_global_settings, WP_Theme_JSON_Resolver::get_merged_data, WP_Theme_JSON_Resolver::get_user_data, WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles, WP_Query->query, WP_Query->get_posts"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001480579376220703,
+            "sql": "SELECT * FROM wp_users WHERE ID = '1' LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, wp_set_current_user, WP_User->__construct, WP_User::get_data_by"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00014495849609375,
+            "sql": "SELECT COUNT(*) FROM wp_options WHERE option_name LIKE 'wp\\\\_1\\\\_wc\\\\_regenerate\\\\_images\\\\_batch\\\\_%'",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Regenerate_Images::regenerating_notice, WC_Regenerate_Images_Request->is_running, WC_Background_Process->is_queue_empty"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001220703125,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 5 LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          }
+        ],
+        "timestamp_gmt": "2026-07-02T10:33:42+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "03-admin-payment-settings-woopayments-1782988422114-4",
+      "http_code": 302,
+      "total_ms": 209.618,
+      "ttfb_ms": 209.57500000000002,
+      "size_download": 0,
+      "body_bytes": 0,
+      "url_effective": "http://localhost:8099/wp-admin/admin.php?page=wc-settings&tab=checkout&section=woocommerce_payments",
+      "redirect_url": "http://localhost:8099/wp-admin/admin.php?page=wc-settings&tab=checkout&path=/woopayments/onboarding&from=WCPAY_ACTIVE&source=unknown",
+      "body_excerpt": "",
+      "profiler": {
+        "run_id": "03-admin-payment-settings-woopayments-1782988422114-4",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-settings&tab=checkout&section=woocommerce_payments",
+        "status": 302,
+        "server_ms": 207.26,
+        "query_count": 121,
+        "query_time_ms": 164.13,
+        "memory_peak_mb": 20,
+        "slow_queries": [
+          {
+            "seconds": 0.14744997024536133,
+            "sql": "SELECT `status`, COUNT(*) AS `count` FROM wp_wc_orders WHERE `type` = 'shop_order' GROUP BY `status`"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 69,
+            "seconds": 0.00845026969909668,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 16,
+            "seconds": 0.002377033233642578,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_woocommerce_activated_plugin','_transient_timeout_woocommerce_activated_plugin')",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Packages::on_init, Automattic\\WooCommerce\\Packages::initialize_packages, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 5,
+            "seconds": 0.0009810924530029297,
+            "sql": "SELECT COUNT(*) FROM wp_comments LEFT JOIN wp_posts AS wp_posts_to_exclude_reviews ON comment_post_ID = wp_posts_to_exclude_reviews.ID WHERE ( comment_approved = '1' ) AND comment_type NOT IN ('note') AND comment_type != 'order_note' AND comment_type != 'webhook_delivery' AND comment_type != 'action_log' AND wp_posts_to_exclude_reviews.post_type NOT IN ('product')",
+            "caller": "require('wp-admin/menu.php'), wp_count_comments, apply_filters('wp_count_comments'), WP_Hook->apply_filters, WC_Comments::wp_count_comments, get_comments, WP_Comment_Query->query, WP_Comment_Query->get_comments, WP_Comment_Query->get_comment_ids"
+          },
+          {
+            "count": 5,
+            "seconds": 0.0006666183471679688,
+            "sql": "SELECT note_id FROM wp_wc_admin_notes WHERE name = 'ppcp-working-capital-inbox-note' ORDER BY note_id ASC",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->get_notes_with_name"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0005068778991699219,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler_run_recurring_actions_schedule_hook' AND p.post_status IN ('in-progress', 'pending') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler::{closure}, do_action('action_scheduler_init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler_RecurringActionScheduler->schedule_recurring_scheduler_hook, as_has_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0004448890686035156,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler_run_recurring_actions_schedule_hook' AND a.status IN ('in-progress', 'pending') LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler::{closure}, do_action('action_scheduler_init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler_RecurringActionScheduler->schedule_recurring_scheduler_hook, as_has_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00030612945556640625,
+            "sql": "SELECT * FROM wp_wc_admin_notes WHERE note_id = 2 LIMIT 1",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note, Automattic\\WooCommerce\\Admin\\Notes\\Note->__construct, WC_Data_Store->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00028204917907714844,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler/migration_hook' AND a.status IN ('in-progress') ORDER BY a.scheduled_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002777576446533203,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler/migration_hook' AND p.post_status IN ('in-progress') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00026702880859375,
+            "sql": "SELECT action_id, name, label, query, status, actioned_text, nonce_action, nonce_name FROM wp_wc_admin_note_actions WHERE note_id = 2",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note, Automattic\\WooCommerce\\Admin\\Notes\\Note->__construct, WC_Data_Store->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002529621124267578,
+            "sql": "SELECT a.*, g.slug AS `group` FROM wp_actionscheduler_actions a LEFT JOIN wp_actionscheduler_groups g ON a.group_id=g.group_id WHERE a.action_id=5",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_HybridStore->fetch_action, ActionScheduler_HybridStore->get_store_from_action_id, ActionScheduler_DBStore->fetch_action"
+          },
+          {
+            "count": 1,
+            "seconds": 0.14744997024536133,
+            "sql": "SELECT `status`, COUNT(*) AS `count` FROM wp_wc_orders WHERE `type` = 'shop_order' GROUP BY `status`",
+            "caller": "require('wp-admin/menu.php'), require_once('wp-admin/includes/menu.php'), do_action('admin_menu'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Admin_Menus->menu_order_count, wc_processing_order_count, wc_orders_count, Automattic\\WooCommerce\\Utilities\\OrderUtil::get_count_for_type"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0006439685821533203,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE autoload IN ( 'yes', 'on', 'auto-on', 'auto' )",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), wp_not_installed, is_blog_installed, wp_load_alloptions"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00021696090698242188,
+            "sql": "SELECT COUNT(*) FROM wp_comments JOIN wp_posts ON wp_posts.ID = wp_comments.comment_post_ID WHERE ( comment_approved = '0' ) AND comment_type IN ('review', '', 'comment') AND comment_type NOT IN ('note') AND wp_posts.post_type IN ('product') AND comment_type != 'order_note' AND comment_type != 'webhook_delivery' AND comment_type != 'action_log' ORDER BY wp_comments.comment_date_gmt DESC",
+            "caller": "require('wp-admin/menu.php'), require_once('wp-admin/includes/menu.php'), do_action('admin_menu'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\ProductReviews\\Reviews->add_reviews_page, Automattic\\WooCommerce\\Internal\\Admin\\ProductReviews\\Reviews->get_pending_count_bubble, WC_Comments::get_products_reviews_pending_moderation_counter, get_comments, WP_Comment_Query->query, WP_Comment_Query->get_comments, WP_Comment_Query->get_comment_ids"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00017213821411132812,
+            "sql": "SELECT t.term_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('wp_theme') AND t.name IN ('twentytwentyfive') LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\BlockPatterns->register_block_patterns, Automattic\\WooCommerce\\Blocks\\BlockPatterns->load_pattern_content, include('/plugins/woocommerce/patterns/coming-soon-entire-site.php'), Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonTemplate::get_font_families, wp_get_global_settings, WP_Theme_JSON_Resolver::get_merged_data, WP_Theme_JSON_Resolver::get_user_data, WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles, WP_Query->query, WP_Query->get_posts, WP_Tax_Query->get_sql, WP_Tax_Query->get_sql_clauses, WP_Tax_Query->get_sql_for_query, WP_Tax_Query->get_sql_for_clause, WP_Tax_Query->clean_query, WP_Tax_Query->transform_query, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00016379356384277344,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 5 LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00015783309936523438,
+            "sql": "SELECT * FROM wp_users WHERE ID = '1' LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, wp_set_current_user, WP_User->__construct, WP_User::get_data_by"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00015687942504882812,
+            "sql": "SELECT user_id, meta_key, meta_value FROM wp_usermeta WHERE user_id IN (1) ORDER BY umeta_id ASC",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, wp_set_current_user, WP_User->__construct, WP_User->init, WP_User->for_site, WP_User->get_caps_data, get_user_meta, get_metadata, get_metadata_raw, update_meta_cache"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00013399124145507812,
+            "sql": "SELECT COUNT(*) FROM wp_options WHERE option_name LIKE 'wp\\\\_1\\\\_wc\\\\_regenerate\\\\_images\\\\_batch\\\\_%'",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Regenerate_Images::regenerating_notice, WC_Regenerate_Images_Request->is_running, WC_Background_Process->is_queue_empty"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001220703125,
+            "sql": "SELECT note_id FROM wp_wc_admin_notes WHERE type = 'survey' ORDER BY note_id ASC",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Admin\\Notes\\Notes::possibly_delete_survey_notes, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->get_note_ids_by_type"
+          }
+        ],
+        "timestamp_gmt": "2026-07-02T10:33:42+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "03-admin-payment-settings-woopayments-1782988422331-5",
+      "http_code": 302,
+      "total_ms": 208.711,
+      "ttfb_ms": 208.66899999999998,
+      "size_download": 0,
+      "body_bytes": 0,
+      "url_effective": "http://localhost:8099/wp-admin/admin.php?page=wc-settings&tab=checkout&section=woocommerce_payments",
+      "redirect_url": "http://localhost:8099/wp-admin/admin.php?page=wc-settings&tab=checkout&path=/woopayments/onboarding&from=WCPAY_ACTIVE&source=unknown",
+      "body_excerpt": "",
+      "profiler": {
+        "run_id": "03-admin-payment-settings-woopayments-1782988422331-5",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-settings&tab=checkout&section=woocommerce_payments",
+        "status": 302,
+        "server_ms": 206.44,
+        "query_count": 121,
+        "query_time_ms": 163.89,
+        "memory_peak_mb": 20,
+        "slow_queries": [
+          {
+            "seconds": 0.14714980125427246,
+            "sql": "SELECT `status`, COUNT(*) AS `count` FROM wp_wc_orders WHERE `type` = 'shop_order' GROUP BY `status`"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 69,
+            "seconds": 0.00824284553527832,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 16,
+            "seconds": 0.0023550987243652344,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_woocommerce_activated_plugin','_transient_timeout_woocommerce_activated_plugin')",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Packages::on_init, Automattic\\WooCommerce\\Packages::initialize_packages, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 5,
+            "seconds": 0.0010492801666259766,
+            "sql": "SELECT COUNT(*) FROM wp_comments LEFT JOIN wp_posts AS wp_posts_to_exclude_reviews ON comment_post_ID = wp_posts_to_exclude_reviews.ID WHERE ( comment_approved = '1' ) AND comment_type NOT IN ('note') AND comment_type != 'order_note' AND comment_type != 'webhook_delivery' AND comment_type != 'action_log' AND wp_posts_to_exclude_reviews.post_type NOT IN ('product')",
+            "caller": "require('wp-admin/menu.php'), wp_count_comments, apply_filters('wp_count_comments'), WP_Hook->apply_filters, WC_Comments::wp_count_comments, get_comments, WP_Comment_Query->query, WP_Comment_Query->get_comments, WP_Comment_Query->get_comment_ids"
+          },
+          {
+            "count": 5,
+            "seconds": 0.0007061958312988281,
+            "sql": "SELECT note_id FROM wp_wc_admin_notes WHERE name = 'ppcp-working-capital-inbox-note' ORDER BY note_id ASC",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->get_notes_with_name"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0005288124084472656,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler_run_recurring_actions_schedule_hook' AND p.post_status IN ('in-progress', 'pending') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler::{closure}, do_action('action_scheduler_init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler_RecurringActionScheduler->schedule_recurring_scheduler_hook, as_has_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 3,
+            "seconds": 0.000431060791015625,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler_run_recurring_actions_schedule_hook' AND a.status IN ('in-progress', 'pending') LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler::{closure}, do_action('action_scheduler_init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler_RecurringActionScheduler->schedule_recurring_scheduler_hook, as_has_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0003159046173095703,
+            "sql": "SELECT action_id, name, label, query, status, actioned_text, nonce_action, nonce_name FROM wp_wc_admin_note_actions WHERE note_id = 2",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note, Automattic\\WooCommerce\\Admin\\Notes\\Note->__construct, WC_Data_Store->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00028896331787109375,
+            "sql": "SELECT * FROM wp_wc_admin_notes WHERE note_id = 2 LIMIT 1",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note, Automattic\\WooCommerce\\Admin\\Notes\\Note->__construct, WC_Data_Store->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00027060508728027344,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler/migration_hook' AND a.status IN ('in-progress') ORDER BY a.scheduled_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002639293670654297,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler/migration_hook' AND p.post_status IN ('in-progress') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002472400665283203,
+            "sql": "SELECT a.*, g.slug AS `group` FROM wp_actionscheduler_actions a LEFT JOIN wp_actionscheduler_groups g ON a.group_id=g.group_id WHERE a.action_id=5",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_HybridStore->fetch_action, ActionScheduler_HybridStore->get_store_from_action_id, ActionScheduler_DBStore->fetch_action"
+          },
+          {
+            "count": 1,
+            "seconds": 0.14714980125427246,
+            "sql": "SELECT `status`, COUNT(*) AS `count` FROM wp_wc_orders WHERE `type` = 'shop_order' GROUP BY `status`",
+            "caller": "require('wp-admin/menu.php'), require_once('wp-admin/includes/menu.php'), do_action('admin_menu'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Admin_Menus->menu_order_count, wc_processing_order_count, wc_orders_count, Automattic\\WooCommerce\\Utilities\\OrderUtil::get_count_for_type"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0006418228149414062,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE autoload IN ( 'yes', 'on', 'auto-on', 'auto' )",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), wp_not_installed, is_blog_installed, wp_load_alloptions"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00024580955505371094,
+            "sql": "SELECT t.term_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('wp_theme') AND t.name IN ('twentytwentyfive') LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\BlockPatterns->register_block_patterns, Automattic\\WooCommerce\\Blocks\\BlockPatterns->load_pattern_content, include('/plugins/woocommerce/patterns/coming-soon-entire-site.php'), Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonTemplate::get_font_families, wp_get_global_settings, WP_Theme_JSON_Resolver::get_merged_data, WP_Theme_JSON_Resolver::get_user_data, WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles, WP_Query->query, WP_Query->get_posts, WP_Tax_Query->get_sql, WP_Tax_Query->get_sql_clauses, WP_Tax_Query->get_sql_for_query, WP_Tax_Query->get_sql_for_clause, WP_Tax_Query->clean_query, WP_Tax_Query->transform_query, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0002288818359375,
+            "sql": "SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND ( 0 = 1 ) AND wp_posts.post_type = 'wp_global_styles' AND ((wp_posts.post_status = 'publish')) GROUP BY wp_posts.ID ORDER BY wp_posts.post_date DESC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\BlockPatterns->register_block_patterns, Automattic\\WooCommerce\\Blocks\\BlockPatterns->load_pattern_content, include('/plugins/woocommerce/patterns/coming-soon-entire-site.php'), Automattic\\WooCommerce\\Blocks\\Templates\\ComingSoonTemplate::get_font_families, wp_get_global_settings, WP_Theme_JSON_Resolver::get_merged_data, WP_Theme_JSON_Resolver::get_user_data, WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles, WP_Query->query, WP_Query->get_posts"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00021505355834960938,
+            "sql": "SELECT COUNT(*) FROM wp_comments JOIN wp_posts ON wp_posts.ID = wp_comments.comment_post_ID WHERE ( comment_approved = '0' ) AND comment_type IN ('review', '', 'comment') AND comment_type NOT IN ('note') AND wp_posts.post_type IN ('product') AND comment_type != 'order_note' AND comment_type != 'webhook_delivery' AND comment_type != 'action_log' ORDER BY wp_comments.comment_date_gmt DESC",
+            "caller": "require('wp-admin/menu.php'), require_once('wp-admin/includes/menu.php'), do_action('admin_menu'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\ProductReviews\\Reviews->add_reviews_page, Automattic\\WooCommerce\\Internal\\Admin\\ProductReviews\\Reviews->get_pending_count_bubble, WC_Comments::get_products_reviews_pending_moderation_counter, get_comments, WP_Comment_Query->query, WP_Comment_Query->get_comments, WP_Comment_Query->get_comment_ids"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00017213821411132812,
+            "sql": "SELECT user_id, meta_key, meta_value FROM wp_usermeta WHERE user_id IN (1) ORDER BY umeta_id ASC",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, wp_set_current_user, WP_User->__construct, WP_User->init, WP_User->for_site, WP_User->get_caps_data, get_user_meta, get_metadata, get_metadata_raw, update_meta_cache"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00015497207641601562,
+            "sql": "SELECT * FROM wp_users WHERE ID = '1' LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, {closure}, wp_set_current_user, WP_User->__construct, WP_User::get_data_by"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00014400482177734375,
+            "sql": "SELECT COUNT(*) FROM wp_options WHERE option_name LIKE 'wp\\\\_1\\\\_wc\\\\_regenerate\\\\_images\\\\_batch\\\\_%'",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Regenerate_Images::regenerating_notice, WC_Regenerate_Images_Request->is_running, WC_Background_Process->is_queue_empty"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00012302398681640625,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 5 LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          }
+        ],
+        "timestamp_gmt": "2026-07-02T10:33:42+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    }
+  ],
+  "environment": {
+    "active_plugins": [
+      "woocommerce-gateway-stripe/woocommerce-gateway-stripe.php",
+      "woocommerce-payments/woocommerce-payments.php",
+      "woocommerce-paypal-payments/woocommerce-paypal-payments.php",
+      "woocommerce/woocommerce.php"
+    ],
+    "woocommerce": "10.9.1",
+    "wordpress": "7.0",
+    "php": "8.3.31"
+  },
+  "measured_at_gmt": "2026-07-02T10:33:42.547Z"
+}

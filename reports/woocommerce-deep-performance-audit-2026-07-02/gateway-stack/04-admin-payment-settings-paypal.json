@@ -1,0 +1,825 @@
+{
+  "scenario": {
+    "id": "04-admin-payment-settings-paypal",
+    "title": "Admin PayPal Payments settings section",
+    "path": "/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ppcp-gateway",
+    "iterations": 5
+  },
+  "summary": {
+    "requests": 5,
+    "http_code_counts": {
+      "200": 5
+    },
+    "effective_urls": [
+      "http://localhost:8099/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ppcp-gateway"
+    ],
+    "total_ms": {
+      "median": 1357.433,
+      "p95": 1696.9350000000002,
+      "max": 1696.9350000000002
+    },
+    "server_ms": {
+      "median": 1355.18,
+      "p95": 1694.35,
+      "max": 1694.35
+    },
+    "query_count": {
+      "median": 268,
+      "p95": 269,
+      "max": 269
+    },
+    "query_time_ms": {
+      "median": 282.55,
+      "p95": 286.72,
+      "max": 286.72
+    },
+    "memory_peak_mb": {
+      "median": 26,
+      "p95": 26,
+      "max": 26
+    }
+  },
+  "samples": [
+    {
+      "run_id": "04-admin-payment-settings-paypal-1782988422547-1",
+      "http_code": 200,
+      "total_ms": 1696.9350000000002,
+      "ttfb_ms": 1694.721,
+      "size_download": 224443,
+      "body_bytes": 224443,
+      "url_effective": "http://localhost:8099/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ppcp-gateway",
+      "redirect_url": "",
+      "body_excerpt": "<!DOCTYPE html>\n<html class=\"wp-toolbar\"\n\tlang=\"en-US\">\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n\t<title>WooCommerce setting",
+      "profiler": {
+        "run_id": "04-admin-payment-settings-paypal-1782988422547-1",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ppcp-gateway",
+        "status": 200,
+        "server_ms": 1694.35,
+        "query_count": 269,
+        "query_time_ms": 283.04,
+        "memory_peak_mb": 26,
+        "slow_queries": [
+          {
+            "seconds": 0.14769506454467773,
+            "sql": "SELECT `status`, COUNT(*) AS `count` FROM wp_wc_orders WHERE `type` = 'shop_order' GROUP BY `status`"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 152,
+            "seconds": 0.018659591674804688,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 25,
+            "seconds": 0.0038962364196777344,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_woocommerce_activated_plugin','_transient_timeout_woocommerce_activated_plugin')",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Packages::on_init, Automattic\\WooCommerce\\Packages::initialize_packages, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 10,
+            "seconds": 0.0010898113250732422,
+            "sql": "SELECT autoload FROM wp_options WHERE option_name = 'jetpack_connection_xmlrpc_errors'",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Connection\\Manager->register, Automattic\\Jetpack\\Connection\\Manager->delete_all_connection_"
+          },
+          {
+            "count": 8,
+            "seconds": 0.0456082820892334,
+            "sql": "UPDATE `wp_options` SET `option_value` = '1' WHERE `option_name` = 'jetpack_tos_agreed'",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Terms_Of_Service->agree, Automattic\\Jetpack\\Terms_Of_Service->set_agree, Jetpack_Options::u"
+          },
+          {
+            "count": 8,
+            "seconds": 0.0017843246459960938,
+            "sql": "SELECT autoload FROM wp_options WHERE option_name = 'jetpack_tos_agreed' LIMIT 1",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Terms_Of_Service->agree, Automattic\\Jetpack\\Terms_Of_Service->set_agree, Jetpack_Options::u"
+          },
+          {
+            "count": 8,
+            "seconds": 0.0012485980987548828,
+            "sql": "SELECT note_id FROM wp_wc_admin_notes WHERE name = 'ppcp-working-capital-inbox-note' ORDER BY note_id ASC",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->get_notes_with_name"
+          },
+          {
+            "count": 5,
+            "seconds": 0.0009748935699462891,
+            "sql": "SELECT COUNT(*) FROM wp_comments LEFT JOIN wp_posts AS wp_posts_to_exclude_reviews ON comment_post_ID = wp_posts_to_exclude_reviews.ID WHERE ( comment_approved = '1' ) AND comment_type NOT IN ('note') AND comment_type != 'order_note' AND comment_type != 'webhook_delivery' AND comment_type != 'action_log' AND wp_posts_to_exclude_reviews.post_type NOT IN ('product')",
+            "caller": "require('wp-admin/menu.php'), wp_count_comments, apply_filters('wp_count_comments'), WP_Hook->apply_filters, WC_Comments::wp_count_comments, get_comments, WP_Comment_Query->query, WP_Comment_Query->get_comments, WP_Comment_Query->get_comment_ids"
+          },
+          {
+            "count": 4,
+            "seconds": 0.012545108795166016,
+            "sql": "UPDATE wp_options SET option_value = 'a:1:{s:18:\\\"jetpack_register_1\\\";a:3:{s:8:\\\"secret_1\\\";s:32:\\\"jt5S3wcde3hwxaqLdun940YoRQvSIYqH\\\";s:8:\\\"secret_2\\\";s:32:\\\"WCa7YNVAA4jU8985N87jzojnqgTPP2Nv\\\";s:3:\\\"exp\\\";i:1782989022;}}' WHERE option_name = 'jetpack_secrets'",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Connection\\Manager->register, Automattic\\Jetpack\\Connection\\Secrets->generate, Jetpack_Opti"
+          },
+          {
+            "count": 4,
+            "seconds": 0.0005590915679931641,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 5 LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          },
+          {
+            "count": 3,
+            "seconds": 0.02155590057373047,
+            "sql": "INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_timeout_ppcp-paypal-api-status-cachefailure_registry_seller_status', '1783074824', 'off') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)",
+            "caller": "require_once('wp-admin/admin-header.php'), do_action('admin_enqueue_scripts'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule->WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\Assets\\SettingsPageAssets->register_assets, WooCommerce\\PayPalCommerce\\WcGateway\\Assets\\SettingsPageAssets->register_paypal_admin_assets, WooCommerce\\PayPalCommerce\\ApiClient\\Helper\\ReferenceTransactionStatus->reference_transaction_enabled, WooCommerce\\PayPalCommerce\\ApiClient\\Endpoint\\PartnersEndpoint->seller_status, WooCommerce\\PayPalCommerce\\ApiClient\\Endpoint\\PartnersEndpoint->fetch_seller_status_from_api, WooCommerce\\PayPalCommerce\\ApiClient\\Helper\\FailureRegistry->add_failure, WooCommerce\\PayPalCommerce\\ApiClient\\Helper\\Cache->set, set_transient, add_option"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0005052089691162109,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler_run_recurring_actions_schedule_hook' AND p.post_status IN ('in-progress', 'pending') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler::{closure}, do_action('action_scheduler_init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler_RecurringActionScheduler->schedule_recurring_scheduler_hook, as_has_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0004401206970214844,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler_run_recurring_actions_schedule_hook' AND a.status IN ('in-progress', 'pending') LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler::{closure}, do_action('action_scheduler_init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler_RecurringActionScheduler->schedule_recurring_scheduler_hook, as_has_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.010966062545776367,
+            "sql": "DELETE FROM wp_options WHERE option_name = 'jetpack_secrets'",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Connection\\Manager->register, Automattic\\Jetpack\\Connection\\Manager->delete_all_connection_"
+          },
+          {
+            "count": 2,
+            "seconds": 0.009475946426391602,
+            "sql": "INSERT IGNORE INTO wp_options ( option_name, option_value, autoload ) VALUES ( 'jetpack_secrets', 'a:1:{s:18:\\\"jetpack_register_1\\\";a:3:{s:8:\\\"secret_1\\\";s:32:\\\"jt5S3wcde3hwxaqLdun940YoRQvSIYqH\\\";s:8:\\\"secret_2\\\";s:32:\\\"WCa7YNVAA4jU8985N87jzojnqgTPP2Nv\\\";s:3:\\\"exp\\\";i:1782989022;}}', 'no' )",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Connection\\Manager->register, Automattic\\Jetpack\\Connection\\Secrets->generate, Jetpack_Opti"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0003440380096435547,
+            "sql": "SELECT * FROM wp_wc_admin_notes WHERE note_id = 2 LIMIT 1",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note, Automattic\\WooCommerce\\Admin\\Notes\\Note->__construct, WC_Data_Store->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00031495094299316406,
+            "sql": "SELECT action_id, name, label, query, status, actioned_text, nonce_action, nonce_name FROM wp_wc_admin_note_actions WHERE note_id = 2",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note, Automattic\\WooCommerce\\Admin\\Notes\\Note->__construct, WC_Data_Store->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002949237823486328,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (3) ORDER BY meta_id ASC",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WP_Privacy_Policy_Content::text_change_check, get_post_meta, get_metadata, get_metadata_raw, update_meta_cache"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00028705596923828125,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler/migration_hook' AND a.status IN ('in-progress') ORDER BY a.scheduled_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.000270843505859375,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler/migration_hook' AND p.post_status IN ('in-progress') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00025081634521484375,
+            "sql": "SELECT a.*, g.slug AS `group` FROM wp_actionscheduler_actions a LEFT JOIN wp_actionscheduler_groups g ON a.group_id=g.group_id WHERE a.action_id=5",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_HybridStore->fetch_action, ActionScheduler_HybridStore->get_store_from_action_id, ActionScheduler_DBStore->fetch_action"
+          }
+        ],
+        "timestamp_gmt": "2026-07-02T10:33:44+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "04-admin-payment-settings-paypal-1782988424251-2",
+      "http_code": 200,
+      "total_ms": 1357.433,
+      "ttfb_ms": 1355.5269999999998,
+      "size_download": 224443,
+      "body_bytes": 224443,
+      "url_effective": "http://localhost:8099/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ppcp-gateway",
+      "redirect_url": "",
+      "body_excerpt": "<!DOCTYPE html>\n<html class=\"wp-toolbar\"\n\tlang=\"en-US\">\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n\t<title>WooCommerce setting",
+      "profiler": {
+        "run_id": "04-admin-payment-settings-paypal-1782988424251-2",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ppcp-gateway",
+        "status": 200,
+        "server_ms": 1355.18,
+        "query_count": 268,
+        "query_time_ms": 286.72,
+        "memory_peak_mb": 26,
+        "slow_queries": [
+          {
+            "seconds": 0.1456918716430664,
+            "sql": "SELECT `status`, COUNT(*) AS `count` FROM wp_wc_orders WHERE `type` = 'shop_order' GROUP BY `status`"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 150,
+            "seconds": 0.017848730087280273,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 25,
+            "seconds": 0.0038461685180664062,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_woocommerce_activated_plugin','_transient_timeout_woocommerce_activated_plugin')",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Packages::on_init, Automattic\\WooCommerce\\Packages::initialize_packages, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 10,
+            "seconds": 0.06929564476013184,
+            "sql": "UPDATE `wp_options` SET `option_value` = '1' WHERE `option_name` = 'jetpack_tos_agreed'",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Terms_Of_Service->agree, Automattic\\Jetpack\\Terms_Of_Service->set_agree, Jetpack_Options::u"
+          },
+          {
+            "count": 10,
+            "seconds": 0.002229928970336914,
+            "sql": "SELECT autoload FROM wp_options WHERE option_name = 'jetpack_tos_agreed' LIMIT 1",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Terms_Of_Service->agree, Automattic\\Jetpack\\Terms_Of_Service->set_agree, Jetpack_Options::u"
+          },
+          {
+            "count": 10,
+            "seconds": 0.0013086795806884766,
+            "sql": "SELECT autoload FROM wp_options WHERE option_name = 'jetpack_connection_xmlrpc_errors'",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Connection\\Manager->register, Automattic\\Jetpack\\Connection\\Manager->delete_all_connection_"
+          },
+          {
+            "count": 8,
+            "seconds": 0.0010039806365966797,
+            "sql": "SELECT note_id FROM wp_wc_admin_notes WHERE name = 'ppcp-working-capital-inbox-note' ORDER BY note_id ASC",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->get_notes_with_name"
+          },
+          {
+            "count": 5,
+            "seconds": 0.0009872913360595703,
+            "sql": "SELECT COUNT(*) FROM wp_comments LEFT JOIN wp_posts AS wp_posts_to_exclude_reviews ON comment_post_ID = wp_posts_to_exclude_reviews.ID WHERE ( comment_approved = '1' ) AND comment_type NOT IN ('note') AND comment_type != 'order_note' AND comment_type != 'webhook_delivery' AND comment_type != 'action_log' AND wp_posts_to_exclude_reviews.post_type NOT IN ('product')",
+            "caller": "require('wp-admin/menu.php'), wp_count_comments, apply_filters('wp_count_comments'), WP_Hook->apply_filters, WC_Comments::wp_count_comments, get_comments, WP_Comment_Query->query, WP_Comment_Query->get_comments, WP_Comment_Query->get_comment_ids"
+          },
+          {
+            "count": 4,
+            "seconds": 0.013957977294921875,
+            "sql": "UPDATE wp_options SET option_value = 'a:1:{s:18:\\\"jetpack_register_1\\\";a:3:{s:8:\\\"secret_1\\\";s:32:\\\"lnUWoUSyxD7iWzV4RdUdlEEEUM6PxMKR\\\";s:8:\\\"secret_2\\\";s:32:\\\"OgYsJjkeYl2WTqQmJafEbEjn5c9a3Nle\\\";s:3:\\\"exp\\\";i:1782989024;}}' WHERE option_name = 'jetpack_secrets'",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Connection\\Manager->register, Automattic\\Jetpack\\Connection\\Secrets->generate, Jetpack_Opti"
+          },
+          {
+            "count": 4,
+            "seconds": 0.0005490779876708984,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 5 LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0005047321319580078,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler_run_recurring_actions_schedule_hook' AND p.post_status IN ('in-progress', 'pending') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler::{closure}, do_action('action_scheduler_init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler_RecurringActionScheduler->schedule_recurring_scheduler_hook, as_has_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 3,
+            "seconds": 0.00043582916259765625,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler_run_recurring_actions_schedule_hook' AND a.status IN ('in-progress', 'pending') LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler::{closure}, do_action('action_scheduler_init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler_RecurringActionScheduler->schedule_recurring_scheduler_hook, as_has_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.013797998428344727,
+            "sql": "INSERT IGNORE INTO wp_options ( option_name, option_value, autoload ) VALUES ( 'jetpack_secrets', 'a:1:{s:18:\\\"jetpack_register_1\\\";a:3:{s:8:\\\"secret_1\\\";s:32:\\\"lnUWoUSyxD7iWzV4RdUdlEEEUM6PxMKR\\\";s:8:\\\"secret_2\\\";s:32:\\\"OgYsJjkeYl2WTqQmJafEbEjn5c9a3Nle\\\";s:3:\\\"exp\\\";i:1782989024;}}', 'no' )",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Connection\\Manager->register, Automattic\\Jetpack\\Connection\\Secrets->generate, Jetpack_Opti"
+          },
+          {
+            "count": 2,
+            "seconds": 0.009809255599975586,
+            "sql": "DELETE FROM wp_options WHERE option_name = 'jetpack_secrets'",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Connection\\Manager->register, Automattic\\Jetpack\\Connection\\Manager->delete_all_connection_"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00029587745666503906,
+            "sql": "SELECT * FROM wp_wc_admin_notes WHERE note_id = 2 LIMIT 1",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note, Automattic\\WooCommerce\\Admin\\Notes\\Note->__construct, WC_Data_Store->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002872943878173828,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler/migration_hook' AND a.status IN ('in-progress') ORDER BY a.scheduled_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002770423889160156,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (3) ORDER BY meta_id ASC",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WP_Privacy_Policy_Content::text_change_check, get_post_meta, get_metadata, get_metadata_raw, update_meta_cache"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002741813659667969,
+            "sql": "SELECT action_id, name, label, query, status, actioned_text, nonce_action, nonce_name FROM wp_wc_admin_note_actions WHERE note_id = 2",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note, Automattic\\WooCommerce\\Admin\\Notes\\Note->__construct, WC_Data_Store->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.000270843505859375,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler/migration_hook' AND p.post_status IN ('in-progress') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002529621124267578,
+            "sql": "SELECT a.*, g.slug AS `group` FROM wp_actionscheduler_actions a LEFT JOIN wp_actionscheduler_groups g ON a.group_id=g.group_id WHERE a.action_id=5",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_HybridStore->fetch_action, ActionScheduler_HybridStore->get_store_from_action_id, ActionScheduler_DBStore->fetch_action"
+          },
+          {
+            "count": 1,
+            "seconds": 0.1456918716430664,
+            "sql": "SELECT `status`, COUNT(*) AS `count` FROM wp_wc_orders WHERE `type` = 'shop_order' GROUP BY `status`",
+            "caller": "require('wp-admin/menu.php'), require_once('wp-admin/includes/menu.php'), do_action('admin_menu'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Admin_Menus->menu_order_count, wc_processing_order_count, wc_orders_count, Automattic\\WooCommerce\\Utilities\\OrderUtil::get_count_for_type"
+          }
+        ],
+        "timestamp_gmt": "2026-07-02T10:33:45+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "04-admin-payment-settings-paypal-1782988425616-3",
+      "http_code": 200,
+      "total_ms": 1330.517,
+      "ttfb_ms": 1328.6070000000002,
+      "size_download": 224443,
+      "body_bytes": 224443,
+      "url_effective": "http://localhost:8099/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ppcp-gateway",
+      "redirect_url": "",
+      "body_excerpt": "<!DOCTYPE html>\n<html class=\"wp-toolbar\"\n\tlang=\"en-US\">\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n\t<title>WooCommerce setting",
+      "profiler": {
+        "run_id": "04-admin-payment-settings-paypal-1782988425616-3",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ppcp-gateway",
+        "status": 200,
+        "server_ms": 1328.25,
+        "query_count": 268,
+        "query_time_ms": 282.55,
+        "memory_peak_mb": 26,
+        "slow_queries": [
+          {
+            "seconds": 0.1473371982574463,
+            "sql": "SELECT `status`, COUNT(*) AS `count` FROM wp_wc_orders WHERE `type` = 'shop_order' GROUP BY `status`"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 150,
+            "seconds": 0.018138647079467773,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 25,
+            "seconds": 0.003837108612060547,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_woocommerce_activated_plugin','_transient_timeout_woocommerce_activated_plugin')",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Packages::on_init, Automattic\\WooCommerce\\Packages::initialize_packages, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 10,
+            "seconds": 0.06486201286315918,
+            "sql": "UPDATE `wp_options` SET `option_value` = '1' WHERE `option_name` = 'jetpack_tos_agreed'",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Terms_Of_Service->agree, Automattic\\Jetpack\\Terms_Of_Service->set_agree, Jetpack_Options::u"
+          },
+          {
+            "count": 10,
+            "seconds": 0.0021965503692626953,
+            "sql": "SELECT autoload FROM wp_options WHERE option_name = 'jetpack_tos_agreed' LIMIT 1",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Terms_Of_Service->agree, Automattic\\Jetpack\\Terms_Of_Service->set_agree, Jetpack_Options::u"
+          },
+          {
+            "count": 10,
+            "seconds": 0.0013043880462646484,
+            "sql": "SELECT autoload FROM wp_options WHERE option_name = 'jetpack_connection_xmlrpc_errors'",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Connection\\Manager->register, Automattic\\Jetpack\\Connection\\Manager->delete_all_connection_"
+          },
+          {
+            "count": 8,
+            "seconds": 0.0010528564453125,
+            "sql": "SELECT note_id FROM wp_wc_admin_notes WHERE name = 'ppcp-working-capital-inbox-note' ORDER BY note_id ASC",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->get_notes_with_name"
+          },
+          {
+            "count": 5,
+            "seconds": 0.001074075698852539,
+            "sql": "SELECT COUNT(*) FROM wp_comments LEFT JOIN wp_posts AS wp_posts_to_exclude_reviews ON comment_post_ID = wp_posts_to_exclude_reviews.ID WHERE ( comment_approved = '1' ) AND comment_type NOT IN ('note') AND comment_type != 'order_note' AND comment_type != 'webhook_delivery' AND comment_type != 'action_log' AND wp_posts_to_exclude_reviews.post_type NOT IN ('product')",
+            "caller": "require('wp-admin/menu.php'), wp_count_comments, apply_filters('wp_count_comments'), WP_Hook->apply_filters, WC_Comments::wp_count_comments, get_comments, WP_Comment_Query->query, WP_Comment_Query->get_comments, WP_Comment_Query->get_comment_ids"
+          },
+          {
+            "count": 4,
+            "seconds": 0.012052059173583984,
+            "sql": "UPDATE wp_options SET option_value = 'a:1:{s:18:\\\"jetpack_register_1\\\";a:3:{s:8:\\\"secret_1\\\";s:32:\\\"NJi13ZOoGOlNBdbfJIQRE9LoDDNItXGM\\\";s:8:\\\"secret_2\\\";s:32:\\\"EWeGdXVm89ELoK7SxpWjLhCii5877DfJ\\\";s:3:\\\"exp\\\";i:1782989025;}}' WHERE option_name = 'jetpack_secrets'",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Connection\\Manager->register, Automattic\\Jetpack\\Connection\\Secrets->generate, Jetpack_Opti"
+          },
+          {
+            "count": 4,
+            "seconds": 0.0005817413330078125,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 5 LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0005450248718261719,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler_run_recurring_actions_schedule_hook' AND p.post_status IN ('in-progress', 'pending') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler::{closure}, do_action('action_scheduler_init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler_RecurringActionScheduler->schedule_recurring_scheduler_hook, as_has_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0004417896270751953,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler_run_recurring_actions_schedule_hook' AND a.status IN ('in-progress', 'pending') LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler::{closure}, do_action('action_scheduler_init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler_RecurringActionScheduler->schedule_recurring_scheduler_hook, as_has_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.01251983642578125,
+            "sql": "DELETE FROM wp_options WHERE option_name = 'jetpack_secrets'",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Connection\\Manager->register, Automattic\\Jetpack\\Connection\\Manager->delete_all_connection_"
+          },
+          {
+            "count": 2,
+            "seconds": 0.01031494140625,
+            "sql": "INSERT IGNORE INTO wp_options ( option_name, option_value, autoload ) VALUES ( 'jetpack_secrets', 'a:1:{s:18:\\\"jetpack_register_1\\\";a:3:{s:8:\\\"secret_1\\\";s:32:\\\"NJi13ZOoGOlNBdbfJIQRE9LoDDNItXGM\\\";s:8:\\\"secret_2\\\";s:32:\\\"EWeGdXVm89ELoK7SxpWjLhCii5877DfJ\\\";s:3:\\\"exp\\\";i:1782989025;}}', 'no' )",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Connection\\Manager->register, Automattic\\Jetpack\\Connection\\Secrets->generate, Jetpack_Opti"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00041604042053222656,
+            "sql": "SELECT a.*, g.slug AS `group` FROM wp_actionscheduler_actions a LEFT JOIN wp_actionscheduler_groups g ON a.group_id=g.group_id WHERE a.action_id=5",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_HybridStore->fetch_action, ActionScheduler_HybridStore->get_store_from_action_id, ActionScheduler_DBStore->fetch_action"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0003769397735595703,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler/migration_hook' AND p.post_status IN ('in-progress') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0003418922424316406,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler/migration_hook' AND a.status IN ('in-progress') ORDER BY a.scheduled_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0003352165222167969,
+            "sql": "SELECT action_id, name, label, query, status, actioned_text, nonce_action, nonce_name FROM wp_wc_admin_note_actions WHERE note_id = 2",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note, Automattic\\WooCommerce\\Admin\\Notes\\Note->__construct, WC_Data_Store->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002739429473876953,
+            "sql": "SELECT * FROM wp_wc_admin_notes WHERE note_id = 2 LIMIT 1",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note, Automattic\\WooCommerce\\Admin\\Notes\\Note->__construct, WC_Data_Store->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00026988983154296875,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (3) ORDER BY meta_id ASC",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WP_Privacy_Policy_Content::text_change_check, get_post_meta, get_metadata, get_metadata_raw, update_meta_cache"
+          },
+          {
+            "count": 1,
+            "seconds": 0.1473371982574463,
+            "sql": "SELECT `status`, COUNT(*) AS `count` FROM wp_wc_orders WHERE `type` = 'shop_order' GROUP BY `status`",
+            "caller": "require('wp-admin/menu.php'), require_once('wp-admin/includes/menu.php'), do_action('admin_menu'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Admin_Menus->menu_order_count, wc_processing_order_count, wc_orders_count, Automattic\\WooCommerce\\Utilities\\OrderUtil::get_count_for_type"
+          }
+        ],
+        "timestamp_gmt": "2026-07-02T10:33:46+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "04-admin-payment-settings-paypal-1782988426954-4",
+      "http_code": 200,
+      "total_ms": 1318.792,
+      "ttfb_ms": 1316.971,
+      "size_download": 224443,
+      "body_bytes": 224443,
+      "url_effective": "http://localhost:8099/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ppcp-gateway",
+      "redirect_url": "",
+      "body_excerpt": "<!DOCTYPE html>\n<html class=\"wp-toolbar\"\n\tlang=\"en-US\">\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n\t<title>WooCommerce setting",
+      "profiler": {
+        "run_id": "04-admin-payment-settings-paypal-1782988426954-4",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ppcp-gateway",
+        "status": 200,
+        "server_ms": 1316.67,
+        "query_count": 268,
+        "query_time_ms": 270.73,
+        "memory_peak_mb": 26,
+        "slow_queries": [
+          {
+            "seconds": 0.14738893508911133,
+            "sql": "SELECT `status`, COUNT(*) AS `count` FROM wp_wc_orders WHERE `type` = 'shop_order' GROUP BY `status`"
+          },
+          {
+            "seconds": 0.021893978118896484,
+            "sql": "UPDATE `wp_options` SET `option_value` = 'a:0:{}' WHERE `option_name` = 'jetpack_options'"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 150,
+            "seconds": 0.018227815628051758,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 25,
+            "seconds": 0.0036716461181640625,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_woocommerce_activated_plugin','_transient_timeout_woocommerce_activated_plugin')",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Packages::on_init, Automattic\\WooCommerce\\Packages::initialize_packages, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 10,
+            "seconds": 0.06177473068237305,
+            "sql": "UPDATE `wp_options` SET `option_value` = '1' WHERE `option_name` = 'jetpack_tos_agreed'",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Terms_Of_Service->agree, Automattic\\Jetpack\\Terms_Of_Service->set_agree, Jetpack_Options::u"
+          },
+          {
+            "count": 10,
+            "seconds": 0.0019443035125732422,
+            "sql": "SELECT autoload FROM wp_options WHERE option_name = 'jetpack_tos_agreed' LIMIT 1",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Terms_Of_Service->agree, Automattic\\Jetpack\\Terms_Of_Service->set_agree, Jetpack_Options::u"
+          },
+          {
+            "count": 10,
+            "seconds": 0.0010330677032470703,
+            "sql": "SELECT autoload FROM wp_options WHERE option_name = 'jetpack_connection_xmlrpc_errors'",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Connection\\Manager->register, Automattic\\Jetpack\\Connection\\Manager->delete_all_connection_"
+          },
+          {
+            "count": 8,
+            "seconds": 0.0009388923645019531,
+            "sql": "SELECT note_id FROM wp_wc_admin_notes WHERE name = 'ppcp-working-capital-inbox-note' ORDER BY note_id ASC",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->get_notes_with_name"
+          },
+          {
+            "count": 5,
+            "seconds": 0.0010581016540527344,
+            "sql": "SELECT COUNT(*) FROM wp_comments LEFT JOIN wp_posts AS wp_posts_to_exclude_reviews ON comment_post_ID = wp_posts_to_exclude_reviews.ID WHERE ( comment_approved = '1' ) AND comment_type NOT IN ('note') AND comment_type != 'order_note' AND comment_type != 'webhook_delivery' AND comment_type != 'action_log' AND wp_posts_to_exclude_reviews.post_type NOT IN ('product')",
+            "caller": "require('wp-admin/menu.php'), wp_count_comments, apply_filters('wp_count_comments'), WP_Hook->apply_filters, WC_Comments::wp_count_comments, get_comments, WP_Comment_Query->query, WP_Comment_Query->get_comments, WP_Comment_Query->get_comment_ids"
+          },
+          {
+            "count": 4,
+            "seconds": 0.009416818618774414,
+            "sql": "UPDATE wp_options SET option_value = 'a:1:{s:18:\\\"jetpack_register_1\\\";a:3:{s:8:\\\"secret_1\\\";s:32:\\\"m8R1nNuUWxmuoNQzlm2vJfqtqz5u4kjv\\\";s:8:\\\"secret_2\\\";s:32:\\\"7LVDpdtdN8HYagivAK1lJn8wTQXToFf5\\\";s:3:\\\"exp\\\";i:1782989027;}}' WHERE option_name = 'jetpack_secrets'",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Connection\\Manager->register, Automattic\\Jetpack\\Connection\\Secrets->generate, Jetpack_Opti"
+          },
+          {
+            "count": 4,
+            "seconds": 0.0005381107330322266,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 5 LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0005490779876708984,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler_run_recurring_actions_schedule_hook' AND p.post_status IN ('in-progress', 'pending') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler::{closure}, do_action('action_scheduler_init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler_RecurringActionScheduler->schedule_recurring_scheduler_hook, as_has_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0004420280456542969,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler_run_recurring_actions_schedule_hook' AND a.status IN ('in-progress', 'pending') LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler::{closure}, do_action('action_scheduler_init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler_RecurringActionScheduler->schedule_recurring_scheduler_hook, as_has_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.009114265441894531,
+            "sql": "DELETE FROM wp_options WHERE option_name = 'jetpack_secrets'",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Connection\\Manager->register, Automattic\\Jetpack\\Connection\\Manager->delete_all_connection_"
+          },
+          {
+            "count": 2,
+            "seconds": 0.008840084075927734,
+            "sql": "INSERT IGNORE INTO wp_options ( option_name, option_value, autoload ) VALUES ( 'jetpack_secrets', 'a:1:{s:18:\\\"jetpack_register_1\\\";a:3:{s:8:\\\"secret_1\\\";s:32:\\\"m8R1nNuUWxmuoNQzlm2vJfqtqz5u4kjv\\\";s:8:\\\"secret_2\\\";s:32:\\\"7LVDpdtdN8HYagivAK1lJn8wTQXToFf5\\\";s:3:\\\"exp\\\";i:1782989027;}}', 'no' )",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Connection\\Manager->register, Automattic\\Jetpack\\Connection\\Secrets->generate, Jetpack_Opti"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00039505958557128906,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler/migration_hook' AND a.status IN ('in-progress') ORDER BY a.scheduled_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0003228187561035156,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler/migration_hook' AND p.post_status IN ('in-progress') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00028586387634277344,
+            "sql": "SELECT * FROM wp_wc_admin_notes WHERE note_id = 2 LIMIT 1",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note, Automattic\\WooCommerce\\Admin\\Notes\\Note->__construct, WC_Data_Store->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00028014183044433594,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (3) ORDER BY meta_id ASC",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WP_Privacy_Policy_Content::text_change_check, get_post_meta, get_metadata, get_metadata_raw, update_meta_cache"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00026869773864746094,
+            "sql": "SELECT action_id, name, label, query, status, actioned_text, nonce_action, nonce_name FROM wp_wc_admin_note_actions WHERE note_id = 2",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note, Automattic\\WooCommerce\\Admin\\Notes\\Note->__construct, WC_Data_Store->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002682209014892578,
+            "sql": "SELECT a.*, g.slug AS `group` FROM wp_actionscheduler_actions a LEFT JOIN wp_actionscheduler_groups g ON a.group_id=g.group_id WHERE a.action_id=5",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_HybridStore->fetch_action, ActionScheduler_HybridStore->get_store_from_action_id, ActionScheduler_DBStore->fetch_action"
+          },
+          {
+            "count": 1,
+            "seconds": 0.14738893508911133,
+            "sql": "SELECT `status`, COUNT(*) AS `count` FROM wp_wc_orders WHERE `type` = 'shop_order' GROUP BY `status`",
+            "caller": "require('wp-admin/menu.php'), require_once('wp-admin/includes/menu.php'), do_action('admin_menu'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Admin_Menus->menu_order_count, wc_processing_order_count, wc_orders_count, Automattic\\WooCommerce\\Utilities\\OrderUtil::get_count_for_type"
+          }
+        ],
+        "timestamp_gmt": "2026-07-02T10:33:48+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "04-admin-payment-settings-paypal-1782988428279-5",
+      "http_code": 200,
+      "total_ms": 1582.4769999999999,
+      "ttfb_ms": 1580.707,
+      "size_download": 224443,
+      "body_bytes": 224443,
+      "url_effective": "http://localhost:8099/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ppcp-gateway",
+      "redirect_url": "",
+      "body_excerpt": "<!DOCTYPE html>\n<html class=\"wp-toolbar\"\n\tlang=\"en-US\">\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n\t<title>WooCommerce setting",
+      "profiler": {
+        "run_id": "04-admin-payment-settings-paypal-1782988428279-5",
+        "method": "GET",
+        "uri": "/wp-admin/admin.php?page=wc-settings&tab=checkout&section=ppcp-gateway",
+        "status": 200,
+        "server_ms": 1580.38,
+        "query_count": 268,
+        "query_time_ms": 256.84,
+        "memory_peak_mb": 26,
+        "slow_queries": [
+          {
+            "seconds": 0.14570093154907227,
+            "sql": "SELECT `status`, COUNT(*) AS `count` FROM wp_wc_orders WHERE `type` = 'shop_order' GROUP BY `status`"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 150,
+            "seconds": 0.017925739288330078,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 25,
+            "seconds": 0.003736734390258789,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_woocommerce_activated_plugin','_transient_timeout_woocommerce_activated_plugin')",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Packages::on_init, Automattic\\WooCommerce\\Packages::initialize_packages, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 10,
+            "seconds": 0.048777103424072266,
+            "sql": "UPDATE `wp_options` SET `option_value` = '1' WHERE `option_name` = 'jetpack_tos_agreed'",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Terms_Of_Service->agree, Automattic\\Jetpack\\Terms_Of_Service->set_agree, Jetpack_Options::u"
+          },
+          {
+            "count": 10,
+            "seconds": 0.002094268798828125,
+            "sql": "SELECT autoload FROM wp_options WHERE option_name = 'jetpack_tos_agreed' LIMIT 1",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Terms_Of_Service->agree, Automattic\\Jetpack\\Terms_Of_Service->set_agree, Jetpack_Options::u"
+          },
+          {
+            "count": 10,
+            "seconds": 0.0011112689971923828,
+            "sql": "SELECT autoload FROM wp_options WHERE option_name = 'jetpack_connection_xmlrpc_errors'",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Connection\\Manager->register, Automattic\\Jetpack\\Connection\\Manager->delete_all_connection_"
+          },
+          {
+            "count": 8,
+            "seconds": 0.0013158321380615234,
+            "sql": "SELECT note_id FROM wp_wc_admin_notes WHERE name = 'ppcp-working-capital-inbox-note' ORDER BY note_id ASC",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, WC_Data_Store->__call, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->get_notes_with_name"
+          },
+          {
+            "count": 5,
+            "seconds": 0.0010139942169189453,
+            "sql": "SELECT COUNT(*) FROM wp_comments LEFT JOIN wp_posts AS wp_posts_to_exclude_reviews ON comment_post_ID = wp_posts_to_exclude_reviews.ID WHERE ( comment_approved = '1' ) AND comment_type NOT IN ('note') AND comment_type != 'order_note' AND comment_type != 'webhook_delivery' AND comment_type != 'action_log' AND wp_posts_to_exclude_reviews.post_type NOT IN ('product')",
+            "caller": "require('wp-admin/menu.php'), wp_count_comments, apply_filters('wp_count_comments'), WP_Hook->apply_filters, WC_Comments::wp_count_comments, get_comments, WP_Comment_Query->query, WP_Comment_Query->get_comments, WP_Comment_Query->get_comment_ids"
+          },
+          {
+            "count": 4,
+            "seconds": 0.009589672088623047,
+            "sql": "UPDATE wp_options SET option_value = 'a:1:{s:18:\\\"jetpack_register_1\\\";a:3:{s:8:\\\"secret_1\\\";s:32:\\\"CcwSUpwgH2i3IzKHdvfs2RTD4oU6lac9\\\";s:8:\\\"secret_2\\\";s:32:\\\"rEl0urEFQ4cOQT6uSnkNpmLUQ7AQyOCR\\\";s:3:\\\"exp\\\";i:1782989028;}}' WHERE option_name = 'jetpack_secrets'",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Connection\\Manager->register, Automattic\\Jetpack\\Connection\\Secrets->generate, Jetpack_Opti"
+          },
+          {
+            "count": 4,
+            "seconds": 0.0005409717559814453,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 5 LIMIT 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0005481243133544922,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler_run_recurring_actions_schedule_hook' AND p.post_status IN ('in-progress', 'pending') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler::{closure}, do_action('action_scheduler_init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler_RecurringActionScheduler->schedule_recurring_scheduler_hook, as_has_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0004420280456542969,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler_run_recurring_actions_schedule_hook' AND a.status IN ('in-progress', 'pending') LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler::{closure}, do_action('action_scheduler_init'), WP_Hook->do_action, WP_Hook->apply_filters, ActionScheduler_RecurringActionScheduler->schedule_recurring_scheduler_hook, as_has_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00938272476196289,
+            "sql": "INSERT IGNORE INTO wp_options ( option_name, option_value, autoload ) VALUES ( 'jetpack_secrets', 'a:1:{s:18:\\\"jetpack_register_1\\\";a:3:{s:8:\\\"secret_1\\\";s:32:\\\"CcwSUpwgH2i3IzKHdvfs2RTD4oU6lac9\\\";s:8:\\\"secret_2\\\";s:32:\\\"rEl0urEFQ4cOQT6uSnkNpmLUQ7AQyOCR\\\";s:3:\\\"exp\\\";i:1782989028;}}', 'no' )",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Connection\\Manager->register, Automattic\\Jetpack\\Connection\\Secrets->generate, Jetpack_Opti"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00879216194152832,
+            "sql": "DELETE FROM wp_options WHERE option_name = 'jetpack_secrets'",
+            "caller": "set_current_screen, WP_Screen->set_current_screen, do_action('current_screen'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingHelper->add_help_tab, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskList->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_complete, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->is_woopayments_onboarded, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_woopayments_provider, Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments->get_payments_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Payments->get_payment_providers, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->remove_shell_payment_gateways, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->group_gateways_by_extension, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders->get_payment_gateway_base_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments->get_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_details, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_onboarding_steps, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\PaymentsProviders\\WooPayments\\WooPaymentsService->get_wpcom_connection_authorization, Automattic\\WooCommerce\\Proxies\\LegacyProxy->call_static, call_user_func_array, Automattic\\WooCommerce\\Internal\\Admin\\Settings\\Utils::get_wpcom_connection_authorization, Automattic\\WooCommerce\\Internal\\Jetpack\\JetpackConnection::get_authorization_url, Automattic\\Jetpack\\Connection\\Manager->try_registration, Automattic\\Jetpack\\Connection\\Manager->register, Automattic\\Jetpack\\Connection\\Manager->delete_all_connection_"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00029921531677246094,
+            "sql": "SELECT action_id, name, label, query, status, actioned_text, nonce_action, nonce_name FROM wp_wc_admin_note_actions WHERE note_id = 2",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note, Automattic\\WooCommerce\\Admin\\Notes\\Note->__construct, WC_Data_Store->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002899169921875,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (3) ORDER BY meta_id ASC",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WP_Privacy_Policy_Content::text_change_check, get_post_meta, get_metadata, get_metadata_raw, update_meta_cache"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002892017364501953,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler/migration_hook' AND p.post_status IN ('in-progress') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00028204917907714844,
+            "sql": "SELECT * FROM wp_wc_admin_notes WHERE note_id = 2 LIMIT 1",
+            "caller": "do_action('admin_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\WcGateway\\WCGatewayModule::WooCommerce\\PayPalCommerce\\WcGateway\\{closure}, WooCommerce\\PayPalCommerce\\WcGateway\\WcInboxNotes\\InboxNoteRegistrar->register, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note_by_name, Automattic\\WooCommerce\\Admin\\Notes\\Notes::get_note, Automattic\\WooCommerce\\Admin\\Notes\\Note->__construct, WC_Data_Store->read, Automattic\\WooCommerce\\Admin\\Notes\\DataStore->read"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002620220184326172,
+            "sql": "SELECT a.*, g.slug AS `group` FROM wp_actionscheduler_actions a LEFT JOIN wp_actionscheduler_groups g ON a.group_id=g.group_id WHERE a.action_id=5",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_HybridStore->fetch_action, ActionScheduler_HybridStore->get_store_from_action_id, ActionScheduler_DBStore->fetch_action"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00026106834411621094,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler/migration_hook' AND a.status IN ('in-progress') ORDER BY a.scheduled_date_gmt ASC LIMIT 0, 1",
+            "caller": "require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 1,
+            "seconds": 0.14570093154907227,
+            "sql": "SELECT `status`, COUNT(*) AS `count` FROM wp_wc_orders WHERE `type` = 'shop_order' GROUP BY `status`",
+            "caller": "require('wp-admin/menu.php'), require_once('wp-admin/includes/menu.php'), do_action('admin_menu'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Admin_Menus->menu_order_count, wc_processing_order_count, wc_orders_count, Automattic\\WooCommerce\\Utilities\\OrderUtil::get_count_for_type"
+          }
+        ],
+        "timestamp_gmt": "2026-07-02T10:33:49+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    }
+  ],
+  "environment": {
+    "active_plugins": [
+      "woocommerce-gateway-stripe/woocommerce-gateway-stripe.php",
+      "woocommerce-payments/woocommerce-payments.php",
+      "woocommerce-paypal-payments/woocommerce-paypal-payments.php",
+      "woocommerce/woocommerce.php"
+    ],
+    "woocommerce": "10.9.1",
+    "wordpress": "7.0",
+    "php": "8.3.31"
+  },
+  "measured_at_gmt": "2026-07-02T10:33:49.869Z"
+}

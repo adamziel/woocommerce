@@ -1,0 +1,1291 @@
+{
+  "scenario": {
+    "id": "01-core-shipping-tax-cart-update",
+    "rank": 1,
+    "title": "Core Shipping/Tax Cart Totals: 8000 postcode shipping zones and 12000 postcode tax ranges",
+    "codePath": "/wp-json/wc/store/v1/cart/update-customer",
+    "trigger": "Fresh Store API cart with one taxable shippable product, then customer address update to US/CA/94105. This isolates cart totals, shipping-zone postcode matching, flat-rate taxable shipping, and tax-rate postcode matching without checkout order writes.",
+    "request": {
+      "method": "POST",
+      "path": "/wp-json/wc/store/v1/cart/update-customer",
+      "headers": [
+        "Content-Type: application/json"
+      ]
+    },
+    "iterations": 8
+  },
+  "request": {
+    "method": "POST",
+    "path": "/wp-json/wc/store/v1/cart/update-customer",
+    "headers": [
+      "Content-Type: application/json"
+    ]
+  },
+  "summary": {
+    "requests": 8,
+    "http_codes": [
+      200
+    ],
+    "http_code_counts": {
+      "200": 8
+    },
+    "success_rate": 1,
+    "total_ms": {
+      "min": 117.706,
+      "median": 122.818,
+      "p95": 133.356,
+      "max": 133.356
+    },
+    "server_ms": {
+      "min": 106.64,
+      "median": 108.05,
+      "p95": 113.31,
+      "max": 113.31
+    },
+    "query_count": {
+      "median": 126,
+      "p95": 126,
+      "max": 126
+    },
+    "query_time_ms": {
+      "median": 56.96,
+      "p95": 59.11,
+      "max": 59.11
+    },
+    "memory_peak_mb": {
+      "median": 26,
+      "p95": 26,
+      "max": 26
+    }
+  },
+  "samples": [
+    {
+      "run_id": "01-core-shipping-tax-cart-update-1782988326368-1",
+      "http_code": 200,
+      "total_ms": 122.818,
+      "ttfb_ms": 122.71700000000001,
+      "size_download": 3150,
+      "body_bytes": 3150,
+      "profiler": {
+        "run_id": "01-core-shipping-tax-cart-update-1782988326368-1",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/cart/update-customer",
+        "status": 200,
+        "server_ms": 111.24,
+        "query_count": 126,
+        "query_time_ms": 56.76,
+        "memory_peak_mb": 26,
+        "slow_queries": [
+          {
+            "seconds": 0.024039030075073242,
+            "sql": "SELECT tax_rates.*, COUNT( locations.location_id ) as postcode_count, COUNT( locations2.location_id ) as city_count FROM wp_woocommerce_tax_rates as tax_rates LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations ON tax_rates.tax_rate_id = locations.tax_rate_id LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations2 ON tax_rates.tax_rate_id = locations2.tax_rate_id WHERE 1=1 AND tax_rate_country IN ( 'US', '' ) AND tax_rate_state IN ( 'CA', '' ) AND tax_rate_class = '' AND ( ( locations.location_type IS NULL ) OR ( locations.location_type = 'postcode' AND locations.location_code IN ('94105','94105*','9410*','941*','94*','9*','*','94100...94199') AND ( ( locations2.location_type = 'city' AND locations2.location_code = 'PERF CITY' ) OR NOT EXISTS ( SELECT sub.tax_rate_id FROM wp_woocommerce_tax_rate_locations as sub WHERE sub.location_type = 'city' AND sub.tax_rate_id = ta"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 82,
+            "seconds": 0.008835792541503906,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 9,
+            "seconds": 0.0014905929565429688,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_wcpay_currency_format','_transient_timeout_wcpay_currency_format')",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, wcpay_init, WC_Payments::init, WC_Payments_Localization_Service->__construct, WC_Payments_Localization_Service->load_locale_data, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0006999969482421875,
+            "sql": "SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 200929 AND stock_table.`order_id` != 0",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->normalize_cart, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->normalize_cart_item_quantity, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->get_cart_item_quantity_limits, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->get_add_to_cart_limits, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->adjust_product_quantity_limit, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->get_remaining_stock, Automattic\\WooCommerce\\Checkout\\Helpers\\ReserveStock->get_reserved_stock"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002899169921875,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler/migration_hook' AND p.post_status IN ('in-progress') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002789497375488281,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler/migration_hook' AND a.status IN ('in-progress') ORDER BY a.scheduled_date_gmt ASC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002760887145996094,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 5 LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          },
+          {
+            "count": 2,
+            "seconds": 0.000244140625,
+            "sql": "SELECT a.*, g.slug AS `group` FROM wp_actionscheduler_actions a LEFT JOIN wp_actionscheduler_groups g ON a.group_id=g.group_id WHERE a.action_id=5",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_HybridStore->fetch_action, ActionScheduler_HybridStore->get_store_from_action_id, ActionScheduler_DBStore->fetch_action"
+          },
+          {
+            "count": 1,
+            "seconds": 0.024039030075073242,
+            "sql": "SELECT tax_rates.*, COUNT( locations.location_id ) as postcode_count, COUNT( locations2.location_id ) as city_count FROM wp_woocommerce_tax_rates as tax_rates LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations ON tax_rates.tax_rate_id = locations.tax_rate_id LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations2 ON tax_rates.tax_rate_id = locations2.tax_rate_id WHERE 1=1 AND tax_rate_country IN ( 'US', '' ) AND tax_rate_state IN ( 'CA', '' ) AND tax_rate_class = '' AND ( ( l",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_rates_from_location, WC_Tax::find_rates, WC_Tax::get_matched_tax_rates"
+          },
+          {
+            "count": 1,
+            "seconds": 0.009509086608886719,
+            "sql": "SELECT tax_rate_id, location_code FROM wp_woocommerce_tax_rate_locations WHERE location_type = 'postcode' AND location_code LIKE '%...%';",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_rates_from_location, WC_Tax::find_rates, WC_Tax::get_matched_tax_rates"
+          },
+          {
+            "count": 1,
+            "seconds": 0.004943132400512695,
+            "sql": "SELECT zone_id, location_code FROM wp_woocommerce_shipping_zone_locations WHERE location_type = 'postcode';",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_shipping_totals, WC_Cart_Totals->get_shipping_from_cart, WC_Cart->calculate_shipping, WC_Shipping->calculate_shipping, WC_Shipping->calculate_shipping_for_package, WC_Shipping->load_shipping_methods, WC_Shipping_Zones::get_zone_matching_package, WC_Data_Store->__call, WC_Shipping_Zone_Data_Store->get_zone_id_from_package"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0026340484619140625,
+            "sql": "SELECT zones.zone_id FROM wp_woocommerce_shipping_zones as zones LEFT OUTER JOIN wp_woocommerce_shipping_zone_locations as locations ON zones.zone_id = locations.zone_id AND location_type != 'postcode' WHERE ( ( location_type = 'country' AND location_code = 'US' ) OR ( location_type = 'state' AND location_code = 'US:CA' ) OR ( location_type = 'continent' AND location_code = 'NA' ) OR ( location_type IS NULL ) ) AND zones.zone_id NOT IN (1502,1503,1504,1505,1506,1507,1508,1509,1510,1511,1512,1513",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_shipping_totals, WC_Cart_Totals->get_shipping_from_cart, WC_Cart->calculate_shipping, WC_Shipping->calculate_shipping, WC_Shipping->calculate_shipping_for_package, WC_Shipping->load_shipping_methods, WC_Shipping_Zones::get_zone_matching_package, WC_Data_Store->__call, WC_Shipping_Zone_Data_Store->get_zone_id_from_package"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0006210803985595703,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE autoload IN ( 'yes', 'on', 'auto-on', 'auto' )",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), wp_not_installed, is_blog_installed, wp_load_alloptions"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0003631114959716797,
+            "sql": "SELECT DISTINCT t.term_id, tr.object_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id INNER JOIN wp_term_relationships AS tr ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE tt.taxonomy IN ('product_brand', 'product_type', 'product_visibility', 'product_cat', 'product_tag', 'product_shipping_class', 'pos_product_visibility', 'pa_path_color', 'pa_path_size', 'pa_size') AND tr.object_id IN (200929) ORDER BY t.name ASC",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches, update_object_term_cache, wp_get_object_terms, get_terms, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00024008750915527344,
+            "sql": "SELECT EXISTS( SELECT 1 FROM wp_wc_orders_meta WHERE meta_key = '_wcpay_multi_currency_order_exchange_rate' LIMIT 1) AS count;",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WCPay\\MultiCurrency\\MultiCurrency->init, WCPay\\MultiCurrency\\Analytics->__construct, WCPay\\MultiCurrency\\Analytics->init, WCPay\\MultiCurrency\\Analytics->has_multi_currency_orders"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00023412704467773438,
+            "sql": "SELECT t.*, tt.* FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE t.term_id IN (2,15)",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches, update_object_term_cache, wp_get_object_terms, get_terms, WP_Term_Query->query, WP_Term_Query->get_terms, _prime_term_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00017690658569335938,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (200929) ORDER BY meta_id ASC",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches, update_postmeta_cache, update_meta_cache"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00016307830810546875,
+            "sql": "SELECT t.term_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('wp_theme') AND t.name IN ('woocommerce', 'woocommerce/woocommerce', 'twentytwentyfive') LIMIT 3",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_tax_location, WC_Customer->get_taxable_address, apply_filters('woocommerce_customer_taxable_address'), WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Shipping\\ShippingController->filter_taxable_address, Automattic\\WooCommerce\\StoreApi\\Utilities\\LocalPickupUtils::get_local_pickup_method_ids, WC_Shipping->get_shipping_methods, WC_Shipping->load_shipping_methods, do_action('woocommerce_load_shipping_methods'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Shipping\\ShippingController->register_local_pickup, Automattic\\WooCommerce\\Blocks\\Utils\\CartCheckoutUtils::is_checkout_block_default, Automattic\\WooCommerce\\Blocks\\Utils\\BlockTemplateUtils::get_block_templates_from_db, WP_Query->__construct, WP_Query->query, WP_Query->get_posts, WP_Tax_Query->get_sql, WP_Tax_Query->get_sql_clauses, WP_Tax_Query->get_sql_for_query, WP_Tax_Query->get_sql_for_clause, WP_Tax_Query->clean_query, WP_Tax_Query->transform_query, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001590251922607422,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('woocommerce_new_order_settings','woocommerce_cancelled_order_settings','woocommerce_customer_cancelled_order_settings','woocommerce_failed_order_settings','woocommerce_customer_failed_order_settings','woocommerce_customer_on_hold_order_settings','woocommerce_customer_processing_order_settings','woocommerce_customer_completed_order_settings','woocommerce_customer_refunded_order_settings','woocommerce_customer_invoice_settings",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce->register_wp_admin_settings, WC_Emails::instance, WC_Emails->__construct, WC_Emails->init, wp_prime_option_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00014400482177734375,
+            "sql": "SELECT method_id, method_order, instance_id, is_enabled FROM wp_woocommerce_shipping_zone_methods WHERE zone_id = 9501 AND is_enabled = 1",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_shipping_totals, WC_Cart_Totals->get_shipping_from_cart, WC_Cart->calculate_shipping, WC_Shipping->calculate_shipping, WC_Shipping->calculate_shipping_for_package, WC_Shipping->load_shipping_methods, WC_Shipping_Zone->get_shipping_methods, WC_Data_Store->__call, WC_Shipping_Zone_Data_Store->get_methods"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001418590545654297,
+            "sql": "SELECT wp_posts.* FROM wp_posts WHERE ID IN (200929)",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches"
+          }
+        ],
+        "timestamp_gmt": "2026-07-02T10:32:06+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-core-shipping-tax-cart-update-1782988326688-2",
+      "http_code": 200,
+      "total_ms": 126.07099999999998,
+      "ttfb_ms": 125.99099999999999,
+      "size_download": 3150,
+      "body_bytes": 3150,
+      "profiler": {
+        "run_id": "01-core-shipping-tax-cart-update-1782988326688-2",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/cart/update-customer",
+        "status": 200,
+        "server_ms": 110.67,
+        "query_count": 126,
+        "query_time_ms": 58.42,
+        "memory_peak_mb": 26,
+        "slow_queries": [
+          {
+            "seconds": 0.024708986282348633,
+            "sql": "SELECT tax_rates.*, COUNT( locations.location_id ) as postcode_count, COUNT( locations2.location_id ) as city_count FROM wp_woocommerce_tax_rates as tax_rates LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations ON tax_rates.tax_rate_id = locations.tax_rate_id LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations2 ON tax_rates.tax_rate_id = locations2.tax_rate_id WHERE 1=1 AND tax_rate_country IN ( 'US', '' ) AND tax_rate_state IN ( 'CA', '' ) AND tax_rate_class = '' AND ( ( locations.location_type IS NULL ) OR ( locations.location_type = 'postcode' AND locations.location_code IN ('94105','94105*','9410*','941*','94*','9*','*','94100...94199') AND ( ( locations2.location_type = 'city' AND locations2.location_code = 'PERF CITY' ) OR NOT EXISTS ( SELECT sub.tax_rate_id FROM wp_woocommerce_tax_rate_locations as sub WHERE sub.location_type = 'city' AND sub.tax_rate_id = ta"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 82,
+            "seconds": 0.008801937103271484,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 9,
+            "seconds": 0.0015940666198730469,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_wcpay_currency_format','_transient_timeout_wcpay_currency_format')",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, wcpay_init, WC_Payments::init, WC_Payments_Localization_Service->__construct, WC_Payments_Localization_Service->load_locale_data, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0006999969482421875,
+            "sql": "SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 200929 AND stock_table.`order_id` != 0",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->normalize_cart, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->normalize_cart_item_quantity, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->get_cart_item_quantity_limits, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->get_add_to_cart_limits, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->adjust_product_quantity_limit, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->get_remaining_stock, Automattic\\WooCommerce\\Checkout\\Helpers\\ReserveStock->get_reserved_stock"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00033593177795410156,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler/migration_hook' AND p.post_status IN ('in-progress') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.000293731689453125,
+            "sql": "SELECT a.*, g.slug AS `group` FROM wp_actionscheduler_actions a LEFT JOIN wp_actionscheduler_groups g ON a.group_id=g.group_id WHERE a.action_id=5",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_HybridStore->fetch_action, ActionScheduler_HybridStore->get_store_from_action_id, ActionScheduler_DBStore->fetch_action"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002770423889160156,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 5 LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002727508544921875,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler/migration_hook' AND a.status IN ('in-progress') ORDER BY a.scheduled_date_gmt ASC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 1,
+            "seconds": 0.024708986282348633,
+            "sql": "SELECT tax_rates.*, COUNT( locations.location_id ) as postcode_count, COUNT( locations2.location_id ) as city_count FROM wp_woocommerce_tax_rates as tax_rates LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations ON tax_rates.tax_rate_id = locations.tax_rate_id LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations2 ON tax_rates.tax_rate_id = locations2.tax_rate_id WHERE 1=1 AND tax_rate_country IN ( 'US', '' ) AND tax_rate_state IN ( 'CA', '' ) AND tax_rate_class = '' AND ( ( l",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_rates_from_location, WC_Tax::find_rates, WC_Tax::get_matched_tax_rates"
+          },
+          {
+            "count": 1,
+            "seconds": 0.009908914566040039,
+            "sql": "SELECT tax_rate_id, location_code FROM wp_woocommerce_tax_rate_locations WHERE location_type = 'postcode' AND location_code LIKE '%...%';",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_rates_from_location, WC_Tax::find_rates, WC_Tax::get_matched_tax_rates"
+          },
+          {
+            "count": 1,
+            "seconds": 0.004987001419067383,
+            "sql": "SELECT zone_id, location_code FROM wp_woocommerce_shipping_zone_locations WHERE location_type = 'postcode';",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_shipping_totals, WC_Cart_Totals->get_shipping_from_cart, WC_Cart->calculate_shipping, WC_Shipping->calculate_shipping, WC_Shipping->calculate_shipping_for_package, WC_Shipping->load_shipping_methods, WC_Shipping_Zones::get_zone_matching_package, WC_Data_Store->__call, WC_Shipping_Zone_Data_Store->get_zone_id_from_package"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0028221607208251953,
+            "sql": "SELECT zones.zone_id FROM wp_woocommerce_shipping_zones as zones LEFT OUTER JOIN wp_woocommerce_shipping_zone_locations as locations ON zones.zone_id = locations.zone_id AND location_type != 'postcode' WHERE ( ( location_type = 'country' AND location_code = 'US' ) OR ( location_type = 'state' AND location_code = 'US:CA' ) OR ( location_type = 'continent' AND location_code = 'NA' ) OR ( location_type IS NULL ) ) AND zones.zone_id NOT IN (1502,1503,1504,1505,1506,1507,1508,1509,1510,1511,1512,1513",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_shipping_totals, WC_Cart_Totals->get_shipping_from_cart, WC_Cart->calculate_shipping, WC_Shipping->calculate_shipping, WC_Shipping->calculate_shipping_for_package, WC_Shipping->load_shipping_methods, WC_Shipping_Zones::get_zone_matching_package, WC_Data_Store->__call, WC_Shipping_Zone_Data_Store->get_zone_id_from_package"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0007150173187255859,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE autoload IN ( 'yes', 'on', 'auto-on', 'auto' )",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), wp_not_installed, is_blog_installed, wp_load_alloptions"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00033783912658691406,
+            "sql": "SELECT DISTINCT t.term_id, tr.object_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id INNER JOIN wp_term_relationships AS tr ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE tt.taxonomy IN ('product_brand', 'product_type', 'product_visibility', 'product_cat', 'product_tag', 'product_shipping_class', 'pos_product_visibility', 'pa_path_color', 'pa_path_size', 'pa_size') AND tr.object_id IN (200929) ORDER BY t.name ASC",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches, update_object_term_cache, wp_get_object_terms, get_terms, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00023508071899414062,
+            "sql": "SELECT EXISTS( SELECT 1 FROM wp_wc_orders_meta WHERE meta_key = '_wcpay_multi_currency_order_exchange_rate' LIMIT 1) AS count;",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WCPay\\MultiCurrency\\MultiCurrency->init, WCPay\\MultiCurrency\\Analytics->__construct, WCPay\\MultiCurrency\\Analytics->init, WCPay\\MultiCurrency\\Analytics->has_multi_currency_orders"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00022602081298828125,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (200929) ORDER BY meta_id ASC",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches, update_postmeta_cache, update_meta_cache"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001881122589111328,
+            "sql": "SELECT wp_posts.* FROM wp_posts WHERE ID IN (200929)",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00016307830810546875,
+            "sql": "SELECT method_id, method_order, instance_id, is_enabled FROM wp_woocommerce_shipping_zone_methods WHERE zone_id = 9501 AND is_enabled = 1",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_shipping_totals, WC_Cart_Totals->get_shipping_from_cart, WC_Cart->calculate_shipping, WC_Shipping->calculate_shipping, WC_Shipping->calculate_shipping_for_package, WC_Shipping->load_shipping_methods, WC_Shipping_Zone->get_shipping_methods, WC_Data_Store->__call, WC_Shipping_Zone_Data_Store->get_methods"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001628398895263672,
+            "sql": "SELECT t.term_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('product_shipping_class') ORDER BY t.name ASC",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_tax_location, WC_Customer->get_taxable_address, apply_filters('woocommerce_customer_taxable_address'), WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Shipping\\ShippingController->filter_taxable_address, Automattic\\WooCommerce\\StoreApi\\Utilities\\LocalPickupUtils::get_local_pickup_method_ids, WC_Shipping->get_shipping_methods, WC_Shipping->load_shipping_methods, WC_Shipping->register_shipping_method, WC_Shipping_Flat_Rate->__construct, WC_Shipping_Flat_Rate->init, include('/plugins/woocommerce/includes/shipping/flat-rate/includes/settings-flat-rate.php'), WC_Shipping->get_shipping_classes, get_terms, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00016117095947265625,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('woocommerce_flat_rate_settings','woocommerce_free_shipping_settings','woocommerce_international_delivery_settings','woocommerce_local_delivery_settings','woocommerce_local_pickup_settings')",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_tax_location, WC_Customer->get_taxable_address, apply_filters('woocommerce_customer_taxable_address'), WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Shipping\\ShippingController->filter_taxable_address, Automattic\\WooCommerce\\StoreApi\\Utilities\\LocalPickupUtils::get_local_pickup_method_ids, WC_Shipping->get_shipping_methods, WC_Shipping->load_shipping_methods, WC_Shipping->get_shipping_method_class_names, wp_prime_option_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00015807151794433594,
+            "sql": "SELECT t.*, tt.* FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE t.term_id IN (2,15)",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches, update_object_term_cache, wp_get_object_terms, get_terms, WP_Term_Query->query, WP_Term_Query->get_terms, _prime_term_caches"
+          }
+        ],
+        "timestamp_gmt": "2026-07-02T10:32:06+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-core-shipping-tax-cart-update-1782988327025-3",
+      "http_code": 200,
+      "total_ms": 124.886,
+      "ttfb_ms": 124.796,
+      "size_download": 3150,
+      "body_bytes": 3150,
+      "profiler": {
+        "run_id": "01-core-shipping-tax-cart-update-1782988327025-3",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/cart/update-customer",
+        "status": 200,
+        "server_ms": 113.31,
+        "query_count": 126,
+        "query_time_ms": 59.11,
+        "memory_peak_mb": 26,
+        "slow_queries": [
+          {
+            "seconds": 0.024055004119873047,
+            "sql": "SELECT tax_rates.*, COUNT( locations.location_id ) as postcode_count, COUNT( locations2.location_id ) as city_count FROM wp_woocommerce_tax_rates as tax_rates LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations ON tax_rates.tax_rate_id = locations.tax_rate_id LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations2 ON tax_rates.tax_rate_id = locations2.tax_rate_id WHERE 1=1 AND tax_rate_country IN ( 'US', '' ) AND tax_rate_state IN ( 'CA', '' ) AND tax_rate_class = '' AND ( ( locations.location_type IS NULL ) OR ( locations.location_type = 'postcode' AND locations.location_code IN ('94105','94105*','9410*','941*','94*','9*','*','94100...94199') AND ( ( locations2.location_type = 'city' AND locations2.location_code = 'PERF CITY' ) OR NOT EXISTS ( SELECT sub.tax_rate_id FROM wp_woocommerce_tax_rate_locations as sub WHERE sub.location_type = 'city' AND sub.tax_rate_id = ta"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 82,
+            "seconds": 0.009975910186767578,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 9,
+            "seconds": 0.0017061233520507812,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_wcpay_currency_format','_transient_timeout_wcpay_currency_format')",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, wcpay_init, WC_Payments::init, WC_Payments_Localization_Service->__construct, WC_Payments_Localization_Service->load_locale_data, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0006928443908691406,
+            "sql": "SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 200929 AND stock_table.`order_id` != 0",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->normalize_cart, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->normalize_cart_item_quantity, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->get_cart_item_quantity_limits, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->get_add_to_cart_limits, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->adjust_product_quantity_limit, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->get_remaining_stock, Automattic\\WooCommerce\\Checkout\\Helpers\\ReserveStock->get_reserved_stock"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00031495094299316406,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler/migration_hook' AND p.post_status IN ('in-progress') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002970695495605469,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler/migration_hook' AND a.status IN ('in-progress') ORDER BY a.scheduled_date_gmt ASC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002880096435546875,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 5 LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00024700164794921875,
+            "sql": "SELECT a.*, g.slug AS `group` FROM wp_actionscheduler_actions a LEFT JOIN wp_actionscheduler_groups g ON a.group_id=g.group_id WHERE a.action_id=5",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_HybridStore->fetch_action, ActionScheduler_HybridStore->get_store_from_action_id, ActionScheduler_DBStore->fetch_action"
+          },
+          {
+            "count": 1,
+            "seconds": 0.024055004119873047,
+            "sql": "SELECT tax_rates.*, COUNT( locations.location_id ) as postcode_count, COUNT( locations2.location_id ) as city_count FROM wp_woocommerce_tax_rates as tax_rates LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations ON tax_rates.tax_rate_id = locations.tax_rate_id LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations2 ON tax_rates.tax_rate_id = locations2.tax_rate_id WHERE 1=1 AND tax_rate_country IN ( 'US', '' ) AND tax_rate_state IN ( 'CA', '' ) AND tax_rate_class = '' AND ( ( l",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_rates_from_location, WC_Tax::find_rates, WC_Tax::get_matched_tax_rates"
+          },
+          {
+            "count": 1,
+            "seconds": 0.009613037109375,
+            "sql": "SELECT tax_rate_id, location_code FROM wp_woocommerce_tax_rate_locations WHERE location_type = 'postcode' AND location_code LIKE '%...%';",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_rates_from_location, WC_Tax::find_rates, WC_Tax::get_matched_tax_rates"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0049860477447509766,
+            "sql": "SELECT zone_id, location_code FROM wp_woocommerce_shipping_zone_locations WHERE location_type = 'postcode';",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_shipping_totals, WC_Cart_Totals->get_shipping_from_cart, WC_Cart->calculate_shipping, WC_Shipping->calculate_shipping, WC_Shipping->calculate_shipping_for_package, WC_Shipping->load_shipping_methods, WC_Shipping_Zones::get_zone_matching_package, WC_Data_Store->__call, WC_Shipping_Zone_Data_Store->get_zone_id_from_package"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0030510425567626953,
+            "sql": "SELECT zones.zone_id FROM wp_woocommerce_shipping_zones as zones LEFT OUTER JOIN wp_woocommerce_shipping_zone_locations as locations ON zones.zone_id = locations.zone_id AND location_type != 'postcode' WHERE ( ( location_type = 'country' AND location_code = 'US' ) OR ( location_type = 'state' AND location_code = 'US:CA' ) OR ( location_type = 'continent' AND location_code = 'NA' ) OR ( location_type IS NULL ) ) AND zones.zone_id NOT IN (1502,1503,1504,1505,1506,1507,1508,1509,1510,1511,1512,1513",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_shipping_totals, WC_Cart_Totals->get_shipping_from_cart, WC_Cart->calculate_shipping, WC_Shipping->calculate_shipping, WC_Shipping->calculate_shipping_for_package, WC_Shipping->load_shipping_methods, WC_Shipping_Zones::get_zone_matching_package, WC_Data_Store->__call, WC_Shipping_Zone_Data_Store->get_zone_id_from_package"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0006899833679199219,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE autoload IN ( 'yes', 'on', 'auto-on', 'auto' )",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), wp_not_installed, is_blog_installed, wp_load_alloptions"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0004100799560546875,
+            "sql": "SELECT DISTINCT t.term_id, tr.object_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id INNER JOIN wp_term_relationships AS tr ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE tt.taxonomy IN ('product_brand', 'product_type', 'product_visibility', 'product_cat', 'product_tag', 'product_shipping_class', 'pos_product_visibility', 'pa_path_color', 'pa_path_size', 'pa_size') AND tr.object_id IN (200929) ORDER BY t.name ASC",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches, update_object_term_cache, wp_get_object_terms, get_terms, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 1,
+            "seconds": 0.000308990478515625,
+            "sql": "SELECT EXISTS( SELECT 1 FROM wp_wc_orders_meta WHERE meta_key = '_wcpay_multi_currency_order_exchange_rate' LIMIT 1) AS count;",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WCPay\\MultiCurrency\\MultiCurrency->init, WCPay\\MultiCurrency\\Analytics->__construct, WCPay\\MultiCurrency\\Analytics->init, WCPay\\MultiCurrency\\Analytics->has_multi_currency_orders"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0002601146697998047,
+            "sql": "SELECT wp_posts.* FROM wp_posts WHERE ID IN (200929)",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00021886825561523438,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (200929) ORDER BY meta_id ASC",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches, update_postmeta_cache, update_meta_cache"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00018596649169921875,
+            "sql": "SELECT t.*, tt.* FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE t.term_id IN (2,15)",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches, update_object_term_cache, wp_get_object_terms, get_terms, WP_Term_Query->query, WP_Term_Query->get_terms, _prime_term_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00017380714416503906,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('woocommerce_new_order_settings','woocommerce_cancelled_order_settings','woocommerce_customer_cancelled_order_settings','woocommerce_failed_order_settings','woocommerce_customer_failed_order_settings','woocommerce_customer_on_hold_order_settings','woocommerce_customer_processing_order_settings','woocommerce_customer_completed_order_settings','woocommerce_customer_refunded_order_settings','woocommerce_customer_invoice_settings",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce->register_wp_admin_settings, WC_Emails::instance, WC_Emails->__construct, WC_Emails->init, wp_prime_option_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00015091896057128906,
+            "sql": "SELECT session_value FROM `wp_woocommerce_sessions` WHERE session_key = 't_743076348c9f125e273e3a9c275463'",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\Settings\\SettingsModule::WooCommerce\\PayPalCommerce\\Settings\\{closure}, WooCommerce\\PayPalCommerce\\Vendor\\Inpsyde\\Modularity\\Container\\ReadOnlyContainer->get, WooCommerce\\PayPalCommerce\\Settings\\SettingsModule::WooCommerce\\PayPalCommerce\\Settings\\{closure}, WooCommerce\\PayPalCommerce\\Vendor\\Inpsyde\\Modularity\\Container\\ReadOnlyContainer->get, WooCommerce\\PayPalCommerce\\Settings\\SettingsModule::WooCommerce\\PayPalCommerce\\Settings\\{closure}, WooCommerce\\PayPalCommerce\\Vendor\\Inpsyde\\Modularity\\Container\\ReadOnlyContainer->get, WooCommerce\\PayPalCommerce\\ApiClient\\ApiModule::WooCommerce\\PayPalCommerce\\ApiClient\\{closure}, WooCommerce\\PayPalCommerce\\Vendor\\Inpsyde\\Modularity\\Container\\ReadOnlyContainer->get, WooCommerce\\PayPalCommerce\\Settings\\SettingsModule::WooCommerce\\PayPalCommerce\\Settings\\{closure}, WooCommerce\\PayPalCommerce\\Settings\\Endpoint\\PaymentRestEndpoint->get_details, WooCommerce\\PayPalCommerce\\Settings\\Endpoint\\PaymentRestEndpoint->gateways, WooCommerce\\PayPalCommerce\\Settings\\Data\\Definition\\PaymentMethodsDefinition->get_definitions, WooCommerce->payment_gateways, WC_Payment_Gateways::instance, WC_Payment_Gateways->__construct, WC_Payment_Gateways->init, WC_Gateway_Paypal->__construct, WC_Gateway_Paypal->is_valid_for_use, get_woocommerce_currency, apply_filters('woocommerce_currency'), WP_Hook->apply_filters, WCPay\\MultiCurrency\\FrontendCurrencies->get_woocommerce_currency, WCPay\\MultiCurrency\\FrontendCurrencies->get_selected_currency_code, WCPay\\MultiCurrency\\MultiCurrency->get_selected_currency, WCPay\\MultiCurrency\\MultiCurrency->get_stored_currency_code, WooCommerce->initialize_session, Automattic\\WooCommerce\\StoreApi\\SessionHandler->init, Automattic\\WooCommerce\\StoreApi\\Sessi"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00015091896057128906,
+            "sql": "SELECT t.term_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('wp_theme') AND t.name IN ('woocommerce', 'woocommerce/woocommerce', 'twentytwentyfive') LIMIT 3",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_tax_location, WC_Customer->get_taxable_address, apply_filters('woocommerce_customer_taxable_address'), WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Shipping\\ShippingController->filter_taxable_address, Automattic\\WooCommerce\\StoreApi\\Utilities\\LocalPickupUtils::get_local_pickup_method_ids, WC_Shipping->get_shipping_methods, WC_Shipping->load_shipping_methods, do_action('woocommerce_load_shipping_methods'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Shipping\\ShippingController->register_local_pickup, Automattic\\WooCommerce\\Blocks\\Utils\\CartCheckoutUtils::is_checkout_block_default, Automattic\\WooCommerce\\Blocks\\Utils\\BlockTemplateUtils::get_block_templates_from_db, WP_Query->__construct, WP_Query->query, WP_Query->get_posts, WP_Tax_Query->get_sql, WP_Tax_Query->get_sql_clauses, WP_Tax_Query->get_sql_for_query, WP_Tax_Query->get_sql_for_clause, WP_Tax_Query->clean_query, WP_Tax_Query->transform_query, WP_Term_Query->query, WP_Term_Query->get_terms"
+          }
+        ],
+        "timestamp_gmt": "2026-07-02T10:32:07+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-core-shipping-tax-cart-update-1782988327341-4",
+      "http_code": 200,
+      "total_ms": 118.758,
+      "ttfb_ms": 118.674,
+      "size_download": 3150,
+      "body_bytes": 3150,
+      "profiler": {
+        "run_id": "01-core-shipping-tax-cart-update-1782988327341-4",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/cart/update-customer",
+        "status": 200,
+        "server_ms": 107.46,
+        "query_count": 126,
+        "query_time_ms": 56.96,
+        "memory_peak_mb": 26,
+        "slow_queries": [
+          {
+            "seconds": 0.0236208438873291,
+            "sql": "SELECT tax_rates.*, COUNT( locations.location_id ) as postcode_count, COUNT( locations2.location_id ) as city_count FROM wp_woocommerce_tax_rates as tax_rates LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations ON tax_rates.tax_rate_id = locations.tax_rate_id LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations2 ON tax_rates.tax_rate_id = locations2.tax_rate_id WHERE 1=1 AND tax_rate_country IN ( 'US', '' ) AND tax_rate_state IN ( 'CA', '' ) AND tax_rate_class = '' AND ( ( locations.location_type IS NULL ) OR ( locations.location_type = 'postcode' AND locations.location_code IN ('94105','94105*','9410*','941*','94*','9*','*','94100...94199') AND ( ( locations2.location_type = 'city' AND locations2.location_code = 'PERF CITY' ) OR NOT EXISTS ( SELECT sub.tax_rate_id FROM wp_woocommerce_tax_rate_locations as sub WHERE sub.location_type = 'city' AND sub.tax_rate_id = ta"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 82,
+            "seconds": 0.008857011795043945,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 9,
+            "seconds": 0.0014119148254394531,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_wcpay_currency_format','_transient_timeout_wcpay_currency_format')",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, wcpay_init, WC_Payments::init, WC_Payments_Localization_Service->__construct, WC_Payments_Localization_Service->load_locale_data, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0006730556488037109,
+            "sql": "SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 200929 AND stock_table.`order_id` != 0",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->normalize_cart, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->normalize_cart_item_quantity, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->get_cart_item_quantity_limits, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->get_add_to_cart_limits, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->adjust_product_quantity_limit, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->get_remaining_stock, Automattic\\WooCommerce\\Checkout\\Helpers\\ReserveStock->get_reserved_stock"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00044608116149902344,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler/migration_hook' AND p.post_status IN ('in-progress') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002818107604980469,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler/migration_hook' AND a.status IN ('in-progress') ORDER BY a.scheduled_date_gmt ASC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00025391578674316406,
+            "sql": "SELECT a.*, g.slug AS `group` FROM wp_actionscheduler_actions a LEFT JOIN wp_actionscheduler_groups g ON a.group_id=g.group_id WHERE a.action_id=5",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_HybridStore->fetch_action, ActionScheduler_HybridStore->get_store_from_action_id, ActionScheduler_DBStore->fetch_action"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002536773681640625,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 5 LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0236208438873291,
+            "sql": "SELECT tax_rates.*, COUNT( locations.location_id ) as postcode_count, COUNT( locations2.location_id ) as city_count FROM wp_woocommerce_tax_rates as tax_rates LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations ON tax_rates.tax_rate_id = locations.tax_rate_id LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations2 ON tax_rates.tax_rate_id = locations2.tax_rate_id WHERE 1=1 AND tax_rate_country IN ( 'US', '' ) AND tax_rate_state IN ( 'CA', '' ) AND tax_rate_class = '' AND ( ( l",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_rates_from_location, WC_Tax::find_rates, WC_Tax::get_matched_tax_rates"
+          },
+          {
+            "count": 1,
+            "seconds": 0.010040998458862305,
+            "sql": "SELECT tax_rate_id, location_code FROM wp_woocommerce_tax_rate_locations WHERE location_type = 'postcode' AND location_code LIKE '%...%';",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_rates_from_location, WC_Tax::find_rates, WC_Tax::get_matched_tax_rates"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0049550533294677734,
+            "sql": "SELECT zone_id, location_code FROM wp_woocommerce_shipping_zone_locations WHERE location_type = 'postcode';",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_shipping_totals, WC_Cart_Totals->get_shipping_from_cart, WC_Cart->calculate_shipping, WC_Shipping->calculate_shipping, WC_Shipping->calculate_shipping_for_package, WC_Shipping->load_shipping_methods, WC_Shipping_Zones::get_zone_matching_package, WC_Data_Store->__call, WC_Shipping_Zone_Data_Store->get_zone_id_from_package"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0027980804443359375,
+            "sql": "SELECT zones.zone_id FROM wp_woocommerce_shipping_zones as zones LEFT OUTER JOIN wp_woocommerce_shipping_zone_locations as locations ON zones.zone_id = locations.zone_id AND location_type != 'postcode' WHERE ( ( location_type = 'country' AND location_code = 'US' ) OR ( location_type = 'state' AND location_code = 'US:CA' ) OR ( location_type = 'continent' AND location_code = 'NA' ) OR ( location_type IS NULL ) ) AND zones.zone_id NOT IN (1502,1503,1504,1505,1506,1507,1508,1509,1510,1511,1512,1513",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_shipping_totals, WC_Cart_Totals->get_shipping_from_cart, WC_Cart->calculate_shipping, WC_Shipping->calculate_shipping, WC_Shipping->calculate_shipping_for_package, WC_Shipping->load_shipping_methods, WC_Shipping_Zones::get_zone_matching_package, WC_Data_Store->__call, WC_Shipping_Zone_Data_Store->get_zone_id_from_package"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0006029605865478516,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE autoload IN ( 'yes', 'on', 'auto-on', 'auto' )",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), wp_not_installed, is_blog_installed, wp_load_alloptions"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0002830028533935547,
+            "sql": "SELECT DISTINCT t.term_id, tr.object_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id INNER JOIN wp_term_relationships AS tr ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE tt.taxonomy IN ('product_brand', 'product_type', 'product_visibility', 'product_cat', 'product_tag', 'product_shipping_class', 'pos_product_visibility', 'pa_path_color', 'pa_path_size', 'pa_size') AND tr.object_id IN (200929) ORDER BY t.name ASC",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches, update_object_term_cache, wp_get_object_terms, get_terms, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0002269744873046875,
+            "sql": "SELECT EXISTS( SELECT 1 FROM wp_wc_orders_meta WHERE meta_key = '_wcpay_multi_currency_order_exchange_rate' LIMIT 1) AS count;",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WCPay\\MultiCurrency\\MultiCurrency->init, WCPay\\MultiCurrency\\Analytics->__construct, WCPay\\MultiCurrency\\Analytics->init, WCPay\\MultiCurrency\\Analytics->has_multi_currency_orders"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00017380714416503906,
+            "sql": "SELECT t.term_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('wp_theme') AND t.name IN ('woocommerce', 'woocommerce/woocommerce', 'twentytwentyfive') LIMIT 3",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_tax_location, WC_Customer->get_taxable_address, apply_filters('woocommerce_customer_taxable_address'), WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Shipping\\ShippingController->filter_taxable_address, Automattic\\WooCommerce\\StoreApi\\Utilities\\LocalPickupUtils::get_local_pickup_method_ids, WC_Shipping->get_shipping_methods, WC_Shipping->load_shipping_methods, do_action('woocommerce_load_shipping_methods'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Shipping\\ShippingController->register_local_pickup, Automattic\\WooCommerce\\Blocks\\Utils\\CartCheckoutUtils::is_checkout_block_default, Automattic\\WooCommerce\\Blocks\\Utils\\BlockTemplateUtils::get_block_templates_from_db, WP_Query->__construct, WP_Query->query, WP_Query->get_posts, WP_Tax_Query->get_sql, WP_Tax_Query->get_sql_clauses, WP_Tax_Query->get_sql_for_query, WP_Tax_Query->get_sql_for_clause, WP_Tax_Query->clean_query, WP_Tax_Query->transform_query, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001659393310546875,
+            "sql": "SELECT wp_posts.* FROM wp_posts WHERE ID IN (200929)",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00016188621520996094,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('woocommerce_new_order_settings','woocommerce_cancelled_order_settings','woocommerce_customer_cancelled_order_settings','woocommerce_failed_order_settings','woocommerce_customer_failed_order_settings','woocommerce_customer_on_hold_order_settings','woocommerce_customer_processing_order_settings','woocommerce_customer_completed_order_settings','woocommerce_customer_refunded_order_settings','woocommerce_customer_invoice_settings",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce->register_wp_admin_settings, WC_Emails::instance, WC_Emails->__construct, WC_Emails->init, wp_prime_option_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001590251922607422,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (200929) ORDER BY meta_id ASC",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches, update_postmeta_cache, update_meta_cache"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00015401840209960938,
+            "sql": "SELECT t.*, tt.* FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE t.term_id IN (2,15)",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches, update_object_term_cache, wp_get_object_terms, get_terms, WP_Term_Query->query, WP_Term_Query->get_terms, _prime_term_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001430511474609375,
+            "sql": "SELECT t.term_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('product_shipping_class') ORDER BY t.name ASC",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_tax_location, WC_Customer->get_taxable_address, apply_filters('woocommerce_customer_taxable_address'), WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Shipping\\ShippingController->filter_taxable_address, Automattic\\WooCommerce\\StoreApi\\Utilities\\LocalPickupUtils::get_local_pickup_method_ids, WC_Shipping->get_shipping_methods, WC_Shipping->load_shipping_methods, WC_Shipping->register_shipping_method, WC_Shipping_Flat_Rate->__construct, WC_Shipping_Flat_Rate->init, include('/plugins/woocommerce/includes/shipping/flat-rate/includes/settings-flat-rate.php'), WC_Shipping->get_shipping_classes, get_terms, WP_Term_Query->query, WP_Term_Query->get_terms"
+          }
+        ],
+        "timestamp_gmt": "2026-07-02T10:32:07+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-core-shipping-tax-cart-update-1782988327644-5",
+      "http_code": 200,
+      "total_ms": 128.245,
+      "ttfb_ms": 128.16,
+      "size_download": 3150,
+      "body_bytes": 3150,
+      "profiler": {
+        "run_id": "01-core-shipping-tax-cart-update-1782988327644-5",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/cart/update-customer",
+        "status": 200,
+        "server_ms": 108.96,
+        "query_count": 126,
+        "query_time_ms": 58.76,
+        "memory_peak_mb": 26,
+        "slow_queries": [
+          {
+            "seconds": 0.024641990661621094,
+            "sql": "SELECT tax_rates.*, COUNT( locations.location_id ) as postcode_count, COUNT( locations2.location_id ) as city_count FROM wp_woocommerce_tax_rates as tax_rates LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations ON tax_rates.tax_rate_id = locations.tax_rate_id LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations2 ON tax_rates.tax_rate_id = locations2.tax_rate_id WHERE 1=1 AND tax_rate_country IN ( 'US', '' ) AND tax_rate_state IN ( 'CA', '' ) AND tax_rate_class = '' AND ( ( locations.location_type IS NULL ) OR ( locations.location_type = 'postcode' AND locations.location_code IN ('94105','94105*','9410*','941*','94*','9*','*','94100...94199') AND ( ( locations2.location_type = 'city' AND locations2.location_code = 'PERF CITY' ) OR NOT EXISTS ( SELECT sub.tax_rate_id FROM wp_woocommerce_tax_rate_locations as sub WHERE sub.location_type = 'city' AND sub.tax_rate_id = ta"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 82,
+            "seconds": 0.00907444953918457,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 9,
+            "seconds": 0.0014865398406982422,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_wcpay_currency_format','_transient_timeout_wcpay_currency_format')",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, wcpay_init, WC_Payments::init, WC_Payments_Localization_Service->__construct, WC_Payments_Localization_Service->load_locale_data, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0006878376007080078,
+            "sql": "SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 200929 AND stock_table.`order_id` != 0",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->normalize_cart, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->normalize_cart_item_quantity, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->get_cart_item_quantity_limits, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->get_add_to_cart_limits, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->adjust_product_quantity_limit, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->get_remaining_stock, Automattic\\WooCommerce\\Checkout\\Helpers\\ReserveStock->get_reserved_stock"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00030684471130371094,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler/migration_hook' AND p.post_status IN ('in-progress') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002682209014892578,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 5 LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002589225769042969,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler/migration_hook' AND a.status IN ('in-progress') ORDER BY a.scheduled_date_gmt ASC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002448558807373047,
+            "sql": "SELECT a.*, g.slug AS `group` FROM wp_actionscheduler_actions a LEFT JOIN wp_actionscheduler_groups g ON a.group_id=g.group_id WHERE a.action_id=5",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_HybridStore->fetch_action, ActionScheduler_HybridStore->get_store_from_action_id, ActionScheduler_DBStore->fetch_action"
+          },
+          {
+            "count": 1,
+            "seconds": 0.024641990661621094,
+            "sql": "SELECT tax_rates.*, COUNT( locations.location_id ) as postcode_count, COUNT( locations2.location_id ) as city_count FROM wp_woocommerce_tax_rates as tax_rates LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations ON tax_rates.tax_rate_id = locations.tax_rate_id LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations2 ON tax_rates.tax_rate_id = locations2.tax_rate_id WHERE 1=1 AND tax_rate_country IN ( 'US', '' ) AND tax_rate_state IN ( 'CA', '' ) AND tax_rate_class = '' AND ( ( l",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_rates_from_location, WC_Tax::find_rates, WC_Tax::get_matched_tax_rates"
+          },
+          {
+            "count": 1,
+            "seconds": 0.010326147079467773,
+            "sql": "SELECT tax_rate_id, location_code FROM wp_woocommerce_tax_rate_locations WHERE location_type = 'postcode' AND location_code LIKE '%...%';",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_rates_from_location, WC_Tax::find_rates, WC_Tax::get_matched_tax_rates"
+          },
+          {
+            "count": 1,
+            "seconds": 0.004967927932739258,
+            "sql": "SELECT zone_id, location_code FROM wp_woocommerce_shipping_zone_locations WHERE location_type = 'postcode';",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_shipping_totals, WC_Cart_Totals->get_shipping_from_cart, WC_Cart->calculate_shipping, WC_Shipping->calculate_shipping, WC_Shipping->calculate_shipping_for_package, WC_Shipping->load_shipping_methods, WC_Shipping_Zones::get_zone_matching_package, WC_Data_Store->__call, WC_Shipping_Zone_Data_Store->get_zone_id_from_package"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0029761791229248047,
+            "sql": "SELECT zones.zone_id FROM wp_woocommerce_shipping_zones as zones LEFT OUTER JOIN wp_woocommerce_shipping_zone_locations as locations ON zones.zone_id = locations.zone_id AND location_type != 'postcode' WHERE ( ( location_type = 'country' AND location_code = 'US' ) OR ( location_type = 'state' AND location_code = 'US:CA' ) OR ( location_type = 'continent' AND location_code = 'NA' ) OR ( location_type IS NULL ) ) AND zones.zone_id NOT IN (1502,1503,1504,1505,1506,1507,1508,1509,1510,1511,1512,1513",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_shipping_totals, WC_Cart_Totals->get_shipping_from_cart, WC_Cart->calculate_shipping, WC_Shipping->calculate_shipping, WC_Shipping->calculate_shipping_for_package, WC_Shipping->load_shipping_methods, WC_Shipping_Zones::get_zone_matching_package, WC_Data_Store->__call, WC_Shipping_Zone_Data_Store->get_zone_id_from_package"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0006480216979980469,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE autoload IN ( 'yes', 'on', 'auto-on', 'auto' )",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), wp_not_installed, is_blog_installed, wp_load_alloptions"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0002810955047607422,
+            "sql": "SELECT DISTINCT t.term_id, tr.object_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id INNER JOIN wp_term_relationships AS tr ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE tt.taxonomy IN ('product_brand', 'product_type', 'product_visibility', 'product_cat', 'product_tag', 'product_shipping_class', 'pos_product_visibility', 'pa_path_color', 'pa_path_size', 'pa_size') AND tr.object_id IN (200929) ORDER BY t.name ASC",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches, update_object_term_cache, wp_get_object_terms, get_terms, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00021409988403320312,
+            "sql": "SELECT EXISTS( SELECT 1 FROM wp_wc_orders_meta WHERE meta_key = '_wcpay_multi_currency_order_exchange_rate' LIMIT 1) AS count;",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WCPay\\MultiCurrency\\MultiCurrency->init, WCPay\\MultiCurrency\\Analytics->__construct, WCPay\\MultiCurrency\\Analytics->init, WCPay\\MultiCurrency\\Analytics->has_multi_currency_orders"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00019812583923339844,
+            "sql": "SELECT wp_posts.ID FROM wp_posts WHERE 1=1 AND wp_posts.ID NOT IN (0) AND ( 0 = 1 ) AND ((wp_posts.post_type = 'wp_template' AND (wp_posts.post_status = 'publish'))) GROUP BY wp_posts.ID ORDER BY wp_posts.post_date DESC",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_tax_location, WC_Customer->get_taxable_address, apply_filters('woocommerce_customer_taxable_address'), WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Shipping\\ShippingController->filter_taxable_address, Automattic\\WooCommerce\\StoreApi\\Utilities\\LocalPickupUtils::get_local_pickup_method_ids, WC_Shipping->get_shipping_methods, WC_Shipping->load_shipping_methods, do_action('woocommerce_load_shipping_methods'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Shipping\\ShippingController->register_local_pickup, Automattic\\WooCommerce\\Blocks\\Utils\\CartCheckoutUtils::is_checkout_block_default, Automattic\\WooCommerce\\Blocks\\Utils\\BlockTemplateUtils::get_block_templates_from_db, WP_Query->__construct, WP_Query->query, WP_Query->get_posts"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00017404556274414062,
+            "sql": "SELECT t.term_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('wp_theme') AND t.name IN ('woocommerce', 'woocommerce/woocommerce', 'twentytwentyfive') LIMIT 3",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_tax_location, WC_Customer->get_taxable_address, apply_filters('woocommerce_customer_taxable_address'), WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Shipping\\ShippingController->filter_taxable_address, Automattic\\WooCommerce\\StoreApi\\Utilities\\LocalPickupUtils::get_local_pickup_method_ids, WC_Shipping->get_shipping_methods, WC_Shipping->load_shipping_methods, do_action('woocommerce_load_shipping_methods'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Shipping\\ShippingController->register_local_pickup, Automattic\\WooCommerce\\Blocks\\Utils\\CartCheckoutUtils::is_checkout_block_default, Automattic\\WooCommerce\\Blocks\\Utils\\BlockTemplateUtils::get_block_templates_from_db, WP_Query->__construct, WP_Query->query, WP_Query->get_posts, WP_Tax_Query->get_sql, WP_Tax_Query->get_sql_clauses, WP_Tax_Query->get_sql_for_query, WP_Tax_Query->get_sql_for_clause, WP_Tax_Query->clean_query, WP_Tax_Query->transform_query, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00015997886657714844,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (200929) ORDER BY meta_id ASC",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches, update_postmeta_cache, update_meta_cache"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001590251922607422,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('woocommerce_new_order_settings','woocommerce_cancelled_order_settings','woocommerce_customer_cancelled_order_settings','woocommerce_failed_order_settings','woocommerce_customer_failed_order_settings','woocommerce_customer_on_hold_order_settings','woocommerce_customer_processing_order_settings','woocommerce_customer_completed_order_settings','woocommerce_customer_refunded_order_settings','woocommerce_customer_invoice_settings",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce->register_wp_admin_settings, WC_Emails::instance, WC_Emails->__construct, WC_Emails->init, wp_prime_option_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00015807151794433594,
+            "sql": "SELECT t.*, tt.* FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE t.term_id IN (2,15)",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches, update_object_term_cache, wp_get_object_terms, get_terms, WP_Term_Query->query, WP_Term_Query->get_terms, _prime_term_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00015497207641601562,
+            "sql": "SELECT method_id, method_order, instance_id, is_enabled FROM wp_woocommerce_shipping_zone_methods WHERE zone_id = 9501 AND is_enabled = 1",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_shipping_totals, WC_Cart_Totals->get_shipping_from_cart, WC_Cart->calculate_shipping, WC_Shipping->calculate_shipping, WC_Shipping->calculate_shipping_for_package, WC_Shipping->load_shipping_methods, WC_Shipping_Zone->get_shipping_methods, WC_Data_Store->__call, WC_Shipping_Zone_Data_Store->get_methods"
+          }
+        ],
+        "timestamp_gmt": "2026-07-02T10:32:07+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-core-shipping-tax-cart-update-1782988327961-6",
+      "http_code": 200,
+      "total_ms": 117.706,
+      "ttfb_ms": 117.62100000000001,
+      "size_download": 3150,
+      "body_bytes": 3150,
+      "profiler": {
+        "run_id": "01-core-shipping-tax-cart-update-1782988327961-6",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/cart/update-customer",
+        "status": 200,
+        "server_ms": 106.64,
+        "query_count": 126,
+        "query_time_ms": 56.9,
+        "memory_peak_mb": 26,
+        "slow_queries": [
+          {
+            "seconds": 0.02393317222595215,
+            "sql": "SELECT tax_rates.*, COUNT( locations.location_id ) as postcode_count, COUNT( locations2.location_id ) as city_count FROM wp_woocommerce_tax_rates as tax_rates LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations ON tax_rates.tax_rate_id = locations.tax_rate_id LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations2 ON tax_rates.tax_rate_id = locations2.tax_rate_id WHERE 1=1 AND tax_rate_country IN ( 'US', '' ) AND tax_rate_state IN ( 'CA', '' ) AND tax_rate_class = '' AND ( ( locations.location_type IS NULL ) OR ( locations.location_type = 'postcode' AND locations.location_code IN ('94105','94105*','9410*','941*','94*','9*','*','94100...94199') AND ( ( locations2.location_type = 'city' AND locations2.location_code = 'PERF CITY' ) OR NOT EXISTS ( SELECT sub.tax_rate_id FROM wp_woocommerce_tax_rate_locations as sub WHERE sub.location_type = 'city' AND sub.tax_rate_id = ta"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 82,
+            "seconds": 0.008760690689086914,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 9,
+            "seconds": 0.0015339851379394531,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_wcpay_currency_format','_transient_timeout_wcpay_currency_format')",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, wcpay_init, WC_Payments::init, WC_Payments_Localization_Service->__construct, WC_Payments_Localization_Service->load_locale_data, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0006921291351318359,
+            "sql": "SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 200929 AND stock_table.`order_id` != 0",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->normalize_cart, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->normalize_cart_item_quantity, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->get_cart_item_quantity_limits, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->get_add_to_cart_limits, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->adjust_product_quantity_limit, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->get_remaining_stock, Automattic\\WooCommerce\\Checkout\\Helpers\\ReserveStock->get_reserved_stock"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0003001689910888672,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler/migration_hook' AND p.post_status IN ('in-progress') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00027489662170410156,
+            "sql": "SELECT a.*, g.slug AS `group` FROM wp_actionscheduler_actions a LEFT JOIN wp_actionscheduler_groups g ON a.group_id=g.group_id WHERE a.action_id=5",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_HybridStore->fetch_action, ActionScheduler_HybridStore->get_store_from_action_id, ActionScheduler_DBStore->fetch_action"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00027108192443847656,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 5 LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00026106834411621094,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler/migration_hook' AND a.status IN ('in-progress') ORDER BY a.scheduled_date_gmt ASC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 1,
+            "seconds": 0.02393317222595215,
+            "sql": "SELECT tax_rates.*, COUNT( locations.location_id ) as postcode_count, COUNT( locations2.location_id ) as city_count FROM wp_woocommerce_tax_rates as tax_rates LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations ON tax_rates.tax_rate_id = locations.tax_rate_id LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations2 ON tax_rates.tax_rate_id = locations2.tax_rate_id WHERE 1=1 AND tax_rate_country IN ( 'US', '' ) AND tax_rate_state IN ( 'CA', '' ) AND tax_rate_class = '' AND ( ( l",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_rates_from_location, WC_Tax::find_rates, WC_Tax::get_matched_tax_rates"
+          },
+          {
+            "count": 1,
+            "seconds": 0.01001596450805664,
+            "sql": "SELECT tax_rate_id, location_code FROM wp_woocommerce_tax_rate_locations WHERE location_type = 'postcode' AND location_code LIKE '%...%';",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_rates_from_location, WC_Tax::find_rates, WC_Tax::get_matched_tax_rates"
+          },
+          {
+            "count": 1,
+            "seconds": 0.005032062530517578,
+            "sql": "SELECT zone_id, location_code FROM wp_woocommerce_shipping_zone_locations WHERE location_type = 'postcode';",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_shipping_totals, WC_Cart_Totals->get_shipping_from_cart, WC_Cart->calculate_shipping, WC_Shipping->calculate_shipping, WC_Shipping->calculate_shipping_for_package, WC_Shipping->load_shipping_methods, WC_Shipping_Zones::get_zone_matching_package, WC_Data_Store->__call, WC_Shipping_Zone_Data_Store->get_zone_id_from_package"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0025489330291748047,
+            "sql": "SELECT zones.zone_id FROM wp_woocommerce_shipping_zones as zones LEFT OUTER JOIN wp_woocommerce_shipping_zone_locations as locations ON zones.zone_id = locations.zone_id AND location_type != 'postcode' WHERE ( ( location_type = 'country' AND location_code = 'US' ) OR ( location_type = 'state' AND location_code = 'US:CA' ) OR ( location_type = 'continent' AND location_code = 'NA' ) OR ( location_type IS NULL ) ) AND zones.zone_id NOT IN (1502,1503,1504,1505,1506,1507,1508,1509,1510,1511,1512,1513",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_shipping_totals, WC_Cart_Totals->get_shipping_from_cart, WC_Cart->calculate_shipping, WC_Shipping->calculate_shipping, WC_Shipping->calculate_shipping_for_package, WC_Shipping->load_shipping_methods, WC_Shipping_Zones::get_zone_matching_package, WC_Data_Store->__call, WC_Shipping_Zone_Data_Store->get_zone_id_from_package"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0006401538848876953,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE autoload IN ( 'yes', 'on', 'auto-on', 'auto' )",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), wp_not_installed, is_blog_installed, wp_load_alloptions"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0002758502960205078,
+            "sql": "SELECT DISTINCT t.term_id, tr.object_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id INNER JOIN wp_term_relationships AS tr ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE tt.taxonomy IN ('product_brand', 'product_type', 'product_visibility', 'product_cat', 'product_tag', 'product_shipping_class', 'pos_product_visibility', 'pa_path_color', 'pa_path_size', 'pa_size') AND tr.object_id IN (200929) ORDER BY t.name ASC",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches, update_object_term_cache, wp_get_object_terms, get_terms, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00015997886657714844,
+            "sql": "SELECT t.*, tt.* FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE t.term_id IN (2,15)",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches, update_object_term_cache, wp_get_object_terms, get_terms, WP_Term_Query->query, WP_Term_Query->get_terms, _prime_term_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00015997886657714844,
+            "sql": "SELECT t.term_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('product_shipping_class') ORDER BY t.name ASC",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_tax_location, WC_Customer->get_taxable_address, apply_filters('woocommerce_customer_taxable_address'), WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Shipping\\ShippingController->filter_taxable_address, Automattic\\WooCommerce\\StoreApi\\Utilities\\LocalPickupUtils::get_local_pickup_method_ids, WC_Shipping->get_shipping_methods, WC_Shipping->load_shipping_methods, WC_Shipping->register_shipping_method, WC_Shipping_Flat_Rate->__construct, WC_Shipping_Flat_Rate->init, include('/plugins/woocommerce/includes/shipping/flat-rate/includes/settings-flat-rate.php'), WC_Shipping->get_shipping_classes, get_terms, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001552104949951172,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('woocommerce_new_order_settings','woocommerce_cancelled_order_settings','woocommerce_customer_cancelled_order_settings','woocommerce_failed_order_settings','woocommerce_customer_failed_order_settings','woocommerce_customer_on_hold_order_settings','woocommerce_customer_processing_order_settings','woocommerce_customer_completed_order_settings','woocommerce_customer_refunded_order_settings','woocommerce_customer_invoice_settings",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce->register_wp_admin_settings, WC_Emails::instance, WC_Emails->__construct, WC_Emails->init, wp_prime_option_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00015306472778320312,
+            "sql": "SELECT EXISTS( SELECT 1 FROM wp_wc_orders_meta WHERE meta_key = '_wcpay_multi_currency_order_exchange_rate' LIMIT 1) AS count;",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WCPay\\MultiCurrency\\MultiCurrency->init, WCPay\\MultiCurrency\\Analytics->__construct, WCPay\\MultiCurrency\\Analytics->init, WCPay\\MultiCurrency\\Analytics->has_multi_currency_orders"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00014710426330566406,
+            "sql": "SELECT t.term_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('wp_theme') AND t.name IN ('woocommerce', 'woocommerce/woocommerce', 'twentytwentyfive') LIMIT 3",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_tax_location, WC_Customer->get_taxable_address, apply_filters('woocommerce_customer_taxable_address'), WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Shipping\\ShippingController->filter_taxable_address, Automattic\\WooCommerce\\StoreApi\\Utilities\\LocalPickupUtils::get_local_pickup_method_ids, WC_Shipping->get_shipping_methods, WC_Shipping->load_shipping_methods, do_action('woocommerce_load_shipping_methods'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Shipping\\ShippingController->register_local_pickup, Automattic\\WooCommerce\\Blocks\\Utils\\CartCheckoutUtils::is_checkout_block_default, Automattic\\WooCommerce\\Blocks\\Utils\\BlockTemplateUtils::get_block_templates_from_db, WP_Query->__construct, WP_Query->query, WP_Query->get_posts, WP_Tax_Query->get_sql, WP_Tax_Query->get_sql_clauses, WP_Tax_Query->get_sql_for_query, WP_Tax_Query->get_sql_for_clause, WP_Tax_Query->clean_query, WP_Tax_Query->transform_query, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00014591217041015625,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (200929) ORDER BY meta_id ASC",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches, update_postmeta_cache, update_meta_cache"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00014209747314453125,
+            "sql": "SELECT method_id, method_order, instance_id, is_enabled FROM wp_woocommerce_shipping_zone_methods WHERE zone_id = 9501 AND is_enabled = 1",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_shipping_totals, WC_Cart_Totals->get_shipping_from_cart, WC_Cart->calculate_shipping, WC_Shipping->calculate_shipping, WC_Shipping->calculate_shipping_for_package, WC_Shipping->load_shipping_methods, WC_Shipping_Zone->get_shipping_methods, WC_Data_Store->__call, WC_Shipping_Zone_Data_Store->get_methods"
+          }
+        ],
+        "timestamp_gmt": "2026-07-02T10:32:08+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-core-shipping-tax-cart-update-1782988328276-7",
+      "http_code": 200,
+      "total_ms": 133.356,
+      "ttfb_ms": 133.275,
+      "size_download": 3150,
+      "body_bytes": 3150,
+      "profiler": {
+        "run_id": "01-core-shipping-tax-cart-update-1782988328276-7",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/cart/update-customer",
+        "status": 200,
+        "server_ms": 108.05,
+        "query_count": 126,
+        "query_time_ms": 56.31,
+        "memory_peak_mb": 26,
+        "slow_queries": [
+          {
+            "seconds": 0.023797035217285156,
+            "sql": "SELECT tax_rates.*, COUNT( locations.location_id ) as postcode_count, COUNT( locations2.location_id ) as city_count FROM wp_woocommerce_tax_rates as tax_rates LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations ON tax_rates.tax_rate_id = locations.tax_rate_id LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations2 ON tax_rates.tax_rate_id = locations2.tax_rate_id WHERE 1=1 AND tax_rate_country IN ( 'US', '' ) AND tax_rate_state IN ( 'CA', '' ) AND tax_rate_class = '' AND ( ( locations.location_type IS NULL ) OR ( locations.location_type = 'postcode' AND locations.location_code IN ('94105','94105*','9410*','941*','94*','9*','*','94100...94199') AND ( ( locations2.location_type = 'city' AND locations2.location_code = 'PERF CITY' ) OR NOT EXISTS ( SELECT sub.tax_rate_id FROM wp_woocommerce_tax_rate_locations as sub WHERE sub.location_type = 'city' AND sub.tax_rate_id = ta"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 82,
+            "seconds": 0.008597850799560547,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 9,
+            "seconds": 0.0014567375183105469,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_wcpay_currency_format','_transient_timeout_wcpay_currency_format')",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, wcpay_init, WC_Payments::init, WC_Payments_Localization_Service->__construct, WC_Payments_Localization_Service->load_locale_data, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0006999969482421875,
+            "sql": "SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 200929 AND stock_table.`order_id` != 0",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->normalize_cart, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->normalize_cart_item_quantity, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->get_cart_item_quantity_limits, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->get_add_to_cart_limits, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->adjust_product_quantity_limit, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->get_remaining_stock, Automattic\\WooCommerce\\Checkout\\Helpers\\ReserveStock->get_reserved_stock"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002911090850830078,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler/migration_hook' AND p.post_status IN ('in-progress') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00026798248291015625,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 5 LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00026679039001464844,
+            "sql": "SELECT a.*, g.slug AS `group` FROM wp_actionscheduler_actions a LEFT JOIN wp_actionscheduler_groups g ON a.group_id=g.group_id WHERE a.action_id=5",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_HybridStore->fetch_action, ActionScheduler_HybridStore->get_store_from_action_id, ActionScheduler_DBStore->fetch_action"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002589225769042969,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler/migration_hook' AND a.status IN ('in-progress') ORDER BY a.scheduled_date_gmt ASC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 1,
+            "seconds": 0.023797035217285156,
+            "sql": "SELECT tax_rates.*, COUNT( locations.location_id ) as postcode_count, COUNT( locations2.location_id ) as city_count FROM wp_woocommerce_tax_rates as tax_rates LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations ON tax_rates.tax_rate_id = locations.tax_rate_id LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations2 ON tax_rates.tax_rate_id = locations2.tax_rate_id WHERE 1=1 AND tax_rate_country IN ( 'US', '' ) AND tax_rate_state IN ( 'CA', '' ) AND tax_rate_class = '' AND ( ( l",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_rates_from_location, WC_Tax::find_rates, WC_Tax::get_matched_tax_rates"
+          },
+          {
+            "count": 1,
+            "seconds": 0.009464025497436523,
+            "sql": "SELECT tax_rate_id, location_code FROM wp_woocommerce_tax_rate_locations WHERE location_type = 'postcode' AND location_code LIKE '%...%';",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_rates_from_location, WC_Tax::find_rates, WC_Tax::get_matched_tax_rates"
+          },
+          {
+            "count": 1,
+            "seconds": 0.004849910736083984,
+            "sql": "SELECT zone_id, location_code FROM wp_woocommerce_shipping_zone_locations WHERE location_type = 'postcode';",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_shipping_totals, WC_Cart_Totals->get_shipping_from_cart, WC_Cart->calculate_shipping, WC_Shipping->calculate_shipping, WC_Shipping->calculate_shipping_for_package, WC_Shipping->load_shipping_methods, WC_Shipping_Zones::get_zone_matching_package, WC_Data_Store->__call, WC_Shipping_Zone_Data_Store->get_zone_id_from_package"
+          },
+          {
+            "count": 1,
+            "seconds": 0.002824068069458008,
+            "sql": "SELECT zones.zone_id FROM wp_woocommerce_shipping_zones as zones LEFT OUTER JOIN wp_woocommerce_shipping_zone_locations as locations ON zones.zone_id = locations.zone_id AND location_type != 'postcode' WHERE ( ( location_type = 'country' AND location_code = 'US' ) OR ( location_type = 'state' AND location_code = 'US:CA' ) OR ( location_type = 'continent' AND location_code = 'NA' ) OR ( location_type IS NULL ) ) AND zones.zone_id NOT IN (1502,1503,1504,1505,1506,1507,1508,1509,1510,1511,1512,1513",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_shipping_totals, WC_Cart_Totals->get_shipping_from_cart, WC_Cart->calculate_shipping, WC_Shipping->calculate_shipping, WC_Shipping->calculate_shipping_for_package, WC_Shipping->load_shipping_methods, WC_Shipping_Zones::get_zone_matching_package, WC_Data_Store->__call, WC_Shipping_Zone_Data_Store->get_zone_id_from_package"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0006608963012695312,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE autoload IN ( 'yes', 'on', 'auto-on', 'auto' )",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), wp_not_installed, is_blog_installed, wp_load_alloptions"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0002849102020263672,
+            "sql": "SELECT DISTINCT t.term_id, tr.object_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id INNER JOIN wp_term_relationships AS tr ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE tt.taxonomy IN ('product_brand', 'product_type', 'product_visibility', 'product_cat', 'product_tag', 'product_shipping_class', 'pos_product_visibility', 'pa_path_color', 'pa_path_size', 'pa_size') AND tr.object_id IN (200929) ORDER BY t.name ASC",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches, update_object_term_cache, wp_get_object_terms, get_terms, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0002701282501220703,
+            "sql": "SELECT wp_posts.* FROM wp_posts WHERE ID IN (200929)",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0002319812774658203,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (200929) ORDER BY meta_id ASC",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches, update_postmeta_cache, update_meta_cache"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001590251922607422,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('woocommerce_flat_rate_settings','woocommerce_free_shipping_settings','woocommerce_international_delivery_settings','woocommerce_local_delivery_settings','woocommerce_local_pickup_settings')",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_tax_location, WC_Customer->get_taxable_address, apply_filters('woocommerce_customer_taxable_address'), WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Shipping\\ShippingController->filter_taxable_address, Automattic\\WooCommerce\\StoreApi\\Utilities\\LocalPickupUtils::get_local_pickup_method_ids, WC_Shipping->get_shipping_methods, WC_Shipping->load_shipping_methods, WC_Shipping->get_shipping_method_class_names, wp_prime_option_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00015211105346679688,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('woocommerce_new_order_settings','woocommerce_cancelled_order_settings','woocommerce_customer_cancelled_order_settings','woocommerce_failed_order_settings','woocommerce_customer_failed_order_settings','woocommerce_customer_on_hold_order_settings','woocommerce_customer_processing_order_settings','woocommerce_customer_completed_order_settings','woocommerce_customer_refunded_order_settings','woocommerce_customer_invoice_settings",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce->register_wp_admin_settings, WC_Emails::instance, WC_Emails->__construct, WC_Emails->init, wp_prime_option_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00014901161193847656,
+            "sql": "SELECT EXISTS( SELECT 1 FROM wp_wc_orders_meta WHERE meta_key = '_wcpay_multi_currency_order_exchange_rate' LIMIT 1) AS count;",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WCPay\\MultiCurrency\\MultiCurrency->init, WCPay\\MultiCurrency\\Analytics->__construct, WCPay\\MultiCurrency\\Analytics->init, WCPay\\MultiCurrency\\Analytics->has_multi_currency_orders"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001468658447265625,
+            "sql": "SELECT t.*, tt.* FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE t.term_id IN (2,15)",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches, update_object_term_cache, wp_get_object_terms, get_terms, WP_Term_Query->query, WP_Term_Query->get_terms, _prime_term_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001430511474609375,
+            "sql": "SELECT t.term_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('wp_theme') AND t.name IN ('woocommerce', 'woocommerce/woocommerce', 'twentytwentyfive') LIMIT 3",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_tax_location, WC_Customer->get_taxable_address, apply_filters('woocommerce_customer_taxable_address'), WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Shipping\\ShippingController->filter_taxable_address, Automattic\\WooCommerce\\StoreApi\\Utilities\\LocalPickupUtils::get_local_pickup_method_ids, WC_Shipping->get_shipping_methods, WC_Shipping->load_shipping_methods, do_action('woocommerce_load_shipping_methods'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Shipping\\ShippingController->register_local_pickup, Automattic\\WooCommerce\\Blocks\\Utils\\CartCheckoutUtils::is_checkout_block_default, Automattic\\WooCommerce\\Blocks\\Utils\\BlockTemplateUtils::get_block_templates_from_db, WP_Query->__construct, WP_Query->query, WP_Query->get_posts, WP_Tax_Query->get_sql, WP_Tax_Query->get_sql_clauses, WP_Tax_Query->get_sql_for_query, WP_Tax_Query->get_sql_for_clause, WP_Tax_Query->clean_query, WP_Tax_Query->transform_query, WP_Term_Query->query, WP_Term_Query->get_terms"
+          }
+        ],
+        "timestamp_gmt": "2026-07-02T10:32:08+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    },
+    {
+      "run_id": "01-core-shipping-tax-cart-update-1782988328600-8",
+      "http_code": 200,
+      "total_ms": 117.71,
+      "ttfb_ms": 117.62100000000001,
+      "size_download": 3150,
+      "body_bytes": 3150,
+      "profiler": {
+        "run_id": "01-core-shipping-tax-cart-update-1782988328600-8",
+        "method": "POST",
+        "uri": "/wp-json/wc/store/v1/cart/update-customer",
+        "status": 200,
+        "server_ms": 106.83,
+        "query_count": 126,
+        "query_time_ms": 57.48,
+        "memory_peak_mb": 26,
+        "slow_queries": [
+          {
+            "seconds": 0.024532079696655273,
+            "sql": "SELECT tax_rates.*, COUNT( locations.location_id ) as postcode_count, COUNT( locations2.location_id ) as city_count FROM wp_woocommerce_tax_rates as tax_rates LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations ON tax_rates.tax_rate_id = locations.tax_rate_id LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations2 ON tax_rates.tax_rate_id = locations2.tax_rate_id WHERE 1=1 AND tax_rate_country IN ( 'US', '' ) AND tax_rate_state IN ( 'CA', '' ) AND tax_rate_class = '' AND ( ( locations.location_type IS NULL ) OR ( locations.location_type = 'postcode' AND locations.location_code IN ('94105','94105*','9410*','941*','94*','9*','*','94100...94199') AND ( ( locations2.location_type = 'city' AND locations2.location_code = 'PERF CITY' ) OR NOT EXISTS ( SELECT sub.tax_rate_id FROM wp_woocommerce_tax_rate_locations as sub WHERE sub.location_type = 'city' AND sub.tax_rate_id = ta"
+          }
+        ],
+        "query_digests": [
+          {
+            "count": 82,
+            "seconds": 0.008881330490112305,
+            "sql": "SELECT option_value FROM wp_options WHERE option_name = 'woocommerce_custom_orders_table_background_sync_mode' LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), include_once('/plugins/woocommerce/woocommerce.php'), WC, WooCommerce::instance, WooCommerce->__construct, WooCommerce->init_hooks, Automattic\\WooCommerce\\Container->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, array_map, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->Automattic\\WooCommerce\\Internal\\DependencyManagement\\{closure}, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->get_core, Automattic\\WooCommerce\\Internal\\DependencyManagement\\RuntimeContainer->instantiate_class_using_reflection, ReflectionClass->newInstance, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->__construct, Automattic\\WooCommerce\\Internal\\DataStores\\Orders\\DataSynchronizer->get_background_sync_mode, get_option"
+          },
+          {
+            "count": 9,
+            "seconds": 0.0014591217041015625,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('_transient_wcpay_currency_format','_transient_timeout_wcpay_currency_format')",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('plugins_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, wcpay_init, WC_Payments::init, WC_Payments_Localization_Service->__construct, WC_Payments_Localization_Service->load_locale_data, get_transient, wp_prime_option_caches"
+          },
+          {
+            "count": 3,
+            "seconds": 0.0006756782531738281,
+            "sql": "SELECT COALESCE( SUM( stock_table.`stock_quantity` ), 0 ) FROM wp_wc_reserved_stock stock_table LEFT JOIN wp_wc_orders orders ON stock_table.`order_id` = orders.id WHERE orders.status IN ( 'wc-checkout-draft', 'wc-pending' ) AND stock_table.`expires` > NOW() AND stock_table.`product_id` = 200929 AND stock_table.`order_id` != 0",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->normalize_cart, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->normalize_cart_item_quantity, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->get_cart_item_quantity_limits, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->get_add_to_cart_limits, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->adjust_product_quantity_limit, Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits->get_remaining_stock, Automattic\\WooCommerce\\Checkout\\Helpers\\ReserveStock->get_reserved_stock"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00030612945556640625,
+            "sql": "SELECT p.ID FROM wp_posts p WHERE post_type='scheduled-action' AND p.post_title='action_scheduler/migration_hook' AND p.post_status IN ('in-progress') ORDER BY p.post_date_gmt ASC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_wpPostStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002701282501220703,
+            "sql": "SELECT a.action_id FROM wp_actionscheduler_actions a WHERE 1=1 AND a.hook='action_scheduler/migration_hook' AND a.status IN ('in-progress') ORDER BY a.scheduled_date_gmt ASC LIMIT 0, 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_Store->query_action, ActionScheduler_HybridStore->query_actions, ActionScheduler_DBStore->query_actions"
+          },
+          {
+            "count": 2,
+            "seconds": 0.00026726722717285156,
+            "sql": "SELECT * FROM wp_posts WHERE ID = 5 LIMIT 1",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Post_Types::register_post_types, get_post, WP_Post::get_instance"
+          },
+          {
+            "count": 2,
+            "seconds": 0.0002510547637939453,
+            "sql": "SELECT a.*, g.slug AS `group` FROM wp_actionscheduler_actions a LEFT JOIN wp_actionscheduler_groups g ON a.group_id=g.group_id WHERE a.action_id=5",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('wp_loaded'), WP_Hook->do_action, WP_Hook->apply_filters, Action_Scheduler\\Migration\\Controller->schedule_migration, Action_Scheduler\\Migration\\Scheduler->is_migration_scheduled, as_next_scheduled_action, ActionScheduler_HybridStore->fetch_action, ActionScheduler_HybridStore->get_store_from_action_id, ActionScheduler_DBStore->fetch_action"
+          },
+          {
+            "count": 1,
+            "seconds": 0.024532079696655273,
+            "sql": "SELECT tax_rates.*, COUNT( locations.location_id ) as postcode_count, COUNT( locations2.location_id ) as city_count FROM wp_woocommerce_tax_rates as tax_rates LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations ON tax_rates.tax_rate_id = locations.tax_rate_id LEFT OUTER JOIN wp_woocommerce_tax_rate_locations as locations2 ON tax_rates.tax_rate_id = locations2.tax_rate_id WHERE 1=1 AND tax_rate_country IN ( 'US', '' ) AND tax_rate_state IN ( 'CA', '' ) AND tax_rate_class = '' AND ( ( l",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_rates_from_location, WC_Tax::find_rates, WC_Tax::get_matched_tax_rates"
+          },
+          {
+            "count": 1,
+            "seconds": 0.009586095809936523,
+            "sql": "SELECT tax_rate_id, location_code FROM wp_woocommerce_tax_rate_locations WHERE location_type = 'postcode' AND location_code LIKE '%...%';",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_rates_from_location, WC_Tax::find_rates, WC_Tax::get_matched_tax_rates"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00501704216003418,
+            "sql": "SELECT zone_id, location_code FROM wp_woocommerce_shipping_zone_locations WHERE location_type = 'postcode';",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_shipping_totals, WC_Cart_Totals->get_shipping_from_cart, WC_Cart->calculate_shipping, WC_Shipping->calculate_shipping, WC_Shipping->calculate_shipping_for_package, WC_Shipping->load_shipping_methods, WC_Shipping_Zones::get_zone_matching_package, WC_Data_Store->__call, WC_Shipping_Zone_Data_Store->get_zone_id_from_package"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0026018619537353516,
+            "sql": "SELECT zones.zone_id FROM wp_woocommerce_shipping_zones as zones LEFT OUTER JOIN wp_woocommerce_shipping_zone_locations as locations ON zones.zone_id = locations.zone_id AND location_type != 'postcode' WHERE ( ( location_type = 'country' AND location_code = 'US' ) OR ( location_type = 'state' AND location_code = 'US:CA' ) OR ( location_type = 'continent' AND location_code = 'NA' ) OR ( location_type IS NULL ) ) AND zones.zone_id NOT IN (1502,1503,1504,1505,1506,1507,1508,1509,1510,1511,1512,1513",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_shipping_totals, WC_Cart_Totals->get_shipping_from_cart, WC_Cart->calculate_shipping, WC_Shipping->calculate_shipping, WC_Shipping->calculate_shipping_for_package, WC_Shipping->load_shipping_methods, WC_Shipping_Zones::get_zone_matching_package, WC_Data_Store->__call, WC_Shipping_Zone_Data_Store->get_zone_id_from_package"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0006508827209472656,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE autoload IN ( 'yes', 'on', 'auto-on', 'auto' )",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), wp_not_installed, is_blog_installed, wp_load_alloptions"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00030994415283203125,
+            "sql": "SELECT DISTINCT t.term_id, tr.object_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id INNER JOIN wp_term_relationships AS tr ON tr.term_taxonomy_id = tt.term_taxonomy_id WHERE tt.taxonomy IN ('product_brand', 'product_type', 'product_visibility', 'product_cat', 'product_tag', 'product_shipping_class', 'pos_product_visibility', 'pa_path_color', 'pa_path_size', 'pa_size') AND tr.object_id IN (200929) ORDER BY t.name ASC",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches, update_object_term_cache, wp_get_object_terms, get_terms, WP_Term_Query->query, WP_Term_Query->get_terms"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00028204917907714844,
+            "sql": "SELECT post_id, meta_key, meta_value FROM wp_postmeta WHERE post_id IN (200929) ORDER BY meta_id ASC",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches, update_postmeta_cache, update_meta_cache"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00022411346435546875,
+            "sql": "SELECT wp_posts.* FROM wp_posts WHERE ID IN (200929)",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00021386146545410156,
+            "sql": "SELECT session_value FROM `wp_woocommerce_sessions` WHERE session_key = 't_1302ba6acdc1ac58e6e1c95e38f70e'",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce\\PayPalCommerce\\Settings\\SettingsModule::WooCommerce\\PayPalCommerce\\Settings\\{closure}, WooCommerce\\PayPalCommerce\\Vendor\\Inpsyde\\Modularity\\Container\\ReadOnlyContainer->get, WooCommerce\\PayPalCommerce\\Settings\\SettingsModule::WooCommerce\\PayPalCommerce\\Settings\\{closure}, WooCommerce\\PayPalCommerce\\Vendor\\Inpsyde\\Modularity\\Container\\ReadOnlyContainer->get, WooCommerce\\PayPalCommerce\\Settings\\SettingsModule::WooCommerce\\PayPalCommerce\\Settings\\{closure}, WooCommerce\\PayPalCommerce\\Vendor\\Inpsyde\\Modularity\\Container\\ReadOnlyContainer->get, WooCommerce\\PayPalCommerce\\ApiClient\\ApiModule::WooCommerce\\PayPalCommerce\\ApiClient\\{closure}, WooCommerce\\PayPalCommerce\\Vendor\\Inpsyde\\Modularity\\Container\\ReadOnlyContainer->get, WooCommerce\\PayPalCommerce\\Settings\\SettingsModule::WooCommerce\\PayPalCommerce\\Settings\\{closure}, WooCommerce\\PayPalCommerce\\Settings\\Endpoint\\PaymentRestEndpoint->get_details, WooCommerce\\PayPalCommerce\\Settings\\Endpoint\\PaymentRestEndpoint->gateways, WooCommerce\\PayPalCommerce\\Settings\\Data\\Definition\\PaymentMethodsDefinition->get_definitions, WooCommerce->payment_gateways, WC_Payment_Gateways::instance, WC_Payment_Gateways->__construct, WC_Payment_Gateways->init, WC_Gateway_Paypal->__construct, WC_Gateway_Paypal->is_valid_for_use, get_woocommerce_currency, apply_filters('woocommerce_currency'), WP_Hook->apply_filters, WCPay\\MultiCurrency\\FrontendCurrencies->get_woocommerce_currency, WCPay\\MultiCurrency\\FrontendCurrencies->get_selected_currency_code, WCPay\\MultiCurrency\\MultiCurrency->get_selected_currency, WCPay\\MultiCurrency\\MultiCurrency->get_stored_currency_code, WooCommerce->initialize_session, Automattic\\WooCommerce\\StoreApi\\SessionHandler->init, Automattic\\WooCommerce\\StoreApi\\Sessi"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00015497207641601562,
+            "sql": "SELECT option_name, option_value FROM wp_options WHERE option_name IN ('woocommerce_new_order_settings','woocommerce_cancelled_order_settings','woocommerce_customer_cancelled_order_settings','woocommerce_failed_order_settings','woocommerce_customer_failed_order_settings','woocommerce_customer_on_hold_order_settings','woocommerce_customer_processing_order_settings','woocommerce_customer_completed_order_settings','woocommerce_customer_refunded_order_settings','woocommerce_customer_invoice_settings",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, rest_get_server, do_action('rest_api_init'), WP_Hook->do_action, WP_Hook->apply_filters, WooCommerce->register_wp_admin_settings, WC_Emails::instance, WC_Emails->__construct, WC_Emails->init, wp_prime_option_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001480579376220703,
+            "sql": "SELECT EXISTS( SELECT 1 FROM wp_wc_orders_meta WHERE meta_key = '_wcpay_multi_currency_order_exchange_rate' LIMIT 1) AS count;",
+            "caller": "require('wp-blog-header.php'), require_once('wp-load.php'), require_once('wp-config.php'), require_once('wp-settings.php'), do_action('init'), WP_Hook->do_action, WP_Hook->apply_filters, WCPay\\MultiCurrency\\MultiCurrency->init, WCPay\\MultiCurrency\\Analytics->__construct, WCPay\\MultiCurrency\\Analytics->init, WCPay\\MultiCurrency\\Analytics->has_multi_currency_orders"
+          },
+          {
+            "count": 1,
+            "seconds": 0.0001468658447265625,
+            "sql": "SELECT t.*, tt.* FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE t.term_id IN (2,15)",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->load_cart_session, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->load_cart, WC_Cart->get_cart, WC_Cart_Session->get_cart_from_session, _prime_post_caches, update_object_term_cache, wp_get_object_terms, get_terms, WP_Term_Query->query, WP_Term_Query->get_terms, _prime_term_caches"
+          },
+          {
+            "count": 1,
+            "seconds": 0.00014591217041015625,
+            "sql": "SELECT t.term_id FROM wp_terms AS t INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('product_shipping_class') ORDER BY t.name ASC",
+            "caller": "require('wp-blog-header.php'), wp, WP->main, WP->parse_request, do_action_ref_array('parse_request'), WP_Hook->do_action, WP_Hook->apply_filters, rest_api_loaded, WP_REST_Server->serve_request, WP_REST_Server->dispatch, WP_REST_Server->respond_to_request, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractCartRoute->get_response, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\AbstractRoute->get_response_by_request_method, Automattic\\WooCommerce\\StoreApi\\Routes\\V1\\CartUpdateCustomer->get_route_post_response, Automattic\\WooCommerce\\StoreApi\\Utilities\\CartController->calculate_totals, WC_Cart->calculate_totals, WC_Cart_Totals->__construct, WC_Cart_Totals->calculate, WC_Cart_Totals->calculate_item_totals, WC_Cart_Totals->get_items_from_cart, WC_Cart_Totals->get_item_tax_rates, WC_Tax::get_rates, WC_Tax::get_tax_location, WC_Customer->get_taxable_address, apply_filters('woocommerce_customer_taxable_address'), WP_Hook->apply_filters, Automattic\\WooCommerce\\Blocks\\Shipping\\ShippingController->filter_taxable_address, Automattic\\WooCommerce\\StoreApi\\Utilities\\LocalPickupUtils::get_local_pickup_method_ids, WC_Shipping->get_shipping_methods, WC_Shipping->load_shipping_methods, WC_Shipping->register_shipping_method, WC_Shipping_Flat_Rate->__construct, WC_Shipping_Flat_Rate->init, include('/plugins/woocommerce/includes/shipping/flat-rate/includes/settings-flat-rate.php'), WC_Shipping->get_shipping_classes, get_terms, WP_Term_Query->query, WP_Term_Query->get_terms"
+          }
+        ],
+        "timestamp_gmt": "2026-07-02T10:32:08+00:00",
+        "woocommerce": "10.9.1",
+        "wordpress": "7.0",
+        "php": "8.3.31"
+      }
+    }
+  ],
+  "fixture": {
+    "fixture": "core-shipping-tax-postcode-ranges",
+    "product_id": 200929,
+    "shipping_zones": 8000,
+    "shipping_methods": 8000,
+    "tax_rates": 12000,
+    "tax_locations": 12000,
+    "target_country": "US",
+    "target_state": "CA",
+    "target_postcode": "94105",
+    "target_city": "Perf City",
+    "generated_at_gmt": "2026-07-02T10:24:40+00:00"
+  },
+  "environment": {
+    "wordpress": "7.0",
+    "woocommerce": "10.9.1",
+    "php": "8.3.31",
+    "mysql": "8.0.46",
+    "hpos_enabled": "yes",
+    "site_url": "http://localhost:8099",
+    "active_plugins": [
+      "woocommerce-gateway-stripe/woocommerce-gateway-stripe.php",
+      "woocommerce-payments/woocommerce-payments.php",
+      "woocommerce-paypal-payments/woocommerce-paypal-payments.php",
+      "woocommerce/woocommerce.php"
+    ]
+  },
+  "measured_at_gmt": "2026-07-02T10:32:11.286Z"
+}
